@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Data;
 using UnityEngine;
-using UnityEngine.Timeline;
-using UnityEngine.XR;
 
 public class Deck
 {
@@ -11,6 +9,26 @@ public class Deck
     public List<Card> HandPile = new List<Card>();
     public List<Card> DiscardPile = new List<Card>();
     public List<Card> ExhaustPile = new List<Card>();
+
+    public IEnumerable<Card> AllCards()
+    {
+        foreach (Card card in DrawPile)
+        {
+            yield return card;
+        }
+        foreach (Card card in HandPile)
+        {
+            yield return card;
+        }
+        foreach (Card card in DiscardPile)
+        {
+            yield return card;
+        }
+        foreach (Card card in ExhaustPile)
+        {
+            yield return card;
+        }
+    }
 
     public event CardMovedEvent CardMoved;
 

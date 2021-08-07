@@ -132,7 +132,8 @@ public class GlobalApi : IGlobalApi
     private void DamageTarget(int target, int damage, Script script = null)
     {
         GetActorById(target).TryDealDamage(damage, out int totalDamage, out int healthDamage);
-        //Notify the card that it dealt damage in case it cares.
+        //Notify the card that it dealt damage in case it cares. This should probably notify all cards that something dealt damage.
+        //That will have to be moved somewhere else though. 
         script?.Call(script?.Globals["onDamageDealt"], target, totalDamage, healthDamage);
     }
 
@@ -169,7 +170,7 @@ public class GlobalApi : IGlobalApi
 
     void IGlobalApi.AddCard(string scriptString, string name) => AddCard(scriptString, name);
 
-    public Card CreateCardInstance(string cardName)
+    public Card CreateCardInstance(string cardName, DynValue opaqueData = null)
     {
         bool found = CardsByName.TryGetValue(cardName, out Script script);
         if (!found)
@@ -177,7 +178,7 @@ public class GlobalApi : IGlobalApi
             throw new ArgumentException($"Card with name {cardName} not found in database!");
         }
 
-        Card card = new Card(script, cardName, this);
+        Card card = new Card(script, cardName, this, opaqueData);
         EntitiesById.Add(card.Id, card);
 
         return card;

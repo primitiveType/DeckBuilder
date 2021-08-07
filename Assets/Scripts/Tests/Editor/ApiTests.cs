@@ -37,6 +37,7 @@ internal class ApiTests
     {
         yield return CreateCard(TestCards.Attack5Damage, nameof(TestCards.Attack5Damage));
         yield return CreateCard(TestCards.Attack10DamageExhaust, nameof(TestCards.Attack10DamageExhaust));
+        yield return CreateCard(TestCards.DealMoreDamageEachPlay, nameof(TestCards.DealMoreDamageEachPlay));
     }
 
     [Test]
@@ -52,7 +53,7 @@ internal class ApiTests
     [Test]
     public void TestGetValidTargets()
     {
-        Card card = Api.CreateCardInstance(nameof(TestCards.Attack5Damage));
+        Card card = FindCardInDeck(nameof(TestCards.Attack5Damage));
         List<Actor> targets = card.GetValidTargets();
 
         Assert.That(targets, Has.Count.EqualTo(Api.GetEnemies().Count));
@@ -75,7 +76,7 @@ internal class ApiTests
     [Test]
     public void TestAttackDealsDamage()
     {
-        Card card = Api.GetCurrentBattle().Deck.DrawPile.Find(draw => draw.Name == nameof(TestCards.Attack5Damage));
+        Card card = FindCardInDeck(TestCards.Attack5Damage);
         var targets = card.GetValidTargets();
         Assert.That(targets[0].Health, Is.EqualTo(100));
         card.PlayCard(targets[0]);
@@ -87,7 +88,7 @@ internal class ApiTests
     public void TestCardIsDiscarded()
     {
         bool receivedMoveEvent = false;
-        Card cardToPlay = Api.GetCurrentBattle().Deck.DrawPile.First(card => card.Name == nameof(TestCards.Attack5Damage));
+        Card cardToPlay = FindCardInDeck(nameof(TestCards.Attack5Damage));
         Actor target = cardToPlay.GetValidTargets()[0];
         Api.GetCurrentBattle().Deck.CardMoved += DeckOnOnCardMoved;
         cardToPlay.PlayCard(target);
@@ -112,7 +113,7 @@ internal class ApiTests
     public void TestCardIsExhausted()
     {
         bool receivedMoveEvent = false;
-        Card cardToPlay = Api.GetCurrentBattle().Deck.DrawPile.First(card => card.Name == nameof(TestCards.Attack10DamageExhaust));
+        Card cardToPlay = FindCardInDeck(nameof(TestCards.Attack10DamageExhaust));
         Actor target = cardToPlay.GetValidTargets()[0];
         Api.GetCurrentBattle().Deck.CardMoved += DeckOnCardMoved;
         cardToPlay.PlayCard(target);
@@ -132,56 +133,130 @@ internal class ApiTests
         }
     }
 
-    [Test]
-    public void TestCardIsDuplicated()
+    private Card FindCardInDeck(string name)
     {
-        Assert.Fail();
+        return Api.GetCurrentBattle().Deck.AllCards().First(card => card.Name == name);
+    }
+
+    private Card FindCardInDeck(int cardId)
+    {
+        return Api.GetCurrentBattle().Deck.AllCards().First(card => card.Id == cardId);
     }
 
     [Test]
-    public void TestDuplicatedCardHasCorrectState()
+    public void TestCardStatefulness()
     {
-        Assert.Fail();
+        Card card = FindCardInDeck(nameof(TestCards.DealMoreDamageEachPlay));
+        Card dup = Api.CreateCardInstance(nameof(TestCards.DealMoreDamageEachPlay));//make sure there are two of the same card
+        Api.GetCurrentBattle().Deck.DrawPile.Add(dup);
+        
+        List<Actor> targets = card.GetValidTargets();
+        Assert.That(targets[0].Health, Is.EqualTo(100));
+        card.PlayCard(targets[0]);
+        Assert.That(targets[0].Health, Is.EqualTo(99));
+        card.PlayCard(targets[0]);
+        Assert.That(targets[0].Health, Is.EqualTo(97)); //deals more damage each time.
+        
+        dup.PlayCard(targets[0]);
+        Assert.That(targets[0].Health, Is.EqualTo(96)); //the dup has not been played yet, so it only deals 1 damage.
+
+        Card copy = card.Duplicate();
+        Api.GetCurrentBattle().Deck.HandPile.Add(copy);
+        copy.PlayCard(targets[0]);
+        Assert.That(targets[0].Health, Is.EqualTo(93)); //the copy should deal 3 damage because it retains the state of its progenitor.
+
     }
+    
 }
 
 public static class TestCards
 {
+    //If a function doesn't exist on the lua side it will throw errors when we attempt to call it.
+    //So we declare all functions in a template and just append the scripts to it. We will do something similar for real cards.
+    //re-declaring a function in lua is legal and just overrides it.
+    //This also serves as a nice one-stop location to see what calls a lua script can implement.
+    private const string BaseCardTemplate =
+        @"function getValidTargets(cardId) end
+          function playCard(cardId, target) end
+          function onDamageDealt(cardId, target, totalDamage, healthDamage) end
+          function log(cardId) end
+          function onCardPlayed(cardId) end
+          function cardInstanceCreated(cardId) end
+          function getCardData(cardId) end
+          ";
+
     //Declaring these test cards here, so it doesn't show up in game, or randomly change, breaking tests.
     //They might need to be updated if changes to the api happen though.
-    public const string Attack5Damage =
-        @"function getValidTargets ()
-            return GetEnemyIds()--Basic attack that considers any enemy a valid target 
-          end
+    public const string Attack5Damage = BaseCardTemplate +
+                                        @"function getValidTargets (cardId)
+                                            return GetEnemyIds()--Basic attack that considers any enemy a valid target 
+                                          end
 
-          function playCard(cardId, target)
-            DamageTarget(target, 5)
-          end
+                                          function playCard(cardId, target)
+                                            DamageTarget(target, 5)
+                                          end
 
-           function onDamageDealt(target, totalDamage, healthDamage)
-            Log('dealt ' .. totalDamage .. ' damage.')
-            end
-          
-            function onCardPlayed (cardId)
-                SendToDiscard(cardId)
-            end
-";
-    
-    public const string Attack10DamageExhaust =
-        @"function getValidTargets ()
-            return GetEnemyIds()--Basic attack that considers any enemy a valid target 
-          end
+                                           function onDamageDealt(cardId, target, totalDamage, healthDamage)
+                                            Log('dealt ' .. totalDamage .. ' damage.')
+                                            end
+                                          
+                                            function onCardPlayed (cardId)
+                                                SendToDiscard(cardId)
+                                            end
+                                ";
 
-          function playCard(cardId, target)
-            DamageTarget(target, 10)
-          end
+    public const string Attack10DamageExhaust = BaseCardTemplate +
+                                                @"function getValidTargets (cardId)
+                                                    return GetEnemyIds()--Basic attack that considers any enemy a valid target 
+                                                  end
 
-           function onDamageDealt(target, totalDamage, healthDamage)
-            Log('dealt ' .. totalDamage .. ' damage.')
-            end
-          
-            function onCardPlayed (cardId)
-                SendToExhaust(cardId)
-            end
-";
+                                                  function playCard(cardId, target)
+                                                    DamageTarget(target, 10)
+                                                  end
+
+                                                   function onDamageDealt(cardId, target, totalDamage, healthDamage)
+                                                    Log('dealt ' .. totalDamage .. ' damage.')
+                                                    end
+                                                  
+                                                    function onCardPlayed (cardId)
+                                                        SendToExhaust(cardId)
+                                                    end
+                                        ";
+
+    public const string DealMoreDamageEachPlay = BaseCardTemplate +
+                                                 @"
+                                                  damageAmount = {}
+
+                                                    function cardInstanceCreated(cardId, opaque)
+                                                        if opaque == nil then
+                                                            damageAmount[cardId] = 1
+                                                        else
+                                                            damageAmount[cardId] = opaque
+                                                        end
+                                                    end
+
+                                                    
+                                                  function getCardData(cardId)
+                                                    return damageAmount[cardId]
+                                                  end
+                                          
+                                                  function getValidTargets (cardId)
+                                                    return GetEnemyIds()--Basic attack that considers any enemy a valid target 
+                                                  end
+
+                                                  function playCard(cardId, target)
+                                                    DamageTarget(target, damageAmount[cardId])
+                                                    damageAmount[cardId] = damageAmount[cardId] + 1;
+                                                  end
+
+                                                   function onDamageDealt(cardId, target, totalDamage, healthDamage)
+                                                    Log('dealt ' .. totalDamage .. ' damage.')
+                                                    end
+                                                  
+                                                    function onCardPlayed (cardId)
+                                                        SendToExhaust(cardId)
+                                                    end
+
+                                                    
+                                        ";
 }
