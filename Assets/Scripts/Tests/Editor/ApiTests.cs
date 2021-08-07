@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Data;
+using MoonSharp.Interpreter;
+using Newtonsoft.Json;
 using NUnit.Framework;
+using UnityEngine;
 
 [TestFixture]
 internal class ApiTests
@@ -54,7 +57,7 @@ internal class ApiTests
     public void TestGetValidTargets()
     {
         Card card = FindCardInDeck(nameof(TestCards.Attack5Damage));
-        List<Actor> targets = card.GetValidTargets();
+        List<Actor> targets = card.GetValidTargets(Api);
 
         Assert.That(targets, Has.Count.EqualTo(Api.GetEnemies().Count));
         Assert.That(targets, Has.Count.EqualTo(1));
@@ -76,8 +79,8 @@ internal class ApiTests
     [Test]
     public void TestAttackDealsDamage()
     {
-        Card card = FindCardInDeck(TestCards.Attack5Damage);
-        var targets = card.GetValidTargets();
+        Card card = FindCardInDeck(nameof(TestCards.Attack5Damage));
+        var targets = card.GetValidTargets(Api);
         Assert.That(targets[0].Health, Is.EqualTo(100));
         card.PlayCard(targets[0]);
         Assert.That(targets[0].Health, Is.LessThan(100));
@@ -89,7 +92,7 @@ internal class ApiTests
     {
         bool receivedMoveEvent = false;
         Card cardToPlay = FindCardInDeck(nameof(TestCards.Attack5Damage));
-        Actor target = cardToPlay.GetValidTargets()[0];
+        Actor target = cardToPlay.GetValidTargets(Api)[0];
         Api.GetCurrentBattle().Deck.CardMoved += DeckOnOnCardMoved;
         cardToPlay.PlayCard(target);
         Assert.That(Api.GetCurrentBattle().Deck.DrawPile, !Contains.Item(cardToPlay));
@@ -114,7 +117,7 @@ internal class ApiTests
     {
         bool receivedMoveEvent = false;
         Card cardToPlay = FindCardInDeck(nameof(TestCards.Attack10DamageExhaust));
-        Actor target = cardToPlay.GetValidTargets()[0];
+        Actor target = cardToPlay.GetValidTargets(Api)[0];
         Api.GetCurrentBattle().Deck.CardMoved += DeckOnCardMoved;
         cardToPlay.PlayCard(target);
         Assert.That(Api.GetCurrentBattle().Deck.DrawPile, !Contains.Item(cardToPlay));
@@ -150,7 +153,7 @@ internal class ApiTests
         Card dup = Api.CreateCardInstance(nameof(TestCards.DealMoreDamageEachPlay));//make sure there are two of the same card
         Api.GetCurrentBattle().Deck.DrawPile.Add(dup);
         
-        List<Actor> targets = card.GetValidTargets();
+        List<Actor> targets = card.GetValidTargets(Api);
         Assert.That(targets[0].Health, Is.EqualTo(100));
         card.PlayCard(targets[0]);
         Assert.That(targets[0].Health, Is.EqualTo(99));
@@ -160,13 +163,48 @@ internal class ApiTests
         dup.PlayCard(targets[0]);
         Assert.That(targets[0].Health, Is.EqualTo(96)); //the dup has not been played yet, so it only deals 1 damage.
 
-        Card copy = card.Duplicate();
+        Card copy = card.Duplicate(Api);
         Api.GetCurrentBattle().Deck.HandPile.Add(copy);
         copy.PlayCard(targets[0]);
         Assert.That(targets[0].Health, Is.EqualTo(93)); //the copy should deal 3 damage because it retains the state of its progenitor.
 
     }
     
+    [Test]
+    public void TestCardSaving()
+    {
+        Card card = FindCardInDeck(nameof(TestCards.DealMoreDamageEachPlay));
+        
+        List<Actor> targets = card.GetValidTargets(Api);
+        Assert.That(targets[0].Health, Is.EqualTo(100));
+        card.PlayCard(targets[0]);
+        Assert.That(targets[0].Health, Is.EqualTo(99));
+        card.PlayCard(targets[0]);
+        Assert.That(targets[0].Health, Is.EqualTo(97)); //deals more damage each time.
+
+        string cardStr = JsonConvert.SerializeObject(card);
+
+        var cardCopy = Api.LoadCardFromJson(cardStr);
+        Api.GetCurrentBattle().Deck.DrawPile.Add(cardCopy);
+        Debug.Log(cardStr);
+        Assert.That(cardStr, Contains.Substring("Name"));
+        
+        cardCopy.PlayCard(targets[0]);
+        Assert.That(targets[0].Health, Is.EqualTo(94)); //deals more damage each time, even when re-loading the game.
+    }
+
+    private const string savedCard = "{\"Name\":\"DealMoreDamageEachPlay\",\"SaveData\":3,\"Id\":88241230}";
+
+    [Test]
+    public void TestCardLoading()
+    {
+        var cardCopy = Api.LoadCardFromJson(savedCard);
+        Api.GetCurrentBattle().Deck.DrawPile.Add(cardCopy);
+        List<Actor> targets = cardCopy.GetValidTargets(Api);
+
+        cardCopy.PlayCard(targets[0]);
+        Assert.That(targets[0].Health, Is.EqualTo(97)); //deals more damage each time.
+    }
 }
 
 public static class TestCards

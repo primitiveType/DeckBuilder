@@ -1,26 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using MoonSharp.Interpreter;
+using MoonSharp.Interpreter.Serialization;
+using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Data
 {
+    [Serializable]
     public class Card : GameEntity
     {
-        private Script Script { get; }
-        private GlobalApi Api { get; }
+        private Script Script { get; set; }
 
         public string Name { get; set; }
+        
+        //TODO: this property should not be necessary. The save data should only ever exist when serializing/deserializing.
+        //We only need it right now because we don't have a good way to get the current api while creating this object.
+        public double? SaveData { get; set; }
 
-        public Card(Script script, string name, GlobalApi api, DynValue opaqueData) //TODO: this shouldn't need the current api.
+        [JsonConstructor]
+        public Card(string name, double? saveData)
         {
-            Script = script;
-            Api = api;
             Name = name;
-            Script.Call(Script.Globals["cardInstanceCreated"], Id, opaqueData);
+            SaveData = saveData;
+            Debug.Log("Default ctor.");
         }
 
+        public void InitializeScript(Script script)
+        {
+            Script = script;
+            Script.Call(Script.Globals["cardInstanceCreated"], Id, SaveData);
+        }
 
-        public List<Actor> GetValidTargets()
+  
+
+        [OnSerializing]
+        private void OnSerializing(StreamingContext streamingContext)
+        {
+            DynValue data = Script.Call(Script.Globals["getCardData"], Id);
+            var number = data.CastToNumber();
+            SaveData = number;
+        }
+        
+        [OnSerialized]
+        private void OnSerialized(StreamingContext streamingContext)
+        {
+            SaveData = null;
+        }
+
+        public List<Actor> GetValidTargets(GlobalApi api)
         {
             List<Actor> actors = new List<Actor>();
             DynValue values = Script.Call(Script.Globals["getValidTargets"], Id);
@@ -28,7 +57,7 @@ namespace Data
             {
                 double? number = value.CastToNumber();
                 int id = number.HasValue ? (int) number.Value : -1;
-                actors.Add(Api.GetActorById(id));
+                actors.Add(api.GetActorById(id));
             }
 
             return actors;
@@ -46,10 +75,10 @@ namespace Data
             Script.Call(Script.Globals["log"], Id, log);
         }
 
-        public Card Duplicate()
+        public Card Duplicate(GlobalApi api)
         {
             DynValue data = Script.Call(Script.Globals["getCardData"], Id);
-            Card copy = Api.CreateCardInstance(Name, data);
+            Card copy = api.CreateCardInstance(Name, data);
             return copy;
         }
     }

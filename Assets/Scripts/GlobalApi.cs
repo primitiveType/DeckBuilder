@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using Data;
 using MoonSharp.Interpreter;
+using MoonSharp.Interpreter.Serialization;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class GlobalApi : IGlobalApi
@@ -178,9 +180,18 @@ public class GlobalApi : IGlobalApi
             throw new ArgumentException($"Card with name {cardName} not found in database!");
         }
 
-        Card card = new Card(script, cardName, this, opaqueData);
+        Card card = new Card(cardName, opaqueData?.CastToNumber());
+        card.InitializeScript(script);
         EntitiesById.Add(card.Id, card);
 
         return card;
+    }
+
+    public Card LoadCardFromJson(string cardStr)
+    {
+        Card cardCopy = JsonConvert.DeserializeObject<Card>(cardStr);
+        cardCopy.InitializeScript(CardsByName[cardCopy.Name]);
+        EntitiesById.Add(cardCopy.Id, cardCopy);
+        return cardCopy;
     }
 }
