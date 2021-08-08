@@ -49,7 +49,7 @@ namespace Data
             SaveData = null;
         }
 
-        public List<Actor> GetValidTargets(GlobalApi api)
+        public List<Actor> GetValidTargets()
         {
             List<Actor> actors = new List<Actor>();
             DynValue values = Script.Call(Script.Globals["getValidTargets"], Id);
@@ -57,7 +57,7 @@ namespace Data
             {
                 double? number = value.CastToNumber();
                 int id = number.HasValue ? (int) number.Value : -1;
-                actors.Add(api.GetActorById(id));
+                actors.Add(Api.GetActorById(id));
             }
 
             return actors;
@@ -75,10 +75,10 @@ namespace Data
             Script.Call(Script.Globals["log"], Id, log);
         }
 
-        public Card Duplicate(GlobalApi api)
+        public Card Duplicate()
         {
             DynValue data = Script.Call(Script.Globals["getCardData"], Id);
-            Card copy = api.CreateCardInstance(Name, data);
+            Card copy = Api.CreateCardInstance(Name, data);
             return copy;
         }
     }

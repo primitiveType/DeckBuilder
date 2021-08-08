@@ -7,7 +7,8 @@ public class BattleBootstrap : MonoBehaviour
     [SerializeField] ActorProxy ActorProxyPrefab;
     [SerializeField] CardProxy CardProxyPrefab;
     [SerializeField] PileProxy PileProxyPrefab;
-
+    private IGlobalApi Api => Injector.GlobalApi;
+    
     void Awake()
     {
         //TODO: Set up the scene with data injected from elsewhere.
@@ -16,7 +17,7 @@ public class BattleBootstrap : MonoBehaviour
 
         
         Battle battle = new Battle(player, new List<Actor> {enemy}, new Deck());
-        GameManager.Instance.Api.SetCurrentBattle(battle);
+        Api.SetCurrentBattle(battle);
         InitializeProxies(battle);
     }
 
@@ -48,7 +49,7 @@ public class BattleBootstrap : MonoBehaviour
         //mechanism for that right now.
         foreach (Card card in battle.Deck.AllCards())
         {
-            var cardProxy = Instantiate(CardProxyPrefab);
+            CardProxy cardProxy = Instantiate(CardProxyPrefab);
             cardProxy.Initialize(card);
         }
     }

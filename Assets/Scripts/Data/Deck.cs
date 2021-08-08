@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Data;
 using UnityEngine;
 
-public class Deck
+public class Deck : GameEntity
 {
     public readonly Pile DrawPile = new Pile();
     public readonly Pile HandPile = new Pile();
@@ -33,7 +33,6 @@ public class Deck
         }
     }
 
-    public event CardMovedEvent CardMoved;
 
     public void SendToPile(Card card, CardPile pile)
     {
@@ -67,7 +66,7 @@ public class Deck
 
 
         GetPileCards(pile).Add(card);
-        CardMoved?.Invoke(this, new CardMovedEventArgs(card, pile, previousPile));
+        GameEvents.InvokeCardMoved(this, new CardMovedEventArgs(card, pile, previousPile));
     }
 
     private IList<Card> GetPileCards(CardPile pile)

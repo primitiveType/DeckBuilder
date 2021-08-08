@@ -4,12 +4,14 @@ using System.IO;
 using System.Linq;
 using Data;
 using MoonSharp.Interpreter;
-using MoonSharp.Interpreter.Serialization;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GlobalApi : IGlobalApi
 {
+    public GameEventHandler GameEvents { get; private set; } = new GameEventHandler();
+
     public GlobalApi()
     {
         Initialize();
@@ -150,6 +152,7 @@ public class GlobalApi : IGlobalApi
         CurrentBattle = battle;
     }
 
+
     public Battle GetCurrentBattle()
     {
         return CurrentBattle;
@@ -160,7 +163,7 @@ public class GlobalApi : IGlobalApi
         return CurrentBattle.Player.Health;
     }
 
-    public IReadOnlyList<Actor> GetEnemies(Script script = null)
+    public IReadOnlyList<Actor> GetEnemies()
     {
         return CurrentBattle.Enemies;
     }
@@ -193,5 +196,15 @@ public class GlobalApi : IGlobalApi
         cardCopy.InitializeScript(CardsByName[cardCopy.Name]);
         EntitiesById.Add(cardCopy.Id, cardCopy);
         return cardCopy;
+    }
+}
+
+public class GameEventHandler : IGameEventHandler
+{
+    public event CardMovedEvent CardMoved;
+
+    public void InvokeCardMoved(object sender, CardMovedEventArgs args)
+    {
+        CardMoved?.Invoke(sender, args);
     }
 }

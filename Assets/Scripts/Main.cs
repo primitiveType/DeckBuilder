@@ -5,9 +5,7 @@ public class Main : MonoBehaviour
 {
     void Awake()
     {
-        // GlobalApi.Initialize();
-
-        //Temp code
+        Injector.Initialize();
         SceneManager.LoadScene("BattleScene");
     }
 }

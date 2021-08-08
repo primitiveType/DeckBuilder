@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Data;
 
-public class Battle
+public class Battle : GameEntity
 {
     public Actor Player { get; }
     public List<Actor> Enemies { get; }
@@ -12,7 +12,7 @@ public class Battle
         Player = player;
         Enemies = enemies;
         Deck = deck;
-        Deck.CardMoved += DeckOnCardMoved;
+        GameEvents.CardMoved += DeckOnCardMoved;
     }
 
     private void DeckOnCardMoved(object sender, CardMovedEventArgs args)
