@@ -12,5 +12,11 @@ public class Battle
         Player = player;
         Enemies = enemies;
         Deck = deck;
+        Deck.CardMoved += DeckOnCardMoved;
+    }
+
+    private void DeckOnCardMoved(object sender, CardMovedEventArgs args)
+    {
+        //should battle mediate events so that the ui, etc have one place to listen to?
     }
 }

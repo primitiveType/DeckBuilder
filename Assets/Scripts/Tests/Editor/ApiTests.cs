@@ -193,12 +193,12 @@ internal class ApiTests
         Assert.That(targets[0].Health, Is.EqualTo(94)); //deals more damage each time, even when re-loading the game.
     }
 
-    private const string savedCard = "{\"Name\":\"DealMoreDamageEachPlay\",\"SaveData\":3,\"Id\":88241230}";
+    private const string SavedCard = "{\"Name\":\"DealMoreDamageEachPlay\",\"SaveData\":3,\"Id\":88241230}";
 
     [Test]
     public void TestCardLoading()
     {
-        var cardCopy = Api.LoadCardFromJson(savedCard);
+        var cardCopy = Api.LoadCardFromJson(SavedCard);
         Api.GetCurrentBattle().Deck.DrawPile.Add(cardCopy);
         List<Actor> targets = cardCopy.GetValidTargets(Api);
 

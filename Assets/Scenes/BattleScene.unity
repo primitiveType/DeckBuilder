@@ -213,6 +213,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2054723789}
+  - component: {fileID: 2054723790}
   m_Layer: 0
   m_Name: Bootstrap
   m_TagString: Untagged
@@ -234,3 +235,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2054723790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054723788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea98f8c68e0334446aeb988ceecd313b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActorProxyPrefab: {fileID: 5377121643956732155, guid: 237b7a613b7f78548b6313a115fcd8f5,
+    type: 3}
+  CardProxyPrefab: {fileID: 3902755131011797395, guid: f22a7d097afa6cc42a802ba2117eae3c,
+    type: 3}
+  PileProxyPrefab: {fileID: 5535255690016881432, guid: a97602e7c9a2d7b42a220418274ee4df,
+    type: 3}

@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class Deck
 {
-    public List<Card> DrawPile = new List<Card>();
-    public List<Card> HandPile = new List<Card>();
-    public List<Card> DiscardPile = new List<Card>();
-    public List<Card> ExhaustPile = new List<Card>();
+    public readonly Pile DrawPile = new Pile();
+    public readonly Pile HandPile = new Pile();
+    public readonly Pile DiscardPile = new Pile();
+    public readonly Pile ExhaustPile = new Pile();
 
     public IEnumerable<Card> AllCards()
     {
@@ -16,14 +16,17 @@ public class Deck
         {
             yield return card;
         }
+
         foreach (Card card in HandPile)
         {
             yield return card;
         }
+
         foreach (Card card in DiscardPile)
         {
             yield return card;
         }
+
         foreach (Card card in ExhaustPile)
         {
             yield return card;
@@ -57,17 +60,17 @@ public class Deck
             throw new ArgumentException($"Tried to send card to {pile} that does not exist in deck!");
         }
 
-        if(pile == previousPile)
+        if (pile == previousPile)
         {
             Debug.LogWarning($"Card with id {card.Id} sent to {pile} when it was already there!");
         }
 
 
-        GetLocationCards(pile).Add(card);
+        GetPileCards(pile).Add(card);
         CardMoved?.Invoke(this, new CardMovedEventArgs(card, pile, previousPile));
     }
 
-    private List<Card> GetLocationCards(CardPile pile)
+    private IList<Card> GetPileCards(CardPile pile)
     {
         switch (pile)
         {
@@ -82,11 +85,6 @@ public class Deck
             default:
                 throw new ArgumentOutOfRangeException(nameof(pile), pile, null);
         }
-    }
-    
-    public void SendToDiscard(Card card)
-    {
-      SendToPile(card, CardPile.DiscardPile);
     }
 }
 
