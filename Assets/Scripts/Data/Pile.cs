@@ -8,6 +8,12 @@ using Data;
 /// </summary>
 public class Pile : GameEntity, IList<Card>
 {
+    public CardPile PileType { get; }
+
+    public Pile(CardPile pileType)
+    {
+        PileType = pileType;
+    }
     private readonly List<Card> m_Cards = new List<Card>();
 
     public IEnumerator<Card> GetEnumerator()
