@@ -21,6 +21,7 @@ namespace Data
             totalDamage = healthDamage + armorDamage;
 
             Health -= healthDamage;
+            
         }
 
         public void GainArmor(int amount)

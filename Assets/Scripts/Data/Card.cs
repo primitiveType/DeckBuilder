@@ -25,12 +25,37 @@ namespace Data
             Name = name;
             SaveData = saveData;
             Debug.Log("Default ctor.");
+            GameEvents.DamageDealt += GameEventsOnDamageDealt;
+            GameEvents.CardPlayed += GameEventsOnCardPlayed;
+            GameEvents.CardCreated += GameEventsOnCardCreated;
+            GameEvents.CardMoved += GameEventsOnCardMoved;
+        }
+
+        private void GameEventsOnCardMoved(object sender, CardMovedEventArgs args)
+        {
+            Script.Call(Script.Globals["onCardMoved"], args.MovedCard);//TODO: pile info needs to go to lua.
+        }
+
+        private void GameEventsOnCardCreated(object sender, CardCreatedEventArgs args)
+        {
+            Script.Call(Script.Globals["onCardCreated"], args.CardId);
+
+        }
+
+        private void GameEventsOnCardPlayed(object sender, CardPlayedEventArgs args)
+        {
+            Script.Call(Script.Globals["onCardPlayed"], args.CardId);
+        }
+
+        private void GameEventsOnDamageDealt(object sender, DamageDealtArgs args)
+        {
+            Script?.Call(Script?.Globals["onDamageDealt"], args.ActorId, args.TotalDamage, args.HealthDamage);
         }
 
         public void InitializeScript(Script script)
         {
             Script = script;
-            Script.Call(Script.Globals["cardInstanceCreated"], Id, SaveData);
+            Script.Call(Script.Globals["cardInstanceCreate"], Id, SaveData);
         }
 
   
@@ -66,7 +91,7 @@ namespace Data
         public void PlayCard(Actor target)
         {
             Script.Call(Script.Globals["playCard"], Id, target.Id);
-            Script.Call(Script.Globals["onCardPlayed"], Id);
+            GameEvents.InvokeCardPlayed(this, new CardPlayedEventArgs(Id));
         }
 
 

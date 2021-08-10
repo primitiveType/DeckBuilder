@@ -66,7 +66,7 @@ public class Deck : GameEntity
 
 
         GetPileCards(pile).Add(card);
-        GameEvents.InvokeCardMoved(this, new CardMovedEventArgs(card, pile, previousPile));
+        GameEvents.InvokeCardMoved(this, new CardMovedEventArgs(card.Id, pile, previousPile));
     }
 
     private IList<Card> GetPileCards(CardPile pile)
@@ -93,9 +93,9 @@ public struct CardMovedEventArgs
 {
     public CardPile PreviousPile;
     public CardPile NewPile;
-    public Card MovedCard;
+    public int MovedCard;
 
-    public CardMovedEventArgs(Card movedCard, CardPile newPile, CardPile previousPile)
+    public CardMovedEventArgs(int movedCard, CardPile newPile, CardPile previousPile)
     {
         MovedCard = movedCard;
         NewPile = newPile;

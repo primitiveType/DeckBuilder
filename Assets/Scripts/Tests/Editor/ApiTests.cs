@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Data;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.TestTools;
 
 [TestFixture]
 internal class ApiTests
@@ -13,8 +11,9 @@ internal class ApiTests
     //I'd really like to abstract this away with an injector or something... should be possible to do all simulation
     //without any unity objects.
     private IGlobalApi Api => Injector.GlobalApi;
-    [UnitySetUp]
-    public IEnumerator Setup()
+
+    [SetUp]
+    public void Setup()
     {
         Injector.Initialize();
         Actor player = new Actor(100);
@@ -25,7 +24,6 @@ internal class ApiTests
         Battle battle = new Battle(player, new List<Actor> {enemy}, deck);
 
         Api.SetCurrentBattle(battle);
-        yield return null;
     }
 
     private Deck CreateDeck()
@@ -46,19 +44,18 @@ internal class ApiTests
         yield return CreateCard(TestCards.DealMoreDamageEachPlay, nameof(TestCards.DealMoreDamageEachPlay));
     }
 
-    [UnityTest]
-    public IEnumerator TestThatSetupWorks()
+    [Test]
+    public void TestThatSetupWorks()
     {
         //Check that setup is working
         Assert.That(Api.GetPlayerHealth(), Is.EqualTo(100));
         IReadOnlyList<Actor> enemies = Api.GetEnemies();
         Assert.That(enemies, Has.Count.EqualTo(1));
-        yield return null;
     }
 
 
-    [UnityTest]
-    public IEnumerator TestGetValidTargets()
+    [Test]
+    public void TestGetValidTargets()
     {
         Card card = FindCardInDeck(nameof(TestCards.Attack5Damage));
         List<Actor> targets = card.GetValidTargets();
@@ -71,7 +68,6 @@ internal class ApiTests
         Assert.That(firstTarget.Health, Is.EqualTo(firstEnemy.Health));
         Assert.That(firstTarget.Id, Is.EqualTo(firstEnemy.Id));
         Assert.That(firstTarget, Is.EqualTo(firstEnemy));
-        yield return null;
     }
 
     private Card CreateCard(string cardScript, string cardName)
@@ -81,20 +77,42 @@ internal class ApiTests
         return card;
     }
 
-    [UnityTest]
-    public IEnumerator TestAttackDealsDamage()
+    [Test]
+    public void TestAttackDealsDamage()
     {
         Card card = FindCardInDeck(nameof(TestCards.Attack5Damage));
         var targets = card.GetValidTargets();
         Assert.That(targets[0].Health, Is.EqualTo(100));
         card.PlayCard(targets[0]);
         Assert.That(targets[0].Health, Is.LessThan(100));
-        yield return null;
     }
 
 
-    [UnityTest]
-    public IEnumerator TestCardIsDiscarded()
+    [Test]
+    public void TestAttackCausesEvent()
+    {
+        bool gotEvent = false;
+        Card card = FindCardInDeck(nameof(TestCards.Attack5Damage));
+        List<Actor> targets = card.GetValidTargets();
+        Injector.GameEventHandler.DamageDealt += GameEventHandlerOnDamageDealt;
+        Assert.That(targets[0].Health, Is.EqualTo(100));
+        card.PlayCard(targets[0]);
+        Assert.That(targets[0].Health, Is.LessThan(100));
+        Assert.That(gotEvent);
+
+
+        void GameEventHandlerOnDamageDealt(object sender, DamageDealtArgs args)
+        {
+            gotEvent = true;
+            Assert.That(args.HealthDamage, Is.EqualTo(5));
+            Assert.That(args.TotalDamage, Is.EqualTo(5));
+            Assert.That(args.ActorId, Is.EqualTo(targets[0].Id));
+        }
+    }
+
+
+    [Test]
+    public void TestCardIsDiscarded()
     {
         bool receivedMoveEvent = false;
         Card cardToPlay = FindCardInDeck(nameof(TestCards.Attack5Damage));
@@ -111,16 +129,15 @@ internal class ApiTests
         void DeckOnOnCardMoved(object sender, CardMovedEventArgs args)
         {
             receivedMoveEvent = true;
-            Assert.That(args.MovedCard, Is.EqualTo(cardToPlay));
+            Assert.That(args.MovedCard, Is.EqualTo(cardToPlay.Id));
             Assert.That(args.NewPile, Is.EqualTo(CardPile.DiscardPile));
             Assert.That(args.PreviousPile, Is.EqualTo(CardPile.DrawPile));
         }
-        yield return null;
     }
 
 
-    [UnityTest]
-    public IEnumerator TestCardIsExhausted()
+    [Test]
+    public void TestCardIsExhausted()
     {
         bool receivedMoveEvent = false;
         Card cardToPlay = FindCardInDeck(nameof(TestCards.Attack10DamageExhaust));
@@ -137,11 +154,10 @@ internal class ApiTests
         void DeckOnCardMoved(object sender, CardMovedEventArgs args)
         {
             receivedMoveEvent = true;
-            Assert.That(args.MovedCard, Is.EqualTo(cardToPlay));
+            Assert.That(args.MovedCard, Is.EqualTo(cardToPlay.Id));
             Assert.That(args.NewPile, Is.EqualTo(CardPile.ExhaustPile));
             Assert.That(args.PreviousPile, Is.EqualTo(CardPile.DrawPile));
         }
-        yield return null;
     }
 
     private Card FindCardInDeck(string name)
@@ -154,8 +170,8 @@ internal class ApiTests
         return Api.GetCurrentBattle().Deck.AllCards().First(card => card.Id == cardId);
     }
 
-    [UnityTest]
-    public IEnumerator TestCardStatefulness()
+    [Test]
+    public void TestCardStatefulness()
     {
         Card card = FindCardInDeck(nameof(TestCards.DealMoreDamageEachPlay));
         Card dup = Api.CreateCardInstance(nameof(TestCards
@@ -177,12 +193,10 @@ internal class ApiTests
         copy.PlayCard(targets[0]);
         Assert.That(targets[0].Health,
             Is.EqualTo(93)); //the copy should deal 3 damage because it retains the state of its progenitor.
-        yield return null;
-        yield return null;
     }
 
-    [UnityTest]
-    public IEnumerator TestCardSaving()
+    [Test]
+    public void TestCardSaving()
     {
         Card card = FindCardInDeck(nameof(TestCards.DealMoreDamageEachPlay));
 
@@ -202,13 +216,12 @@ internal class ApiTests
 
         cardCopy.PlayCard(targets[0]);
         Assert.That(targets[0].Health, Is.EqualTo(94)); //deals more damage each time, even when re-loading the game.
-        yield return null;
     }
 
     private const string SavedCard = "{\"Name\":\"DealMoreDamageEachPlay\",\"SaveData\":3,\"Id\":88241230}";
 
-    [UnityTest]
-    public IEnumerator TestCardLoading()
+    [Test]
+    public void TestCardLoading()
     {
         var cardCopy = Api.LoadCardFromJson(SavedCard);
         Api.GetCurrentBattle().Deck.DrawPile.Add(cardCopy);
@@ -216,7 +229,6 @@ internal class ApiTests
 
         cardCopy.PlayCard(targets[0]);
         Assert.That(targets[0].Health, Is.EqualTo(97)); //deals more damage each time.
-        yield return null;
     }
 }
 
@@ -227,13 +239,27 @@ public static class TestCards
     //re-declaring a function in lua is legal and just overrides it.
     //This also serves as a nice one-stop location to see what calls a lua script can implement.
     private const string BaseCardTemplate =
-        @"function getValidTargets(cardId) end
-          function playCard(cardId, target) end
-          function onDamageDealt(cardId, target, totalDamage, healthDamage) end
-          function log(cardId) end
-          function onCardPlayed(cardId) end
-          function cardInstanceCreated(cardId) end
-          function getCardData(cardId) end
+        @"
+        instances = {}
+        function getValidTargets(cardId) end
+        function playCard(cardId, target) end
+        function onDamageDealt(cardId, target, totalDamage, healthDamage) end
+        function log(cardId) end
+        function onCardPlayed(cardId) end
+        function cardInstanceCreate(cardId, saveData) 
+             if saveData == nil then
+                Log('created instance ' .. cardId .. ' with nil data ')
+                instances[cardId] = 1
+            else
+                Log('created instance ' .. cardId .. ' with data ' .. saveData)
+                instances[cardId] = saveData
+            end
+            
+        end
+        function getCardData(cardId) end
+        function onCardCreated(cardId) end
+        function onCardMoved(cardId) end
+        function onCardPlayed(cardId) end
           ";
 
     //Declaring these test cards here, so it doesn't show up in game, or randomly change, breaking tests.
@@ -248,11 +274,15 @@ public static class TestCards
                                           end
 
                                            function onDamageDealt(cardId, target, totalDamage, healthDamage)
-                                            Log('dealt ' .. totalDamage .. ' damage.')
+                                                if instances[cardId] != nill then
+                                                    Log('dealt ' .. totalDamage .. ' damage.')
+                                                end
                                             end
                                           
                                             function onCardPlayed (cardId)
+                                              if instances[cardId] != nil then
                                                 SendToDiscard(cardId)
+                                              end
                                             end
                                 ";
 
@@ -270,25 +300,19 @@ public static class TestCards
                                                     end
                                                   
                                                     function onCardPlayed (cardId)
-                                                        SendToExhaust(cardId)
+                                                        if instances[cardId] != nil then
+                                                          SendToExhaust(cardId)
+                                                        end
                                                     end
                                         ";
 
     public const string DealMoreDamageEachPlay = BaseCardTemplate +
                                                  @"
-                                                  damageAmount = {}
-
-                                                    function cardInstanceCreated(cardId, opaque)
-                                                        if opaque == nil then
-                                                            damageAmount[cardId] = 1
-                                                        else
-                                                            damageAmount[cardId] = opaque
-                                                        end
-                                                    end
+                                                   
 
                                                     
                                                   function getCardData(cardId)
-                                                    return damageAmount[cardId]
+                                                    return instances[cardId]
                                                   end
                                           
                                                   function getValidTargets (cardId)
@@ -296,16 +320,21 @@ public static class TestCards
                                                   end
 
                                                   function playCard(cardId, target)
-                                                    DamageTarget(target, damageAmount[cardId])
-                                                    damageAmount[cardId] = damageAmount[cardId] + 1;
+                                                    DamageTarget(target, instances[cardId])
+                                                    instances[cardId] = instances[cardId] + 1;
+                                                    Log(instances[cardId])
                                                   end
 
                                                    function onDamageDealt(cardId, target, totalDamage, healthDamage)
-                                                    Log('dealt ' .. totalDamage .. ' damage.')
+                                                    if instances[cardId] != nil then
+                                                        Log('dealt ' .. totalDamage .. ' damage.')
+                                                    end
                                                     end
                                                   
                                                     function onCardPlayed (cardId)
-                                                        SendToExhaust(cardId)
+                                                        if instances[cardId] != nil then
+                                                          SendToExhaust(cardId)
+                                                        end
                                                     end
 
                                                     

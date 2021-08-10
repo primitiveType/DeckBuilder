@@ -10,7 +10,6 @@ using UnityEngine.UIElements;
 
 public class GlobalApi : IGlobalApi
 {
-    public GameEventHandler GameEvents { get; private set; } = new GameEventHandler();
 
     public GlobalApi()
     {
@@ -136,9 +135,7 @@ public class GlobalApi : IGlobalApi
     private void DamageTarget(int target, int damage, Script script = null)
     {
         GetActorById(target).TryDealDamage(damage, out int totalDamage, out int healthDamage);
-        //Notify the card that it dealt damage in case it cares. This should probably notify all cards that something dealt damage.
-        //That will have to be moved somewhere else though. 
-        script?.Call(script?.Globals["onDamageDealt"], target, totalDamage, healthDamage);
+        Injector.GameEventHandler.InvokeDamageDealt(this, new DamageDealtArgs(target, totalDamage, healthDamage));
     }
 
 
@@ -207,4 +204,53 @@ public class GameEventHandler : IGameEventHandler
     {
         CardMoved?.Invoke(sender, args);
     }
+
+    public event CardPlayedEvent CardPlayed;
+
+    public void InvokeCardPlayed(object sender, CardPlayedEventArgs args)
+    {
+        CardPlayed?.Invoke(sender, args);
+    }
+
+    public event CardCreatedEvent CardCreated;
+
+    public void InvokeCardCreated(object sender, CardCreatedEventArgs args)
+    {
+        CardCreated?.Invoke(sender, args);
+    }
+
+    public event DamageDealt DamageDealt;
+
+    public void InvokeDamageDealt(object sender, DamageDealtArgs args)
+    {
+        DamageDealt?.Invoke(sender, args);
+    }
+}
+
+public delegate void DamageDealt(object sender, DamageDealtArgs args);
+
+public class DamageDealtArgs
+{
+    public int ActorId { get; }
+    public int HealthDamage { get; }
+    public int TotalDamage { get; }
+
+    public DamageDealtArgs(int actorId, int totalDamage, int healthDamage)
+    {
+        ActorId = actorId;
+        HealthDamage = healthDamage;
+        TotalDamage = totalDamage;
+    }
+}
+
+public delegate void CardCreatedEvent(object sender, CardCreatedEventArgs args);
+
+public class CardCreatedEventArgs
+{
+    public CardCreatedEventArgs(int cardId)
+    {
+        CardId = cardId;
+    }
+
+    public int CardId { get; }
 }
