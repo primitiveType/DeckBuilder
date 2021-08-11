@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class Deck : GameEntity
 {
-    public readonly Pile DrawPile = new Pile();
-    public readonly Pile HandPile = new Pile();
-    public readonly Pile DiscardPile = new Pile();
-    public readonly Pile ExhaustPile = new Pile();
+    public readonly Pile DrawPile = new Pile(CardPile.DrawPile);
+    public readonly Pile HandPile = new Pile(CardPile.HandPile);
+    public readonly Pile DiscardPile = new Pile(CardPile.DiscardPile);
+    public readonly Pile ExhaustPile = new Pile(CardPile.ExhaustPile);
 
     public IEnumerable<Card> AllCards()
     {
