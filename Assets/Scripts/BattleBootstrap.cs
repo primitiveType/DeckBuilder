@@ -7,6 +7,9 @@ public class BattleBootstrap : MonoBehaviour
     [SerializeField] ActorProxy ActorProxyPrefab;
     [SerializeField] CardProxy CardProxyPrefab;
     [SerializeField] PileProxy PileProxyPrefab;
+
+    [SerializeField]
+    private int NumCardsInTestDeck;
     private IGlobalApi Api => Injector.GlobalApi;
     
     void Awake()
@@ -15,8 +18,14 @@ public class BattleBootstrap : MonoBehaviour
         Actor player = new Actor(100);
         Actor enemy = new Actor(100);
 
-        
-        Battle battle = new Battle(player, new List<Actor> {enemy}, new Deck());
+        Deck deck = new Deck();
+        Api.AddCard(TestCards.Attack5Damage, nameof(TestCards.Attack5Damage));
+        for(int i = 0; i < NumCardsInTestDeck; i++)
+        {
+            deck.DrawPile.Add(Api.CreateCardInstance(nameof(TestCards.Attack5Damage)));
+        }
+
+        Battle battle = new Battle(player, new List<Actor> {enemy}, deck);
         Api.SetCurrentBattle(battle);
         InitializeProxies(battle);
     }
