@@ -1,7 +1,7 @@
 ﻿using Data;
 using UnityEngine;
 
-public class CardProxy : Proxy<Card>
+public class CardView : View<Card>
 {
     protected override void OnInitialize()
     {

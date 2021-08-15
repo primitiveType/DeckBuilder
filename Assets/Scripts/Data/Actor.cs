@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Data
 {
@@ -7,7 +9,14 @@ namespace Data
         public int Health { get; private set; }
         public int Armor { get; private set; }
 
-        public Actor(int health)
+        [JsonConstructor]
+        public Actor(int id, Properties properties, int health, int armor) : base(id, properties)
+        {
+            Health = health;
+            Armor = armor;
+        }
+
+        public Actor(int health, IContext context) : base(context)
         {
             Health = health;
         }
@@ -21,7 +30,6 @@ namespace Data
             totalDamage = healthDamage + armorDamage;
 
             Health -= healthDamage;
-            
         }
 
         public void GainArmor(int amount)

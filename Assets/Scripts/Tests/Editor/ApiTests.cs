@@ -1,55 +1,63 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using Data;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using UnityEngine;
 
 [TestFixture]
 internal class ApiTests
 {
-    //I'd really like to abstract this away with an injector or something... should be possible to do all simulation
-    //without any unity objects.
-    private IGlobalApi Api => Injector.GlobalApi;
+    //Lua is stateless
+    //State is stored on c# side in relevant objects
+    //Basically nothing is static
+    //Entire game context can be duplicated and simulated separately
+    //
+
+
+    private static ITestContext Context { get; set; }
 
     [SetUp]
     public void Setup()
     {
-        Injector.Initialize();
-        Actor player = new Actor(100);
-        Actor enemy = new Actor(100);
+        Context = new GameContext();
+        Actor player = new Actor(100, Context);
+        Actor enemy = new Actor(100, Context);
 
-        Deck deck = CreateDeck();
+        Deck deck = CreateDeck(Context);
 
-        Battle battle = new Battle(player, new List<Actor> {enemy}, deck);
+        Battle battle = new Battle(player, new List<Actor> {enemy}, deck, Context);
 
-        Api.SetCurrentBattle(battle);
+        Context.SetCurrentBattle(battle);
     }
 
-    private Deck CreateDeck()
+
+    private Deck CreateDeck(ITestContext context)
     {
-        Deck deck = new Deck();
-        foreach (var card in CreateCards())
+        Deck deck = new Deck(context);
+        foreach (string card in CreateCards(context))
         {
-            deck.DrawPile.Add(card);
+            deck.DrawPile.Cards.Add(context.CreateCardInstance(card));
         }
 
         return deck;
     }
 
-    private IEnumerable<Card> CreateCards()
+    private IEnumerable<string> CreateCards(ITestContext context)
     {
-        yield return CreateCard(TestCards.Attack5Damage, nameof(TestCards.Attack5Damage));
-        yield return CreateCard(TestCards.Attack10DamageExhaust, nameof(TestCards.Attack10DamageExhaust));
-        yield return CreateCard(TestCards.DealMoreDamageEachPlay, nameof(TestCards.DealMoreDamageEachPlay));
+        yield return "Attack5Damage";
+        yield return "Attack10DamageExhaust";
+        yield return "DealMoreDamageEachPlay";
     }
 
     [Test]
     public void TestThatSetupWorks()
     {
         //Check that setup is working
-        Assert.That(Api.GetPlayerHealth(), Is.EqualTo(100));
-        IReadOnlyList<Actor> enemies = Api.GetEnemies();
+        Assert.That(Context.GetPlayerHealth(), Is.EqualTo(100));
+        IReadOnlyList<Actor> enemies = Context.GetEnemies();
         Assert.That(enemies, Has.Count.EqualTo(1));
     }
 
@@ -57,30 +65,30 @@ internal class ApiTests
     [Test]
     public void TestGetValidTargets()
     {
-        Card card = FindCardInDeck(nameof(TestCards.Attack5Damage));
+        Card card = FindCardInDeck("Attack5Damage");
         List<Actor> targets = card.GetValidTargets();
 
-        Assert.That(targets, Has.Count.EqualTo(Api.GetEnemies().Count));
+        Assert.That(targets, Has.Count.EqualTo(Context.GetEnemies().Count));
         Assert.That(targets, Has.Count.EqualTo(1));
         Actor firstTarget = targets[0];
-        Actor firstEnemy = Api.GetEnemies()[0];
+        Actor firstEnemy = Context.GetEnemies()[0];
         Assert.That(firstTarget.Armor, Is.EqualTo(firstEnemy.Armor));
         Assert.That(firstTarget.Health, Is.EqualTo(firstEnemy.Health));
         Assert.That(firstTarget.Id, Is.EqualTo(firstEnemy.Id));
         Assert.That(firstTarget, Is.EqualTo(firstEnemy));
     }
 
-    private Card CreateCard(string cardScript, string cardName)
+    private Card CreateCard(ITestContext context, string cardScript, string cardName)
     {
-        ((IGlobalApi) Api).AddCard(cardScript, cardName);
-        Card card = Api.CreateCardInstance(cardName);
+        context.AddCard(cardScript, cardName);
+        Card card = context.CreateCardInstance(cardName);
         return card;
     }
 
     [Test]
     public void TestAttackDealsDamage()
     {
-        Card card = FindCardInDeck(nameof(TestCards.Attack5Damage));
+        Card card = FindCardInDeck("Attack5Damage");
         var targets = card.GetValidTargets();
         Assert.That(targets[0].Health, Is.EqualTo(100));
         card.PlayCard(targets[0]);
@@ -92,9 +100,9 @@ internal class ApiTests
     public void TestAttackCausesEvent()
     {
         bool gotEvent = false;
-        Card card = FindCardInDeck(nameof(TestCards.Attack5Damage));
+        Card card = FindCardInDeck("Attack5Damage");
         List<Actor> targets = card.GetValidTargets();
-        Injector.GameEventHandler.DamageDealt += GameEventHandlerOnDamageDealt;
+        Context.Events.DamageDealt += GameEventHandlerOnDamageDealt;
         Assert.That(targets[0].Health, Is.EqualTo(100));
         card.PlayCard(targets[0]);
         Assert.That(targets[0].Health, Is.LessThan(100));
@@ -115,12 +123,12 @@ internal class ApiTests
     public void TestCardIsDiscarded()
     {
         bool receivedMoveEvent = false;
-        Card cardToPlay = FindCardInDeck(nameof(TestCards.Attack5Damage));
+        Card cardToPlay = FindCardInDeck("Attack5Damage");
         Actor target = cardToPlay.GetValidTargets()[0];
-        Injector.GameEventHandler.CardMoved += DeckOnOnCardMoved;
+        Context.Events.CardMoved += DeckOnOnCardMoved;
         cardToPlay.PlayCard(target);
-        Assert.That(Api.GetCurrentBattle().Deck.DrawPile, !Contains.Item(cardToPlay));
-        Assert.That(Api.GetCurrentBattle().Deck.DiscardPile, Contains.Item(cardToPlay));
+        Assert.That(Context.GetCurrentBattle().Deck.DrawPile.Cards, !Contains.Item(cardToPlay));
+        Assert.That(Context.GetCurrentBattle().Deck.DiscardPile.Cards, Contains.Item(cardToPlay));
         if (!receivedMoveEvent)
         {
             Assert.Fail("Never received event for card move!");
@@ -130,8 +138,8 @@ internal class ApiTests
         {
             receivedMoveEvent = true;
             Assert.That(args.MovedCard, Is.EqualTo(cardToPlay.Id));
-            Assert.That(args.NewPile, Is.EqualTo(CardPile.DiscardPile));
-            Assert.That(args.PreviousPile, Is.EqualTo(CardPile.DrawPile));
+            Assert.That(args.NewPileType, Is.EqualTo(PileType.DiscardPile));
+            Assert.That(args.PreviousPileType, Is.EqualTo(PileType.DrawPile));
         }
     }
 
@@ -140,12 +148,12 @@ internal class ApiTests
     public void TestCardIsExhausted()
     {
         bool receivedMoveEvent = false;
-        Card cardToPlay = FindCardInDeck(nameof(TestCards.Attack10DamageExhaust));
+        Card cardToPlay = FindCardInDeck("Attack10DamageExhaust");
         Actor target = cardToPlay.GetValidTargets()[0];
-        Injector.GameEventHandler.CardMoved += DeckOnCardMoved;
+        Context.Events.CardMoved += DeckOnCardMoved;
         cardToPlay.PlayCard(target);
-        Assert.That(Api.GetCurrentBattle().Deck.DrawPile, !Contains.Item(cardToPlay));
-        Assert.That(Api.GetCurrentBattle().Deck.ExhaustPile, Contains.Item(cardToPlay));
+        Assert.That(Context.GetCurrentBattle().Deck.DrawPile.Cards, !Contains.Item(cardToPlay));
+        Assert.That(Context.GetCurrentBattle().Deck.ExhaustPile.Cards, Contains.Item(cardToPlay));
         if (!receivedMoveEvent)
         {
             Assert.Fail("Never received event for card move!");
@@ -155,28 +163,27 @@ internal class ApiTests
         {
             receivedMoveEvent = true;
             Assert.That(args.MovedCard, Is.EqualTo(cardToPlay.Id));
-            Assert.That(args.NewPile, Is.EqualTo(CardPile.ExhaustPile));
-            Assert.That(args.PreviousPile, Is.EqualTo(CardPile.DrawPile));
+            Assert.That(args.NewPileType, Is.EqualTo(PileType.ExhaustPile));
+            Assert.That(args.PreviousPileType, Is.EqualTo(PileType.DrawPile));
         }
     }
 
     private Card FindCardInDeck(string name)
     {
-        return Api.GetCurrentBattle().Deck.AllCards().First(card => card.Name == name);
+        return Context.GetCurrentBattle().Deck.AllCards().First(card => card.Name == name);
     }
 
     private Card FindCardInDeck(int cardId)
     {
-        return Api.GetCurrentBattle().Deck.AllCards().First(card => card.Id == cardId);
+        return Context.GetCurrentBattle().Deck.AllCards().First(card => card.Id == cardId);
     }
 
     [Test]
     public void TestCardStatefulness()
     {
-        Card card = FindCardInDeck(nameof(TestCards.DealMoreDamageEachPlay));
-        Card dup = Api.CreateCardInstance(nameof(TestCards
-            .DealMoreDamageEachPlay)); //make sure there are two of the same card
-        Api.GetCurrentBattle().Deck.DrawPile.Add(dup);
+        Card card = FindCardInDeck("DealMoreDamageEachPlay");
+        Card sibling = Context.CreateCardInstance("DealMoreDamageEachPlay"); //make sure there are two of the same card
+        Context.GetCurrentBattle().Deck.DrawPile.Cards.Add(sibling);
 
         List<Actor> targets = card.GetValidTargets();
         Assert.That(targets[0].Health, Is.EqualTo(100));
@@ -185,158 +192,66 @@ internal class ApiTests
         card.PlayCard(targets[0]);
         Assert.That(targets[0].Health, Is.EqualTo(97)); //deals more damage each time.
 
-        dup.PlayCard(targets[0]);
+        sibling.PlayCard(targets[0]);
         Assert.That(targets[0].Health, Is.EqualTo(96)); //the dup has not been played yet, so it only deals 1 damage.
 
-        Card copy = card.Duplicate();
-        Api.GetCurrentBattle().Deck.HandPile.Add(copy);
+        Card copy = new Card(card);
+        Context.GetCurrentBattle().Deck.HandPile.Cards.Add(copy);
         copy.PlayCard(targets[0]);
         Assert.That(targets[0].Health,
             Is.EqualTo(93)); //the copy should deal 3 damage because it retains the state of its progenitor.
     }
 
-    [Test]
-    public void TestCardSaving()
-    {
-        Card card = FindCardInDeck(nameof(TestCards.DealMoreDamageEachPlay));
 
+    [Test]
+    public void TestMultipleGameSimulationsDontOverlap()
+    {
+        var copiedContext = GetCopiedContext();
+        Assert.That(copiedContext.GetCurrentBattle().Deck.AllCards().ToList(), Has.Count.GreaterThan(0));
+        Assert.That(copiedContext.GetEnemies().ToList(), Has.Count.GreaterThan(0));
+        Assert.That(copiedContext.GetCurrentBattle().Deck.AllCards().FirstOrDefault(c => c.Id > 0), Is.Not.Null);
+        Assert.That(copiedContext.GetCurrentBattle().Enemies.First().Id,
+            Is.EqualTo(Context.GetCurrentBattle().Enemies.First().Id));
+
+        Card card = FindCardInDeck("DealMoreDamageEachPlay");
         List<Actor> targets = card.GetValidTargets();
         Assert.That(targets[0].Health, Is.EqualTo(100));
         card.PlayCard(targets[0]);
         Assert.That(targets[0].Health, Is.EqualTo(99));
-        card.PlayCard(targets[0]);
-        Assert.That(targets[0].Health, Is.EqualTo(97)); //deals more damage each time.
 
-        string cardStr = JsonConvert.SerializeObject(card);
+        Assert.That(copiedContext.GetEnemies().First().Health, Is.EqualTo(100));
+        Card copiedCard = copiedContext.GetCurrentBattle().Deck.AllCards().First(c => c.Id == card.Id);
+        copiedCard.PlayCard(targets[0]); //it only uses the id so this actually works... for now.
+        Assert.That(copiedContext.GetEnemies().First().Health, Is.EqualTo(99));//should have only dealt 1 damage
 
-        var cardCopy = Api.LoadCardFromJson(cardStr);
-        Api.GetCurrentBattle().Deck.DrawPile.Add(cardCopy);
-        Debug.Log(cardStr);
-        Assert.That(cardStr, Contains.Substring("Name"));
-
-        cardCopy.PlayCard(targets[0]);
-        Assert.That(targets[0].Health, Is.EqualTo(94)); //deals more damage each time, even when re-loading the game.
     }
-
-    private const string SavedCard = "{\"Name\":\"DealMoreDamageEachPlay\",\"SaveData\":3,\"Id\":88241230}";
-
+    
     [Test]
-    public void TestCardLoading()
+    public void TestCopiedContextGetsSerializedData()
     {
-        var cardCopy = Api.LoadCardFromJson(SavedCard);
-        Api.GetCurrentBattle().Deck.DrawPile.Add(cardCopy);
-        List<Actor> targets = cardCopy.GetValidTargets();
+        Card card = FindCardInDeck("DealMoreDamageEachPlay");
+        List<Actor> targets = card.GetValidTargets();
+        Assert.That(targets[0].Health, Is.EqualTo(100));
+        card.PlayCard(targets[0]);
+        Assert.That(targets[0].Health, Is.EqualTo(99));
 
-        cardCopy.PlayCard(targets[0]);
-        Assert.That(targets[0].Health, Is.EqualTo(97)); //deals more damage each time.
+        var copiedContext = GetCopiedContext();
+
+        Assert.That(copiedContext.GetEnemies().First().Health, Is.EqualTo(99));
+        Card copiedCard = copiedContext.GetCurrentBattle().Deck.AllCards().First(c => c.Id == card.Id);
+        Assert.That(copiedCard.Properties.Ints["TimesPlayed"], Is.EqualTo(1));
+        copiedCard.PlayCard(targets[0]); //it only uses the id so this actually works... for now.
+        Assert.That(copiedContext.GetEnemies().First().Health, Is.EqualTo(97));//context copied after the first play so it should deal 2 damage.
+        
+        Assert.That(card.Properties.Ints["TimesPlayed"], Is.EqualTo(1));
+
     }
-}
 
-public static class TestCards
-{
-    //If a function doesn't exist on the lua side it will throw errors when we attempt to call it.
-    //So we declare all functions in a template and just append the scripts to it. We will do something similar for real cards.
-    //re-declaring a function in lua is legal and just overrides it.
-    //This also serves as a nice one-stop location to see what calls a lua script can implement.
-    private const string BaseCardTemplate =
-        @"
-        instances = {}
-        function getValidTargets(cardId) end
-        function playCard(cardId, target) end
-        function onDamageDealt(cardId, target, totalDamage, healthDamage) end
-        function log(cardId) end
-        function onCardPlayed(cardId) end
-        function cardInstanceCreate(cardId, saveData) 
-             if saveData == nil then
-                Log('created instance ' .. cardId .. ' with nil data ')
-                instances[cardId] = 1
-            else
-                Log('created instance ' .. cardId .. ' with data ' .. saveData)
-                instances[cardId] = saveData
-            end
-            
-        end
-        function getCardData(cardId) end
-        function onCardCreated(cardId) end
-        function onCardMoved(cardId) end
-        function onCardPlayed(cardId) end
-          ";
 
-    //Declaring these test cards here, so it doesn't show up in game, or randomly change, breaking tests.
-    //They might need to be updated if changes to the api happen though.
-    public const string Attack5Damage = BaseCardTemplate +
-                                        @"function getValidTargets (cardId)
-                                            return GetEnemyIds()--Basic attack that considers any enemy a valid target 
-                                          end
-
-                                          function playCard(cardId, target)
-                                            DamageTarget(target, 5)
-                                          end
-
-                                           function onDamageDealt(cardId, target, totalDamage, healthDamage)
-                                                if instances[cardId] != nill then
-                                                    Log('dealt ' .. totalDamage .. ' damage.')
-                                                end
-                                            end
-                                          
-                                            function onCardPlayed (cardId)
-                                              if instances[cardId] != nil then
-                                                SendToDiscard(cardId)
-                                              end
-                                            end
-                                ";
-
-    public const string Attack10DamageExhaust = BaseCardTemplate +
-                                                @"function getValidTargets (cardId)
-                                                    return GetEnemyIds()--Basic attack that considers any enemy a valid target 
-                                                  end
-
-                                                  function playCard(cardId, target)
-                                                    DamageTarget(target, 10)
-                                                  end
-
-                                                   function onDamageDealt(cardId, target, totalDamage, healthDamage)
-                                                    Log('dealt ' .. totalDamage .. ' damage.')
-                                                    end
-                                                  
-                                                    function onCardPlayed (cardId)
-                                                        if instances[cardId] != nil then
-                                                          SendToExhaust(cardId)
-                                                        end
-                                                    end
-                                        ";
-
-    public const string DealMoreDamageEachPlay = BaseCardTemplate +
-                                                 @"
-                                                   
-
-                                                    
-                                                  function getCardData(cardId)
-                                                    return instances[cardId]
-                                                  end
-                                          
-                                                  function getValidTargets (cardId)
-                                                    return GetEnemyIds()--Basic attack that considers any enemy a valid target 
-                                                  end
-
-                                                  function playCard(cardId, target)
-                                                    DamageTarget(target, instances[cardId])
-                                                    instances[cardId] = instances[cardId] + 1;
-                                                    Log(instances[cardId])
-                                                  end
-
-                                                   function onDamageDealt(cardId, target, totalDamage, healthDamage)
-                                                    if instances[cardId] != nil then
-                                                        Log('dealt ' .. totalDamage .. ' damage.')
-                                                    end
-                                                    end
-                                                  
-                                                    function onCardPlayed (cardId)
-                                                        if instances[cardId] != nil then
-                                                          SendToExhaust(cardId)
-                                                        end
-                                                    end
-
-                                                    
-                                        ";
+    private GameContext GetCopiedContext()
+    {
+        string contextStr = JsonConvert.SerializeObject(Context);
+        GameContext copy = JsonConvert.DeserializeObject<GameContext>(contextStr);
+        return copy;
+    }
 }

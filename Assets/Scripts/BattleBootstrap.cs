@@ -4,53 +4,53 @@ using UnityEngine;
 
 public class BattleBootstrap : MonoBehaviour
 {
-    [SerializeField] ActorProxy ActorProxyPrefab;
-    [SerializeField] CardProxy CardProxyPrefab;
-    [SerializeField] PileProxy PileProxyPrefab;
-    private IGlobalApi Api => Injector.GlobalApi;
+    [SerializeField] ActorView m_ActorViewPrefab;
+    [SerializeField] CardView m_CardViewPrefab;
+    [SerializeField] PileView m_PileViewPrefab;
+    private IContext Api { get; set; }
     
     void Awake()
     {
         //TODO: Set up the scene with data injected from elsewhere.
-        Actor player = new Actor(100);
-        Actor enemy = new Actor(100);
+        Actor player = new Actor(100, Api);
+        Actor enemy = new Actor(100, Api);
 
-        
-        Battle battle = new Battle(player, new List<Actor> {enemy}, new Deck());
+        Api = new GameContext();
+        Battle battle = new Battle(player, new List<Actor> {enemy}, new Deck(Api), Api);
         Api.SetCurrentBattle(battle);
         InitializeProxies(battle);
     }
 
     private void InitializeProxies(Battle battle)
     {
-        ActorProxy playerProxy = Instantiate(ActorProxyPrefab);
-        playerProxy.Initialize(battle.Player);
+        ActorView playerView = Instantiate(m_ActorViewPrefab);
+        playerView.Initialize(battle.Player);
 
         foreach (Actor enemy in battle.Enemies)
         {
-            ActorProxy enemyProxy = Instantiate(ActorProxyPrefab);
-            enemyProxy.Initialize(enemy);
+            ActorView enemyView = Instantiate(m_ActorViewPrefab);
+            enemyView.Initialize(enemy);
         }
 
         //piles probably shouldn't be instantiated and should instead exist in the scene and hook up.
         //Maybe they shouldn't even be proxy/entity.
-        PileProxy discardProxy = Instantiate(PileProxyPrefab);
-        PileProxy handProxy = Instantiate(PileProxyPrefab);
-        PileProxy drawPileProxy = Instantiate(PileProxyPrefab);
-        PileProxy exhaustPileProxy = Instantiate(PileProxyPrefab);
+        PileView discardView = Instantiate(m_PileViewPrefab);
+        PileView handView = Instantiate(m_PileViewPrefab);
+        PileView drawPileView = Instantiate(m_PileViewPrefab);
+        PileView exhaustPileView = Instantiate(m_PileViewPrefab);
 
-        discardProxy.Initialize(battle.Deck.DiscardPile);
-        handProxy.Initialize(battle.Deck.HandPile);
-        drawPileProxy.Initialize(battle.Deck.DrawPile);
-        exhaustPileProxy.Initialize(battle.Deck.ExhaustPile);
+        discardView.Initialize(battle.Deck.DiscardPile);
+        handView.Initialize(battle.Deck.HandPile);
+        drawPileView.Initialize(battle.Deck.DrawPile);
+        exhaustPileView.Initialize(battle.Deck.ExhaustPile);
 
         //cards are kinda weird too. I'm not sure if it makes sense to pre-create them... but maybe it does?
         //at the very least the card proxies will have to know about what pile they are in. There's not really a 
         //mechanism for that right now.
         foreach (Card card in battle.Deck.AllCards())
         {
-            CardProxy cardProxy = Instantiate(CardProxyPrefab);
-            cardProxy.Initialize(card);
+            CardView cardView = Instantiate(m_CardViewPrefab);
+            cardView.Initialize(card);
         }
     }
 }

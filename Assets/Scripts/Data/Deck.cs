@@ -1,112 +1,106 @@
 ﻿using System;
 using System.Collections.Generic;
 using Data;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class Deck : GameEntity
 {
-    public readonly Pile DrawPile = new Pile(CardPile.DrawPile);
-    public readonly Pile HandPile = new Pile(CardPile.HandPile);
-    public readonly Pile DiscardPile = new Pile(CardPile.DiscardPile);
-    public readonly Pile ExhaustPile = new Pile(CardPile.ExhaustPile);
+    public Pile DrawPile { get; }
+    public Pile HandPile { get; }
+    public Pile DiscardPile { get; }
+    public Pile ExhaustPile { get; }
+
+    [JsonConstructor]
+    public Deck( int id, Properties properties, Pile drawPile, Pile handPile, Pile discardPile, Pile exhaustPile) : base(id, properties)
+    {
+        DrawPile = drawPile;
+        HandPile = handPile;
+        DiscardPile = discardPile;
+        ExhaustPile = exhaustPile;
+    }
 
     public IEnumerable<Card> AllCards()
     {
-        foreach (Card card in DrawPile)
+        foreach (Card card in DrawPile.Cards)
         {
             yield return card;
         }
 
-        foreach (Card card in HandPile)
+        foreach (Card card in HandPile.Cards)
         {
             yield return card;
         }
 
-        foreach (Card card in DiscardPile)
+        foreach (Card card in DiscardPile.Cards)
         {
             yield return card;
         }
 
-        foreach (Card card in ExhaustPile)
+        foreach (Card card in ExhaustPile.Cards)
         {
             yield return card;
         }
     }
 
 
-    public void SendToPile(Card card, CardPile pile)
+    public void SendToPile(Card card, PileType pileType)
     {
-        CardPile previousPile;
-        if (DrawPile.Remove(card))
+        PileType previousPileType;
+        if (DrawPile.Cards.Remove(card))
         {
-            previousPile = CardPile.DrawPile;
+            previousPileType = PileType.DrawPile;
         }
-        else if (HandPile.Remove(card))
+        else if (HandPile.Cards.Remove(card))
         {
-            previousPile = CardPile.HandPile;
+            previousPileType = PileType.HandPile;
         }
-        else if (ExhaustPile.Remove(card))
+        else if (ExhaustPile.Cards.Remove(card))
         {
-            previousPile = CardPile.ExhaustPile;
+            previousPileType = PileType.ExhaustPile;
         }
-        else if (DiscardPile.Remove(card))
+        else if (DiscardPile.Cards.Remove(card))
         {
-            previousPile = CardPile.DiscardPile;
+            previousPileType = PileType.DiscardPile;
         }
         else
         {
             //There might actually be cases where this is legal, we'll see.
-            throw new ArgumentException($"Tried to send card to {pile} that does not exist in deck!");
+            throw new ArgumentException($"Tried to send card to {pileType} that does not exist in deck!");
         }
 
-        if (pile == previousPile)
+        if (pileType == previousPileType)
         {
-            Debug.LogWarning($"Card with id {card.Id} sent to {pile} when it was already there!");
+            Debug.LogWarning($"Card with id {card.Id} sent to {pileType} when it was already there!");
         }
 
 
-        GetPileCards(pile).Add(card);
-        GameEvents.InvokeCardMoved(this, new CardMovedEventArgs(card.Id, pile, previousPile));
+        GetPileCards(pileType).Add(card);
+        Context.Events.InvokeCardMoved(this, new CardMovedEventArgs(card.Id, pileType, previousPileType));
     }
 
-    private IList<Card> GetPileCards(CardPile pile)
+    private IList<Card> GetPileCards(PileType pileType)
     {
-        switch (pile)
+        switch (pileType)
         {
-            case CardPile.DrawPile:
-                return DrawPile;
-            case CardPile.HandPile:
-                return HandPile;
-            case CardPile.DiscardPile:
-                return DiscardPile;
-            case CardPile.ExhaustPile:
-                return ExhaustPile;
+            case PileType.DrawPile:
+                return DrawPile.Cards;
+            case PileType.HandPile:
+                return HandPile.Cards;
+            case PileType.DiscardPile:
+                return DiscardPile.Cards;
+            case PileType.ExhaustPile:
+                return ExhaustPile.Cards;
             default:
-                throw new ArgumentOutOfRangeException(nameof(pile), pile, null);
+                throw new ArgumentOutOfRangeException(nameof(pileType), pileType, null);
         }
     }
-}
 
-public delegate void CardMovedEvent(object sender, CardMovedEventArgs args);
-
-public struct CardMovedEventArgs
-{
-    public CardPile PreviousPile;
-    public CardPile NewPile;
-    public int MovedCard;
-
-    public CardMovedEventArgs(int movedCard, CardPile newPile, CardPile previousPile)
+    public Deck(IContext context) : base(context)
     {
-        MovedCard = movedCard;
-        NewPile = newPile;
-        PreviousPile = previousPile;
+        DrawPile = new Pile(PileType.DrawPile, Context);
+        HandPile = new Pile(PileType.HandPile, Context);
+        DiscardPile = new Pile(PileType.DiscardPile, Context);
+        ExhaustPile = new Pile(PileType.ExhaustPile, Context);
     }
-}
-
-public enum CardPile
-{
-    DrawPile,
-    HandPile,
-    DiscardPile,
-    ExhaustPile
 }

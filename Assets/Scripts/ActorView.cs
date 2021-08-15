@@ -1,7 +1,7 @@
 ﻿using Data;
 using UnityEngine;
 
-public class ActorProxy : Proxy<Actor>
+public class ActorView : View<Actor>
 {
     protected override void OnInitialize()
     {

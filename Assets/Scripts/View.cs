@@ -2,7 +2,7 @@
 using Data;
 using UnityEngine;
 
-public abstract class Proxy<T> : MonoBehaviour where T : GameEntity
+public abstract class View<T> : MonoBehaviour where T : GameEntity
 {
     public T GameEntity { get; private set; }
 

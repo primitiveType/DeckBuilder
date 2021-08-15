@@ -1,4 +1,6 @@
-﻿public interface IGameEventHandler
+﻿using System.Runtime.Serialization;
+
+public interface IGameEventHandler
 {
     event CardMovedEvent CardMoved;
     void InvokeCardMoved(object sender, CardMovedEventArgs args);
@@ -10,16 +12,4 @@
     void InvokeCardCreated(object sender, CardCreatedEventArgs args);
     event DamageDealt DamageDealt;
     void InvokeDamageDealt(object sender, DamageDealtArgs args);
-}
-
-public delegate void CardPlayedEvent(object sender, CardPlayedEventArgs args);
-
-public class CardPlayedEventArgs
-{
-    public CardPlayedEventArgs(int cardId)
-    {
-        CardId = cardId;
-    }
-
-    public int CardId { get; }
 }

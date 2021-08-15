@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using MoonSharp.Interpreter;
-using MoonSharp.Interpreter.Serialization;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -15,20 +13,41 @@ namespace Data
 
         public string Name { get; set; }
         
-        //TODO: this property should not be necessary. The save data should only ever exist when serializing/deserializing.
-        //We only need it right now because we don't have a good way to get the current api while creating this object.
-        public double? SaveData { get; set; }
 
-        [JsonConstructor]
-        public Card(string name, double? saveData)
+        public Card(string name,  IContext context) : base(context)
         {
             Name = name;
-            SaveData = saveData;
-            Debug.Log("Default ctor.");
-            GameEvents.DamageDealt += GameEventsOnDamageDealt;
-            GameEvents.CardPlayed += GameEventsOnCardPlayed;
-            GameEvents.CardCreated += GameEventsOnCardCreated;
-            GameEvents.CardMoved += GameEventsOnCardMoved;
+            SetupEvents();
+            Script = Context.GetCardScript(Name);
+        }
+
+        public Card(Card card) : base(card.Context)
+        {
+            Name = card.Name;
+            InitializeScript(card.Script);//assumes same context. a true copy ctor.
+            Properties = card.Properties;
+            SetupEvents();
+        }
+
+        private void SetupEvents()
+        {
+            Context.Events.DamageDealt -= GameEventsOnDamageDealt;
+            Context.Events.CardPlayed -= GameEventsOnCardPlayed;
+            Context.Events.CardCreated -= GameEventsOnCardCreated;
+            Context.Events.CardMoved -= GameEventsOnCardMoved;
+            
+            Context.Events.DamageDealt += GameEventsOnDamageDealt;
+            Context.Events.CardPlayed += GameEventsOnCardPlayed;
+            Context.Events.CardCreated += GameEventsOnCardCreated;
+            Context.Events.CardMoved += GameEventsOnCardMoved;
+        }
+
+        [JsonConstructor]
+        private Card(int id, Properties properties, string name) : base(id, properties)
+        {
+            Name = name;
+            SetupEvents();
+            Script = Context.GetCardScript(Name);
         }
 
         private void GameEventsOnCardMoved(object sender, CardMovedEventArgs args)
@@ -39,12 +58,16 @@ namespace Data
         private void GameEventsOnCardCreated(object sender, CardCreatedEventArgs args)
         {
             Script.Call(Script.Globals["onCardCreated"], args.CardId);
-
         }
 
         private void GameEventsOnCardPlayed(object sender, CardPlayedEventArgs args)
         {
-            Script.Call(Script.Globals["onCardPlayed"], args.CardId);
+            if (args.CardId == Id)
+            {
+                Script.Call(Script.Globals["onThisCardPlayed"], args.CardId);
+            }
+          
+            Script.Call(Script.Globals["onAnyCardPlayed"], args.CardId);
         }
 
         private void GameEventsOnDamageDealt(object sender, DamageDealtArgs args)
@@ -55,24 +78,9 @@ namespace Data
         public void InitializeScript(Script script)
         {
             Script = script;
-            Script.Call(Script.Globals["cardInstanceCreate"], Id, SaveData);
+            Script.Call(Script.Globals["cardInstanceCreate"], Id);
         }
 
-  
-
-        [OnSerializing]
-        private void OnSerializing(StreamingContext streamingContext)
-        {
-            DynValue data = Script.Call(Script.Globals["getCardData"], Id);
-            var number = data.CastToNumber();
-            SaveData = number;
-        }
-        
-        [OnSerialized]
-        private void OnSerialized(StreamingContext streamingContext)
-        {
-            SaveData = null;
-        }
 
         public List<Actor> GetValidTargets()
         {
@@ -82,7 +90,7 @@ namespace Data
             {
                 double? number = value.CastToNumber();
                 int id = number.HasValue ? (int) number.Value : -1;
-                actors.Add(Api.GetActorById(id));
+                actors.Add(Context.GetActorById(id));
             }
 
             return actors;
@@ -91,7 +99,7 @@ namespace Data
         public void PlayCard(Actor target)
         {
             Script.Call(Script.Globals["playCard"], Id, target.Id);
-            GameEvents.InvokeCardPlayed(this, new CardPlayedEventArgs(Id));
+            ((IGameEventHandler) Context.Events).InvokeCardPlayed(this, new CardPlayedEventArgs(Id));
         }
 
 
@@ -99,12 +107,8 @@ namespace Data
         {
             Script.Call(Script.Globals["log"], Id, log);
         }
-
-        public Card Duplicate()
-        {
-            DynValue data = Script.Call(Script.Globals["getCardData"], Id);
-            Card copy = Api.CreateCardInstance(Name, data);
-            return copy;
-        }
+        
+        
+        
     }
 }
