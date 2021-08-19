@@ -1,12 +1,28 @@
 ﻿using UnityEngine;
+using System.Linq;
+using Data;
+using System.Collections.Generic;
 
-public class PileProxy : Proxy<Pile>
+public class PileProxy<TCardProxy> : Proxy<Pile> where TCardProxy : CardProxy  
 {//I think this thing would probably only care about how many cards are in it... and might have inheritors for different
     //types of piles. Should it also initialize card proxies?
+
+
+    [SerializeField] TCardProxy CardProxyPrefab;
+
+    protected Dictionary<int, TCardProxy> CardProxies { get; set;  } = new Dictionary<int, TCardProxy>();
+
     protected override void OnInitialize()
     {
+        foreach(Card card in GameEntity.AsEnumerable())
+        {
+            TCardProxy cardProxy = Instantiate(CardProxyPrefab);
+            cardProxy.Initialize(card);
+
+            CardProxies.Add(card.Id, cardProxy);
+        }
         Debug.Log($"Initialized pile proxy with id {GameEntity.Id}.");
-        Injector.GameEventHandler.CardCreated += GameEventHandlerOnCardCreated;
+  
         Injector.GameEventHandler.CardMoved += GameEventHandlerOnCardMoved;
     }
 
@@ -25,17 +41,20 @@ public class PileProxy : Proxy<Pile>
         }
     }
 
-    private void DestroyCardProxy(int argsMovedCard)
+    protected virtual void DestroyCardProxy(int argsMovedCard)
     {
+        TCardProxy CardProxy = CardProxies[argsMovedCard];
+        CardProxies.Remove(argsMovedCard);
+        Destroy(CardProxy.gameObject);
     }
 
-    private void CreateCardProxy(int argsMovedCard)
+    protected virtual void CreateCardProxy(int argsMovedCard)
     {
-        //instantiate
-        //initialize
+        TCardProxy cardProxy = Instantiate(CardProxyPrefab);
+        Card cardForProxy = Injector.GlobalApi.GetCurrentBattle().Deck.AllCards().First(card => card.Id == argsMovedCard);
+        cardProxy.Initialize(cardForProxy);
+        CardProxies.Add(argsMovedCard, cardProxy);
     }
 
-    private void GameEventHandlerOnCardCreated(object sender, CardCreatedEventArgs args)
-    {
-    }
+ 
 }
