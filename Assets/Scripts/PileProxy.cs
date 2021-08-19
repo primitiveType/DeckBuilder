@@ -26,7 +26,7 @@ public class PileProxy<TCardProxy> : Proxy<Pile> where TCardProxy : CardProxy
         Injector.GameEventHandler.CardMoved += GameEventHandlerOnCardMoved;
     }
 
-    private void GameEventHandlerOnCardMoved(object sender, CardMovedEventArgs args)
+    protected virtual void GameEventHandlerOnCardMoved(object sender, CardMovedEventArgs args)
     {
         //not sure pile type needs to exist. maybe that enum can just go away... not sure.
         if (args.NewPile == GameEntity.PileType && args.PreviousPile != GameEntity.PileType)

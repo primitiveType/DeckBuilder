@@ -1,14 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 
 public class HandCardProxy : CardProxy
 {
+    [SerializeField]
+    private Text NameText; 
     protected override void OnInitialize()
     {
         Debug.Log($"Initialized hand card proxy with id {GameEntity.Id}.");
+        NameText.text = GameEntity.Name;
     }
 
     public int HandPositionIndex;
