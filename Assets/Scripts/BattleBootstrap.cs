@@ -6,19 +6,19 @@ public class BattleBootstrap : MonoBehaviour
 {
     [SerializeField] ActorProxy ActorProxyPrefab;
     [SerializeField] CardProxy CardProxyPrefab;
-   // [SerializeField] PileProxy PileProxyPrefab;
+  
 
     [SerializeField]
-    public GenericPileProxy discardProxy;
+    public DiscardPileProxy discardProxy;
 
     [SerializeField]
     public HandPileProxy handProxy;
 
     [SerializeField]
-    public GenericPileProxy drawPileProxy;
+    public DrawPileProxy drawPileProxy;
 
     [SerializeField]
-    public GenericPileProxy exhaustPileProxy;
+    public ExhaustPileProxy exhaustPileProxy;
 
     [SerializeField]
     public EnemyActorManager enemyActorManager;
@@ -35,9 +35,18 @@ public class BattleBootstrap : MonoBehaviour
 
         Deck deck = new Deck();
         Api.AddCard(TestCards.Attack5Damage, nameof(TestCards.Attack5Damage));
-        for(int i = 0; i < NumCardsInTestDeck; i++)
+        Api.AddCard(TestCards.Attack10DamageExhaust, nameof(TestCards.Attack10DamageExhaust));
+        for (int i = 0; i < NumCardsInTestDeck; i++)
         {
-            deck.DrawPile.Add(Api.CreateCardInstance(nameof(TestCards.Attack5Damage)));
+            if(i % 2 == 0)
+            {
+                deck.DrawPile.Add(Api.CreateCardInstance(nameof(TestCards.Attack5Damage)));
+            }
+            else
+            {
+                deck.DrawPile.Add(Api.CreateCardInstance(nameof(TestCards.Attack10DamageExhaust)));
+            }
+     
         }
 
         Battle battle = new Battle(player, new List<Actor> {enemy}, deck);
