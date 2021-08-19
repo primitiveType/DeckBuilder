@@ -5,12 +5,16 @@ using UnityEngine.UI;
 
 public class BattleUIManager : MonoBehaviour
 {
+    //This class should probably just be the DrawPileProxy. It was my first stab at working with the UI and didn't have it figured out yet. 
 
     [SerializeField]
     private Text DrawPileCount;
 
     [SerializeField]
     private Button DrawCardButton;
+
+    [SerializeField]
+    private HandPileProxy handPileProxy;
 
     private IGlobalApi Api => Injector.GlobalApi;
     private IGameEventHandler GameEventHandler => Injector.GameEventHandler;
@@ -33,6 +37,7 @@ public class BattleUIManager : MonoBehaviour
         {
             DrawPileCount.text = $"Draw Pile: {CurrentBattle.Deck.DrawPile.Count.ToString()}";
         }
+
     }
 
     private void DrawCardButtonClicked()
@@ -44,9 +49,5 @@ public class BattleUIManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+ 
 }
