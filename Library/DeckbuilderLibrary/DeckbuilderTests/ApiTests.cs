@@ -57,6 +57,7 @@ namespace DeckbuilderLibrary.Tests
         private IEnumerable<Card> CreateCards(ITestContext context)
         {
             yield return context.CreateEntity<Attack5Damage>();
+            yield return context.CreateEntity<DoubleNextCardDamage>();
             yield return context.CreateEntity<Attack10DamageExhaust>();
             yield return context.CreateEntity<DealMoreDamageEachPlay>();
         }

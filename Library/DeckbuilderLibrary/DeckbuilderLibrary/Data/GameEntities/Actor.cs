@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Data
+﻿namespace Data
 {
     public class Actor : GameEntity
     {
@@ -17,7 +15,7 @@ namespace Data
 
             Health -= healthDamage;
 
-            Context.Events.InvokeDamageDealt(this, new DamageDealtArgs(Id, totalDamage, healthDamage));
+            ((IInternalGameEventHandler)Context.Events).InvokeDamageDealt(this, new DamageDealtArgs(Id, totalDamage, healthDamage));
         }
 
         public void GainArmor(int amount)

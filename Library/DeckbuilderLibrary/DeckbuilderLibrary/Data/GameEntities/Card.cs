@@ -10,11 +10,18 @@ namespace Data
     public abstract class Card : GameEntity
     {
         public abstract string Name { get; }
-        
+
+        public abstract string GetCardText(IGameEntity target = null);
 
         public abstract IReadOnlyList<Actor> GetValidTargets();
 
-        public abstract void PlayCard(Actor target);
+        public void PlayCard(Actor target)
+        {
+            DoPlayCard(target);
+            ((IInternalGameEventHandler)Context.Events).InvokeCardPlayed(this, new CardPlayedEventArgs(Id)); 
+        }
+
+        protected abstract void DoPlayCard(Actor target);
 
 
         private void Log(string log)

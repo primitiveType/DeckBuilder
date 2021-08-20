@@ -17,6 +17,7 @@ public interface IContext
     T CreateEntity<T>() where T : GameEntity, new();
     IDeck CreateDeck();
     IPile CreatePile();
+    int GetDamageAmount(object sender, int baseDamage, IGameEntity target);
 }
 
 public interface IContextListener

@@ -117,6 +117,11 @@ public class GameContext : ITestContext
         return m_NextId++;
     }
 
+    public int GetDamageAmount(object sender, int baseDamage, IGameEntity target)
+    {
+        return ((IInternalGameEventHandler)Events).RequestDamage(sender, baseDamage, target);
+    }
+    
     public T CreateEntity<T>() where T : GameEntity, new()
     {
         T entity = new T

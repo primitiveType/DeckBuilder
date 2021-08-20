@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 
-public class HandCardProxy : CardProxy
+public class HandCardProxy : CardProxy, ITargetingProvider
 {
     [SerializeField]
     private Text NameText; 
@@ -38,6 +38,10 @@ public class HandCardProxy : CardProxy
 
     [SerializeField]
     private Vector3 HoverOffset;
+    
+    [SerializeField]
+    private Vector3 OffsetToPlayTargetlessCard;
+    
     private bool m_Selected;
 
     [SerializeField]
@@ -126,4 +130,15 @@ public class HandCardProxy : CardProxy
 
 
 
+}
+
+public interface ITargetingProvider
+{
+    TargetingType TargetingType { get; }
+}
+
+public enum TargetingType
+{
+    None, 
+    Single
 }
