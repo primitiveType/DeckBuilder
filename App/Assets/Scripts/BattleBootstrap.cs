@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using Content.Cards;
 using Data;
-using Data.Cards;
 using UnityEngine;
 
 public class BattleBootstrap : MonoBehaviour
@@ -34,7 +34,7 @@ public class BattleBootstrap : MonoBehaviour
         enemy.Health = 100;
 
 
-        Deck deck = Api.CreateEntity<Deck>();
+        IDeck deck = Api.CreateDeck();
 
         
         for (int i = 0; i < NumCardsInTestDeck; i++)

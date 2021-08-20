@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Content.Cards;
 using Data;
-using Data.Cards;
 using DeckbuilderLibrary.Data;
 using JsonNet.ContractResolvers;
 using Newtonsoft.Json;

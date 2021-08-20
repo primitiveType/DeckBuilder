@@ -1,3 +1,5 @@
 dotnet build "Library\DeckbuilderLibrary\DeckbuilderLibrary"
 cp "Library\DeckbuilderLibrary\DeckbuilderLibrary\bin\Debug\netcoreapp2.1\DeckbuilderLibrary.dll" "App\Assets\Dependencies"
 cp "Library\DeckbuilderLibrary\DeckbuilderLibrary\bin\Debug\netcoreapp2.1\DeckbuilderLibrary.pdb" "App\Assets\Dependencies"
+cp "Library\DeckbuilderLibrary\Content\bin\Debug\netcoreapp2.1\Content.dll" "App\Assets\Dependencies"
+cp "Library\DeckbuilderLibrary\Content\bin\Debug\netcoreapp2.1\Content.pdb" "App\Assets\Dependencies"

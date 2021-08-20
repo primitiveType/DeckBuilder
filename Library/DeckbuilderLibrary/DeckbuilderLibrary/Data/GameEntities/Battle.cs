@@ -9,7 +9,7 @@ namespace Data
     {
         [JsonProperty] public Actor Player { get; set; }
         [JsonProperty] public List<Actor> Enemies { get; set; }
-        [JsonProperty] public Deck Deck { get; set; }
+        [JsonProperty] public IDeck Deck { get; set; }
 
     }
 }

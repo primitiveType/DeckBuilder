@@ -5,18 +5,18 @@ using Newtonsoft.Json.Linq;
 
 namespace DeckbuilderLibrary.Data
 {
-    internal class GameEntityConverter : JsonConverter<GameEntity>
+    internal class GameEntityConverter : JsonConverter<IGameEntity>
     {
         public override bool CanRead { get; } = true;
         public override bool CanWrite { get; } = false;
 
 
-        public override void WriteJson(JsonWriter writer, GameEntity value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, IGameEntity value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
         }
 
-        public override GameEntity ReadJson(JsonReader reader, Type objectType, GameEntity existingValue,
+        public override IGameEntity ReadJson(JsonReader reader, Type objectType, IGameEntity existingValue,
             bool hasExistingValue,
             JsonSerializer serializer)
         {
@@ -28,18 +28,20 @@ namespace DeckbuilderLibrary.Data
             if (existingValue == null || existingValue.GetType() != actualType)
             {
                 var contract = serializer.ContractResolver.ResolveContract(actualType);
-                existingValue = (GameEntity) contract.DefaultCreator();
+                existingValue = (IGameEntity) contract.DefaultCreator();
             }
             using (var subReader = token.CreateReader())
             {
                 // Using "populate" avoids infinite recursion.
                 serializer.Populate(subReader, existingValue);
             }
-            existingValue.Context = GameContext.CurrentContext;
-            existingValue.Initialize();
+
+            IInternalGameEntity internalGameEntity = ((IInternalGameEntity)existingValue);
+            internalGameEntity.SetContext(GameContext.CurrentContext);
+            internalGameEntity.InternalInitialize();
             existingValue.Context.AddEntity(existingValue);
             return existingValue;
-            // var newEntity = (GameEntity) Activator.CreateInstance(objectType);
+            // var newEntity = (IGameEntity) Activator.CreateInstance(objectType);
             // serializer.Populate(reader, newEntity);
             //
         

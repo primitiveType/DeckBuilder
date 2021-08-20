@@ -1,3 +1,6 @@
-﻿public interface ITestContext : IContext
+﻿using DeckbuilderLibrary.Data.GameEntities;
+
+public interface ITestContext : IContext
 {
+
 }

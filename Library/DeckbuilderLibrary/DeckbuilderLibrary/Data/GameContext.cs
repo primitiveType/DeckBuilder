@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data;
+using DeckbuilderLibrary.Data.GameEntities;
 using Newtonsoft.Json;
 
 
@@ -17,12 +18,12 @@ public class GameContext : ITestContext
     }
 
     [JsonProperty] private Battle CurrentBattle { get; set; }
-    [JsonIgnore] private Dictionary<int, GameEntity> EntitiesById = new Dictionary<int, GameEntity>();
+    [JsonIgnore] private Dictionary<int, IGameEntity> EntitiesById = new Dictionary<int, IGameEntity>();
 
     public IGameEventHandler Events { get; } = new GameEventHandler();
     public static IContext CurrentContext { get; set; }
 
-    public void AddEntity(GameEntity entity)
+    public void AddEntity(IGameEntity entity)
     {
         EntitiesById.Add(entity.Id, entity);
     }
@@ -66,7 +67,7 @@ public class GameContext : ITestContext
 
     public void SendToPile(int cardId, PileType pileType)
     {
-        if (!EntitiesById.TryGetValue(cardId, out GameEntity entity))
+        if (!EntitiesById.TryGetValue(cardId, out IGameEntity entity))
         {
             throw new ArgumentException($"Failed to find card with id {cardId}!");
         }
@@ -121,11 +122,20 @@ public class GameContext : ITestContext
         T entity = new T
         {
              Id = m_NextId++,
-            Context = this
+            
         };
-        
+        entity.SetContext(this);
         EntitiesById.Add(entity.Id, entity);
-        entity.Initialize();
+        ((IInternalGameEntity)entity).InternalInitialize();
         return entity;
+    }
+
+    public IDeck CreateDeck()
+    {
+        return CreateEntity<Deck>();
+    }
+    public IPile CreatePile()
+    {
+        return CreateEntity<Pile>();
     }
 }

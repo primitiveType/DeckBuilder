@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using Data;
 using DeckbuilderLibrary.Data.GameEntities;
 
-public class Deck : GameEntity
+internal class Deck : GameEntity, IDeck
 {
-    public Pile DrawPile { get; private set; }
-    public Pile HandPile { get; private set; }
-    public Pile DiscardPile { get; private set; }
-    public Pile ExhaustPile { get; private set; }
+    public IPile DrawPile { get; private set; }
+    public IPile HandPile { get; private set; }
+    public IPile DiscardPile { get; private set; }
+    public IPile ExhaustPile { get; private set; }
 
 
     public IEnumerable<Card> AllCards()
@@ -70,7 +70,7 @@ public class Deck : GameEntity
         Context.Events.InvokeCardMoved(this, new CardMovedEventArgs(card.Id, pileType, previousPileType));
     }
 
-    private IList<Card> GetPileCards(PileType pileType)
+    public IList<Card> GetPileCards(PileType pileType)
     {
         switch (pileType)
         {
@@ -87,31 +87,42 @@ public class Deck : GameEntity
         }
     }
 
-    public override void Initialize()
+    protected override void Initialize()
     {
         base.Initialize();
         if (DrawPile == null)
         {
             DrawPile = Context.CreateEntity<Pile>();
-            DrawPile.PileType = PileType.DrawPile;
+            ((Pile)DrawPile).PileType = PileType.DrawPile;
         }
 
         if (HandPile == null)
         {
             HandPile = Context.CreateEntity<Pile>();
-            HandPile.PileType = PileType.HandPile;
+            ((Pile)HandPile).PileType = PileType.HandPile;
         }
 
         if (DiscardPile == null)
         {
             DiscardPile = Context.CreateEntity<Pile>();
-            DiscardPile.PileType = PileType.DiscardPile;
+            ((Pile)DiscardPile).PileType = PileType.DiscardPile;
         }
 
         if (ExhaustPile == null)
         {
             ExhaustPile = Context.CreateEntity<Pile>();
-            ExhaustPile.PileType = PileType.ExhaustPile;
+            ((Pile)ExhaustPile).PileType = PileType.ExhaustPile;
         }
     }
+}
+
+public interface IDeck : IGameEntity
+{
+    IPile DrawPile { get; }
+    IPile HandPile { get; }
+    IPile DiscardPile { get; }
+    IPile ExhaustPile { get; }
+    IEnumerable<Card> AllCards();
+    void SendToPile(Card card, PileType pileType);
+    IList<Card> GetPileCards(PileType pileType);
 }
