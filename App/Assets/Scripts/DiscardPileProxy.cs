@@ -5,11 +5,9 @@ using UnityEngine.UI;
 
 public class DiscardPileProxy : PileProxy<CardProxy>
 {
-    [SerializeField]
-    private Text DiscardPileCount;
+    [SerializeField] private Text DiscardPileCount;
 
-    [SerializeField]
-    private Button SendToDrawButon;
+    [SerializeField] private Button SendToDrawButon;
 
     private IContext Api => GameEntity.Context;
     private Battle CurrentBattle { get; set; }
@@ -25,7 +23,7 @@ public class DiscardPileProxy : PileProxy<CardProxy>
 
     private void OnDrawButtonClicked()
     {
-        for(int i = 0; i < GameEntity.Cards.Count; i++)
+        for (int i = GameEntity.Cards.Count - 1; i >= 0; i--)
         {
             CurrentBattle.Deck.SendToPile(GameEntity.Cards[i], PileType.DrawPile);
         }
@@ -39,12 +37,10 @@ public class DiscardPileProxy : PileProxy<CardProxy>
         {
             SetText();
         }
-
     }
 
     private void SetText()
     {
         DiscardPileCount.text = $"Discard Pile: {CurrentBattle.Deck.DiscardPile.Cards.Count.ToString()}";
     }
-
 }

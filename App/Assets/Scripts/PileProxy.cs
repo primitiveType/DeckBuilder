@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Linq;
 using Data;
 using System.Collections.Generic;
 using DeckbuilderLibrary.Data.GameEntities;
 
-public class PileProxy<TCardProxy> : Proxy<Pile> where TCardProxy : CardProxy  
+public class PileProxy<TCardProxy> : Proxy<IPile> where TCardProxy : CardProxy  
 {//I think this thing would probably only care about how many cards are in it... and might have inheritors for different
     //types of piles. Should it also initialize card proxies?
 
@@ -45,7 +46,6 @@ public class PileProxy<TCardProxy> : Proxy<Pile> where TCardProxy : CardProxy
     protected virtual void DestroyCardProxy(int argsMovedCard)
     {
         TCardProxy CardProxy = CardProxies[argsMovedCard];
-        GameEntity.Context.Events.CardMoved -= GameEventHandlerOnCardMoved;
         CardProxies.Remove(argsMovedCard);
         Destroy(CardProxy.gameObject);
     }
@@ -58,5 +58,8 @@ public class PileProxy<TCardProxy> : Proxy<Pile> where TCardProxy : CardProxy
         CardProxies.Add(argsMovedCard, cardProxy);
     }
 
- 
+    private void OnDestroy()
+    {
+        GameEntity.Context.Events.CardMoved -= GameEventHandlerOnCardMoved;
+    }
 }

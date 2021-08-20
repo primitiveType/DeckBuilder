@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Data;
+using DeckbuilderLibrary.Data.GameEntities;
 
 public interface IContext
 {
@@ -10,13 +11,14 @@ public interface IContext
 
     Actor GetActorById(int id);
     IGameEventHandler Events { get; }
-    void AddEntity(GameEntity entity);
+    void AddEntity(IGameEntity entity);
 
     void SendToPile(int cardId, PileType pileType);
     T CreateEntity<T>() where T : GameEntity, new();
+    IDeck CreateDeck();
+    IPile CreatePile();
 }
 
 public interface IContextListener
 {
-    
 }
