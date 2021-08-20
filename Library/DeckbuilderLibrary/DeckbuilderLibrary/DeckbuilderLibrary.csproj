@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="JsonNet.ContractResolvers" Version="2.0.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Tests\Editor\ApiTests.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Tests" />
+    </ItemGroup>
+
+</Project>
