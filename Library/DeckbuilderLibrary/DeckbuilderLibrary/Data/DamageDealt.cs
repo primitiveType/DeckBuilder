@@ -1,0 +1,1 @@
+﻿public delegate void DamageDealt(object sender, DamageDealtArgs args);
