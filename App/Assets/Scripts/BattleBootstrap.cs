@@ -47,6 +47,8 @@ public class BattleBootstrap : MonoBehaviour
             {
                 deck.DrawPile.Cards.Add(Api.CreateEntity<Attack10DamageExhaust>());
             }
+            deck.DrawPile.Cards.Add(Api.CreateEntity<DoubleNextCardDamage>());
+
         }
 
         Battle battle = Api.CreateEntity<Battle>();

@@ -8,24 +8,35 @@ namespace Content.Cards
     {
         [JsonProperty] public int TimesPlayed { get; set; }
 
+        private int DamageIncreasePerPlay = 1;
+        private int BaseDamage = 1;
+
+        private int CurrentDamage => (TimesPlayed * DamageIncreasePerPlay) + BaseDamage; 
+
         protected override void Initialize()
         {
             base.Initialize();
             Context.Events.CardPlayed += EventsOnCardPlayed;
         }
 
-        public override string Name { get; } = nameof(DealMoreDamageEachPlay);
+        public override string Name => nameof(DealMoreDamageEachPlay);
+
+        public override string GetCardText(IGameEntity target = null)
+        {
+            return $"Deal {Context.GetDamageAmount(this, CurrentDamage, target)} to target enemy. Increase this card's damage by 1 for the rest of combat.";
+        }
 
         public override IReadOnlyList<Actor> GetValidTargets()
         {
             return Context.GetEnemies();
         }
 
-        public override void PlayCard(Actor target)
+        public override bool RequiresTarget => true;
+
+        protected override void DoPlayCard(Actor target)
         {
-            target.TryDealDamage(TimesPlayed + 1, out int _, out int __);
+            Context.TryDealDamage(this, target, CurrentDamage);
             TimesPlayed += 1;
-            Context.Events.InvokeCardPlayed(this, new CardPlayedEventArgs(Id));
         }
 
         private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)

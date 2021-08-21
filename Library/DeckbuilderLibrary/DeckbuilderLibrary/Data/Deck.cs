@@ -67,7 +67,7 @@ internal class Deck : GameEntity, IDeck
 
 
         GetPileCards(pileType).Add(card);
-        Context.Events.InvokeCardMoved(this, new CardMovedEventArgs(card.Id, pileType, previousPileType));
+        ((IInternalGameEventHandler)Context.Events).InvokeCardMoved(this, new CardMovedEventArgs(card.Id, pileType, previousPileType));
     }
 
     public IList<Card> GetPileCards(PileType pileType)

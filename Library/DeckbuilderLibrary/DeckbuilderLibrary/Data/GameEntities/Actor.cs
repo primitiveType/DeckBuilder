@@ -1,13 +1,11 @@
-﻿using Newtonsoft.Json;
-
-namespace Data
+﻿namespace Data
 {
     public class Actor : GameEntity
     {
         public int Health { get;  set; }
         public int Armor { get;  set; }
         
-        public void TryDealDamage(int damage, out int totalDamage, out int healthDamage)
+        internal void TryDealDamage(int damage, out int totalDamage, out int healthDamage)
         {
             int armorDamage = System.Math.Min(damage, Armor);
             Armor -= armorDamage;
@@ -17,7 +15,7 @@ namespace Data
 
             Health -= healthDamage;
 
-            Context.Events.InvokeDamageDealt(this, new DamageDealtArgs(Id, totalDamage, healthDamage));
+            ((IInternalGameEventHandler)Context.Events).InvokeDamageDealt(this, new DamageDealtArgs(Id, totalDamage, healthDamage));
         }
 
         public void GainArmor(int amount)
