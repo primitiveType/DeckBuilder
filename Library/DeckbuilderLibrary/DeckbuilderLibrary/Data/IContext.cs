@@ -19,7 +19,8 @@ public interface IContext
     IPile CreatePile();
     int GetDamageAmount(object sender, int baseDamage, IGameEntity target);
     void TryDealDamage(GameEntity source, IActor target, int baseDamage);
-    IActor CreateActor<T>(int health, int armor) where T : Actor;
+    Actor CreateActor<T>(int health, int armor) where T : Actor;
+    IBattle CreateBattle(IDeck deck, Actor player);
 }
 
 public interface IContextListener

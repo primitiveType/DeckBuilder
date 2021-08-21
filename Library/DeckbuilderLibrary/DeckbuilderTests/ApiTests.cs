@@ -28,14 +28,12 @@ namespace DeckbuilderTests
         public void Setup()
         {
             Context = new GameContext();
-            IActor player = Context.CreateActor<Actor>(100, 0);
-            IActor enemy = Context.CreateActor<Actor>(100, 0);
+            Actor player = Context.CreateActor<Actor>(100, 0);
+            Actor enemy = Context.CreateActor<Actor>(100, 0);
             Deck deck = CreateDeck(Context);
 
-            Battle battle = Context.CreateEntity<Battle>();
-            battle.SetPlayer(player);
+            IBattle battle = Context.CreateBattle(deck, player);
             battle.AddEnemy(enemy);
-            battle.Deck = deck;
 
             Context.SetCurrentBattle(battle);
         }

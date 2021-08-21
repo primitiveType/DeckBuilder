@@ -16,7 +16,7 @@ public class DrawPileProxy : PileProxy<CardProxy>
     private IContext Api => GameEntity.Context;
     private IGameEventHandler GameEventHandler => Api.Events;
 
-    private Battle CurrentBattle => Api.GetCurrentBattle();
+    private IBattle CurrentBattle => Api.GetCurrentBattle();
 
     // Start is called before the first frame update
     void Start()

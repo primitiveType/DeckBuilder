@@ -27,7 +27,7 @@ public class EnemyActorProxy : ActorProxy
         foreach(HandCardProxy selectedCard in SelectedCards)
         {
             Card card = selectedCard.GameEntity;
-            IReadOnlyList<Actor> validTargets = card.GetValidTargets();
+            IReadOnlyList<IActor> validTargets = card.GetValidTargets();
             if(validTargets.Contains(GameEntity))
             {
                 card.PlayCard(GameEntity);

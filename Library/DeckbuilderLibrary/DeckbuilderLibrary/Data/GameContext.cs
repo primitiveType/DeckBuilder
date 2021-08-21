@@ -152,12 +152,21 @@ public class GameContext : ITestContext
         return CreateEntity<Pile>();
     }
 
-    public IActor CreateActor<T>(int health, int armor) where T : Actor
+    public Actor CreateActor<T>(int health, int armor) where T : Actor
     {
         var actor = (Actor)CreateEntity<Actor>();
         actor.Health = health;
         actor.Armor = armor;
 
         return actor;
+    }
+
+    public IBattle CreateBattle(IDeck deck, Actor player)
+    {
+        var battle =  CreateEntity<Battle>();
+        battle.SetDeck(deck);
+        battle.SetPlayer(player);
+
+        return battle;
     }
 }

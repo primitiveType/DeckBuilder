@@ -28,15 +28,13 @@ public class BattleBootstrap : MonoBehaviour
         //TODO: Set up the scene with data injected from elsewhere.
         Api = new GameContext();
 
-        Actor player = Api.CreateEntity<Actor>();
-        player.Health = 100;
-        Actor enemy = Api.CreateEntity<Actor>();
-        enemy.Health = 100;
+        IActor player = Api.CreateActor<Actor>(100, 0);
+        IActor enemy = Api.CreateActor<Actor>(100, 0);
 
 
         IDeck deck = Api.CreateDeck();
 
-        
+
         for (int i = 0; i < NumCardsInTestDeck; i++)
         {
             if (i % 2 == 0)
@@ -47,22 +45,22 @@ public class BattleBootstrap : MonoBehaviour
             {
                 deck.DrawPile.Cards.Add(Api.CreateEntity<Attack10DamageExhaust>());
             }
-            deck.DrawPile.Cards.Add(Api.CreateEntity<DoubleNextCardDamage>());
 
+            deck.DrawPile.Cards.Add(Api.CreateEntity<DoubleNextCardDamage>());
         }
 
-        Battle battle = Api.CreateEntity<Battle>();
+        IBattle battle = Api.CreateEntity<Battle>();
         battle.Deck = deck;
         battle.Player = player;
-        battle.Enemies = new List<Actor> {enemy};
+        battle.Enemies = new List<Actor> { enemy };
         Api.SetCurrentBattle(battle);
         InitializeProxies(battle);
     }
 
-    private void InitializeProxies(Battle battle)
+    private void InitializeProxies(IBattle battle)
     {
         ActorProxy playerProxy = Instantiate(ActorProxyPrefab);
-        playerProxy.Initialize(battle.Player);
+        playerProxy.Initialize((Actor)battle.Player);
 
         foreach (Actor enemy in battle.Enemies)
         {

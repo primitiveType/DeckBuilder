@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Data;
 using DeckbuilderLibrary.Data;
 using Newtonsoft.Json;
@@ -10,9 +9,9 @@ namespace Data
     [Serializable]
     internal class Battle : GameEntity, IBattle
     {
-        [JsonProperty] public IActor Player { get; private set; }
-        [JsonProperty] private List<IActor> Enemies { get; set; }
-        [JsonProperty] public IDeck Deck { get; set; }
+        [JsonProperty] public Actor Player { get; private set; }
+        [JsonProperty] private List<Actor> Enemies { get; set; }
+        [JsonProperty] public IDeck Deck { get; private set; }
 
         protected override void Initialize()
         {
@@ -26,11 +25,12 @@ namespace Data
             {
                 //Todo, it is probably possible for the player and final enemy to die at the same time, which would technically result in a victory right now.
                 //It should probably be a loss though.
-                ((IInternalGameEventHandler)Context.Events).InvokeBattleEnded(this, new BattleEndedEventArgs(Player.Health > 0));
+                ((IInternalGameEventHandler)Context.Events).InvokeBattleEnded(this,
+                    new BattleEndedEventArgs(Player.Health > 0));
             }
         }
 
-        public void SetPlayer(IActor player)
+        public void SetPlayer(Actor player)
         {
             if (Player != null)
             {
@@ -40,11 +40,11 @@ namespace Data
             Player = player;
         }
 
-        public void AddEnemy(IActor enemy)
+        public void AddEnemy(Actor enemy)
         {
             if (Enemies == null)
             {
-                Enemies = new List<IActor>();
+                Enemies = new List<Actor>();
             }
 
             if (Enemies.Contains(enemy))
@@ -55,15 +55,27 @@ namespace Data
             Enemies.Add(enemy);
         }
 
+        internal void SetDeck(IDeck deck)
+        {
+            if (Deck != null)
+            {
+                throw new NotSupportedException("It is not allowed to set the deck on a battle more than once!");
+            }
+
+            Deck = deck;
+        }
+
         IReadOnlyList<IActor> IBattle.Enemies => Enemies;
     }
 }
 
 
-public interface IBattle
+public interface IBattle : IGameEntity
 {
     IReadOnlyList<IActor> Enemies { get; }
-    IActor Player { get; }
+    Actor Player { get; }
 
     IDeck Deck { get; }
+
+    void AddEnemy(Actor enemy);
 }
