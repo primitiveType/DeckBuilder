@@ -1,5 +1,5 @@
-dotnet clean "Library\DeckbuilderLibrary\DeckbuilderLibrary" 
-dotnet build "Library\DeckbuilderLibrary\DeckbuilderLibrary" 
+dotnet clean "Library\DeckbuilderLibrary\" 
+dotnet build "Library\DeckbuilderLibrary\" 
 $dependencies = "App\Assets\Dependencies\"
 if (!(Test-Path $dependencies) ){mkdir $dependencies}
 cp "Library\DeckbuilderLibrary\DeckbuilderLibrary\bin\Debug\netstandard2.0\DeckbuilderLibrary.dll"  $dependencies
