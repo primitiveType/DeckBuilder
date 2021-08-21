@@ -26,14 +26,14 @@ namespace Content.Cards
             return $"Deal {Context.GetDamageAmount(this, CurrentDamage, target)} to target enemy. Increase this card's damage by 1 for the rest of combat.";
         }
 
-        public override IReadOnlyList<Actor> GetValidTargets()
+        public override IReadOnlyList<IActor> GetValidTargets()
         {
             return Context.GetEnemies();
         }
 
         public override bool RequiresTarget => true;
 
-        protected override void DoPlayCard(Actor target)
+        protected override void DoPlayCard(IActor target)
         {
             Context.TryDealDamage(this, target, CurrentDamage);
             TimesPlayed += 1;

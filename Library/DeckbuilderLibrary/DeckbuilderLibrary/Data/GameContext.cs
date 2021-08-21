@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Data;
+using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.GameEntities;
 using Newtonsoft.Json;
 
@@ -18,7 +19,7 @@ public class GameContext : ITestContext
         CardsDatabase = new CardsDatabase(this);
     }
 
-    [JsonProperty] private Battle CurrentBattle { get; set; }
+    [JsonProperty] private IBattle CurrentBattle { get; set; }
     [JsonIgnore] private Dictionary<int, IGameEntity> EntitiesById = new Dictionary<int, IGameEntity>();
 
     public IGameEventHandler Events { get; } = new GameEventHandler();
@@ -29,12 +30,12 @@ public class GameContext : ITestContext
         EntitiesById.Add(entity.Id, entity);
     }
 
-    public Actor GetActorById(int id)
+    public IActor GetActorById(int id)
     {
         return AllActors().First(actor => actor.Id == id);
     }
 
-    private IEnumerable<Actor> AllActors()
+    private IEnumerable<IActor> AllActors()
     {
         yield return CurrentBattle.Player;
         foreach (var actor in CurrentBattle.Enemies)
@@ -84,13 +85,13 @@ public class GameContext : ITestContext
     }
 
 
-    public void SetCurrentBattle(Battle battle)
+    public void SetCurrentBattle(IBattle battle)
     {
         CurrentBattle = battle;
     }
 
 
-    public Battle GetCurrentBattle()
+    public IBattle GetCurrentBattle()
     {
         return CurrentBattle;
     }
@@ -100,7 +101,7 @@ public class GameContext : ITestContext
         return CurrentBattle.Player.Health;
     }
 
-    public IReadOnlyList<Actor> GetEnemies()
+    public IReadOnlyList<IActor> GetEnemies()
     {
         return CurrentBattle.Enemies;
     }
@@ -123,17 +124,17 @@ public class GameContext : ITestContext
         return ((IInternalGameEventHandler)Events).RequestDamage(sender, baseDamage, target);
     }
 
-    public void TryDealDamage(GameEntity source, Actor target, int baseDamage)
+    public void TryDealDamage(GameEntity source, IActor target, int baseDamage)
     {
-        target.TryDealDamage(GetDamageAmount(source, baseDamage, target), out int totalDamageDealt, out int healthDamageDealt);
+        ((IInternalActor)target).TryDealDamage(source, GetDamageAmount(source, baseDamage, target),
+            out int totalDamageDealt, out int healthDamageDealt);
     }
 
     public T CreateEntity<T>() where T : GameEntity, new()
     {
         T entity = new T
         {
-             Id = m_NextId++,
-            
+            Id = m_NextId++,
         };
         entity.SetContext(this);
         EntitiesById.Add(entity.Id, entity);
@@ -145,8 +146,18 @@ public class GameContext : ITestContext
     {
         return CreateEntity<Deck>();
     }
+
     public IPile CreatePile()
     {
         return CreateEntity<Pile>();
+    }
+
+    public IActor CreateActor<T>(int health, int armor) where T : Actor
+    {
+        var actor = (Actor)CreateEntity<Actor>();
+        actor.Health = health;
+        actor.Armor = armor;
+
+        return actor;
     }
 }
