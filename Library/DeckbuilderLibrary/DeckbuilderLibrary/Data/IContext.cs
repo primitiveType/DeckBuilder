@@ -17,10 +17,11 @@ public interface IContext
     T CreateEntity<T>() where T : GameEntity, new();
     IDeck CreateDeck();
     IPile CreatePile();
-    int GetDamageAmount(object sender, int baseDamage, IGameEntity target);
-    void TryDealDamage(GameEntity source, IActor target, int baseDamage);
-    Actor CreateActor<T>(int health, int armor) where T : Actor;
+    int GetDamageAmount(object sender, int baseDamage, IActor target, IActor owner);
+    void TryDealDamage(GameEntity source, IActor owner,  IActor target, int baseDamage);
+    Actor CreateActor<T>(int health, int armor) where T : Actor, new ();
     IBattle CreateBattle(IDeck deck, Actor player);
+    T CreateIntent<T>(Actor owner) where T : Intent, new();
 }
 
 public interface IContextListener

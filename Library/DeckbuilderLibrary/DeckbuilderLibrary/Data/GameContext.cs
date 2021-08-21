@@ -119,14 +119,14 @@ public class GameContext : ITestContext
         return m_NextId++;
     }
 
-    public int GetDamageAmount(object sender, int baseDamage, IGameEntity target)
+    public int GetDamageAmount(object sender, int baseDamage, IActor target, IActor owner)
     {
         return ((IInternalGameEventHandler)Events).RequestDamage(sender, baseDamage, target);
     }
 
-    public void TryDealDamage(GameEntity source, IActor target, int baseDamage)
+    public void TryDealDamage(GameEntity source, IActor owner, IActor target, int baseDamage)
     {
-        ((IInternalActor)target).TryDealDamage(source, GetDamageAmount(source, baseDamage, target),
+        ((IInternalActor)target).TryDealDamage(source, GetDamageAmount(source, baseDamage, target, owner),
             out int totalDamageDealt, out int healthDamageDealt);
     }
 
@@ -152,18 +152,25 @@ public class GameContext : ITestContext
         return CreateEntity<Pile>();
     }
 
-    public Actor CreateActor<T>(int health, int armor) where T : Actor
+    public T CreateIntent<T>(Actor owner) where T : Intent, new()
     {
-        var actor = (Actor)CreateEntity<Actor>();
+        var intent = CreateEntity<T>();
+        intent.OwnerId = owner.Id;
+        return intent;
+    }
+
+    public Actor CreateActor<T>(int health, int armor) where T : Actor, new ()
+    {
+        var actor = (Actor)CreateEntity<T>();
         actor.Health = health;
         actor.Armor = armor;
-
+        
         return actor;
     }
 
     public IBattle CreateBattle(IDeck deck, Actor player)
     {
-        var battle =  CreateEntity<Battle>();
+        var battle = CreateEntity<Battle>();
         battle.SetDeck(deck);
         battle.SetPlayer(player);
 

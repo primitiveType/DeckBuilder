@@ -11,7 +11,7 @@ namespace Content.Cards
         private int DamageIncreasePerPlay = 1;
         private int BaseDamage = 1;
 
-        private int CurrentDamage => (TimesPlayed * DamageIncreasePerPlay) + BaseDamage; 
+        private int CurrentDamage => (TimesPlayed * DamageIncreasePerPlay) + BaseDamage;
 
         protected override void Initialize()
         {
@@ -23,7 +23,8 @@ namespace Content.Cards
 
         public override string GetCardText(IGameEntity target = null)
         {
-            return $"Deal {Context.GetDamageAmount(this, CurrentDamage, target)} to target enemy. Increase this card's damage by 1 for the rest of combat.";
+            return
+                $"Deal {Context.GetDamageAmount(this, CurrentDamage, target as IActor, Owner)} to target enemy. Increase this card's damage by 1 for the rest of combat.";
         }
 
         public override IReadOnlyList<IActor> GetValidTargets()
@@ -35,7 +36,7 @@ namespace Content.Cards
 
         protected override void DoPlayCard(IActor target)
         {
-            Context.TryDealDamage(this, target, CurrentDamage);
+            Context.TryDealDamage(this, Owner, target, CurrentDamage);
             TimesPlayed += 1;
         }
 

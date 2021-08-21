@@ -1,6 +1,7 @@
 ﻿using System;
 using Data;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
 namespace DeckbuilderLibrary.Data
@@ -21,6 +22,9 @@ namespace DeckbuilderLibrary.Data
             JsonSerializer serializer)
         {
             var token = JToken.Load(reader);
+            if (!token.HasValues)
+                throw new InvalidOperationException("invalid object");
+
             var typeToken = token["$type"];
             if (typeToken == null)
                 throw new InvalidOperationException("invalid object");
@@ -28,8 +32,9 @@ namespace DeckbuilderLibrary.Data
             if (existingValue == null || existingValue.GetType() != actualType)
             {
                 var contract = serializer.ContractResolver.ResolveContract(actualType);
-                existingValue = (IGameEntity) contract.DefaultCreator();
+                existingValue = (IGameEntity)contract.DefaultCreator();
             }
+
             using (var subReader = token.CreateReader())
             {
                 // Using "populate" avoids infinite recursion.
@@ -44,7 +49,7 @@ namespace DeckbuilderLibrary.Data
             // var newEntity = (IGameEntity) Activator.CreateInstance(objectType);
             // serializer.Populate(reader, newEntity);
             //
-        
+
             // return newEntity;
         }
     }
