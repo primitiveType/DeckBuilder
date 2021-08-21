@@ -10,6 +10,17 @@ namespace DeckbuilderLibrary.Data
         public event RequestDamageAmountEvent RequestDamageAmount;
         public event ActorDiedEvent ActorDied;
         public event BattleEndedEvent BattleEnded;
+        public event TurnEndedEvent TurnEnded;
+        public event IntentChangedEvent IntentChanged;
+
+        public void InvokeIntentChanged(object sender, IntentChangedEventArgs args)
+        {
+            IntentChanged?.Invoke(sender, args);
+        }
+        public void InvokeTurnEnded(object sender, TurnEndedEventArgs args)
+        {
+            TurnEnded?.Invoke(sender, args);
+        }
 
         public void InvokeBattleEnded(object sender, BattleEndedEventArgs args) 
         {

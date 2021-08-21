@@ -1,5 +1,4 @@
-﻿using System.Runtime.Serialization;
-using Data;
+﻿using Data;
 using DeckbuilderLibrary.Data;
 
 public interface IGameEventHandler
@@ -13,6 +12,28 @@ public interface IGameEventHandler
     event RequestDamageAmountEvent RequestDamageAmount;
     event ActorDiedEvent ActorDied;
     event BattleEndedEvent BattleEnded;
+    event TurnEndedEvent TurnEnded;
+    event IntentChangedEvent IntentChanged;
+    void InvokeTurnEnded(object sender, TurnEndedEventArgs args);
+    void InvokeIntentChanged(object sender, IntentChangedEventArgs args);
+}
+
+public delegate void IntentChangedEvent(object sender, IntentChangedEventArgs args);
+
+public class IntentChangedEventArgs
+{
+    public Enemy Owner { get; }
+
+    public IntentChangedEventArgs(Enemy owner)
+    {
+        Owner = owner;
+    }
+}
+
+public delegate void TurnEndedEvent(object sender, TurnEndedEventArgs args);
+
+public class TurnEndedEventArgs
+{
 }
 
 //This interface exists to hide stuff on the game event handler that we don't want to be accessible when creating content.

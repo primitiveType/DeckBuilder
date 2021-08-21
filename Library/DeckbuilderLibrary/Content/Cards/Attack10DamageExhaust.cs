@@ -17,7 +17,7 @@ namespace Content.Cards
 
         public override string GetCardText(IGameEntity target = null)
         {
-            return $"Deal {Context.GetDamageAmount(this, DamageAmount, target)} to target enemy.";
+            return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)} to target enemy.";
         }
 
         public override IReadOnlyList<IActor> GetValidTargets()
@@ -29,7 +29,7 @@ namespace Content.Cards
 
         protected override void DoPlayCard(IActor target)
         {
-            Context.TryDealDamage(this, target, DamageAmount);
+            Context.TryDealDamage(this, Owner, target, DamageAmount);
         }
 
         private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)

@@ -45,6 +45,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardProxyPrefab: {fileID: -9702683617557761, guid: 6eb0eadf32b28204bbecb1d128b4a4db,
     type: 3}
-  CardWidth: 2
+  CardWidth: 1.5
   CardSeperation: 0.1
   CenterPosition: {x: 0, y: -3, z: 0}

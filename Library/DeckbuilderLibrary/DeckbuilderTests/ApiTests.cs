@@ -28,8 +28,8 @@ namespace DeckbuilderTests
         public void Setup()
         {
             Context = new GameContext();
-            Actor player = Context.CreateActor<Actor>(100, 0);
-            Actor enemy = Context.CreateActor<Actor>(100, 0);
+            Actor player = Context.CreateActor<PlayerActor>(100, 0);
+            Actor enemy = Context.CreateActor<BasicEnemy>(100, 0);
             Deck deck = CreateDeck(Context);
 
             IBattle battle = Context.CreateBattle(deck, player);
@@ -87,6 +87,14 @@ namespace DeckbuilderTests
             {
                 receivedEvent = true;
             }
+        }
+
+        [Test]
+        public void EnemyAttacksOnTurnEnd()
+        {
+            Assert.That(Context.GetCurrentBattle().Player, Has.Property("Health").EqualTo(100));
+            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Assert.That(Context.GetCurrentBattle().Player, Has.Property("Health").EqualTo(95));
         }
 
 
