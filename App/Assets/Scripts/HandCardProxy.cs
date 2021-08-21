@@ -1,32 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 
 public class HandCardProxy : CardProxy
 {
-    [SerializeField]
-    private Text NameText; 
+    [SerializeField] private Text NameText;
+    [SerializeField] private Text DescriptionText;
+
     protected override void OnInitialize()
     {
         Debug.Log($"Initialized hand card proxy with id {GameEntity.Id}.");
         NameText.text = GameEntity.Name;
+        GameEntity.Context.Events.CardPlayed += EventsOnCardPlayed;
+        SetDescriptionText();
+    }
+
+    private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
+    {
+        SetDescriptionText(); //any card being played could cause our text to need to update.
+    }
+
+    private void SetDescriptionText()
+    {
+        DescriptionText.text = GameEntity.GetCardText();
     }
 
     public int HandPositionIndex;
 
-    [SerializeField]
-    private bool Hovered => MouseOver || Selected;
+    [SerializeField] private bool Hovered => MouseOver || Selected;
 
     private bool MouseOver;
 
-    public bool Selected { 
-
+    public bool Selected
+    {
         get => m_Selected;
 
-        set {
+        set
+        {
             m_Selected = value;
             HandleSelectedChanged();
         }
@@ -36,19 +46,15 @@ public class HandCardProxy : CardProxy
 
     private Vector3 TargetPosition { get; set; }
 
-    [SerializeField]
-    private Vector3 HoverOffset;
-    
-    [SerializeField]
-    private Vector3 OffsetToPlayTargetlessCard;
-    
+    [SerializeField] private Vector3 HoverOffset;
+
+    [SerializeField] private Vector3 OffsetToPlayTargetlessCard;
+
     private bool m_Selected;
 
-    [SerializeField]
-    private LineRenderer lineRenderer;
+    [SerializeField] private LineRenderer lineRenderer;
 
-    [SerializeField]
-    private Vector3 LineRendererStartOffset;
+    [SerializeField] private Vector3 LineRendererStartOffset;
 
     public void ResetHandPosition(Vector3 handPosition)
     {
@@ -67,30 +73,36 @@ public class HandCardProxy : CardProxy
     {
         MouseOver = true;
         TargetPosition = HandPosition + HoverOffset;
-
     }
 
     void OnMouseExit()
     {
         MouseOver = false;
-        if(!Hovered)
+        if (!Hovered)
         {
             TargetPosition = HandPosition;
         }
-   
     }
 
     void OnMouseDown()
     {
-        Selected = true;
+        if (!GameEntity.RequiresTarget)
+        {
+            GameEntity.PlayCard(null);
+        }
+
+        Selected = !Selected;
         TargetPosition = HandPosition + HoverOffset;
     }
 
     private void HandleSelectedChanged()
     {
-        if(Selected)
+        if (Selected && GameEntity.RequiresTarget)
         {
             lineRenderer.enabled = true;
+        }
+        else if (Selected)
+        {
         }
         else
         {
@@ -100,9 +112,9 @@ public class HandCardProxy : CardProxy
                 TargetPosition = HandPosition;
             }
         }
-
     }
-     void Start()
+
+    void Start()
     {
         lineRenderer.enabled = false;
     }
@@ -118,7 +130,7 @@ public class HandCardProxy : CardProxy
             }
         }
 
-        if(Selected)
+        if (Selected)
         {
             Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3 pointPosition = new Vector3(mouseWorldPosition.x, mouseWorldPosition.y, .1f);
@@ -127,9 +139,6 @@ public class HandCardProxy : CardProxy
 
         lineRenderer.SetPosition(0, transform.position + LineRendererStartOffset);
     }
-
-
-
 }
 
 public interface ITargetingProvider
@@ -139,6 +148,6 @@ public interface ITargetingProvider
 
 public enum TargetingType
 {
-    None, 
+    None,
     Single
 }

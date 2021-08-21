@@ -25,6 +25,8 @@ namespace Content.Cards
             return Context.GetEnemies();
         }
 
+        public override bool RequiresTarget => true;
+
         protected override void DoPlayCard(Actor target)
         {
             Context.TryDealDamage(this, target, DamageAmount);

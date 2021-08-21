@@ -10,7 +10,7 @@ namespace Content.Cards
         public override string Name => nameof(DoubleNextCardDamage);
 
         [JsonIgnore] private bool Activated { get; set; }
-        public override string GetCardText(IGameEntity target = null)
+        public override string GetCardText(IGameEntity _ = null)
         {
             return "The next card you play deals double damage.";
         }
@@ -20,7 +20,9 @@ namespace Content.Cards
             return null;
         }
 
-        protected override void DoPlayCard(Actor target)
+        public override bool RequiresTarget => false;
+
+        protected override void DoPlayCard(Actor actor)
         {
             Activated = true;
         }
@@ -34,7 +36,7 @@ namespace Content.Cards
 
         private void EventsOnRequestDamageAmount(object sender, RequestDamageAmountEventArgs args)
         {
-            if (Activated)
+            if (Activated && sender is Card)
             {
                 args.AddModifier(new DamageAmountModifier { MultiplicativeModifier = 1 });
             }
@@ -42,7 +44,11 @@ namespace Content.Cards
 
         private void OnCardPlayed(object sender, CardPlayedEventArgs args)
         {
-            if (Activated && args.CardId != Id)
+            if (args.CardId == Id)
+            {
+                Context.SendToPile(Id, PileType.ExhaustPile);
+            }
+            else if (Activated)
             {
                 Console.WriteLine("Damage doubled.");
                 Activated = false;
