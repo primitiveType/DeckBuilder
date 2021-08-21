@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Data;
 using DeckbuilderLibrary.Data.GameEntities;
@@ -121,7 +122,12 @@ public class GameContext : ITestContext
     {
         return ((IInternalGameEventHandler)Events).RequestDamage(sender, baseDamage, target);
     }
-    
+
+    public void TryDealDamage(GameEntity source, Actor target, int baseDamage)
+    {
+        target.TryDealDamage(GetDamageAmount(source, baseDamage, target), out int totalDamageDealt, out int healthDamageDealt);
+    }
+
     public T CreateEntity<T>() where T : GameEntity, new()
     {
         T entity = new T

@@ -5,7 +5,7 @@
         public int Health { get;  set; }
         public int Armor { get;  set; }
         
-        public void TryDealDamage(int damage, out int totalDamage, out int healthDamage)
+        internal void TryDealDamage(int damage, out int totalDamage, out int healthDamage)
         {
             int armorDamage = System.Math.Min(damage, Armor);
             Armor -= armorDamage;

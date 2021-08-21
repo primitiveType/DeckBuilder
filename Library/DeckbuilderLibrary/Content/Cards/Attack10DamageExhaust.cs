@@ -27,7 +27,7 @@ namespace Content.Cards
 
         protected override void DoPlayCard(Actor target)
         {
-            target.TryDealDamage(10, out int _, out int __);
+            Context.TryDealDamage(this, target, DamageAmount);
         }
 
         private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)

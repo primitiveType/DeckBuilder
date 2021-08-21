@@ -7,12 +7,12 @@ namespace Content.Cards
 {
     public class DoubleNextCardDamage : Card
     {
-        public override string Name { get; }
-        
+        public override string Name => nameof(DoubleNextCardDamage);
+
         [JsonIgnore] private bool Activated { get; set; }
         public override string GetCardText(IGameEntity target = null)
         {
-            return "Then next card you play deals double damage.";
+            return "The next card you play deals double damage.";
         }
 
         public override IReadOnlyList<Actor> GetValidTargets()
@@ -34,12 +34,15 @@ namespace Content.Cards
 
         private void EventsOnRequestDamageAmount(object sender, RequestDamageAmountEventArgs args)
         {
-            args.AddModifier(new DamageAmountModifier{MultiplicativeModifier = 1});
+            if (Activated)
+            {
+                args.AddModifier(new DamageAmountModifier { MultiplicativeModifier = 1 });
+            }
         }
 
         private void OnCardPlayed(object sender, CardPlayedEventArgs args)
         {
-            if (Activated)
+            if (Activated && args.CardId != Id)
             {
                 Console.WriteLine("Damage doubled.");
                 Activated = false;

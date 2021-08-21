@@ -6,6 +6,7 @@ using DeckbuilderLibrary.Data;
 using JsonNet.ContractResolvers;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace DeckbuilderLibrary.Tests
 {
@@ -36,10 +37,40 @@ namespace DeckbuilderLibrary.Tests
 
             Battle battle = Context.CreateEntity<Battle>();
             battle.Player = player;
-            battle.Enemies = new List<Actor> {enemy};
+            battle.Enemies = new List<Actor> { enemy };
             battle.Deck = deck;
 
             Context.SetCurrentBattle(battle);
+        }
+
+        [Test]
+        public void DamageDoubleCard_DoublesDamage()
+        {
+            Card doubler = FindCardInDeck(nameof(DoubleNextCardDamage));
+            Card damage = FindCardInDeck(nameof(Attack5Damage));
+
+            var enemy = Context.GetEnemies().First();
+            string text = damage.GetCardText(null);
+            //enemy starts with 100 health
+            Assert.That(enemy, Has.Property("Health").EqualTo(100));
+            damage.PlayCard(enemy);
+            //this card always deals 5 damage
+            Assert.That(enemy, Has.Property("Health").EqualTo(95));
+
+            //check that its text says it deals 5 damage
+            Assert.That(text, Does.StartWith("Deal 5 "));
+            //play card that doubles the next cards damage
+            doubler.PlayCard(null);
+            text = damage.GetCardText(null);
+            //now see that the damage reads "10" instead of 5.
+            Assert.That(text, Does.StartWith("Deal 10 "));
+
+            //now verify it actually deals 10 instead of five.
+            damage.PlayCard(enemy);
+            Assert.That(enemy, Has.Property("Health").EqualTo(85));
+            //and that the text has reset.
+            text = damage.GetCardText(null);
+            Assert.That(text, Does.StartWith("Deal 5 "));
         }
 
 
@@ -181,7 +212,6 @@ namespace DeckbuilderLibrary.Tests
         {
             return Context.GetCurrentBattle().Deck.AllCards().First(card => card.Id == cardId);
         }
-    
 
 
         [Test]

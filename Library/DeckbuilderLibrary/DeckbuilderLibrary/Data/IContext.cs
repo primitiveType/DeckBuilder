@@ -18,6 +18,7 @@ public interface IContext
     IDeck CreateDeck();
     IPile CreatePile();
     int GetDamageAmount(object sender, int baseDamage, IGameEntity target);
+    void TryDealDamage(GameEntity source, Actor target, int baseDamage);
 }
 
 public interface IContextListener

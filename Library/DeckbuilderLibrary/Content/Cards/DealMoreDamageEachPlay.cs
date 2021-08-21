@@ -33,7 +33,7 @@ namespace Content.Cards
 
         protected override void DoPlayCard(Actor target)
         {
-            target.TryDealDamage(CurrentDamage, out int _, out int __);
+            Context.TryDealDamage(this, target, CurrentDamage);
             TimesPlayed += 1;
         }
 

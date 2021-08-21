@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 
-public class HandCardProxy : CardProxy, ITargetingProvider
+public class HandCardProxy : CardProxy
 {
     [SerializeField]
     private Text NameText; 
