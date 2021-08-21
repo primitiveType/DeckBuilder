@@ -29,14 +29,14 @@ namespace Content.Cards
         }
 
 
-        public override IReadOnlyList<Actor> GetValidTargets()
+        public override IReadOnlyList<IActor> GetValidTargets()
         {
             return Context.GetEnemies();
         }
 
         public override bool RequiresTarget => true;
 
-        protected override void DoPlayCard(Actor target)
+        protected override void DoPlayCard(IActor target)
         {
             Context.TryDealDamage(this, target, 5);
         }

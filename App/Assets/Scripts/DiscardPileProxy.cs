@@ -10,7 +10,7 @@ public class DiscardPileProxy : PileProxy<CardProxy>
     [SerializeField] private Button SendToDrawButon;
 
     private IContext Api => GameEntity.Context;
-    private Battle CurrentBattle { get; set; }
+    private IBattle CurrentBattle { get; set; }
 
     // Start is called before the first frame update
     void Start()

@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using System;
+using Data;
 using UnityEngine;
 
 public abstract class ActorProxy : Proxy<Actor>
@@ -18,4 +19,9 @@ public abstract class ActorProxy : Proxy<Actor>
     }
 
     public abstract void DamageReceived();
+
+    protected virtual void OnDestroy()
+    {
+        GameEntity.Context.Events.DamageDealt -= OnDamageDealt;
+    }
 }

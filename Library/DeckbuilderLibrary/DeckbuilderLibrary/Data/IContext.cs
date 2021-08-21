@@ -4,12 +4,12 @@ using DeckbuilderLibrary.Data.GameEntities;
 
 public interface IContext
 {
-    void SetCurrentBattle(Battle battle);
+    void SetCurrentBattle(IBattle battle);
     int GetPlayerHealth();
-    IReadOnlyList<Actor> GetEnemies();
-    Battle GetCurrentBattle();
+    IReadOnlyList<IActor> GetEnemies();
+    IBattle GetCurrentBattle();
 
-    Actor GetActorById(int id);
+    IActor GetActorById(int id);
     IGameEventHandler Events { get; }
     void AddEntity(IGameEntity entity);
 
@@ -18,7 +18,9 @@ public interface IContext
     IDeck CreateDeck();
     IPile CreatePile();
     int GetDamageAmount(object sender, int baseDamage, IGameEntity target);
-    void TryDealDamage(GameEntity source, Actor target, int baseDamage);
+    void TryDealDamage(GameEntity source, IActor target, int baseDamage);
+    Actor CreateActor<T>(int health, int armor) where T : Actor;
+    IBattle CreateBattle(IDeck deck, Actor player);
 }
 
 public interface IContextListener

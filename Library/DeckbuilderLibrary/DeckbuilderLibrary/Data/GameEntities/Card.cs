@@ -14,12 +14,12 @@ namespace Data
 
         public abstract string GetCardText(IGameEntity target = null);
 
-        public abstract IReadOnlyList<Actor> GetValidTargets();
+        public abstract IReadOnlyList<IActor> GetValidTargets();
 
         public abstract bool RequiresTarget { get; }
 
         
-        public void PlayCard(Actor target)
+        public void PlayCard(IActor target)
         {
             if (target == null && RequiresTarget)
             {
@@ -33,7 +33,7 @@ namespace Data
             ((IInternalGameEventHandler)Context.Events).InvokeCardPlayed(this, new CardPlayedEventArgs(Id)); 
         }
 
-        protected abstract void DoPlayCard(Actor target);
+        protected abstract void DoPlayCard(IActor target);
 
 
         private void Log(string log)
