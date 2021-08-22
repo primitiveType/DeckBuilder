@@ -1,18 +1,24 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Data;
 
 namespace Content.Cards
 {
-    public class Attack5Damage : Card
+    public class BodySlam : Card
     {
-        private int DamageAmount => 5;
-
+        public override string Name => "Body Slam";
+        private int DamageAmount = 0;
         protected override void Initialize()
         {
+            
             base.Initialize();
             Context.Events.CardPlayed += EventsOnCardPlayed;
+            
         }
-
+        protected override void DoPlayCard(IActor target)
+        {
+            // Deal damage equal to your block.
+            Context.TryDealDamage(this, Owner, target, DamageAmount + Owner.Armor);
+        }
         private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
         {
             if (args.CardId == Id)
@@ -20,25 +26,15 @@ namespace Content.Cards
                 Context.TrySendToPile(Id, PileType.DiscardPile);
             }
         }
-
-        public override string Name => nameof(Attack5Damage);
-
-        public override string GetCardText(IGameEntity target = null)
-        {
-            return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)} to target enemy.";
-        }
-
-
         public override IReadOnlyList<IActor> GetValidTargets()
         {
             return Context.GetEnemies();
         }
-
         public override bool RequiresTarget => true;
-
-        protected override void DoPlayCard(IActor target)
+        public override string GetCardText(IGameEntity target = null)
         {
-            Context.TryDealDamage(this, Owner, target, 5);
+            return $"Deal damage equal to your block.";
         }
+
     }
 }

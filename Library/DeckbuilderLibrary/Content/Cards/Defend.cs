@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Data;
 
 namespace Content.Cards
 {
-    public class Attack5Damage : Card
+    public class Defend : Card
     {
-        private int DamageAmount => 5;
-
+        public override string Name => nameof(Defend);
         protected override void Initialize()
         {
             base.Initialize();
             Context.Events.CardPlayed += EventsOnCardPlayed;
         }
-
         private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
         {
             if (args.CardId == Id)
@@ -20,25 +18,23 @@ namespace Content.Cards
                 Context.TrySendToPile(Id, PileType.DiscardPile);
             }
         }
-
-        public override string Name => nameof(Attack5Damage);
-
+        private int BlockAmount = 5;
         public override string GetCardText(IGameEntity target = null)
         {
-            return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)} to target enemy.";
+            return $"Gain {Context.GetBlockAmount(this, BlockAmount, target as IActor, Owner)} to target enemy.";
         }
-
 
         public override IReadOnlyList<IActor> GetValidTargets()
         {
-            return Context.GetEnemies();
+            return null;
         }
 
-        public override bool RequiresTarget => true;
+        public override bool RequiresTarget => false;
 
-        protected override void DoPlayCard(IActor target)
+        protected override void DoPlayCard(IActor _)
         {
-            Context.TryDealDamage(this, Owner, target, 5);
+            // Gain x block.
+            Context.TryApplyBlock(this, Owner, Owner, BlockAmount);
         }
-    }
+    };
 }
