@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Data;
+using DeckbuilderLibrary.Data;
 using Newtonsoft.Json;
 
 namespace Content.Cards
@@ -15,14 +16,14 @@ namespace Content.Cards
             return "The next card you play deals double damage.";
         }
 
-        public override IReadOnlyList<Actor> GetValidTargets()
+        public override IReadOnlyList<IActor> GetValidTargets()
         {
             return null;
         }
 
         public override bool RequiresTarget => false;
 
-        protected override void DoPlayCard(Actor actor)
+        protected override void DoPlayCard(IActor actor)
         {
             Activated = true;
         }

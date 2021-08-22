@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 
@@ -13,6 +14,11 @@ public class HandCardProxy : CardProxy
         NameText.text = GameEntity.Name;
         GameEntity.Context.Events.CardPlayed += EventsOnCardPlayed;
         SetDescriptionText();
+    }
+
+    private void OnDestroy()
+    {
+        GameEntity.Context.Events.CardPlayed -= EventsOnCardPlayed;
     }
 
     private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)

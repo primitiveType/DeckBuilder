@@ -14,26 +14,31 @@ namespace Data
 
         public abstract string GetCardText(IGameEntity target = null);
 
-        public abstract IReadOnlyList<Actor> GetValidTargets();
+        public abstract IReadOnlyList<IActor> GetValidTargets();
 
         public abstract bool RequiresTarget { get; }
 
-        
-        public void PlayCard(Actor target)
+        [JsonIgnore] public IActor Owner => Context.GetCurrentBattle().Player;
+
+
+        public void PlayCard(IActor target)
         {
             if (target == null && RequiresTarget)
             {
-                throw new ArgumentException("This card requires a target, but an attempt was made to play it without one!");
+                throw new ArgumentException(
+                    "This card requires a target, but an attempt was made to play it without one!");
             }
+
             if (RequiresTarget && !GetValidTargets().Contains(target))
             {
                 throw new ArgumentException("Tried to play card on invalid target!");
             }
+
             DoPlayCard(target);
-            ((IInternalGameEventHandler)Context.Events).InvokeCardPlayed(this, new CardPlayedEventArgs(Id)); 
+            ((IInternalGameEventHandler)Context.Events).InvokeCardPlayed(this, new CardPlayedEventArgs(Id));
         }
 
-        protected abstract void DoPlayCard(Actor target);
+        protected abstract void DoPlayCard(IActor target);
 
 
         private void Log(string log)
