@@ -47,27 +47,27 @@ public class GameContext : ITestContext
 
     private void SendToDiscard(int cardId)
     {
-        SendToPile(cardId, PileType.DiscardPile);
+        TrySendToPile(cardId, PileType.DiscardPile);
     }
 
 
     private void SendToExhaust(int cardId)
     {
-        SendToPile(cardId, PileType.ExhaustPile);
+        TrySendToPile(cardId, PileType.ExhaustPile);
     }
 
     private void SendToDraw(int cardId)
     {
-        SendToPile(cardId, PileType.DrawPile);
+        TrySendToPile(cardId, PileType.DrawPile);
     }
 
     private void SendToHand(int cardId)
     {
-        SendToPile(cardId, PileType.HandPile);
+        TrySendToPile(cardId, PileType.HandPile);
     }
 
 
-    public void SendToPile(int cardId, PileType pileType)
+    public void TrySendToPile(int cardId, PileType pileType)
     {
         if (!EntitiesById.TryGetValue(cardId, out IGameEntity entity))
         {

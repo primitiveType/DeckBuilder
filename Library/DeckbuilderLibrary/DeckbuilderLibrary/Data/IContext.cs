@@ -13,7 +13,7 @@ public interface IContext
     IGameEventHandler Events { get; }
     void AddEntity(IGameEntity entity);
 
-    void SendToPile(int cardId, PileType pileType);
+    void TrySendToPile(int cardId, PileType pileType);
     T CreateEntity<T>() where T : GameEntity, new();
     IDeck CreateDeck();
     IPile CreatePile();

@@ -17,7 +17,7 @@ namespace Content.Cards
         {
             if (args.CardId == Id)
             {
-                Context.SendToPile(Id, PileType.DiscardPile);
+                Context.TrySendToPile(Id, PileType.DiscardPile);
             }
         }
 
