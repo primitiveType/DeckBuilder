@@ -17,7 +17,7 @@ namespace Content.Cards
                 // Deal x damage.
                 Context.SendToPile(Id, PileType.DiscardPile);
                 // Add a copy of this to your discard pile.
-                Card copy = Context.CopyCard();
+                Card copy = Context.CreateCopy(this);
                 Context.SendToPile(copy.Id, PileType.DiscardPile);
             }
         }
