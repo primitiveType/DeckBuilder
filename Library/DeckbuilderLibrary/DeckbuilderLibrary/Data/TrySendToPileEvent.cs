@@ -1,0 +1,1 @@
+public delegate void TrySendToPileEvent(object sender, TrySendToPileEventArgs args);

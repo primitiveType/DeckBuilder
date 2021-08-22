@@ -1,0 +1,68 @@
+using System.Collections.Generic;
+using Data;
+
+namespace Content.Cards
+{
+    public class TheSoularium : Card
+    {
+        public override string Name => "The Soularium";
+        private List<Card> DrawnCards => new List<Card>();
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Context.Events.CardPlayed += EventsOnCardPlayed;
+            Context.Events.TurnEnded += EventsOnTurnEnded;
+        }
+
+        private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
+        {
+            if (args.CardId == Id)
+            {
+                Context.TrySendToPile(Id, PileType.DiscardPile);
+            }
+        }
+
+        private void EventsOnTurnEnded(object sender, TurnEndedEventArgs args)
+        {
+            var cardsInHand = Context.GetCurrentBattle().Deck.HandPile.Cards;
+            foreach (var card in DrawnCards)
+            {
+                if (!cardsInHand.Contains(card))
+                {
+                    continue;
+                }
+                Context.TrySendToPile(card.Id, PileType.ExhaustPile);
+            }
+            Context.Events.TurnEnded -= EventsOnTurnEnded;
+        }
+
+        private int DrawAmount = 3;
+        public override string GetCardText(IGameEntity target = null)
+        {
+            return $"Draw {Context.GetDrawAmount(this, DrawAmount, target as IActor, Owner)} cards. Exhaust .";
+        }
+
+        public override IReadOnlyList<IActor> GetValidTargets()
+        {
+            return null;
+        }
+
+        public override bool RequiresTarget => false;
+        protected override void DoPlayCard(IActor target)
+        {            
+            var deck = Context.GetCurrentBattle().Deck;
+            var drawPile = deck.DrawPile;
+            for (int i = 0; i < Context.GetDrawAmount(this, DrawAmount, target as IActor, Owner); i++)
+            {
+                if (drawPile.Cards.Count > 0)
+                {
+                    // Oh no! I'm using Deck's TrySendToPile instead of Context's!
+                    var card = deck.DrawPile.Cards[0]; 
+                    deck.TrySendToPile(card, PileType.HandPile);
+                    // Todo: If success perform next action?
+                    DrawnCards.Add(card);
+                }
+            }
+        }
+    }
+}

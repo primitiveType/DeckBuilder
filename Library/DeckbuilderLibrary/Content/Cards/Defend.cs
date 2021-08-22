@@ -15,7 +15,7 @@ namespace Content.Cards
         {
             if (args.CardId == Id)
             {
-                Context.SendToPile(Id, PileType.DiscardPile);
+                Context.TrySendToPile(Id, PileType.DiscardPile);
             }
         }
         private int BlockAmount = 5;
@@ -34,7 +34,7 @@ namespace Content.Cards
         protected override void DoPlayCard(IActor target)
         {
             // Gain x block.
-            Context.TryGainBlock(this, Owner, target, BlockAmount);
+            Context.TryApplyBlock(this, Owner, target, BlockAmount);
         }
     };
 }

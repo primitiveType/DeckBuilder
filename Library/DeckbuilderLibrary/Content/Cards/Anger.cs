@@ -14,11 +14,7 @@ namespace Content.Cards
         {
             if (args.CardId == Id)
             {
-                // Deal x damage.
-                Context.SendToPile(Id, PileType.DiscardPile);
-                // Add a copy of this to your discard pile.
-                Card copy = Context.CreateCopy(this);
-                Context.SendToPile(copy.Id, PileType.DiscardPile);
+                Context.TrySendToPile(Id, PileType.DiscardPile);
             }
         }
 
@@ -31,14 +27,17 @@ namespace Content.Cards
 
         public override IReadOnlyList<IActor> GetValidTargets()
         {
-            Context.GetEnemies();
+            return Context.GetEnemies();
         }
 
         public override bool RequiresTarget => true;
         protected override void DoPlayCard(IActor target)
         {
+            // Deal x damage.
             Context.TryDealDamage(this, Owner, target, DamageAmount);
-            
+            // Add a copy of this to your discard pile.
+            Card copy = Context.CopyCard(this);
+            Context.TrySendToPile(copy.Id, PileType.DiscardPile);
         }
     }
 }

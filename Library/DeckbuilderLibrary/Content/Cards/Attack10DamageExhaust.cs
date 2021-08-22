@@ -36,7 +36,7 @@ namespace Content.Cards
         {
             if (args.CardId == Id)
             {
-                Context.SendToPile(Id, PileType.ExhaustPile);
+                Context.TrySendToPile(Id, PileType.ExhaustPile);
             }
         }
     }

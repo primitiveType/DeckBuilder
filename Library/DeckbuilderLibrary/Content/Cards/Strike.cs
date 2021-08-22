@@ -14,7 +14,7 @@ namespace Content.Cards
         {
             if (args.CardId == Id)
             {
-                Context.SendToPile(Id, PileType.DiscardPile);
+                Context.TrySendToPile(Id, PileType.DiscardPile);
             }
         }
         
@@ -34,6 +34,7 @@ namespace Content.Cards
 
         protected override void DoPlayCard(IActor target)
         {
+            // Deal x damage.
             Context.TryDealDamage(this, Owner, target, DamageAmount);
         }
     }

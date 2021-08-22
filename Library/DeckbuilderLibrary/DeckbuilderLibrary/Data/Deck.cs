@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Data;
 using DeckbuilderLibrary.Data.GameEntities;
 
+// A deck is all Piles (not just the 'physical' DrawPile)
 internal class Deck : GameEntity, IDeck
 {
     public IPile DrawPile { get; private set; }
@@ -35,7 +36,7 @@ internal class Deck : GameEntity, IDeck
     }
 
 
-    public void SendToPile(Card card, PileType pileType)
+    public void TrySendToPile(Card card, PileType pileType)
     {
         PileType previousPileType;
         if (DrawPile.Cards.Remove(card))
@@ -123,6 +124,6 @@ public interface IDeck : IGameEntity
     IPile DiscardPile { get; }
     IPile ExhaustPile { get; }
     IEnumerable<Card> AllCards();
-    void SendToPile(Card card, PileType pileType);
+    void TrySendToPile(Card card, PileType pileType);
     IList<Card> GetPileCards(PileType pileType);
 }

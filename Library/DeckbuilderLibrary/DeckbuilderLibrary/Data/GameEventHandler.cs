@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Data;
 
 namespace DeckbuilderLibrary.Data
@@ -130,7 +131,6 @@ namespace DeckbuilderLibrary.Data
             return (int)(total * totalPercentMod);
         }
     }
-
     public class DamageAmountModifier
     {
         public int AdditiveModifier { get; set; }
