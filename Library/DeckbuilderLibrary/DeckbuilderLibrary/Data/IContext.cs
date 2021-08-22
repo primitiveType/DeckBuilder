@@ -22,6 +22,7 @@ public interface IContext
     Actor CreateActor<T>(int health, int armor) where T : Actor, new ();
     IBattle CreateBattle(IDeck deck, Actor player);
     T CreateIntent<T>(Actor owner) where T : Intent, new();
+    T CopyCard<T>(T card) where T : Card;
 }
 
 public interface IContextListener
