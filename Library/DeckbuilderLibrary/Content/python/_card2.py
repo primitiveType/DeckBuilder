@@ -13,8 +13,9 @@ class PileType(enum.Enum):
 
 
 class Card(metaclass=ABCMeta):
-    
+
     class Context:
+        pass
         
 
     @property
