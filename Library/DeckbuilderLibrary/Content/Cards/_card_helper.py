@@ -124,7 +124,7 @@ def create_skill():
 
 def create_power():
     pass
-        
+
 
 
 @click.command()
@@ -132,15 +132,15 @@ def new_card():
     click.echo("Welcome to the card builder! Fill in the prompts.\n")
     card_name = input("Card name? ")
     card_type = input("Card type? attack (1), skill (2), or power (3) ")
-    card = lookup(card_type, lookup_table=card_type_generator, name_to_number=card_types)
+    card = lookup(card_type, lookup_table=card_type_generator)
     click.echo(f"You said {card_name}")
 
 
 
 card_type_generator = {
-    "attack": create_attack,
-    "skill": create_skill,
-    "power": create_power
+    1: ("attack", create_attack),
+    2: ("skill", create_skill),
+    3: ("power", create_power)
 }
 
 card_types = {
