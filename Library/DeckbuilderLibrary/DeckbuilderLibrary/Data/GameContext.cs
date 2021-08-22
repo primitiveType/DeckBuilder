@@ -5,6 +5,7 @@ using System.Linq;
 using Data;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.GameEntities;
+using JsonNet.ContractResolvers;
 using Newtonsoft.Json;
 
 
@@ -142,6 +143,25 @@ public class GameContext : ITestContext
         return entity;
     }
 
+    readonly JsonSerializerSettings m_JsonSerializerSettings = new JsonSerializerSettings
+    {
+        TypeNameHandling = TypeNameHandling.All,
+        ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+        ContractResolver = new PrivateSetterContractResolver(),
+        Converters = new List<JsonConverter>
+        {
+            new GameEntityConverter()
+        }
+    };
+
+    public T CopyCard<T>(T card) where T : Card
+    {
+        CurrentContext = this;
+        string contextStr = JsonConvert.SerializeObject(card, m_JsonSerializerSettings);
+        T copy = JsonConvert.DeserializeObject<T>(contextStr, m_JsonSerializerSettings);
+        return copy;
+    }
+
     public IDeck CreateDeck()
     {
         return CreateEntity<Deck>();
@@ -159,12 +179,12 @@ public class GameContext : ITestContext
         return intent;
     }
 
-    public Actor CreateActor<T>(int health, int armor) where T : Actor, new ()
+    public Actor CreateActor<T>(int health, int armor) where T : Actor, new()
     {
         var actor = (Actor)CreateEntity<T>();
         actor.Health = health;
         actor.Armor = armor;
-        
+
         return actor;
     }
 
