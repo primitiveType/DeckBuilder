@@ -1,5 +1,6 @@
-﻿using System;
-using DeckbuilderLibrary.Data;
+﻿using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -19,12 +20,12 @@ public class BattleProxy : Proxy<IBattle>
     private IGameEventHandler GameEventHandler => Api.Events;
 
 
-
     protected override void OnInitialize()
     {
         LeaveBattleButton.onClick.AddListener(LeaveBattle);
         GameEventHandler.BattleEnded += OnBattleEnded;
     }
+
 
     private void LeaveBattle()
     {

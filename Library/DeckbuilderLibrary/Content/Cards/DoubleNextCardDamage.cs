@@ -1,16 +1,19 @@
 using System;
 using System.Collections.Generic;
-using Data;
 using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 using Newtonsoft.Json;
 
 namespace Content.Cards
 {
-    public class DoubleNextCardDamage : Card
+    public class DoubleNextCardDamage : EnergyCard
     {
         public override string Name => nameof(DoubleNextCardDamage);
 
         [JsonIgnore] private bool Activated { get; set; }
+
         public override string GetCardText(IGameEntity _ = null)
         {
             return "The next card you play deals double damage.";
@@ -23,16 +26,19 @@ namespace Content.Cards
 
         public override bool RequiresTarget => false;
 
-        protected override void DoPlayCard(IActor _)
+        protected override void DoPlayCard(IActor target)
         {
+            base.DoPlayCard(target);
             Activated = true;
         }
+
+        public override int EnergyCost => 1;
 
         protected override void Initialize()
         {
             base.Initialize();
             Context.Events.CardPlayed += OnCardPlayed;
-            Context.Events.RequestDamageAmount += EventsOnRequestDamageAmount;
+            Context.Events.DamageAmountRequested += EventsOnRequestDamageAmount;
         }
 
         private void EventsOnRequestDamageAmount(object sender, RequestDamageAmountEventArgs args)

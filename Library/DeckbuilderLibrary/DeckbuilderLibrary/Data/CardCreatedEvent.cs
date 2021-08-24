@@ -1,1 +1,0 @@
-﻿public delegate void CardCreatedEvent(object sender, CardCreatedEventArgs args);

@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using System;
-using Data;
+using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 
 namespace Content.Cards
 {
-    public class SwordBoomerang : Card
+    public class SwordBoomerang : EnergyCard
     {
         protected override void Initialize()
         {
@@ -31,6 +34,8 @@ namespace Content.Cards
             return Context.GetEnemies();
         }
         public override bool RequiresTarget => false;
+
+        public override int EnergyCost => 1;
 
         protected override void DoPlayCard(IActor _)
         {

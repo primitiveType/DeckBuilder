@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 using UnityEngine;
 using UnityEngine.UI;
-using Data;
 
-public class EnemyActorProxy : ActorProxy
+public class EnemyActorProxy : ActorProxy<Actor>
 {
     private HandPileProxy HandPileProxy { get; set; }
 

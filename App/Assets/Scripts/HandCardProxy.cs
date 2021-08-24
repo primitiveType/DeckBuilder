@@ -1,4 +1,5 @@
 ﻿using System;
+using DeckbuilderLibrary.Data.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -92,6 +93,10 @@ public class HandCardProxy : CardProxy
 
     void OnMouseDown()
     {
+        if (!GameEntity.IsPlayable())
+        {
+            return;
+        }
         if (!GameEntity.RequiresTarget)
         {
             GameEntity.PlayCard(null);

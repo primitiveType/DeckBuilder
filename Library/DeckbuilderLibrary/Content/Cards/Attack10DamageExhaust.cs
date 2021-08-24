@@ -1,9 +1,12 @@
 using System.Collections.Generic;
-using Data;
+using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 
 namespace Content.Cards
 {
-    public class Attack10DamageExhaust : Card
+    public class Attack10DamageExhaust : EnergyCard
     {
         private int DamageAmount { get; } = 10;
 
@@ -29,8 +32,10 @@ namespace Content.Cards
 
         protected override void DoPlayCard(IActor target)
         {
+            base.DoPlayCard(target);
             Context.TryDealDamage(this, Owner, target, DamageAmount);
         }
+
 
         private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
         {
@@ -39,5 +44,7 @@ namespace Content.Cards
                 Context.TrySendToPile(Id, PileType.ExhaustPile);
             }
         }
+
+        public override int EnergyCost => 1;
     }
 }

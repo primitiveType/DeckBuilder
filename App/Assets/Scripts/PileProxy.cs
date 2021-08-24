@@ -1,8 +1,7 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Linq;
-using Data;
 using System.Collections.Generic;
+using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 
 public class PileProxy<TCardProxy> : Proxy<IPile> where TCardProxy : CardProxy  

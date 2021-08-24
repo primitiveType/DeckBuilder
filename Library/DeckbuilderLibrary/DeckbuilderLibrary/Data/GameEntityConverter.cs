@@ -1,7 +1,6 @@
 ﻿using System;
-using Data;
+using DeckbuilderLibrary.Data.GameEntities;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
 namespace DeckbuilderLibrary.Data
@@ -43,14 +42,10 @@ namespace DeckbuilderLibrary.Data
 
             IInternalGameEntity internalGameEntity = ((IInternalGameEntity)existingValue);
             internalGameEntity.SetContext(GameContext.CurrentContext);
-            internalGameEntity.InternalInitialize();
             existingValue.Context.AddEntity(existingValue);
+            ((IInternalGameContext)existingValue.Context).ToInitialize.Add(internalGameEntity);
             return existingValue;
-            // var newEntity = (IGameEntity) Activator.CreateInstance(objectType);
-            // serializer.Populate(reader, newEntity);
-            //
-
-            // return newEntity;
+           
         }
     }
 }

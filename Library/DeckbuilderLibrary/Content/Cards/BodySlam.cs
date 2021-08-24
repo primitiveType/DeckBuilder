@@ -1,24 +1,28 @@
 using System.Collections.Generic;
-using Data;
+using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 
 namespace Content.Cards
 {
-    public class BodySlam : Card
+    public class BodySlam : EnergyCard
     {
         public override string Name => "Body Slam";
         private int DamageAmount = 0;
+
         protected override void Initialize()
         {
-            
             base.Initialize();
             Context.Events.CardPlayed += EventsOnCardPlayed;
-            
         }
+
         protected override void DoPlayCard(IActor target)
         {
             // Deal damage equal to your block.
             Context.TryDealDamage(this, Owner, target, DamageAmount + Owner.Armor);
         }
+
         private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
         {
             if (args.CardId == Id)
@@ -26,15 +30,20 @@ namespace Content.Cards
                 Context.TrySendToPile(Id, PileType.DiscardPile);
             }
         }
+
+
         public override IReadOnlyList<IActor> GetValidTargets()
         {
             return Context.GetEnemies();
         }
+
         public override bool RequiresTarget => true;
+
         public override string GetCardText(IGameEntity target = null)
         {
             return $"Deal damage equal to your block.";
         }
 
+        public override int EnergyCost => 1;
     }
 }

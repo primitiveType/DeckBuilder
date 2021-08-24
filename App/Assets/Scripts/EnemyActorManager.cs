@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Data;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 
 public class EnemyActorManager : MonoBehaviour
 {

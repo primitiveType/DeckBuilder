@@ -1,10 +1,13 @@
 using System.Collections.Generic;
-using Data;
+using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 using Newtonsoft.Json;
 
 namespace Content.Cards
 {
-    public class DealMoreDamageEachPlay : Card
+    public class DealMoreDamageEachPlay : EnergyCard
     {
         [JsonProperty] public int TimesPlayed { get; set; }
 
@@ -36,6 +39,7 @@ namespace Content.Cards
 
         protected override void DoPlayCard(IActor target)
         {
+            base.DoPlayCard(target);
             Context.TryDealDamage(this, Owner, target, CurrentDamage);
             TimesPlayed += 1;
         }
@@ -47,5 +51,7 @@ namespace Content.Cards
                 Context.TrySendToPile(Id, PileType.DiscardPile);
             }
         }
+
+        public override int EnergyCost { get; } = 1;
     }
 }

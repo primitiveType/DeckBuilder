@@ -1,52 +1,22 @@
-﻿using Data;
-using DeckbuilderLibrary.Data;
+﻿using DeckbuilderLibrary.Data.Events;
 
-public interface IGameEventHandler
+namespace DeckbuilderLibrary.Data
 {
-    event CardMovedEvent CardMoved;
+    public interface IGameEventHandler
+    {
+        event CardMovedEvent CardMoved;
 
-    // Todo(Arthur, Snapper): CardPlayedEvent is not being used when the card is played. Rather, it is used to resolve a card that has been already played. We either need to rename this function or make a new one to more accurately describe its usage. 
+        // Todo(Arthur, Snapper): CardPlayedEvent is not being used when the card is played. Rather, it is used to resolve a card that has been already played. We either need to rename this function or make a new one to more accurately describe its usage. 
     event CardPlayedEvent CardPlayed;
 
-    event CardCreatedEvent CardCreated;
-    event DamageDealt DamageDealt;
-    event RequestDamageAmountEvent RequestDamageAmount;
-    event ActorDiedEvent ActorDied;
-    event BattleEndedEvent BattleEnded;
-    event TurnEndedEvent TurnEnded;
-    event IntentChangedEvent IntentChanged;
-    void InvokeTurnEnded(object sender, TurnEndedEventArgs args);
-    void InvokeIntentChanged(object sender, IntentChangedEventArgs args);
-}
-
-public delegate void IntentChangedEvent(object sender, IntentChangedEventArgs args);
-
-public class IntentChangedEventArgs
-{
-    public Enemy Owner { get; }
-
-    public IntentChangedEventArgs(Enemy owner)
-    {
-        Owner = owner;
+        event CardCreatedEvent CardCreated;
+        event DamageDealt DamageDealt;
+        event RequestDamageAmountEvent DamageAmountRequested;
+        event ActorDiedEvent ActorDied;
+        event BattleEndedEvent BattleEnded;
+        event TurnEndedEvent TurnEnded;
+        event IntentChangedEvent IntentChanged;
+        void InvokeTurnEnded(object sender, TurnEndedEventArgs args);
+        void InvokeIntentChanged(object sender, IntentChangedEventArgs args);
     }
-}
-
-public delegate void TurnEndedEvent(object sender, TurnEndedEventArgs args);
-
-public class TurnEndedEventArgs
-{
-}
-
-//This interface exists to hide stuff on the game event handler that we don't want to be accessible when creating content.
-//For example, we don't want cards to be able to invoke events directly.
-internal interface IInternalGameEventHandler : IGameEventHandler
-{
-    //To request damage, cards should use the game context.
-    int RequestDamage(object sender, int baseDamage, IGameEntity target);
-    void InvokeCardPlayed(object sender, CardPlayedEventArgs args);
-    void InvokeCardMoved(object sender, CardMovedEventArgs args);
-    void InvokeDamageDealt(object sender, DamageDealtArgs args);
-    void InvokeCardCreated(object sender, CardCreatedEventArgs args);
-    void InvokeActorDied(object sender, ActorDiedEventArgs args);
-    void InvokeBattleEnded(object sender, BattleEndedEventArgs args);
 }

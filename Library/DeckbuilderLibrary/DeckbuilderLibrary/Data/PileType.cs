@@ -1,10 +1,13 @@
 ﻿using System;
 
-[Serializable]
-public enum PileType
+namespace DeckbuilderLibrary.Data
 {
-    DrawPile,
-    HandPile,
-    DiscardPile,
-    ExhaustPile
+    [Serializable]
+    public enum PileType
+    {
+        DrawPile,
+        HandPile,
+        DiscardPile,
+        ExhaustPile
+    }
 }

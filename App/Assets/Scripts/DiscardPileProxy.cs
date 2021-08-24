@@ -1,5 +1,6 @@
-﻿using System;
-using Data;
+﻿using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
 using UnityEngine;
 using UnityEngine.UI;
 

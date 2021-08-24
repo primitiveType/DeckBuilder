@@ -1,8 +1,7 @@
 ﻿using System;
-using DeckbuilderLibrary.Data;
 using Newtonsoft.Json;
 
-namespace Data
+namespace DeckbuilderLibrary.Data.GameEntities
 {
     [JsonConverter(typeof(GameEntityConverter))]
     public abstract class GameEntity : IInternalGameEntity
@@ -46,18 +45,5 @@ namespace Data
         }
 
         // public Properties Properties { get; protected set; } = new Properties();
-    }
-
-    internal interface IInternalGameEntity : IGameEntity
-    {
-        void InternalInitialize();
-
-        void SetContext(IContext context);
-    }
-
-    public interface IGameEntity
-    {
-        int Id { get; }
-        IContext Context { get; }
     }
 }

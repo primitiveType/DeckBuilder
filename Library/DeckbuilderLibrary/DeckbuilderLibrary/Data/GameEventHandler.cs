@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Data;
+using System;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
 
 namespace DeckbuilderLibrary.Data
 {
@@ -8,7 +8,7 @@ namespace DeckbuilderLibrary.Data
     {
         public event CardMovedEvent CardMoved;
 
-        public event RequestDamageAmountEvent RequestDamageAmount;
+        public event RequestDamageAmountEvent DamageAmountRequested;
         public event ActorDiedEvent ActorDied;
         public event BattleEndedEvent BattleEnded;
         public event TurnEndedEvent TurnEnded;
@@ -58,82 +58,12 @@ namespace DeckbuilderLibrary.Data
             DamageDealt?.Invoke(sender, args);
         }
 
-        public int RequestDamage(object sender, int baseDamage, IGameEntity target)
+        public int RequestDamageAmount(object sender, int baseDamage, IGameEntity target)
         {
             var args = new RequestDamageAmountEventArgs(target);
             args.AddModifier(new DamageAmountModifier { AdditiveModifier = baseDamage });
-            RequestDamageAmount?.Invoke(sender, args);
+            DamageAmountRequested?.Invoke(sender, args);
             return args.GetResult();
         }
-    }
-
-    public delegate void BattleEndedEvent(object sender, BattleEndedEventArgs args);
-
-    public class BattleEndedEventArgs
-    {
-        public bool IsVictory { get; }
-
-        public BattleEndedEventArgs(bool isVictory)
-        {
-            IsVictory = isVictory;
-        }
-    }
-
-    public delegate void ActorDiedEvent(object sender, ActorDiedEventArgs args);
-
-    public class ActorDiedEventArgs
-    {
-        public ActorDiedEventArgs(Actor actor, IGameEntity causeOfDeath, IGameEntity causeOfDeathOwner)
-        {
-            Actor = actor;
-            CauseOfDeath = causeOfDeath;
-            CauseOfDeathOwner = causeOfDeathOwner;
-        }
-
-        public Actor Actor { get; }
-        public IGameEntity CauseOfDeath { get; }
-        public IGameEntity CauseOfDeathOwner { get; }
-    }
-
-
-    public delegate void RequestDamageAmountEvent(object sender, RequestDamageAmountEventArgs args);
-
-    public class RequestDamageAmountEventArgs
-    {
-        public IGameEntity Target { get; }
-        private List<DamageAmountModifier> Modifiers { get; } = new List<DamageAmountModifier>();
-
-
-        public void AddModifier(DamageAmountModifier mod)
-        {
-            Modifiers.Add(mod);
-        }
-
-        public RequestDamageAmountEventArgs(IGameEntity target)
-        {
-            Target = target;
-        }
-
-        public int GetResult()
-        {
-            int total = 0;
-            foreach (var mod in Modifiers)
-            {
-                total += mod.AdditiveModifier;
-            }
-
-            float totalPercentMod = 1;
-            foreach (var mod in Modifiers)
-            {
-                totalPercentMod += mod.MultiplicativeModifier;
-            }
-
-            return (int)(total * totalPercentMod);
-        }
-    }
-    public class DamageAmountModifier
-    {
-        public int AdditiveModifier { get; set; }
-        public float MultiplicativeModifier { get; set; }
     }
 }

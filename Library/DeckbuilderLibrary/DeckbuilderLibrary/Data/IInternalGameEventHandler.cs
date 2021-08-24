@@ -1,0 +1,17 @@
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
+
+namespace DeckbuilderLibrary.Data
+{
+    internal interface IInternalGameEventHandler : IGameEventHandler
+    {
+        //To request damage, cards should use the game context.
+        int RequestDamageAmount(object sender, int baseDamage, IGameEntity target);
+        void InvokeCardPlayed(object sender, CardPlayedEventArgs args);
+        void InvokeCardMoved(object sender, CardMovedEventArgs args);
+        void InvokeDamageDealt(object sender, DamageDealtArgs args);
+        void InvokeCardCreated(object sender, CardCreatedEventArgs args);
+        void InvokeActorDied(object sender, ActorDiedEventArgs args);
+        void InvokeBattleEnded(object sender, BattleEndedEventArgs args);
+    }
+}

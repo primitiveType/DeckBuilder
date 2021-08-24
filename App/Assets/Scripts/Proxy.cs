@@ -1,5 +1,5 @@
 ﻿using System;
-using Data;
+using DeckbuilderLibrary.Data.GameEntities;
 using UnityEngine;
 
 public abstract class Proxy<T> : MonoBehaviour where T : IGameEntity
