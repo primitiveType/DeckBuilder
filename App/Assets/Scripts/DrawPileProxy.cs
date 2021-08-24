@@ -30,7 +30,7 @@ public class DrawPileProxy : PileProxy<CardProxy>
         //TODO Also check if hand has enough space for another card
         if (CurrentBattle.Deck.DrawPile.Cards.Count > 0)
         {
-            CurrentBattle.Deck.SendToPile(CurrentBattle.Deck.DrawPile.Cards[0], PileType.HandPile);
+            CurrentBattle.Deck.TrySendToPile(CurrentBattle.Deck.DrawPile.Cards[0], PileType.HandPile);
         }
     }
     protected override void GameEventHandlerOnCardMoved(object sender, CardMovedEventArgs args)

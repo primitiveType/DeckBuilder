@@ -12,6 +12,7 @@ namespace Data
         [JsonProperty] public Actor Player { get; private set; }
         [JsonProperty] private List<Actor> Enemies { get; set; }
         [JsonProperty] public IDeck Deck { get; private set; }
+        
 
         protected override void Initialize()
         {
@@ -76,6 +77,5 @@ public interface IBattle : IGameEntity
     Actor Player { get; }
 
     IDeck Deck { get; }
-
     void AddEnemy(Actor enemy);
 }

@@ -23,7 +23,7 @@ namespace Content.Cards
 
         public override bool RequiresTarget => false;
 
-        protected override void DoPlayCard(IActor actor)
+        protected override void DoPlayCard(IActor _)
         {
             Activated = true;
         }
@@ -47,7 +47,7 @@ namespace Content.Cards
         {
             if (args.CardId == Id)
             {
-                Context.SendToPile(Id, PileType.ExhaustPile);
+                Context.TrySendToPile(Id, PileType.ExhaustPile);
             }
             else if (Activated)
             {

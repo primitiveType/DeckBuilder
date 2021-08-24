@@ -25,7 +25,7 @@ public class DiscardPileProxy : PileProxy<CardProxy>
     {
         for (int i = GameEntity.Cards.Count - 1; i >= 0; i--)
         {
-            CurrentBattle.Deck.SendToPile(GameEntity.Cards[i], PileType.DrawPile);
+            CurrentBattle.Deck.TrySendToPile(GameEntity.Cards[i], PileType.DrawPile);
         }
     }
 

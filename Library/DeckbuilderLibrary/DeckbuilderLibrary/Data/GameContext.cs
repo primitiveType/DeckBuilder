@@ -44,31 +44,8 @@ public class GameContext : ITestContext
             yield return actor;
         }
     }
-
-
-    private void SendToDiscard(int cardId)
-    {
-        SendToPile(cardId, PileType.DiscardPile);
-    }
-
-
-    private void SendToExhaust(int cardId)
-    {
-        SendToPile(cardId, PileType.ExhaustPile);
-    }
-
-    private void SendToDraw(int cardId)
-    {
-        SendToPile(cardId, PileType.DrawPile);
-    }
-
-    private void SendToHand(int cardId)
-    {
-        SendToPile(cardId, PileType.HandPile);
-    }
-
-
-    public void SendToPile(int cardId, PileType pileType)
+    
+    public void TrySendToPile(int cardId, PileType pileType)
     {
         if (!EntitiesById.TryGetValue(cardId, out IGameEntity entity))
         {
@@ -77,7 +54,7 @@ public class GameContext : ITestContext
 
         if (entity is Card card)
         {
-            CurrentBattle.Deck.SendToPile(card, pileType);
+            CurrentBattle.Deck.TrySendToPile(card, pileType);
         }
         else
         {
@@ -120,17 +97,6 @@ public class GameContext : ITestContext
         return m_NextId++;
     }
 
-    public int GetDamageAmount(object sender, int baseDamage, IActor target, IActor owner)
-    {
-        return ((IInternalGameEventHandler)Events).RequestDamage(sender, baseDamage, target);
-    }
-
-    public void TryDealDamage(GameEntity source, IActor owner, IActor target, int baseDamage)
-    {
-        ((IInternalActor)target).TryDealDamage(source, GetDamageAmount(source, baseDamage, target, owner),
-            out int totalDamageDealt, out int healthDamageDealt);
-    }
-
     public T CreateEntity<T>() where T : GameEntity, new()
     {
         T entity = new T
@@ -160,6 +126,21 @@ public class GameContext : ITestContext
         string contextStr = JsonConvert.SerializeObject(card, m_JsonSerializerSettings);
         T copy = JsonConvert.DeserializeObject<T>(contextStr, m_JsonSerializerSettings);
         return copy;
+    }
+
+    public int GetBlockAmount(object sender, int baseDamage, IActor target, IActor owner)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetDrawAmount(object sender, int baseDraw, IActor target, IActor owner)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetVulnerableAmount(object sender, int baseDamage, IActor target, IActor owner)
+    {
+        throw new NotImplementedException();
     }
 
     public IDeck CreateDeck()
@@ -196,4 +177,26 @@ public class GameContext : ITestContext
 
         return battle;
     }
+
+    public int GetDamageAmount(object sender, int baseDamage, IActor target, IActor owner)
+    {
+        return ((IInternalGameEventHandler)Events).RequestDamage(sender, baseDamage, target);
+    }
+
+    public void TryDealDamage(GameEntity source, IActor owner, IActor target, int baseDamage)
+    {
+        ((IInternalActor)target).TryDealDamage(source, GetDamageAmount(source, baseDamage, target, owner),
+            out int totalDamageDealt, out int healthDamageDealt);
+    }
+
+    public void TryApplyBlock(GameEntity source, IActor owner, IActor target, int baseBlock)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void TryApplyVulnerable(GameEntity source, IActor owner, IActor target, int baseVulnerable)
+    {
+        throw new NotImplementedException();
+    }
 }
+    

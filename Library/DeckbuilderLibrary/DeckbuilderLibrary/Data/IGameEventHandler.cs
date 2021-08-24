@@ -5,6 +5,7 @@ public interface IGameEventHandler
 {
     event CardMovedEvent CardMoved;
 
+    // Todo(Arthur, Snapper): CardPlayedEvent is not being used when the card is played. Rather, it is used to resolve a card that has been already played. We either need to rename this function or make a new one to more accurately describe its usage. 
     event CardPlayedEvent CardPlayed;
 
     event CardCreatedEvent CardCreated;
