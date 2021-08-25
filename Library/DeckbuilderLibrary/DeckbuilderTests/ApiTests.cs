@@ -32,16 +32,13 @@ namespace DeckbuilderTests
         public void Setup()
         {
             Context = new GameContext();
-            PlayerActor player = (PlayerActor) Context.CreateActor<PlayerActor>(100, 0);
-            Actor enemy = Context.CreateActor<BasicEnemy>(100, 0);
+            PlayerActor player = (PlayerActor)Context.CreateActor<PlayerActor>(100, 0);
+            Enemy enemy = Context.CreateActor<BasicEnemy>(100, 0);
             Deck deck = CreateDeck(Context);
 
-            IBattle battle = Context.CreateBattle(deck, player);
-            battle.AddEnemy(enemy);
-
-            Context.SetCurrentBattle(battle);
+            IBattle battle = Context.CreateBattle(deck, player, new List<Enemy>{enemy});
         }
-        
+
         [Test]
         public void Energy_Resets_Every_Turn()
         {
@@ -53,19 +50,18 @@ namespace DeckbuilderTests
             Assert.That(player.Resources.GetResourceAmount<BaseEnergy>(), Is.EqualTo(3));
             Assert.That(player.Resources.GetResourceAmount<Energy>(), Is.EqualTo(3));
             damage.PlayCard(damage.GetValidTargets().First());
-            
+
             Assert.That(player.BaseEnergy, Is.EqualTo(3));
             Assert.That(player.CurrentEnergy, Is.EqualTo(2));
             Assert.That(player.Resources.GetResourceAmount<BaseEnergy>(), Is.EqualTo(3));
             Assert.That(player.Resources.GetResourceAmount<Energy>(), Is.EqualTo(2));
-            
+
             Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
             Assert.That(player.BaseEnergy, Is.EqualTo(3));
             Assert.That(player.CurrentEnergy, Is.EqualTo(3));
-            
+
             Assert.That(player.Resources.GetResourceAmount<BaseEnergy>(), Is.EqualTo(3));
             Assert.That(player.Resources.GetResourceAmount<Energy>(), Is.EqualTo(3));
-           
         }
 
         [Test]
@@ -120,6 +116,38 @@ namespace DeckbuilderTests
         }
 
         [Test]
+        public void DiscardShuffledIntoDraw()
+        {
+            Context.Events.CardMoved += OnCardMoved;
+            bool receivedEvent = false;
+            var drawCards = Context.GetCurrentBattle().Deck.DrawPile.Cards;
+            var count = drawCards.Count;
+            var target = Context.GetCurrentBattle().Enemies.First();
+            Assert.That(count, Is.GreaterThan(1));
+            while (drawCards.Count > 1)
+            {
+                drawCards[0].PlayCard(target);
+                count--;
+                Assert.That(drawCards.Count, Is.EqualTo(count));
+            }
+            Assert.That(drawCards.Count, Is.EqualTo(1));
+            Assert.That(receivedEvent, Is.False);
+            drawCards[0].PlayCard(target);
+            Assert.That(drawCards.Count, Is.GreaterThan(1));//some cards exhaust, but we should basically never have zero cards in draw.
+            Assert.That(receivedEvent, Is.True);
+            
+            void OnCardMoved(object sender, CardMovedEventArgs args)
+            {
+                if (args.NewPileType == PileType.DrawPile)
+                {
+                    receivedEvent = true;
+                }
+            }
+        }
+
+    
+
+        [Test]
         public void EnemyAttacksOnTurnEnd()
         {
             Assert.That(Context.GetCurrentBattle().Player, Has.Property("Health").EqualTo(100));
@@ -138,8 +166,9 @@ namespace DeckbuilderTests
             var player = Context.GetCurrentBattle().Player;
             player.Resources.AddResource<WeakStatusEffect>(3);
             card.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(92));//should only deal 3 if player is weak.
+            Assert.That(target.Health, Is.EqualTo(92)); //should only deal 3 if player is weak.
         }
+
         [Test]
         public void VulnerableIncreasesDamageDealt()
         {
@@ -151,9 +180,9 @@ namespace DeckbuilderTests
             var player = Context.GetCurrentBattle().Player;
             target.Resources.AddResource<VulnerableStatusEffect>(3);
             card.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(88));//should deal 7 if target is vulnerable.
+            Assert.That(target.Health, Is.EqualTo(88)); //should deal 7 if target is vulnerable.
         }
-        
+
         [Test]
         public void PoisonDealsDamageAndDecrements()
         {
@@ -163,19 +192,19 @@ namespace DeckbuilderTests
 
             Assert.That(enemy, Has.Property("Health").EqualTo(100));
             Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
-            Assert.That(enemy, Has.Property("Health").EqualTo(100-5));
+            Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5));
             Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
-            Assert.That(enemy, Has.Property("Health").EqualTo(100-5-4));
+            Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4));
             Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
-            Assert.That(enemy, Has.Property("Health").EqualTo(100-5-4-3));
+            Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3));
             Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
-            Assert.That(enemy, Has.Property("Health").EqualTo(100-5-4-3-2));
+            Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3 - 2));
             Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
-            Assert.That(enemy, Has.Property("Health").EqualTo(100-5-4-3-2-1));
-            
+            Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3 - 2 - 1));
+
             //poison should be gon at this point
             Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
-            Assert.That(enemy, Has.Property("Health").EqualTo(100-5-4-3-2-1));
+            Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3 - 2 - 1));
 
             Assert.That(enemy.Resources.GetResourceAmount<PoisonStatusEffect>(), Is.EqualTo(0));
         }
@@ -193,11 +222,12 @@ namespace DeckbuilderTests
                 damage.PlayCard(enemy);
                 test = i;
             }
-            
+
             Assert.That(test, Is.EqualTo(19));
 
             Assert.That(enemy.Health, Is.EqualTo(0));
             Assert.That(receivedEvent);
+
             void EventsOnBattleEnded(object sender, BattleEndedEventArgs args)
             {
                 receivedEvent = true;

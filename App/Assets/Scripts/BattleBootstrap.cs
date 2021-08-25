@@ -46,7 +46,7 @@ public class BattleBootstrap : MonoBehaviour
 
         EndTurnButton.onClick.AddListener(EndTurn);
         PlayerActor player = Api.CreateActor<PlayerActor>(100, 0);
-        Actor enemy = Api.CreateActor<BasicEnemy>(100, 0);
+        Enemy enemy = Api.CreateActor<BasicEnemy>(100, 0);
         IDeck deck = Api.CreateDeck();
 
 
@@ -64,9 +64,7 @@ public class BattleBootstrap : MonoBehaviour
             deck.DrawPile.Cards.Add(Api.CreateEntity<DoubleNextCardDamage>());
         }
 
-        IBattle battle = Api.CreateBattle(deck, player);
-        battle.AddEnemy(enemy);
-        Api.SetCurrentBattle(battle);
+        IBattle battle = Api.CreateBattle(deck, player, new List<Enemy>{enemy});
         InitializeProxies(battle);
     }
 
