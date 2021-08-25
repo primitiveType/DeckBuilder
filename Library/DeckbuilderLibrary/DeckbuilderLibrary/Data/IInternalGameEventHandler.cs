@@ -6,7 +6,7 @@ namespace DeckbuilderLibrary.Data
     internal interface IInternalGameEventHandler : IGameEventHandler
     {
         //To request damage, cards should use the game context.
-        int RequestDamageAmount(object sender, int baseDamage, IGameEntity target);
+        int RequestDamageAmount(object sender, int baseDamage, IGameEntity owner, IGameEntity target);
         void InvokeCardPlayed(object sender, CardPlayedEventArgs args);
         void InvokeCardMoved(object sender, CardMovedEventArgs args);
         void InvokeDamageDealt(object sender, DamageDealtArgs args);

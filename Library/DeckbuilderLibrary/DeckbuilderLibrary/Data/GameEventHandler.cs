@@ -58,9 +58,9 @@ namespace DeckbuilderLibrary.Data
             DamageDealt?.Invoke(sender, args);
         }
 
-        public int RequestDamageAmount(object sender, int baseDamage, IGameEntity target)
+        public int RequestDamageAmount(object sender, int baseDamage, IGameEntity owner, IGameEntity target)
         {
-            var args = new RequestDamageAmountEventArgs(target);
+            var args = new RequestDamageAmountEventArgs(owner, target);
             args.AddModifier(new DamageAmountModifier { AdditiveModifier = baseDamage });
             DamageAmountRequested?.Invoke(sender, args);
             return args.GetResult();

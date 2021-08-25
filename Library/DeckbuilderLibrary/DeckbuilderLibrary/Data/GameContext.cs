@@ -101,7 +101,7 @@ namespace DeckbuilderLibrary.Data
 
         public int GetDamageAmount(object sender, int baseDamage, IActor target, IActor owner)
         {
-            return ((IInternalGameEventHandler)Events).RequestDamageAmount(sender, baseDamage, target);
+            return ((IInternalGameEventHandler)Events).RequestDamageAmount(sender, baseDamage, owner, target);
         }
 
         public void TryDealDamage(GameEntity source, IActor owner, IActor target, int baseDamage)

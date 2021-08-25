@@ -6,6 +6,7 @@ using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
+using DeckbuilderLibrary.Data.GameEntities.Resources.Status;
 using JsonNet.ContractResolvers;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -126,6 +127,58 @@ namespace DeckbuilderTests
             Assert.That(Context.GetCurrentBattle().Player, Has.Property("Health").EqualTo(95));
         }
 
+        [Test]
+        public void WeakReducesDamageDealt()
+        {
+            Card card = FindCardInDeck("Attack5Damage");
+            IActor target = card.GetValidTargets().First();
+            Assert.That(target.Health, Is.EqualTo(100));
+            card.PlayCard(target);
+            Assert.That(target.Health, Is.EqualTo(95));
+            var player = Context.GetCurrentBattle().Player;
+            player.Resources.AddResource<WeakStatusEffect>(3);
+            card.PlayCard(target);
+            Assert.That(target.Health, Is.EqualTo(92));//should only deal 3 if player is weak.
+        }
+        [Test]
+        public void VulnerableIncreasesDamageDealt()
+        {
+            Card card = FindCardInDeck("Attack5Damage");
+            IActor target = card.GetValidTargets().First();
+            Assert.That(target.Health, Is.EqualTo(100));
+            card.PlayCard(target);
+            Assert.That(target.Health, Is.EqualTo(95));
+            var player = Context.GetCurrentBattle().Player;
+            target.Resources.AddResource<VulnerableStatusEffect>(3);
+            card.PlayCard(target);
+            Assert.That(target.Health, Is.EqualTo(88));//should deal 7 if target is vulnerable.
+        }
+        
+        [Test]
+        public void PoisonDealsDamageAndDecrements()
+        {
+            var enemy = Context.GetCurrentBattle().Enemies.First();
+            enemy.Resources.AddResource<PoisonStatusEffect>(5);
+            Assert.That(enemy.Resources.GetResourceAmount<PoisonStatusEffect>(), Is.EqualTo(5));
+
+            Assert.That(enemy, Has.Property("Health").EqualTo(100));
+            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Assert.That(enemy, Has.Property("Health").EqualTo(100-5));
+            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Assert.That(enemy, Has.Property("Health").EqualTo(100-5-4));
+            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Assert.That(enemy, Has.Property("Health").EqualTo(100-5-4-3));
+            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Assert.That(enemy, Has.Property("Health").EqualTo(100-5-4-3-2));
+            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Assert.That(enemy, Has.Property("Health").EqualTo(100-5-4-3-2-1));
+            
+            //poison should be gon at this point
+            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Assert.That(enemy, Has.Property("Health").EqualTo(100-5-4-3-2-1));
+
+            Assert.That(enemy.Resources.GetResourceAmount<PoisonStatusEffect>(), Is.EqualTo(0));
+        }
 
         [Test]
         public void BattleEnds_WhenAllEnemiesKilled()
