@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
+using DeckbuilderLibrary.Data.GameEntities.Rules;
 using JsonNet.ContractResolvers;
 using Newtonsoft.Json;
 
@@ -217,13 +218,19 @@ namespace DeckbuilderLibrary.Data
             return actor;
         }
 
-        public IBattle CreateBattle(IDeck deck, PlayerActor player)
+        public IBattle CreateBattle(IDeck deck, PlayerActor player, List<Enemy> enemies)
         {
             var battle = CreateEntity<Battle>();
+            CurrentBattle = battle;
             battle.SetDeck(deck);
             battle.SetPlayer(player);
+            foreach (var enemy in enemies)
+            {
+                battle.AddEnemy(enemy);//might need set access instead.
+            }
 
+            battle.Rules.Add(CreateEntity<ShuffleDiscardIntoDrawWhenEmpty>());
             return battle;
         }
     }
-    }
+}

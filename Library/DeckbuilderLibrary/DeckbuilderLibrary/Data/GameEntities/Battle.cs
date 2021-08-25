@@ -13,7 +13,8 @@ namespace DeckbuilderLibrary.Data.GameEntities
         [JsonProperty] public PlayerActor Player { get; private set; }
         [JsonProperty] public List<Actor> Enemies { get; private set; }
         [JsonProperty] public IDeck Deck { get; private set; }
-        
+        [JsonProperty] public List<GameEntity> Rules { get; private set; } = new List<GameEntity>();
+
 
         protected override void Initialize()
         {
@@ -66,6 +67,5 @@ namespace DeckbuilderLibrary.Data.GameEntities
 
             Deck = deck;
         }
-
     }
 }

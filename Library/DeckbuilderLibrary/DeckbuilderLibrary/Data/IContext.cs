@@ -7,7 +7,6 @@ namespace DeckbuilderLibrary.Data
 {
     public interface IContext
     {
-        void SetCurrentBattle(IBattle battle);
         int GetPlayerHealth();
         IReadOnlyList<IActor> GetEnemies();
         IBattle GetCurrentBattle();
@@ -22,7 +21,7 @@ namespace DeckbuilderLibrary.Data
         int GetDamageAmount(object sender, int baseDamage, IActor target, IActor owner);
         void TryDealDamage(GameEntity source, IActor owner, IActor target, int baseDamage);
         T CreateActor<T>(int health, int armor) where T : Actor, new();
-        IBattle CreateBattle(IDeck deck, PlayerActor player);
+        IBattle CreateBattle(IDeck deck, PlayerActor player, List<Enemy> enemies);
         T CreateIntent<T>(Actor owner) where T : Intent, new();
         T CopyCard<T>(T card) where T : Card;
         T CreateResource<T>(Actor owner, int amount) where T : Resource<T>, IResource, new();
