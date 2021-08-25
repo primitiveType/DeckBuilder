@@ -32,14 +32,14 @@ namespace Content.Cards
         }
 
 
-        public override IReadOnlyList<IActor> GetValidTargets()
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return null;
         }
 
         public override bool RequiresTarget => false;
 
-        protected override void DoPlayCard(IActor _)
+        protected override void DoPlayCard(IGameEntity _)
         {
             // Gain x block.
             Context.TryApplyBlock(this, Owner, Owner, BlockAmount);

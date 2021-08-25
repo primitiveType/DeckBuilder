@@ -29,7 +29,7 @@ namespace Content.Cards
             return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)} to a random enemy {RepeatAmount}.";
         }
         
-        public override IReadOnlyList<IActor> GetValidTargets()
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return Context.GetEnemies();
         }
@@ -37,21 +37,21 @@ namespace Content.Cards
 
         public override int EnergyCost => 1;
 
-        protected override void DoPlayCard(IActor _)
+        protected override void DoPlayCard(IGameEntity _)
         {
             // Deal x damage to y random enemies.
             var random = new Random();
             for (var i = 0; i < RepeatAmount; i++)
             {
-                var enemies = GetValidTargets();
+                IReadOnlyList<IGameEntity> enemies = GetValidTargets();
                 var enemyCount = enemies.Count;
                 if (enemyCount == 0)
                 {
                     return;
                 }
                 var randomIndex = random.Next(enemies.Count);
-                var target = enemies[randomIndex];
-                Context.TryDealDamage(this, Owner, target, DamageAmount);
+                IGameEntity target = enemies[randomIndex];
+                Context.TryDealDamage(this, Owner, target as Actor, DamageAmount);
             }
         }
     }

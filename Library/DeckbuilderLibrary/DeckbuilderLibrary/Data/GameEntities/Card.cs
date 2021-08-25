@@ -15,14 +15,14 @@ namespace DeckbuilderLibrary.Data.GameEntities
 
         public abstract string GetCardText(IGameEntity target = null);
 
-        public abstract IReadOnlyList<IActor> GetValidTargets();
+        public abstract IReadOnlyList<IGameEntity> GetValidTargets();
 
         public abstract bool RequiresTarget { get; }
 
         [JsonIgnore] public IActor Owner => Context.GetCurrentBattle().Player;
 
 
-        public void PlayCard(IActor target)
+        public void PlayCard(IGameEntity target)
         {
             if (target == null && RequiresTarget)
             {
@@ -47,7 +47,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
             }
         }
 
-        protected abstract void DoPlayCard(IActor target);
+        protected abstract void DoPlayCard(IGameEntity target);
 
         public abstract bool IsPlayable();
 

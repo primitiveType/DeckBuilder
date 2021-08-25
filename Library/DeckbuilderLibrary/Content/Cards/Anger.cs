@@ -31,7 +31,7 @@ namespace Content.Cards
                 $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)}. Add a copy of this to your discard pile.";
         }
 
-        public override IReadOnlyList<IActor> GetValidTargets()
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return Context.GetEnemies();
         }
@@ -39,10 +39,10 @@ namespace Content.Cards
         public override bool RequiresTarget => true;
         public override int EnergyCost => 0;
 
-        protected override void DoPlayCard(IActor target)
+        protected override void DoPlayCard(IGameEntity target)
         {
             // Deal x damage.
-            Context.TryDealDamage(this, Owner, target, DamageAmount);
+            Context.TryDealDamage(this, Owner, target as Actor, DamageAmount);
             // Add a copy of this to your discard pile.
             Card copy = Context.CopyCard(this);
             Context.TrySendToPile(copy.Id, PileType.DiscardPile);
