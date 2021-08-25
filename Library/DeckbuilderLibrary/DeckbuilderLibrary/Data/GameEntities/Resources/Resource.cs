@@ -11,6 +11,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
     public abstract class Resource<T> : GameEntity, IArithmetic<T>, IInternalResource where T : Resource<T>
     {
         private IActor m_Owner;
+        private int m_Amount;
         public abstract string Name { get; }
 
         [JsonIgnore]
@@ -32,7 +33,17 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
         }
 
         [JsonProperty] public int OwnerId { get; set; } = -1;
-        public virtual int Amount { get; protected set; }
+
+        public virtual int Amount
+        {
+            get => m_Amount;
+            protected set
+            {
+                m_Amount = value;
+                if (m_Amount < 0)
+                    m_Amount = 0;
+            }
+        } //TODO: I think an event should be invoked in here.
 
         int IInternalResource.Amount
         {
