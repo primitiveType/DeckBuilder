@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 namespace DeckbuilderLibrary.Data.GameEntities
 {
     [Serializable]
-    [JsonConverter(typeof(GameEntityConverter))]
     public abstract class Card : GameEntity
     {
         public abstract string Name { get; }

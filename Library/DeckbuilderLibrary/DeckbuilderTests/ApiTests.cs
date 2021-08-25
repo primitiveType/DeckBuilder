@@ -292,6 +292,15 @@ namespace DeckbuilderTests
             card.PlayCard(target);
             Assert.That(target.Health, Is.LessThan(100));
         }
+        
+        [Test]
+        public void ClonedCardHasNewId()
+        {
+            Card card = FindCardInDeck("Attack5Damage");
+            var copy = Context.CopyCard(card);
+            Assert.That(copy.Id, Is.Not.EqualTo(card.Id));
+        }
+
 
 
         [Test]
