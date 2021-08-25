@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Data
+namespace DeckbuilderLibrary.Data
 {
     [Serializable]
     public class Properties

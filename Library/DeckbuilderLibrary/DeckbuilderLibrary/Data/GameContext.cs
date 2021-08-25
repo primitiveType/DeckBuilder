@@ -1,134 +1,171 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using Data;
-using DeckbuilderLibrary.Data;
+using System.Runtime.Serialization;
 using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Resources;
 using JsonNet.ContractResolvers;
 using Newtonsoft.Json;
 
-
-public class GameContext : ITestContext
+namespace DeckbuilderLibrary.Data
 {
-    private CardsDatabase CardsDatabase;
-
-    [JsonConstructor]
-    public GameContext()
+    public class GameContext : IContext, IInternalGameContext
     {
-        CurrentContext = this;
-        CardsDatabase = new CardsDatabase(this);
-    }
 
-    [JsonProperty] private IBattle CurrentBattle { get; set; }
-    [JsonIgnore] private Dictionary<int, IGameEntity> EntitiesById = new Dictionary<int, IGameEntity>();
-
-    public IGameEventHandler Events { get; } = new GameEventHandler();
-    public static IContext CurrentContext { get; set; }
-
-    public void AddEntity(IGameEntity entity)
-    {
-        EntitiesById.Add(entity.Id, entity);
-    }
-
-    public IActor GetActorById(int id)
-    {
-        return AllActors().First(actor => actor.Id == id);
-    }
-
-    private IEnumerable<IActor> AllActors()
-    {
-        yield return CurrentBattle.Player;
-        foreach (var actor in CurrentBattle.Enemies)
+        [JsonConstructor]
+        public GameContext()
         {
-            yield return actor;
-        }
-    }
-    
-    public void TrySendToPile(int cardId, PileType pileType)
-    {
-        if (!EntitiesById.TryGetValue(cardId, out IGameEntity entity))
-        {
-            throw new ArgumentException($"Failed to find card with id {cardId}!");
+            CurrentContext = this;
         }
 
-        if (entity is Card card)
+        List<IInternalGameEntity> IInternalGameContext.ToInitialize { get; } = new List<IInternalGameEntity>();
+
+        [JsonProperty] private IBattle CurrentBattle { get; set; }
+        [JsonIgnore] private Dictionary<int, IGameEntity> EntitiesById = new Dictionary<int, IGameEntity>();
+
+        public IGameEventHandler Events { get; } = new GameEventHandler();
+        public static IContext CurrentContext { get; set; }
+
+        public void AddEntity(IGameEntity entity)
         {
-            CurrentBattle.Deck.TrySendToPile(card, pileType);
+            EntitiesById.Add(entity.Id, entity);
         }
-        else
+        
+        public IActor GetActorById(int id)
         {
-            throw new ArgumentException($"Tried to move entity with id {cardId} but it was not a card!");
+            return AllActors().First(actor => actor.Id == id);
         }
-    }
 
-
-    public void SetCurrentBattle(IBattle battle)
-    {
-        CurrentBattle = battle;
-    }
-
-
-    public IBattle GetCurrentBattle()
-    {
-        return CurrentBattle;
-    }
-
-    public int GetPlayerHealth()
-    {
-        return CurrentBattle.Player.Health;
-    }
-
-    public IReadOnlyList<IActor> GetEnemies()
-    {
-        return CurrentBattle.Enemies;
-    }
-
-    public IReadOnlyList<int> GetEnemyIds()
-    {
-        return CurrentBattle.Enemies.Select(enemy => enemy.Id).ToList();
-    }
-
-
-    private int m_NextId { get; set; }
-
-    private int GetNextEntityId()
-    {
-        return m_NextId++;
-    }
-
-    public T CreateEntity<T>() where T : GameEntity, new()
-    {
-        T entity = new T
+        private IEnumerable<IActor> AllActors()
         {
-            Id = m_NextId++,
+            yield return CurrentBattle.Player;
+            foreach (var actor in CurrentBattle.Enemies)
+            {
+                yield return actor;
+            }
+        }
+
+        public void TrySendToPile(int cardId, PileType pileType)
+        {
+            if (!EntitiesById.TryGetValue(cardId, out IGameEntity entity))
+            {
+                throw new ArgumentException($"Failed to find card with id {cardId}!");
+            }
+
+            if (entity is Card card)
+            {
+                CurrentBattle.Deck.TrySendToPile(card, pileType);
+            }
+            else
+            {
+                throw new ArgumentException($"Tried to move entity with id {cardId} but it was not a card!");
+            }
+        }
+
+   
+
+        public void SetCurrentBattle(IBattle battle)
+        {
+            CurrentBattle = battle;
+        }
+
+
+        public IBattle GetCurrentBattle()
+        {
+            return CurrentBattle;
+        }
+
+        public int GetPlayerHealth()
+        {
+            return CurrentBattle.Player.Health;
+        }
+
+        public IReadOnlyList<IActor> GetEnemies()
+        {
+            return CurrentBattle.Enemies;
+        }
+
+        public IReadOnlyList<int> GetEnemyIds()
+        {
+            return CurrentBattle.Enemies.Select(enemy => enemy.Id).ToList();
+        }
+
+
+        [JsonProperty] private int m_NextId { get; set; }
+
+        private int GetNextEntityId()
+        {
+            return m_NextId++;
+        }
+
+        public int GetDamageAmount(object sender, int baseDamage, IActor target, IActor owner)
+        {
+            return ((IInternalGameEventHandler)Events).RequestDamageAmount(sender, baseDamage, target);
+        }
+
+        public void TryDealDamage(GameEntity source, IActor owner, IActor target, int baseDamage)
+        {
+            ((IInternalActor)target).TryDealDamage(source, GetDamageAmount(source, baseDamage, target, owner),
+                out int totalDamageDealt, out int healthDamageDealt);
+        }
+
+        public T CreateEntity<T>() where T : GameEntity, new()
+        {
+            T entity = CreateEntityNoInitialize<T>();
+            ((IInternalGameEntity)entity).InternalInitialize();
+            return entity;
+        }
+
+        private T CreateEntityNoInitialize<T>() where T : GameEntity, new()
+        {
+            T entity = new T
+            {
+                Id = GetNextEntityId()
+            };
+            entity.SetContext(this);
+            EntitiesById.Add(entity.Id, entity);
+            return entity;
+        }
+
+        public T CreateResource<T>(Actor owner, int Amount) where T : Resource<T>, IResource, new()
+        {
+            T entity = CreateEntityNoInitialize<T>();
+            entity.Owner = owner;
+            ((IInternalResource)entity).Amount = Amount;
+            ((IInternalGameEntity)entity).InternalInitialize();
+            return entity;
+        }
+
+        readonly JsonSerializerSettings m_JsonSerializerSettings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.All,
+            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+            ContractResolver = new PrivateSetterContractResolver(),
+            Converters = new List<JsonConverter>
+            {
+                new GameEntityConverter()
+            }
         };
-        entity.SetContext(this);
-        EntitiesById.Add(entity.Id, entity);
-        ((IInternalGameEntity)entity).InternalInitialize();
-        return entity;
-    }
 
-    readonly JsonSerializerSettings m_JsonSerializerSettings = new JsonSerializerSettings
-    {
-        TypeNameHandling = TypeNameHandling.All,
-        ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
-        ContractResolver = new PrivateSetterContractResolver(),
-        Converters = new List<JsonConverter>
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
         {
-            new GameEntityConverter()
+            for (var i = 0; i < ((IInternalGameContext)this).ToInitialize.Count; i++)
+            {
+                (((IInternalGameContext)this).ToInitialize[i]).InternalInitialize();
+            }
         }
-    };
 
-    public T CopyCard<T>(T card) where T : Card
-    {
-        CurrentContext = this;
-        string contextStr = JsonConvert.SerializeObject(card, m_JsonSerializerSettings);
-        T copy = JsonConvert.DeserializeObject<T>(contextStr, m_JsonSerializerSettings);
-        return copy;
-    }
+        public T CopyCard<T>(T card) where T : Card
+        {
+            CurrentContext = this;
+            string contextStr = JsonConvert.SerializeObject(card, m_JsonSerializerSettings);
+            T copy = JsonConvert.DeserializeObject<T>(contextStr, m_JsonSerializerSettings);
+            return copy;
+        }
 
-    public int GetBlockAmount(object sender, int baseDamage, IActor target, IActor owner)
+        public int GetBlockAmount(object sender, int baseDamage, IActor target, IActor owner)
     {
         throw new NotImplementedException();
     }
@@ -143,52 +180,6 @@ public class GameContext : ITestContext
         throw new NotImplementedException();
     }
 
-    public IDeck CreateDeck()
-    {
-        return CreateEntity<Deck>();
-    }
-
-    public IPile CreatePile()
-    {
-        return CreateEntity<Pile>();
-    }
-
-    public T CreateIntent<T>(Actor owner) where T : Intent, new()
-    {
-        var intent = CreateEntity<T>();
-        intent.OwnerId = owner.Id;
-        return intent;
-    }
-
-    public Actor CreateActor<T>(int health, int armor) where T : Actor, new()
-    {
-        var actor = (Actor)CreateEntity<T>();
-        actor.Health = health;
-        actor.Armor = armor;
-
-        return actor;
-    }
-
-    public IBattle CreateBattle(IDeck deck, Actor player)
-    {
-        var battle = CreateEntity<Battle>();
-        battle.SetDeck(deck);
-        battle.SetPlayer(player);
-
-        return battle;
-    }
-
-    public int GetDamageAmount(object sender, int baseDamage, IActor target, IActor owner)
-    {
-        return ((IInternalGameEventHandler)Events).RequestDamage(sender, baseDamage, target);
-    }
-
-    public void TryDealDamage(GameEntity source, IActor owner, IActor target, int baseDamage)
-    {
-        ((IInternalActor)target).TryDealDamage(source, GetDamageAmount(source, baseDamage, target, owner),
-            out int totalDamageDealt, out int healthDamageDealt);
-    }
-
     public void TryApplyBlock(GameEntity source, IActor owner, IActor target, int baseBlock)
     {
         throw new NotImplementedException();
@@ -198,5 +189,41 @@ public class GameContext : ITestContext
     {
         throw new NotImplementedException();
     }
-}
-    
+
+    public IDeck CreateDeck()
+        {
+            return CreateEntity<Deck>();
+        }
+
+        public IPile CreatePile()
+        {
+            return CreateEntity<Pile>();
+        }
+
+
+        public T CreateIntent<T>(Actor owner) where T : Intent, new()
+        {
+            var intent = CreateEntity<T>();
+            intent.OwnerId = owner.Id;
+            return intent;
+        }
+
+        public T CreateActor<T>(int health, int armor) where T : Actor, new()
+        {
+            var actor = CreateEntity<T>();
+            actor.Resources.AddResource<Health>(health);
+            actor.Resources.AddResource<Armor>(armor);
+
+            return actor;
+        }
+
+        public IBattle CreateBattle(IDeck deck, PlayerActor player)
+        {
+            var battle = CreateEntity<Battle>();
+            battle.SetDeck(deck);
+            battle.SetPlayer(player);
+
+            return battle;
+        }
+    }
+    }

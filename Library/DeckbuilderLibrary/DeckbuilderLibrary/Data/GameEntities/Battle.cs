@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using Data;
-using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 using Newtonsoft.Json;
 
-namespace Data
+namespace DeckbuilderLibrary.Data.GameEntities
 {
     [Serializable]
     internal class Battle : GameEntity, IBattle
     {
-        [JsonProperty] public Actor Player { get; private set; }
-        [JsonProperty] private List<Actor> Enemies { get; set; }
+        [JsonProperty] public PlayerActor Player { get; private set; }
+        [JsonProperty] public List<Actor> Enemies { get; private set; }
         [JsonProperty] public IDeck Deck { get; private set; }
         
 
@@ -31,7 +32,7 @@ namespace Data
             }
         }
 
-        public void SetPlayer(Actor player)
+        public void SetPlayer(PlayerActor player)
         {
             if (Player != null)
             {
@@ -66,16 +67,5 @@ namespace Data
             Deck = deck;
         }
 
-        IReadOnlyList<IActor> IBattle.Enemies => Enemies;
     }
-}
-
-
-public interface IBattle : IGameEntity
-{
-    IReadOnlyList<IActor> Enemies { get; }
-    Actor Player { get; }
-
-    IDeck Deck { get; }
-    void AddEnemy(Actor enemy);
 }

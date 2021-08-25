@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Content.Cards;
-using Data;
 using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Resources;
 using JsonNet.ContractResolvers;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -11,7 +14,7 @@ namespace DeckbuilderTests
 {
     internal class ApiTests
     {
-        private static ITestContext Context { get; set; }
+        private static IContext Context { get; set; }
 
         readonly JsonSerializerSettings m_JsonSerializerSettings = new JsonSerializerSettings
         {
@@ -28,7 +31,7 @@ namespace DeckbuilderTests
         public void Setup()
         {
             Context = new GameContext();
-            Actor player = Context.CreateActor<PlayerActor>(100, 0);
+            PlayerActor player = (PlayerActor) Context.CreateActor<PlayerActor>(100, 0);
             Actor enemy = Context.CreateActor<BasicEnemy>(100, 0);
             Deck deck = CreateDeck(Context);
 
@@ -36,6 +39,32 @@ namespace DeckbuilderTests
             battle.AddEnemy(enemy);
 
             Context.SetCurrentBattle(battle);
+        }
+        
+        [Test]
+        public void Energy_Resets_Every_Turn()
+        {
+            Card damage = FindCardInDeck(nameof(Attack10DamageExhaust));
+            var player = Context.GetCurrentBattle().Player;
+            Assert.That(player.Resources.HasResource<BaseEnergy>());
+            Assert.That(player.BaseEnergy, Is.EqualTo(3));
+            Assert.That(player.CurrentEnergy, Is.EqualTo(3));
+            Assert.That(player.Resources.GetResourceAmount<BaseEnergy>(), Is.EqualTo(3));
+            Assert.That(player.Resources.GetResourceAmount<Energy>(), Is.EqualTo(3));
+            damage.PlayCard(damage.GetValidTargets().First());
+            
+            Assert.That(player.BaseEnergy, Is.EqualTo(3));
+            Assert.That(player.CurrentEnergy, Is.EqualTo(2));
+            Assert.That(player.Resources.GetResourceAmount<BaseEnergy>(), Is.EqualTo(3));
+            Assert.That(player.Resources.GetResourceAmount<Energy>(), Is.EqualTo(2));
+            
+            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Assert.That(player.BaseEnergy, Is.EqualTo(3));
+            Assert.That(player.CurrentEnergy, Is.EqualTo(3));
+            
+            Assert.That(player.Resources.GetResourceAmount<BaseEnergy>(), Is.EqualTo(3));
+            Assert.That(player.Resources.GetResourceAmount<Energy>(), Is.EqualTo(3));
+           
         }
 
         [Test]
@@ -105,11 +134,16 @@ namespace DeckbuilderTests
             bool receivedEvent = false;
             Card damage = FindCardInDeck(nameof(Attack5Damage));
             IActor enemy = Context.GetEnemies().First();
+            int test = 0;
             for (int i = 0; i < 20; i++)
             {
                 damage.PlayCard(enemy);
+                test = i;
             }
+            
+            Assert.That(test, Is.EqualTo(19));
 
+            Assert.That(enemy.Health, Is.EqualTo(0));
             Assert.That(receivedEvent);
             void EventsOnBattleEnded(object sender, BattleEndedEventArgs args)
             {
@@ -119,7 +153,7 @@ namespace DeckbuilderTests
         }
 
 
-        private Deck CreateDeck(ITestContext context)
+        private Deck CreateDeck(IContext context)
         {
             Deck deck = context.CreateEntity<Deck>();
             foreach (Card card in CreateCards(context))
@@ -130,7 +164,7 @@ namespace DeckbuilderTests
             return deck;
         }
 
-        private IEnumerable<Card> CreateCards(ITestContext context)
+        private IEnumerable<Card> CreateCards(IContext context)
         {
             yield return context.CreateEntity<Attack5Damage>();
             yield return context.CreateEntity<DoubleNextCardDamage>();

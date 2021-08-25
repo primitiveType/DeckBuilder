@@ -1,9 +1,12 @@
 using System.Collections.Generic;
-using Data;
+using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 
 namespace Content.Cards
 {
-    public class TheSoularium : Card
+    public class TheSoularium : EnergyCard
     {
         public override string Name => "The Soularium";
         private List<Card> DrawnCards => new List<Card>();
@@ -48,6 +51,8 @@ namespace Content.Cards
         }
 
         public override bool RequiresTarget => false;
+        public override int EnergyCost => 1;
+
         protected override void DoPlayCard(IActor _)
         {            
             var deck = Context.GetCurrentBattle().Deck;

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Data;
 using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities
@@ -14,11 +13,5 @@ namespace DeckbuilderLibrary.Data.GameEntities
         [JsonProperty] public List<Card> Cards { get; private set; } = new List<Card>();
 
         [JsonProperty] public PileType PileType { get;  set; }
-    }
-
-    public interface IPile : IGameEntity 
-    {
-        List<Card> Cards { get; }
-        PileType PileType { get; }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 using Newtonsoft.Json;
 
-namespace Data
+namespace DeckbuilderLibrary.Data.GameEntities
 {
     [Serializable]
     [JsonConverter(typeof(GameEntityConverter))]
@@ -36,10 +37,19 @@ namespace Data
 
             DoPlayCard(target);
             ((IInternalGameEventHandler)Context.Events).InvokeCardPlayed(this, new CardPlayedEventArgs(Id));
+            if (IsPlayable())
+            {
+            
+            }
+            else
+            {
+                Console.WriteLine("Attempted to play card that was not playable!");
+            }
         }
 
         protected abstract void DoPlayCard(IActor target);
 
+        public abstract bool IsPlayable();
 
         private void Log(string log)
         {

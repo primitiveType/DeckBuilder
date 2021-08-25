@@ -1,3 +1,5 @@
+using DeckbuilderLibrary.Data;
+
 public class TrySendToPileEventArgs
 {
     public TrySendToPileEventArgs(int cardId, PileType pileType)

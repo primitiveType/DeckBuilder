@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using Content.Cards;
-using Data;
+using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BattleBootstrap : MonoBehaviour
 {
-    [SerializeField] ActorProxy m_ActorProxyPrefab;
-    ActorProxy ActorProxyPrefab => m_ActorProxyPrefab;
+    [SerializeField] EnemyActorProxy m_ActorProxyPrefab;
+    EnemyActorProxy ActorProxyPrefab => m_ActorProxyPrefab;
 
     [SerializeField] public DiscardPileProxy m_DiscardProxy;
     DiscardPileProxy DiscardProxy => m_DiscardProxy;
@@ -41,7 +45,7 @@ public class BattleBootstrap : MonoBehaviour
         Api = new GameContext();
 
         EndTurnButton.onClick.AddListener(EndTurn);
-        Actor player = Api.CreateActor<PlayerActor>(100, 0);
+        PlayerActor player = Api.CreateActor<PlayerActor>(100, 0);
         Actor enemy = Api.CreateActor<BasicEnemy>(100, 0);
         IDeck deck = Api.CreateDeck();
 
@@ -61,7 +65,6 @@ public class BattleBootstrap : MonoBehaviour
         }
 
         IBattle battle = Api.CreateBattle(deck, player);
-
         battle.AddEnemy(enemy);
         Api.SetCurrentBattle(battle);
         InitializeProxies(battle);

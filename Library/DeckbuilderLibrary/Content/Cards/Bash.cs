@@ -1,9 +1,12 @@
 using System.Collections.Generic;
-using Data;
+using DeckbuilderLibrary.Data;
+using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 
 namespace Content.Cards
 {
-    public class Bash : Card
+    public class Bash : EnergyCard
     {
         public override string Name => nameof(Bash);
         protected override void Initialize()
@@ -32,6 +35,8 @@ namespace Content.Cards
         }
 
         public override bool RequiresTarget => true;
+        public override int EnergyCost => 2;
+
         protected override void DoPlayCard(IActor target)
         {
             // Deal x damage.
