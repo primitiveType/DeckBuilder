@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
@@ -63,12 +64,12 @@ namespace DeckbuilderLibrary.Data
             }
         }
 
-
-        public void SetCurrentBattle(IBattle battle)
+        public void EndTurn()
         {
-            CurrentBattle = battle;
+            var internalEvents = ((IInternalGameEventHandler)Events);
+            internalEvents.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            internalEvents.InvokeTurnStarted(this, new TurnStartedEventArgs());
         }
-
 
         public IBattle GetCurrentBattle()
         {
@@ -248,12 +249,19 @@ namespace DeckbuilderLibrary.Data
             CurrentBattle = battle;
             battle.SetDeck(deck);
             battle.SetPlayer(player);
+            player.Resources.AddResource<BaseCardDraw>(5);
             foreach (var enemy in enemies)
             {
                 battle.AddEnemy(enemy); //might need set access instead.
             }
 
             battle.Rules.Add(CreateEntity<ShuffleDiscardIntoDrawWhenEmpty>());
+            battle.Rules.Add(CreateEntity<DiscardHandAtEndOfTurn>());
+            
+            //Player goes first. start the turn.
+            var internalEvents = ((IInternalGameEventHandler)Events);
+            internalEvents.InvokeTurnStarted(this, new TurnStartedEventArgs());
+
             return battle;
         }
     }

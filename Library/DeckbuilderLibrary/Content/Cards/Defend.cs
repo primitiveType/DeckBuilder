@@ -3,6 +3,7 @@ using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Resources;
 
 namespace Content.Cards
 {
@@ -42,7 +43,7 @@ namespace Content.Cards
         protected override void DoPlayCard(IGameEntity _)
         {
             // Gain x block.
-            Context.TryApplyBlock(this, Owner, Owner, BlockAmount);
+            Owner.Resources.AddResource<Armor>(BlockAmount);
         }
 
         public override int EnergyCost => 1;

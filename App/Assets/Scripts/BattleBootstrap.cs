@@ -44,7 +44,7 @@ public class BattleBootstrap : MonoBehaviour
         //TODO: Set up the scene with data injected from elsewhere.
         Api = new GameContext();
 
-        EndTurnButton.onClick.AddListener(EndTurn);
+        EndTurnButton.onClick.AddListener(Api.EndTurn);
         PlayerActor player = Api.CreateActor<PlayerActor>(100, 0);
         Enemy enemy = Api.CreateActor<BasicEnemy>(100, 0);
         IDeck deck = Api.CreateDeck();
@@ -64,13 +64,8 @@ public class BattleBootstrap : MonoBehaviour
             deck.DrawPile.Cards.Add(Api.CreateEntity<DoubleNextCardDamage>());
         }
 
-        IBattle battle = Api.CreateBattle(deck, player, new List<Enemy>{enemy});
+        IBattle battle = Api.CreateBattle(deck, player, new List<Enemy> { enemy });
         InitializeProxies(battle);
-    }
-
-    private void EndTurn()
-    {
-        Api.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
     }
 
     private void InitializeProxies(IBattle battle)

@@ -4,34 +4,29 @@ using System.Collections.Generic;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 
-public class PileProxy<TCardProxy> : Proxy<IPile> where TCardProxy : CardProxy  
-{//I think this thing would probably only care about how many cards are in it... and might have inheritors for different
+public class PileProxy<TCardProxy> : Proxy<IPile> where TCardProxy : CardProxy
+{ //I think this thing would probably only care about how many cards are in it... and might have inheritors for different
     //types of piles. Should it also initialize card proxies?
 
 
     [SerializeField] TCardProxy CardProxyPrefab;
 
-    protected Dictionary<int, TCardProxy> CardProxies { get; set;  } = new Dictionary<int, TCardProxy>();
+    protected Dictionary<int, TCardProxy> CardProxies { get; set; } = new Dictionary<int, TCardProxy>();
 
     protected override void OnInitialize()
     {
-        foreach(Card card in GameEntity.Cards.AsEnumerable())
-        {
-            TCardProxy cardProxy = Instantiate(CardProxyPrefab);
-            cardProxy.Initialize(card);
-
-            CardProxies.Add(card.Id, cardProxy);
-        }
-        Debug.Log($"Initialized pile proxy with id {GameEntity.Id}.");
-  
         GameEntity.Context.Events.CardMoved += GameEventHandlerOnCardMoved;
+        foreach (var card in GameEntity.Cards)
+        {
+            CreateCardProxy(card.Id);
+        }
     }
 
     protected virtual void GameEventHandlerOnCardMoved(object sender, CardMovedEventArgs args)
     {
         //not sure pile type needs to exist. maybe that enum can just go away... not sure.
         if (args.NewPileType == GameEntity.PileType && args.PreviousPileType != GameEntity.PileType)
-        {//this pile is receiving a card, so we create a proxy for it. That way different piles can display cards differently.
+        { //this pile is receiving a card, so we create a proxy for it. That way different piles can display cards differently.
             CreateCardProxy(args.MovedCard);
         }
         else if (args.NewPileType != GameEntity.PileType && args.PreviousPileType == GameEntity.PileType)
@@ -52,7 +47,8 @@ public class PileProxy<TCardProxy> : Proxy<IPile> where TCardProxy : CardProxy
     protected virtual void CreateCardProxy(int argsMovedCard)
     {
         TCardProxy cardProxy = Instantiate(CardProxyPrefab);
-        Card cardForProxy = GameEntity.Context.GetCurrentBattle().Deck.AllCards().First(card => card.Id == argsMovedCard);
+        Card cardForProxy = GameEntity.Context.GetCurrentBattle().Deck.AllCards()
+            .First(card => card.Id == argsMovedCard);
         cardProxy.Initialize(cardForProxy);
         CardProxies.Add(argsMovedCard, cardProxy);
     }

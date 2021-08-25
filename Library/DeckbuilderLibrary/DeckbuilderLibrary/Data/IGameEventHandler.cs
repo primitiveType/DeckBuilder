@@ -6,8 +6,7 @@ namespace DeckbuilderLibrary.Data
     {
         event CardMovedEvent CardMoved;
 
-        // Todo(Arthur, Snapper): CardPlayedEvent is not being used when the card is played. Rather, it is used to resolve a card that has been already played. We either need to rename this function or make a new one to more accurately describe its usage. 
-    event CardPlayedEvent CardPlayed;
+        event CardPlayedEvent CardPlayed;
 
         event CardCreatedEvent CardCreated;
         event DamageDealt DamageDealt;
@@ -15,8 +14,13 @@ namespace DeckbuilderLibrary.Data
         event ActorDiedEvent ActorDied;
         event BattleEndedEvent BattleEnded;
         event TurnEndedEvent TurnEnded;
+        event TurnStartedEvent TurnStarted;
         event IntentChangedEvent IntentChanged;
-        void InvokeTurnEnded(object sender, TurnEndedEventArgs args);
-        void InvokeIntentChanged(object sender, IntentChangedEventArgs args);
+    }
+
+    public delegate void TurnStartedEvent(object sender, TurnStartedEventArgs args); //turn number
+
+    public class TurnStartedEventArgs
+    {
     }
 }

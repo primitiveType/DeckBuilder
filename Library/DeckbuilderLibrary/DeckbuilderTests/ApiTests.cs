@@ -56,7 +56,7 @@ namespace DeckbuilderTests
             Assert.That(player.Resources.GetResourceAmount<BaseEnergy>(), Is.EqualTo(3));
             Assert.That(player.Resources.GetResourceAmount<Energy>(), Is.EqualTo(2));
 
-            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Context.EndTurn();
             Assert.That(player.BaseEnergy, Is.EqualTo(3));
             Assert.That(player.CurrentEnergy, Is.EqualTo(3));
 
@@ -116,6 +116,12 @@ namespace DeckbuilderTests
         }
 
         [Test]
+        public void PlayerStartsWithFiveCards()
+        {
+           Assert.That(Context.GetCurrentBattle().Deck.HandPile.Cards.Count, Is.EqualTo(5));
+        }
+
+        [Test]
         public void DiscardShuffledIntoDraw()
         {
             Context.Events.CardMoved += OnCardMoved;
@@ -146,13 +152,37 @@ namespace DeckbuilderTests
                 }
             }
         }
+        
+        [Test]
+        public void DrawCardsEachTurn()
+        {
+            Context.Events.CardMoved += OnCardMoved;
+            bool receivedEvent = false;
+            IPile handPile = Context.GetCurrentBattle().Deck.HandPile;
+           
+            Assert.That(handPile.Cards.Count, Is.EqualTo(5));
+            Context.TrySendToPile(handPile.Cards.First().Id, PileType.DiscardPile);
+            Assert.That(handPile.Cards.Count, Is.EqualTo(4));
+            Context.EndTurn();
+            
+            Assert.That(handPile.Cards.Count, Is.EqualTo(5));
+
+            Assert.That(receivedEvent);
+            void OnCardMoved(object sender, CardMovedEventArgs args)
+            {
+                if (args.NewPileType == PileType.HandPile)
+                {
+                    receivedEvent = true;
+                }
+            }
+        }
 
 
         [Test]
         public void EnemyAttacksOnTurnEnd()
         {
             Assert.That(Context.GetCurrentBattle().Player, Has.Property("Health").EqualTo(100));
-            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Context.EndTurn();
             Assert.That(Context.GetCurrentBattle().Player, Has.Property("Health").EqualTo(95));
         }
 
@@ -192,19 +222,19 @@ namespace DeckbuilderTests
             Assert.That(enemy.Resources.GetResourceAmount<PoisonStatusEffect>(), Is.EqualTo(5));
 
             Assert.That(enemy, Has.Property("Health").EqualTo(100));
-            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Context.EndTurn();
             Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5));
-            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Context.EndTurn();
             Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4));
-            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Context.EndTurn();
             Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3));
-            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Context.EndTurn();
             Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3 - 2));
-            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Context.EndTurn();
             Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3 - 2 - 1));
 
             //poison should be gon at this point
-            Context.Events.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            Context.EndTurn();
             Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3 - 2 - 1));
 
             Assert.That(enemy.Resources.GetResourceAmount<PoisonStatusEffect>(), Is.EqualTo(0));
@@ -254,6 +284,9 @@ namespace DeckbuilderTests
             yield return context.CreateEntity<DoubleNextCardDamage>();
             yield return context.CreateEntity<Attack10DamageExhaust>();
             yield return context.CreateEntity<DealMoreDamageEachPlay>();
+            yield return context.CreateEntity<PommelStrike>();
+            yield return context.CreateEntity<Strike>();
+            yield return context.CreateEntity<Defend>();
         }
 
         [Test]
@@ -346,7 +379,7 @@ namespace DeckbuilderTests
                 receivedMoveEvent = true;
                 Assert.That(args.MovedCard, Is.EqualTo(cardToPlay.Id));
                 Assert.That(args.NewPileType, Is.EqualTo(PileType.DiscardPile));
-                Assert.That(args.PreviousPileType, Is.EqualTo(PileType.DrawPile));
+                Assert.That(args.PreviousPileType, Is.EqualTo(PileType.HandPile));
             }
         }
 
@@ -371,7 +404,7 @@ namespace DeckbuilderTests
                 receivedMoveEvent = true;
                 Assert.That(args.MovedCard, Is.EqualTo(cardToPlay.Id));
                 Assert.That(args.NewPileType, Is.EqualTo(PileType.ExhaustPile));
-                Assert.That(args.PreviousPileType, Is.EqualTo(PileType.DrawPile));
+                Assert.That(args.PreviousPileType, Is.EqualTo(PileType.HandPile));
             }
         }
 
