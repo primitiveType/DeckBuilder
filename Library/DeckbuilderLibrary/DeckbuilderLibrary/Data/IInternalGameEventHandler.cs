@@ -13,5 +13,9 @@ namespace DeckbuilderLibrary.Data
         void InvokeCardCreated(object sender, CardCreatedEventArgs args);
         void InvokeActorDied(object sender, ActorDiedEventArgs args);
         void InvokeBattleEnded(object sender, BattleEndedEventArgs args);
+        
+        void InvokeTurnEnded(object sender, TurnEndedEventArgs args);
+        void InvokeTurnStarted(object sender, TurnStartedEventArgs args);
+        void InvokeIntentChanged(object sender, IntentChangedEventArgs args);
     }
 }

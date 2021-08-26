@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
@@ -27,7 +28,7 @@ namespace Content.Cards
         {
             return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)}. Draw {Context.GetDrawAmount(this, DrawAmount, target as IActor, Owner)}";
         }
-        public override IReadOnlyList<IActor> GetValidTargets()
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return Context.GetEnemies();
         }
@@ -35,10 +36,14 @@ namespace Content.Cards
 
         public override int EnergyCost => 1;
 
-        protected override void DoPlayCard(IActor target)
+        protected override void DoPlayCard(IGameEntity target)
         {
+            if (!(target is IActor actor))
+            {
+                throw new NotSupportedException("Tried to play a card on the wrong target type!");
+            }
             // Deal x damage.
-            Context.TryDealDamage(this, Owner, target, DamageAmount);
+            Context.TryDealDamage(this, Owner, actor, DamageAmount);
             // Draw y cards.
             // We desperately need a way to draw a card using Context.
             // This is currently broken. It will not recycle the discard pile when there are no cards left in the draw pile.

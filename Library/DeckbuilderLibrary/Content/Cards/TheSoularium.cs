@@ -45,7 +45,7 @@ namespace Content.Cards
             return $"Draw {Context.GetDrawAmount(this, DrawAmount, target as IActor, Owner)} cards. If they are in hand at the end of your turn, exhaust them.";
         }
 
-        public override IReadOnlyList<IActor> GetValidTargets()
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return null;
         }
@@ -53,7 +53,7 @@ namespace Content.Cards
         public override bool RequiresTarget => false;
         public override int EnergyCost => 1;
 
-        protected override void DoPlayCard(IActor _)
+        protected override void DoPlayCard(IGameEntity _)
         {            
             var deck = Context.GetCurrentBattle().Deck;
             var drawPile = deck.DrawPile;

@@ -10,7 +10,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
         public void SetIntent(Intent intent)
         {
             Intent = intent;
-            Context.Events.InvokeIntentChanged(this, new IntentChangedEventArgs(this));
+            ((IInternalGameEventHandler)Context.Events).InvokeIntentChanged(this, new IntentChangedEventArgs(this));
         }
     }
 }

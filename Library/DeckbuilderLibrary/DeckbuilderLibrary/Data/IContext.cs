@@ -37,6 +37,7 @@ namespace DeckbuilderLibrary.Data
         // // This particular function doesn't really work because you always draw cards 1 at a time.
         // void TryDrawCard(GameEntity source, IActor owner, IActor target, int baseDraw);
         void TryApplyVulnerable(GameEntity source, IActor owner, IActor target, int baseVulnerable);
+        void EndTurn();
     }
 
     internal interface IInternalGameContext

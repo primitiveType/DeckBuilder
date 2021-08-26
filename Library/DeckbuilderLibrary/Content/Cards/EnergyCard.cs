@@ -13,7 +13,7 @@ namespace Content.Cards
             return ((PlayerActor)Owner).CurrentEnergy >= EnergyCost;
         }
 
-        protected override void DoPlayCard(IActor target)
+        protected override void DoPlayCard(IGameEntity target)
         {
             ((PlayerActor)Owner).Resources.SubtractResource<Energy>(EnergyCost);
         }

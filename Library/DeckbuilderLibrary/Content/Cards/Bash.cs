@@ -29,7 +29,7 @@ namespace Content.Cards
             return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)}. Apply {Context.GetVulnerableAmount(this, VulnerableAmount, target as IActor, Owner)}";
         }
 
-        public override IReadOnlyList<IActor> GetValidTargets()
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return Context.GetEnemies();
         }
@@ -37,12 +37,12 @@ namespace Content.Cards
         public override bool RequiresTarget => true;
         public override int EnergyCost => 2;
 
-        protected override void DoPlayCard(IActor target)
+        protected override void DoPlayCard(IGameEntity target)
         {
             // Deal x damage.
-            Context.TryDealDamage(this, Owner, target, DamageAmount);
+            Context.TryDealDamage(this, Owner, target as IActor, DamageAmount);
             // Apply y vulnerable.
-            Context.TryApplyVulnerable(this, Owner, target, VulnerableAmount);
+            Context.TryApplyVulnerable(this, Owner, target as IActor, VulnerableAmount);
         }
     }
 }

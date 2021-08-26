@@ -23,17 +23,17 @@ namespace Content.Cards
             return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)} to target enemy.";
         }
 
-        public override IReadOnlyList<IActor> GetValidTargets()
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return Context.GetEnemies();
         }
 
         public override bool RequiresTarget => true;
 
-        protected override void DoPlayCard(IActor target)
+        protected override void DoPlayCard(IGameEntity target)
         {
             base.DoPlayCard(target);
-            Context.TryDealDamage(this, Owner, target, DamageAmount);
+            Context.TryDealDamage(this, Owner, target as Actor, DamageAmount);
         }
 
 

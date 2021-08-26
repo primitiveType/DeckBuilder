@@ -67,5 +67,6 @@ namespace DeckbuilderLibrary.Data.GameEntities
 
             Deck = deck;
         }
+        
     }
 }

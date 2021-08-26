@@ -6,7 +6,6 @@ public abstract class ActorProxy<TActor> : Proxy<TActor> where TActor : IGameEnt
 {
     protected override void OnInitialize()
     {
-        Debug.Log($"Initialized actor proxy with id {GameEntity.Id}.");
         GameEntity.Context.Events.DamageDealt += OnDamageDealt;
     }
 

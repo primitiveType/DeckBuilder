@@ -30,17 +30,17 @@ namespace Content.Cards
                 $"Deal {Context.GetDamageAmount(this, CurrentDamage, target as IActor, Owner)} to target enemy. Increase this card's damage by 1 for the rest of combat.";
         }
 
-        public override IReadOnlyList<IActor> GetValidTargets()
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return Context.GetEnemies();
         }
 
         public override bool RequiresTarget => true;
 
-        protected override void DoPlayCard(IActor target)
+        protected override void DoPlayCard(IGameEntity target)
         {
             base.DoPlayCard(target);
-            Context.TryDealDamage(this, Owner, target, CurrentDamage);
+            Context.TryDealDamage(this, Owner, target as IActor, CurrentDamage);
             TimesPlayed += 1;
         }
 

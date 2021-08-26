@@ -1,4 +1,5 @@
 ﻿using System;
+using Content.Cards;
 using DeckbuilderLibrary.Data.Events;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,10 +12,9 @@ public class HandCardProxy : CardProxy
 
     protected override void OnInitialize()
     {
-        Debug.Log($"Initialized hand card proxy with id {GameEntity.Id}.");
-        NameText.text = GameEntity.Name;
+        base.OnInitialize();
         GameEntity.Context.Events.CardPlayed += EventsOnCardPlayed;
-        SetDescriptionText();
+        UpdateCardText();
     }
 
     private void OnDestroy()
@@ -24,15 +24,21 @@ public class HandCardProxy : CardProxy
 
     private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
     {
-        SetDescriptionText(); //any card being played could cause our text to need to update.
+        UpdateCardText(); //any card being played could cause our text to need to update.
     }
 
-    private void SetDescriptionText()
+    private void UpdateCardText()
     {
+        //throwing energy in here for now.. this is also a hack- energy cost should be a component or something.
+        NameText.text = $"({(GameEntity as EnergyCard)?.EnergyCost}) {GameEntity.Name}";
         DescriptionText.text = GameEntity.GetCardText();
     }
 
-    public int HandPositionIndex;
+    public int HandPositionIndex
+    {
+        get => HandPositionIndex1;
+        set => HandPositionIndex1 = value;
+    }
 
     [SerializeField] private bool Hovered => MouseOver || Selected;
 
@@ -62,6 +68,7 @@ public class HandCardProxy : CardProxy
     [SerializeField] private LineRenderer lineRenderer;
 
     [SerializeField] private Vector3 LineRendererStartOffset;
+    private int HandPositionIndex1;
 
     public void ResetHandPosition(Vector3 handPosition)
     {

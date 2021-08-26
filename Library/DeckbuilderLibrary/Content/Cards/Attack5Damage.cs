@@ -32,17 +32,17 @@ namespace Content.Cards
         }
 
 
-        public override IReadOnlyList<IActor> GetValidTargets()
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return Context.GetEnemies();
         }
 
         public override bool RequiresTarget => true;
 
-        protected override void DoPlayCard(IActor target)
+        protected override void DoPlayCard(IGameEntity target)
         {
             base.DoPlayCard(target);
-            Context.TryDealDamage(this, Owner, target, 5);
+            Context.TryDealDamage(this, Owner, target as IActor, 5);
         }
 
         public override int EnergyCost { get; } = 0;

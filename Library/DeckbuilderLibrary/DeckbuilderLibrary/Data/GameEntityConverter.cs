@@ -5,11 +5,16 @@ using Newtonsoft.Json.Linq;
 
 namespace DeckbuilderLibrary.Data
 {
+    internal class GameEntityCloneConverter : GameEntityConverter
+    {
+        protected override bool IsCloning => true;
+    }
+
     internal class GameEntityConverter : JsonConverter<IGameEntity>
     {
         public override bool CanRead { get; } = true;
         public override bool CanWrite { get; } = false;
-
+        protected virtual bool IsCloning => false;
 
         public override void WriteJson(JsonWriter writer, IGameEntity value, JsonSerializer serializer)
         {
@@ -42,7 +47,10 @@ namespace DeckbuilderLibrary.Data
 
             IInternalGameEntity internalGameEntity = ((IInternalGameEntity)existingValue);
             internalGameEntity.SetContext(GameContext.CurrentContext);
-            existingValue.Context.AddEntity(existingValue);
+            if (IsCloning)
+            {
+                ((GameEntity)internalGameEntity).Id = -1;
+            }
             ((IInternalGameContext)existingValue.Context).ToInitialize.Add(internalGameEntity);
             return existingValue;
            

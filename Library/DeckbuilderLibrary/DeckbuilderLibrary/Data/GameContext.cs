@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
@@ -13,7 +14,6 @@ namespace DeckbuilderLibrary.Data
 {
     public class GameContext : IContext, IInternalGameContext
     {
-
         [JsonConstructor]
         public GameContext()
         {
@@ -32,7 +32,7 @@ namespace DeckbuilderLibrary.Data
         {
             EntitiesById.Add(entity.Id, entity);
         }
-        
+
         public IActor GetActorById(int id)
         {
             return AllActors().First(actor => actor.Id == id);
@@ -64,13 +64,12 @@ namespace DeckbuilderLibrary.Data
             }
         }
 
-   
-
-        public void SetCurrentBattle(IBattle battle)
+        public void EndTurn()
         {
-            CurrentBattle = battle;
+            var internalEvents = ((IInternalGameEventHandler)Events);
+            internalEvents.InvokeTurnEnded(this, new TurnEndedEventArgs());
+            internalEvents.InvokeTurnStarted(this, new TurnStartedEventArgs());
         }
-
 
         public IBattle GetCurrentBattle()
         {
@@ -149,49 +148,75 @@ namespace DeckbuilderLibrary.Data
             }
         };
 
+        readonly JsonSerializerSettings m_JsonSerializerCloneSettings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.All,
+            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+            ContractResolver = new PrivateSetterContractResolver(),
+            Converters = new List<JsonConverter>
+            {
+                new GameEntityCloneConverter()
+            }
+        };
+
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
+            InitializeNewObjects();
+        }
+
+        private void InitializeNewObjects()
+        {
             for (var i = 0; i < ((IInternalGameContext)this).ToInitialize.Count; i++)
             {
-                (((IInternalGameContext)this).ToInitialize[i]).InternalInitialize();
+                IInternalGameEntity internalGameEntity = (((IInternalGameContext)this).ToInitialize[i]);
+                if (internalGameEntity.Id < 0)
+                {
+                    ((GameEntity)internalGameEntity).Id = GetNextEntityId();
+                }
+
+                internalGameEntity.InternalInitialize();
+                AddEntity(internalGameEntity);
             }
+
+            ((IInternalGameContext)this).ToInitialize.Clear();
         }
 
         public T CopyCard<T>(T card) where T : Card
         {
             CurrentContext = this;
-            string contextStr = JsonConvert.SerializeObject(card, m_JsonSerializerSettings);
-            T copy = JsonConvert.DeserializeObject<T>(contextStr, m_JsonSerializerSettings);
+            string contextStr = JsonConvert.SerializeObject(card, m_JsonSerializerCloneSettings);
+            T copy = JsonConvert.DeserializeObject<T>(contextStr, m_JsonSerializerCloneSettings);
+            InitializeNewObjects();
             return copy;
         }
 
         public int GetBlockAmount(object sender, int baseDamage, IActor target, IActor owner)
-    {
-        throw new NotImplementedException();
-    }
+        {
+            throw new NotImplementedException();
+        }
 
-    public int GetDrawAmount(object sender, int baseDraw, IActor target, IActor owner)
-    {
-        throw new NotImplementedException();
-    }
+        public int GetDrawAmount(object sender, int baseDraw, IActor target, IActor owner)
+        {
+            throw new NotImplementedException();
+        }
 
-    public int GetVulnerableAmount(object sender, int baseDamage, IActor target, IActor owner)
-    {
-        throw new NotImplementedException();
-    }
+        public int GetVulnerableAmount(object sender, int baseDamage, IActor target, IActor owner)
+        {
+            throw new NotImplementedException();
+        }
 
-    public void TryApplyBlock(GameEntity source, IActor owner, IActor target, int baseBlock)
-    {
-        throw new NotImplementedException();
-    }
+        public void TryApplyBlock(GameEntity source, IActor owner, IActor target, int baseBlock)
+        {
+            throw new NotImplementedException();
+        }
 
-    public void TryApplyVulnerable(GameEntity source, IActor owner, IActor target, int baseVulnerable)
-    {
-        throw new NotImplementedException();
-    }
+        public void TryApplyVulnerable(GameEntity source, IActor owner, IActor target, int baseVulnerable)
+        {
+            throw new NotImplementedException();
+        }
 
-    public IDeck CreateDeck()
+        public IDeck CreateDeck()
         {
             return CreateEntity<Deck>();
         }
@@ -224,12 +249,19 @@ namespace DeckbuilderLibrary.Data
             CurrentBattle = battle;
             battle.SetDeck(deck);
             battle.SetPlayer(player);
+            player.Resources.AddResource<BaseCardDraw>(5);
             foreach (var enemy in enemies)
             {
-                battle.AddEnemy(enemy);//might need set access instead.
+                battle.AddEnemy(enemy); //might need set access instead.
             }
 
             battle.Rules.Add(CreateEntity<ShuffleDiscardIntoDrawWhenEmpty>());
+            battle.Rules.Add(CreateEntity<DiscardHandAtEndOfTurn>());
+            
+            //Player goes first. start the turn.
+            var internalEvents = ((IInternalGameEventHandler)Events);
+            internalEvents.InvokeTurnStarted(this, new TurnStartedEventArgs());
+
             return battle;
         }
     }

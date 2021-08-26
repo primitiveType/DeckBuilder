@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities
 {
-    [JsonConverter(typeof(GameEntityConverter))]
     public abstract class GameEntity : IInternalGameEntity
     {
         [JsonProperty] public int Id { get; internal set; } = -1;

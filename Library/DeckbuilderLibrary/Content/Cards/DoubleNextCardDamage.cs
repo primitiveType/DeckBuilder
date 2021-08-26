@@ -19,14 +19,14 @@ namespace Content.Cards
             return "The next card you play deals double damage.";
         }
 
-        public override IReadOnlyList<IActor> GetValidTargets()
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return null;
         }
 
         public override bool RequiresTarget => false;
 
-        protected override void DoPlayCard(IActor target)
+        protected override void DoPlayCard(IGameEntity target)
         {
             base.DoPlayCard(target);
             Activated = true;

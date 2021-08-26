@@ -37,17 +37,17 @@ namespace Content.Cards
             return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)}. Ethereal.";
         }
         
-        public override IReadOnlyList<IActor> GetValidTargets()
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return Context.GetEnemies();
         }
         public override bool RequiresTarget => true;
         public override int EnergyCost => 2;
 
-        protected override void DoPlayCard(IActor target)
+        protected override void DoPlayCard(IGameEntity target)
         {
             // Deal x damage.
-            Context.TryDealDamage(this, Owner, target, DamageAmount);
+            Context.TryDealDamage(this, Owner, target as IActor, DamageAmount);
         }
     }
 }

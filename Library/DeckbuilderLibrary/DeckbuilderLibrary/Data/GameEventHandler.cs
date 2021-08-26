@@ -12,6 +12,7 @@ namespace DeckbuilderLibrary.Data
         public event ActorDiedEvent ActorDied;
         public event BattleEndedEvent BattleEnded;
         public event TurnEndedEvent TurnEnded;
+        public event TurnStartedEvent TurnStarted;
         public event IntentChangedEvent IntentChanged;
 
         public void InvokeIntentChanged(object sender, IntentChangedEventArgs args)
@@ -22,7 +23,10 @@ namespace DeckbuilderLibrary.Data
         {
             TurnEnded?.Invoke(sender, args);
         }
-
+        public void InvokeTurnStarted(object sender, TurnStartedEventArgs args)
+        {
+            TurnStarted?.Invoke(sender, args);
+        }
         public void InvokeBattleEnded(object sender, BattleEndedEventArgs args) 
         {
             BattleEnded?.Invoke(sender, args);
