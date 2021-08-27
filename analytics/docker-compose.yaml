@@ -1,0 +1,33 @@
+version: "3.3"
+services:
+  backend:
+    env_file:
+      - "dev.env"
+    environment:
+      MODULE_NAME: server
+      VARIABLE_NAME: app
+    build:
+      context: .
+      dockerfile: server.Dockerfile
+      args:
+        IS_PRODUCTION: "${IS_PRODUCTION-false}"
+    volumes:
+      # Sync changes made during development are automatically reflected in the container
+      - ".:/app"
+    depends_on:
+      - "db"
+    command: "/start-reload.sh"
+    ports:
+      - "8000:80"
+    links:
+      - db
+
+  db:
+    image: mongo
+    env_file:
+      - dev.env
+    volumes:
+      - data:/data
+
+volumes:
+  data:
