@@ -10,6 +10,11 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
         protected override void Initialize()
         {
             base.Initialize();
+            Context.Events.BattleStarted += OnBattleStarted;
+        }
+
+        private void OnBattleStarted(object sender, BattleStartedArgs args)
+        {
             Owner.Resources.SetResource<Energy>(Amount);
             Context.Events.TurnEnded += OnTurnEnded;
         }
@@ -23,20 +28,21 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
     public class BaseCardDraw : Resource<BaseCardDraw>
     {
         public override string Name => nameof(BaseCardDraw);
-        private IDeck Deck { get; set; }
+        private IBattleDeck BattleDeck => Context.GetCurrentBattle().Deck;
 
         protected override void Initialize()
         {
             base.Initialize();
             Context.Events.TurnStarted += OnTurnStarted;
-            Deck = Context.GetCurrentBattle().Deck;
+
         }
+        
 
         private void OnTurnStarted(object sender, TurnStartedEventArgs args)
         {
             for (int i = 0; i < Amount; i++)
             {
-                var card = Deck.DrawPile.Cards.FirstOrDefault() ;
+                var card = BattleDeck.DrawPile.Cards.FirstOrDefault() ;
                 if (card != null)
                 {
                     Context.TrySendToPile(card.Id, PileType.HandPile);

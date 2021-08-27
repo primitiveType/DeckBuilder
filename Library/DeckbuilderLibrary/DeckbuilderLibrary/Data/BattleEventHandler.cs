@@ -4,7 +4,7 @@ using DeckbuilderLibrary.Data.GameEntities;
 
 namespace DeckbuilderLibrary.Data
 {
-    internal class GameEventHandler : IInternalGameEventHandler
+    internal class BattleEventHandler : IInternalBattleEventHandler
     {
         public event CardMovedEvent CardMoved;
 

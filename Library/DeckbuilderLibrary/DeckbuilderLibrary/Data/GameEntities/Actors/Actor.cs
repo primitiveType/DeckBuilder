@@ -12,6 +12,11 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
 
         [JsonProperty] public Resources.Resources Resources { get; private set; }
 
+        [JsonProperty]
+        public SerializableDictionary<string, int> MiscData { get; private set; } =
+            new SerializableDictionary<string, int>();
+
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -35,12 +40,12 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
             Resources.SubtractResource<Health>(healthDamage);
 
             //do we want to clamp the output of damage dealt? add overkill damage as a param?
-            ((IInternalGameEventHandler)Context.Events).InvokeDamageDealt(this,
+            ((IInternalBattleEventHandler)Context.Events).InvokeDamageDealt(this,
                 new DamageDealtArgs(Id, totalDamage, healthDamage, source));
 
             if (Health <= 0)
             {
-                ((IInternalGameEventHandler)Context.Events).InvokeActorDied(this,
+                ((IInternalBattleEventHandler)Context.Events).InvokeActorDied(this,
                     new ActorDiedEventArgs(this, source, source /*TODO*/));
             }
         }

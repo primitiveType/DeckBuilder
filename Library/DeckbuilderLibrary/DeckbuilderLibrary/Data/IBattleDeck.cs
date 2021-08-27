@@ -3,7 +3,7 @@ using DeckbuilderLibrary.Data.GameEntities;
 
 namespace DeckbuilderLibrary.Data
 {
-    public interface IDeck : IGameEntity
+    public interface IBattleDeck : IGameEntity
     {
         IPile DrawPile { get; }
         IPile HandPile { get; }

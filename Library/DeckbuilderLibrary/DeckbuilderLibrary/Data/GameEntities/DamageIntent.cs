@@ -8,7 +8,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
         public int DamageAmount { get; set; }
 
         public override string GetDescription =>
-            Context.GetDamageAmount(this, DamageAmount, Target, Context.GetActorById(OwnerId)).ToString();
+            Context.GetDamageAmount(this, DamageAmount, Target, Context.GetCurrentBattle().GetActorById(OwnerId)).ToString();
 
         private IActor Target => Context.GetCurrentBattle().Player;
 
@@ -25,7 +25,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
                 throw new NotSupportedException("Intent with no owner was triggered!");
             }
 
-            Context.TryDealDamage(this, Context.GetActorById(OwnerId), Target, DamageAmount);
+            Context.TryDealDamage(this, battle.GetActorById(OwnerId), Target, DamageAmount);
         }
     }
 }

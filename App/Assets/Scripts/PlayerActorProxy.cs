@@ -1,4 +1,5 @@
-﻿using DeckbuilderLibrary.Data.Events;
+﻿using System;
+using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,13 @@ public class PlayerActorProxy : ActorProxy<PlayerActor>
         
         GameEntity.Context.Events.CardPlayed += OnCardPlayed;
         GameEntity.Context.Events.TurnEnded += OnTurnEnded; //TODO: turn began?
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        GameEntity.Context.Events.CardPlayed -= OnCardPlayed;
+        GameEntity.Context.Events.TurnEnded -= OnTurnEnded; //TODO: turn began?
     }
 
     private void OnTurnEnded(object sender, TurnEndedEventArgs args)
@@ -42,3 +50,4 @@ public class PlayerActorProxy : ActorProxy<PlayerActor>
         EnergyText.text = $"Energy : {GameEntity.CurrentEnergy} / {GameEntity.BaseEnergy}";
     }
 }
+

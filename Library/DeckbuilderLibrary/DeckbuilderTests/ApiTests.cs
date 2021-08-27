@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Content.Cards;
 using DeckbuilderLibrary.Data;
@@ -15,6 +16,16 @@ namespace DeckbuilderTests
 {
     internal class ApiTests
     {
+        /// cases to cover:
+        /// card used in combat permanently changes stat out of combat
+        /// card used in combat temporarily changes stat until end of combat
+        /// some effects on cards temporary until end of turn
+        /// able to view cards in hand and see their temporary effects, but when viewing deck, only permanent effects appear.
+        ///
+        /// approach: at the start of battle, the deck is copied.
+        /// cards that need to increment a permanent value store it on the context as a "rule", along with the id of the card, so that it works in a sim context.
+
+        //GlobalDeck
         private static IContext Context { get; set; }
 
         readonly JsonSerializerSettings m_JsonSerializerSettings = new JsonSerializerSettings
@@ -28,15 +39,19 @@ namespace DeckbuilderTests
             }
         };
 
+        public PlayerActor Player { get; private set; }
+
         [SetUp]
         public void Setup()
         {
             Context = new GameContext();
-            PlayerActor player = (PlayerActor)Context.CreateActor<PlayerActor>(100, 0);
-            Enemy enemy = Context.CreateActor<BasicEnemy>(100, 0);
-            Deck deck = CreateDeck(Context);
 
-            IBattle battle = Context.CreateBattle(deck, player, new List<Enemy> { enemy });
+
+            Player = (PlayerActor)Context.CreateActor<PlayerActor>(100, 0);
+            CreateDeck(Context);
+
+
+            IBattle battle = Context.StartBattle(Player, Context.CreateEntity<BasicBattleData>());
         }
 
         [Test]
@@ -118,7 +133,7 @@ namespace DeckbuilderTests
         [Test]
         public void PlayerStartsWithFiveCards()
         {
-           Assert.That(Context.GetCurrentBattle().Deck.HandPile.Cards.Count, Is.EqualTo(5));
+            Assert.That(Context.GetCurrentBattle().Deck.HandPile.Cards.Count, Is.EqualTo(5));
         }
 
         [Test]
@@ -152,22 +167,23 @@ namespace DeckbuilderTests
                 }
             }
         }
-        
+
         [Test]
         public void DrawCardsEachTurn()
         {
             Context.Events.CardMoved += OnCardMoved;
             bool receivedEvent = false;
             IPile handPile = Context.GetCurrentBattle().Deck.HandPile;
-           
+
             Assert.That(handPile.Cards.Count, Is.EqualTo(5));
             Context.TrySendToPile(handPile.Cards.First().Id, PileType.DiscardPile);
             Assert.That(handPile.Cards.Count, Is.EqualTo(4));
             Context.EndTurn();
-            
+
             Assert.That(handPile.Cards.Count, Is.EqualTo(5));
 
             Assert.That(receivedEvent);
+
             void OnCardMoved(object sender, CardMovedEventArgs args)
             {
                 if (args.NewPileType == PileType.HandPile)
@@ -233,7 +249,7 @@ namespace DeckbuilderTests
             Context.EndTurn();
             Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3 - 2 - 1));
 
-            //poison should be gon at this point
+            //poison should be gone at this point
             Context.EndTurn();
             Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3 - 2 - 1));
 
@@ -266,16 +282,57 @@ namespace DeckbuilderTests
             }
         }
 
-
-        private Deck CreateDeck(IContext context)
+        [Test]
+        public void MultipleBattles()
         {
-            Deck deck = context.CreateEntity<Deck>();
-            foreach (Card card in CreateCards(context))
+            Context.Events.BattleEnded += EventsOnBattleEnded;
+            bool receivedEvent = false;
+            Card damage = FindCardInDeck(nameof(Attack5Damage));
+            IActor enemy = Context.GetEnemies().First();
+            int test = 0;
+            for (int i = 0; i < 20; i++)
             {
-                deck.DrawPile.Cards.Add(card);
+                damage.PlayCard(enemy);
+                test = i;
             }
 
-            return deck;
+            Assert.That(test, Is.EqualTo(19));
+
+            Assert.That(enemy.Health, Is.EqualTo(0));
+            Assert.That(receivedEvent);
+
+            Context.StartBattle(Player, Context.CreateEntity<BasicBattleData>());
+            enemy = Context.GetEnemies().First();
+            for (int i = 0; i < 20; i++)
+            {
+                damage.PlayCard(enemy);
+                if (i % 5 == 0)
+                {
+                    Context.EndTurn();
+                }
+
+                test = i;
+            }
+
+            Assert.That(test, Is.EqualTo(19));
+
+            Assert.That(enemy.Health, Is.EqualTo(0));
+            Assert.That(receivedEvent);
+
+            void EventsOnBattleEnded(object sender, BattleEndedEventArgs args)
+            {
+                receivedEvent = true;
+                Assert.That(args.IsVictory);
+            }
+        }
+
+
+        private void CreateDeck(IContext context)
+        {
+            foreach (Card card in CreateCards(context))
+            {
+                Context.PlayerDeck.Add(card);
+            }
         }
 
         private IEnumerable<Card> CreateCards(IContext context)
@@ -283,6 +340,7 @@ namespace DeckbuilderTests
             yield return context.CreateEntity<Attack5Damage>();
             yield return context.CreateEntity<DoubleNextCardDamage>();
             yield return context.CreateEntity<Attack10DamageExhaust>();
+            yield return context.CreateEntity<BattleStateAndPermanentState>();
             yield return context.CreateEntity<DealMoreDamageEachPlay>();
             yield return context.CreateEntity<PommelStrike>();
             yield return context.CreateEntity<Strike>();
@@ -325,7 +383,7 @@ namespace DeckbuilderTests
             card.PlayCard(target);
             Assert.That(target.Health, Is.LessThan(100));
         }
-        
+
         [Test]
         public void ClonedCardHasNewId()
         {
@@ -333,7 +391,6 @@ namespace DeckbuilderTests
             var copy = Context.CopyCard(card);
             Assert.That(copy.Id, Is.Not.EqualTo(card.Id));
         }
-
 
 
         [Test]
@@ -364,17 +421,21 @@ namespace DeckbuilderTests
         {
             bool receivedMoveEvent = false;
             Card cardToPlay = FindCardInDeck("Attack5Damage");
+
+            Assert.That(Context.GetCurrentBattle().Deck.HandPile.Cards, Contains.Item(cardToPlay));
+            Assert.That(Context.GetCurrentBattle().Deck.DiscardPile.Cards, !Contains.Item(cardToPlay));
+
             IActor target = (IActor)cardToPlay.GetValidTargets()[0];
-            Context.Events.CardMoved += DeckOnOnCardMoved;
+            Context.Events.CardMoved += OnCardMoved;
             cardToPlay.PlayCard(target);
-            Assert.That(Context.GetCurrentBattle().Deck.DrawPile.Cards, !Contains.Item(cardToPlay));
+            Assert.That(Context.GetCurrentBattle().Deck.HandPile.Cards, !Contains.Item(cardToPlay));
             Assert.That(Context.GetCurrentBattle().Deck.DiscardPile.Cards, Contains.Item(cardToPlay));
             if (!receivedMoveEvent)
             {
                 Assert.Fail("Never received event for card move!");
             }
 
-            void DeckOnOnCardMoved(object sender, CardMovedEventArgs args)
+            void OnCardMoved(object sender, CardMovedEventArgs args)
             {
                 receivedMoveEvent = true;
                 Assert.That(args.MovedCard, Is.EqualTo(cardToPlay.Id));
@@ -425,7 +486,8 @@ namespace DeckbuilderTests
             var copiedContext = GetCopiedContext();
             Assert.That(copiedContext.GetCurrentBattle().Deck.AllCards().ToList(), Has.Count.GreaterThan(0));
             Assert.That(copiedContext.GetEnemies().ToList(), Has.Count.GreaterThan(0));
-            Assert.That(copiedContext.GetCurrentBattle().Deck.AllCards().FirstOrDefault(c => c.Id > 0), Is.Not.Null);
+            Assert.That(copiedContext.GetCurrentBattle().Deck.AllCards().FirstOrDefault(c => c.Id > 0),
+                Is.Not.Null);
             Assert.That(copiedContext.GetCurrentBattle().Enemies.First().Id,
                 Is.EqualTo(Context.GetCurrentBattle().Enemies.First().Id));
 
@@ -440,6 +502,71 @@ namespace DeckbuilderTests
             IActor copiedTarget = (IActor)copiedCard.GetValidTargets().First();
             copiedCard.PlayCard(copiedTarget);
             Assert.That(copiedContext.GetEnemies().First().Health, Is.EqualTo(99)); //should have only dealt 1 damage
+        }
+
+        [Test]
+        public void TestAttributes()
+        {
+        }
+
+        [Test]
+        public void TestMultipleCardsDontShareState()
+        {
+            Card card = FindCardInDeck("DealMoreDamageEachPlay");
+            Card copy = Context.CopyCard(card);
+            Context.GetCurrentBattle().Deck.HandPile.Cards.Add(copy);
+            IActor target = (IActor)card.GetValidTargets().First();
+            Assert.That(target.Health, Is.EqualTo(100));
+            card.PlayCard(target);
+            Assert.That(target.Health, Is.EqualTo(99));
+
+            copy.PlayCard(target);
+            Assert.That(target.Health, Is.EqualTo(98));
+            copy.PlayCard(target);
+            Assert.That(target.Health, Is.EqualTo(96));
+        }
+
+        [Test]
+        public void TestBattleStateAndPermanentState()
+        {
+            BattleStateAndPermanentState card =
+                (BattleStateAndPermanentState)FindCardInDeck("BattleStateAndPermanentState");
+            Assert.That(Context.PlayerDeck.Contains(card));
+
+            IActor target = (IActor)card.GetValidTargets().First();
+            Assert.That(target.Health, Is.EqualTo(100));
+            card.PlayCard(target);
+            Assert.That(target.Health, Is.EqualTo(98));
+
+            //end the battle
+            ((IInternalBattleEventHandler)Context.Events).InvokeBattleEnded(this, new BattleEndedEventArgs(true));
+            //start new battle
+            var player = Context.GetCurrentBattle().Player;
+            Context.StartBattle(player, Context.CreateEntity<BasicBattleData>());
+            target = (IActor)card.GetValidTargets().First();
+            Assert.That(target.Health, Is.EqualTo(100));
+            card.PlayCard(target);
+            Assert.That(target.Health, Is.EqualTo(97));
+
+            BattleStateAndPermanentState copy = (BattleStateAndPermanentState)Context.CopyCard(card);
+            Assert.That(copy.TimesPlayed, Is.EqualTo(card.TimesPlayed));
+            Assert.That(copy.TimesPlayedThisCombat, Is.EqualTo(card.TimesPlayedThisCombat));
+            Context.GetCurrentBattle().Deck.DrawPile.Cards.Add(copy);
+            //next attack should deal 5
+            copy.PlayCard(target);
+            Assert.That(target.Health, Is.EqualTo(92));
+
+            //this code right here is probably what we need to do to create an out-of-battle context, but like every time the game state dirties and the player is checking their deck.
+            GameContext outOfBattleContext = GetCopiedContext();
+            ((IInternalBattleEventHandler)outOfBattleContext.Events).InvokeBattleEnded(this,
+                new BattleEndedEventArgs(true));
+            var outOfBattleCopiedCard =
+                outOfBattleContext.GetCurrentBattle().Deck.AllCards().First(c => c.Id == copy.Id);
+            Assert.That(outOfBattleCopiedCard.GetCardText(), Is.Not.EqualTo(copy.GetCardText()));
+
+            Assert.That(outOfBattleCopiedCard.GetCardText(),
+                Is.EqualTo(
+                    "Deal 4 to target enemy. Then deal 1.")); //this indicates that the out-of-battle card had its battleproperty reset to zero.
         }
 
         [Test]

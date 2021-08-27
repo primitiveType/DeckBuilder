@@ -21,7 +21,11 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
             {
                 Resources.SetResource<BaseEnergy>(3);
             }
+
+            if (!Resources.HasResource<BaseCardDraw>())
+            {
+                Resources.SetResource<BaseCardDraw>(5);
+            }
         }
-        
     }
 }

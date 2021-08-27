@@ -34,15 +34,19 @@ namespace Content.Cards
                 {
                     continue;
                 }
+
                 Context.TrySendToPile(card.Id, PileType.ExhaustPile);
             }
+
             Context.Events.TurnEnded -= EventsOnTurnEnded;
         }
 
         private int DrawAmount = 3;
+
         public override string GetCardText(IGameEntity target = null)
         {
-            return $"Draw {Context.GetDrawAmount(this, DrawAmount, target as IActor, Owner)} cards. If they are in hand at the end of your turn, exhaust them.";
+            return
+                $"Draw {Context.GetDrawAmount(this, DrawAmount, target as IActor, Owner)} cards. If they are in hand at the end of your turn, exhaust them.";
         }
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
@@ -54,7 +58,7 @@ namespace Content.Cards
         public override int EnergyCost => 1;
 
         protected override void DoPlayCard(IGameEntity _)
-        {            
+        {
             var deck = Context.GetCurrentBattle().Deck;
             var drawPile = deck.DrawPile;
             for (int i = 0; i < Context.GetDrawAmount(this, DrawAmount, Owner, Owner); i++)
@@ -63,7 +67,7 @@ namespace Content.Cards
                 if (drawPile.Cards.Count > 0)
                 {
                     // Oh no! I'm using Deck's TrySendToPile instead of Context's!
-                    var card = deck.DrawPile.Cards[0]; 
+                    var card = deck.DrawPile.Cards[0];
                     deck.TrySendToPile(card, PileType.HandPile);
                     DrawnCards.Add(card);
                 }

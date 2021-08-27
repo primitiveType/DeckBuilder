@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using Content.Cards;
+﻿using Content.Cards;
 using DeckbuilderLibrary.Data;
-using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using UnityEngine;
@@ -37,35 +34,14 @@ public class BattleBootstrap : MonoBehaviour
     private Button EndTurnButton => m_EndTurnButton;
     int NumCardsInTestDeck => m_NumCardsInTestDeck;
 
-    private IContext Api { get; set; }
+    private IContext Context => GameContextManager.Instance.Context;
 
     void Awake()
     {
         //TODO: Set up the scene with data injected from elsewhere.
-        Api = new GameContext();
-
-        EndTurnButton.onClick.AddListener(Api.EndTurn);
-        PlayerActor player = Api.CreateActor<PlayerActor>(100, 0);
-        Enemy enemy = Api.CreateActor<BasicEnemy>(100, 0);
-        IDeck deck = Api.CreateDeck();
-
-
-        for (int i = 0; i < NumCardsInTestDeck; i++)
-        {
-            if (i % 2 == 0)
-            {
-                deck.DrawPile.Cards.Add(Api.CreateEntity<Attack5Damage>());
-            }
-            else
-            {
-                deck.DrawPile.Cards.Add(Api.CreateEntity<Attack10DamageExhaust>());
-            }
-
-            deck.DrawPile.Cards.Add(Api.CreateEntity<DoubleNextCardDamage>());
-        }
-
-        IBattle battle = Api.CreateBattle(deck, player, new List<Enemy> { enemy });
-        InitializeProxies(battle);
+        // Context = GameContextManager.Instance.Context;
+        EndTurnButton.onClick.AddListener(Context.EndTurn);
+        InitializeProxies(Context.GetCurrentBattle());
     }
 
     private void InitializeProxies(IBattle battle)

@@ -14,6 +14,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
         private int m_Amount;
         public abstract string Name { get; }
 
+
         [JsonIgnore]
         public IActor Owner
         {
@@ -61,7 +62,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
                     throw new ArgumentException("Tried to initialize resource with no Owner info!");
                 }
 
-                Owner = Context.GetActorById(OwnerId);
+                Owner = Context.GetCurrentBattle().GetActorById(OwnerId);
             }
             else
             {

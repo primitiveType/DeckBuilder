@@ -4,7 +4,6 @@ using DeckbuilderLibrary.Data.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class HandCardProxy : CardProxy
 {
     [SerializeField] private Text NameText;
@@ -157,15 +156,4 @@ public class HandCardProxy : CardProxy
 
         lineRenderer.SetPosition(0, transform.position + LineRendererStartOffset);
     }
-}
-
-public interface ITargetingProvider
-{
-    TargetingType TargetingType { get; }
-}
-
-public enum TargetingType
-{
-    None,
-    Single
 }

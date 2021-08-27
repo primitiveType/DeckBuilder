@@ -3,7 +3,7 @@ using DeckbuilderLibrary.Data.GameEntities;
 
 namespace DeckbuilderLibrary.Data
 {
-    internal interface IInternalGameEventHandler : IGameEventHandler
+    internal interface IInternalBattleEventHandler : IBattleEventHandler
     {
         //To request damage, cards should use the game context.
         int RequestDamageAmount(object sender, int baseDamage, IGameEntity owner, IGameEntity target);
