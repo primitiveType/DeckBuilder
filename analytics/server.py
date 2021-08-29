@@ -56,7 +56,7 @@ async def close_mongo_connection():
 
 
 class PyObjectId(ObjectId):
-    # Copied directly from https://www.mongodb.com/developer/quickstart/python-quickstart-fastapi/#the-_id-attribute-and-objectids
+    # https://www.mongodb.com/developer/quickstart/python-quickstart-fastapi/#the-_id-attribute-and-objectids
     @classmethod
     def __get_validators__(cls):
         yield cls.validate
@@ -70,6 +70,11 @@ class PyObjectId(ObjectId):
     @classmethod
     def __modify_schema__(cls, field_schema):
         field_schema.update(type="string")
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
 
 
 class BaseChoices(BaseModel, Generic[ChoiceType]):
@@ -91,8 +96,6 @@ class _Model(BaseModel):
 
 
 class RunModel(_Model):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-
     rng_seed: int
     game_version: str
     chosen_path: List[str]
@@ -104,6 +107,17 @@ class RunModel(_Model):
     class Config:
         allow_population_by_field_name = True
         json_encoders = {ObjectId: str}
+
+
+class RunPostSchema(BaseModel):
+    # Having basically identical schemas and models is actually the correct way to do this
+    rng_seed: int
+    game_version: str
+    chosen_path: List[str]
+    normal_deck: List[str]
+    special_deck: List[Dict]
+    card_choices: List[CardChoices]
+    relics: List[Relic]
 
 
 class _CRUDBase(Generic[ModelType]):
@@ -124,12 +138,17 @@ class CRUDRun(_CRUDBase[RunModel]):
     pass
 
 
+crud_run = CRUDRun("runs", RunModel)
+
+
 app = FastAPI()
 
 
-@app.post("/v1/run")
-def post_run(obj_in: RunModel, db=Depends(get_db)):
-    return db.client
+@app.post("/v1/run", response_model=RunModel)
+async def post_run(obj_in: RunPostSchema, db=Depends(get_db)):
+    x = await crud_run.create(db, obj_in=obj_in)
+    print(x)
+    return x
 
 
 app.add_event_handler("startup", connect_to_mongo)
