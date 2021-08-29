@@ -127,9 +127,9 @@ class CRUDRun(_CRUDBase[RunModel]):
 app = FastAPI()
 
 
-@app.post("v1/run")
+@app.post("/v1/run")
 def post_run(obj_in: RunModel, db=Depends(get_db)):
-    pass
+    return db.client
 
 
 app.add_event_handler("startup", connect_to_mongo)
