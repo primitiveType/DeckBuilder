@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class Main : MonoBehaviour
 {
-    void Awake()
+    void Start()
     {
         SceneManager.LoadScene("BattleScene");
     }
