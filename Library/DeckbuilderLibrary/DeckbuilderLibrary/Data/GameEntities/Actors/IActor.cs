@@ -5,6 +5,5 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
         int Health { get; }
         int Armor { get; }
         Resources.Resources Resources { get; }
-        SerializableDictionary<string, int> MiscData { get; }
     }
 }

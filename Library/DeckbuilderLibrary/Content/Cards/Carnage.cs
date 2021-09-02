@@ -14,7 +14,6 @@ namespace Content.Cards
             Context.Events.CardPlayed += EventsOnCardPlayed;
             Context.Events.TurnEnded += EventsOnTurnEnded;
         }
-
         private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
         {
             if (args.CardId == Id)

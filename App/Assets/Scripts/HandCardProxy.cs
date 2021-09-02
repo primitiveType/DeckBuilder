@@ -4,6 +4,7 @@ using DeckbuilderLibrary.Data.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class HandCardProxy : CardProxy
 {
     [SerializeField] private Text NameText;

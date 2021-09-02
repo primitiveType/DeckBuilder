@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
@@ -10,21 +9,7 @@ namespace Content.Cards
 {
     public class DealMoreDamageEachPlay : EnergyCard
     {
-        private string DataKey => nameof(DealMoreDamageEachPlay) + "_" + Id;
-
-        private int TimesPlayed
-        {
-            get
-            {
-                if (Owner.MiscData.ContainsKey(DataKey))
-                {
-                    return Owner.MiscData[DataKey];
-                }
-
-                return 0;
-            }
-            set => Owner.MiscData[DataKey] = value;
-        }
+        [JsonProperty] public int TimesPlayed { get; set; }
 
         private int DamageIncreasePerPlay = 1;
         private int BaseDamage = 1;

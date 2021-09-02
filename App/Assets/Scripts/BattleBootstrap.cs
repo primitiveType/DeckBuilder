@@ -39,7 +39,6 @@ public class BattleBootstrap : MonoBehaviour
     void Awake()
     {
         //TODO: Set up the scene with data injected from elsewhere.
-        // Context = GameContextManager.Instance.Context;
         EndTurnButton.onClick.AddListener(Context.EndTurn);
         InitializeProxies(Context.GetCurrentBattle());
     }
@@ -54,26 +53,12 @@ public class BattleBootstrap : MonoBehaviour
         {
             EnemyActorManager.CreateEnemyActor(enemy);
         }
-
-        //piles probably shouldn't be instantiated and should instead exist in the scene and hook up.
-        //Maybe they shouldn't even be proxy/entity.
-        //PileProxy discardProxy = Instantiate(PileProxyPrefab);
-        //PileProxy handProxy = Instantiate(PileProxyPrefab);
-        //PileProxy drawPileProxy = Instantiate(PileProxyPrefab);
-        //PileProxy exhaustPileProxy = Instantiate(PileProxyPrefab);
-
+        
         DiscardProxy.Initialize(battle.Deck.DiscardPile);
         HandProxy.Initialize(battle.Deck.HandPile);
         DrawPileProxy.Initialize(battle.Deck.DrawPile);
         ExhaustPileProxy.Initialize(battle.Deck.ExhaustPile);
 
-        //cards are kinda weird too. I'm not sure if it makes sense to pre-create them... but maybe it does?
-        //at the very least the card proxies will have to know about what pile they are in. There's not really a 
-        //mechanism for that right now.
-        //foreach (Card card in battle.Deck.AllCards())
-        //{
-        //    CardProxy cardProxy = Instantiate(CardProxyPrefab);
-        //    cardProxy.Initialize(card);
-        //}
+     
     }
 }

@@ -14,7 +14,6 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
         private int m_Amount;
         public abstract string Name { get; }
 
-
         [JsonIgnore]
         public IActor Owner
         {

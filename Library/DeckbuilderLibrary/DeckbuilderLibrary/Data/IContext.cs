@@ -30,26 +30,4 @@ namespace DeckbuilderLibrary.Data
 
         void EndTurn();
     }
-
-    
-    internal interface IInternalGameEvents : IGameEvents, IInternalBattleEventHandler
-    {
-        void SetBattle(Battle newBattle);
-    }
-
-    public interface IGameEvents : IBattleEventHandler
-    {
-        event BattleStarted BattleStarted;
-    }
-
-    public delegate void BattleStarted(object sender, BattleStartedArgs args);
-
-    public class BattleStartedArgs
-    {
-    }
-
-    internal interface IInternalGameContext
-    {
-        List<IInternalGameEntity> ToInitialize { get; }
-    }
 }

@@ -1,5 +1,6 @@
 ﻿using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
+using UnityEngine;
 
 public abstract class ActorProxy<TActor> : Proxy<TActor> where TActor : IGameEntity
 {

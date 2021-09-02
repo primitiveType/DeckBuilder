@@ -25,7 +25,7 @@ namespace DeckbuilderTests
         /// approach: at the start of battle, the deck is copied.
         /// cards that need to increment a permanent value store it on the context as a "rule", along with the id of the card, so that it works in a sim context.
 
-        //GlobalDeck
+
         private static IContext Context { get; set; }
 
         readonly JsonSerializerSettings m_JsonSerializerSettings = new JsonSerializerSettings

@@ -12,10 +12,6 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
 
         [JsonProperty] public Resources.Resources Resources { get; private set; }
 
-        [JsonProperty]
-        public SerializableDictionary<string, int> MiscData { get; private set; } =
-            new SerializableDictionary<string, int>();
-
 
         protected override void Initialize()
         {
