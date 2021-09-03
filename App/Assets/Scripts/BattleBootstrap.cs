@@ -2,6 +2,7 @@
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Battles;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,13 +22,9 @@ public class BattleBootstrap : MonoBehaviour
 
     [SerializeField] public ExhaustPileProxy m_ExhaustPileProxy;
     ExhaustPileProxy ExhaustPileProxy => m_ExhaustPileProxy;
-    [SerializeField] public BattleProxy m_BattleProxy;
-    BattleProxy BattleProxy => m_BattleProxy;
+    [SerializeField] public BattleFactory BattleFactory;
     [SerializeField] public PlayerActorProxy m_PlayerProxy;
     PlayerActorProxy PlayerProxy => m_PlayerProxy;
-
-    [SerializeField] public EnemyActorManager m_EnemyActorManager;
-    EnemyActorManager EnemyActorManager => m_EnemyActorManager;
 
     [SerializeField] private int m_NumCardsInTestDeck;
     [SerializeField] private Button m_EndTurnButton;
@@ -45,20 +42,15 @@ public class BattleBootstrap : MonoBehaviour
 
     private void InitializeProxies(IBattle battle)
     {
-        BattleProxy.Initialize(battle);
+        var battleProxy = BattleFactory.GetBattleGO(battle);
+        battleProxy.transform.SetParent(transform);
+        battleProxy.Initialize(battle);
 
         PlayerProxy.Initialize(battle.Player);
-
-        foreach (Actor enemy in battle.Enemies)
-        {
-            EnemyActorManager.CreateEnemyActor(enemy);
-        }
         
         DiscardProxy.Initialize(battle.Deck.DiscardPile);
         HandProxy.Initialize(battle.Deck.HandPile);
         DrawPileProxy.Initialize(battle.Deck.DrawPile);
         ExhaustPileProxy.Initialize(battle.Deck.ExhaustPile);
-
-     
     }
 }

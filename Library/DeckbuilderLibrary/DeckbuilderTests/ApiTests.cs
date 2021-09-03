@@ -6,6 +6,7 @@ using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Battles;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
 using DeckbuilderLibrary.Data.GameEntities.Resources.Status;
 using JsonNet.ContractResolvers;
@@ -14,7 +15,7 @@ using NUnit.Framework;
 
 namespace DeckbuilderTests
 {
-    internal class ApiTests
+    internal class ApiTests : BaseTest
     {
         /// cases to cover:
         /// card used in combat permanently changes stat out of combat
@@ -24,22 +25,6 @@ namespace DeckbuilderTests
         ///
         /// approach: at the start of battle, the deck is copied.
         /// cards that need to increment a permanent value store it on the context as a "rule", along with the id of the card, so that it works in a sim context.
-
-
-        private static IContext Context { get; set; }
-
-        readonly JsonSerializerSettings m_JsonSerializerSettings = new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.All,
-            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
-            ContractResolver = new PrivateSetterContractResolver(),
-            Converters = new List<JsonConverter>
-            {
-                new GameEntityConverter()
-            }
-        };
-
-        public PlayerActor Player { get; private set; }
 
         [SetUp]
         public void Setup()
@@ -229,6 +214,7 @@ namespace DeckbuilderTests
             card.PlayCard(target);
             Assert.That(target.Health, Is.EqualTo(88)); //should deal 7 if target is vulnerable.
         }
+        
 
         [Test]
         public void PoisonDealsDamageAndDecrements()
@@ -327,25 +313,7 @@ namespace DeckbuilderTests
         }
 
 
-        private void CreateDeck(IContext context)
-        {
-            foreach (Card card in CreateCards(context))
-            {
-                Context.PlayerDeck.Add(card);
-            }
-        }
-
-        private IEnumerable<Card> CreateCards(IContext context)
-        {
-            yield return context.CreateEntity<Attack5Damage>();
-            yield return context.CreateEntity<DoubleNextCardDamage>();
-            yield return context.CreateEntity<Attack10DamageExhaust>();
-            yield return context.CreateEntity<BattleStateAndPermanentState>();
-            yield return context.CreateEntity<DealMoreDamageEachPlay>();
-            yield return context.CreateEntity<PommelStrike>();
-            yield return context.CreateEntity<Strike>();
-            yield return context.CreateEntity<Defend>();
-        }
+    
 
         [Test]
         public void TestThatSetupWorks()
@@ -469,10 +437,7 @@ namespace DeckbuilderTests
             }
         }
 
-        private Card FindCardInDeck(string name)
-        {
-            return Context.GetCurrentBattle().Deck.AllCards().First(card => card.Name == name);
-        }
+    
 
         private Card FindCardInDeck(int cardId)
         {
@@ -596,6 +561,48 @@ namespace DeckbuilderTests
             string contextStr = JsonConvert.SerializeObject(Context, m_JsonSerializerSettings);
             GameContext copy = JsonConvert.DeserializeObject<GameContext>(contextStr, m_JsonSerializerSettings);
             return copy;
+        }
+    }
+
+    internal class BaseTest
+    {
+        protected static IContext Context { get; set; }
+
+        protected readonly JsonSerializerSettings m_JsonSerializerSettings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.All,
+            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+            ContractResolver = new PrivateSetterContractResolver(),
+            Converters = new List<JsonConverter>
+            {
+                new GameEntityConverter()
+            }
+        };
+
+        protected PlayerActor Player { get;  set; }
+        
+        protected void CreateDeck(IContext context)
+        {
+            foreach (Card card in CreateCards(context))
+            {
+                Context.PlayerDeck.Add(card);
+            }
+        }
+        protected Card FindCardInDeck(string name)
+        {
+            return Context.GetCurrentBattle().Deck.AllCards().First(card => card.Name == name);
+        }
+        private IEnumerable<Card> CreateCards(IContext context)
+        {
+            yield return context.CreateEntity<Attack5Damage>();
+            yield return context.CreateEntity<DoubleNextCardDamage>();
+            yield return context.CreateEntity<Attack10DamageExhaust>();
+            yield return context.CreateEntity<BattleStateAndPermanentState>();
+            yield return context.CreateEntity<DealMoreDamageEachPlay>();
+            yield return context.CreateEntity<PommelStrike>();
+            yield return context.CreateEntity<Strike>();
+            yield return context.CreateEntity<Defend>();
+            yield return context.CreateEntity<MoveToEmptyAdjacentNode>();
         }
     }
 }

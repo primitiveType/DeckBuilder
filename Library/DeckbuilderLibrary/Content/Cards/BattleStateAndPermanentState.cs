@@ -4,6 +4,7 @@ using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
+using DeckbuilderLibrary.Data.Property;
 using Newtonsoft.Json;
 
 namespace Content.Cards
@@ -34,11 +35,9 @@ namespace Content.Cards
         private int CurrentDamage => (TimesPlayed * DamageIncreasePerPlay) + BaseDamage;
         private int CurrentDamageThisCombat => (TimesPlayedThisCombat.Value * DamageIncreasePerPlay) + BaseDamage;
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Context.Events.CardPlayed += EventsOnCardPlayed;
-        }
+        protected override PileType DefaultDestinationPile => PileType.DiscardPile;
+
+  
 
         public override string Name => nameof(BattleStateAndPermanentState);
 
@@ -64,13 +63,6 @@ namespace Content.Cards
             TimesPlayedThisCombat.Value += 1;
         }
 
-        private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
-        {
-            if (args.CardId == Id)
-            {
-                Context.TrySendToPile(Id, PileType.DiscardPile);
-            }
-        }
 
         public override int EnergyCost { get; } = 1;
     }

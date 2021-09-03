@@ -2,7 +2,7 @@
 using DeckbuilderLibrary.Data.GameEntities;
 using UnityEngine;
 
-public abstract class Proxy<T> : MonoBehaviour where T : IGameEntity
+public abstract class Proxy<T> : MonoBehaviour, IGameEntityProperty where T : IGameEntity
 {
     public T GameEntity { get; private set; }
 
@@ -16,5 +16,6 @@ public abstract class Proxy<T> : MonoBehaviour where T : IGameEntity
         OnInitialize();
     }
 
+    IGameEntity IGameEntityProperty.GameEntity => GameEntity;
     protected abstract void OnInitialize();
 }

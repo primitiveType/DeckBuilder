@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Battles;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
 
 namespace DeckbuilderLibrary.Data
@@ -14,6 +15,7 @@ namespace DeckbuilderLibrary.Data
         List<Card> PlayerDeck { get; }
 
         T CreateEntity<T>() where T : GameEntity, new();
+        ActorNode CreateNodeEntity();
         IBattleDeck CreateDeck();
         IPile CreatePile();
         int GetDamageAmount(object sender, int baseDamage, IActor target, IActor owner);

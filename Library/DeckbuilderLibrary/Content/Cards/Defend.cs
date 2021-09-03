@@ -11,19 +11,8 @@ namespace Content.Cards
     {
         public override string Name => nameof(Defend);
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Context.Events.CardPlayed += EventsOnCardPlayed;
-        }
-
-        private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
-        {
-            if (args.CardId == Id)
-            {
-                Context.TrySendToPile(Id, PileType.DiscardPile);
-            }
-        }
+  
+   
 
         private int BlockAmount = 5;
 

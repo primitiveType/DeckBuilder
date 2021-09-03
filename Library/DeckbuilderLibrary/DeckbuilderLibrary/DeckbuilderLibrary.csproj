@@ -8,6 +8,7 @@
       <PackageReference Include="JsonNet.ContractResolvers" Version="2.0.0" />
       <PackageReference Include="JsonSubTypes" Version="1.8.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="SCGraphTheory.AdjacencyList" Version="1.0.5" />
     </ItemGroup>
 
     <ItemGroup>

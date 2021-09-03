@@ -1,11 +1,12 @@
 ﻿using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Battles;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class BattleProxy : Proxy<IBattle>
+public abstract class BattleProxy : Proxy<IBattle>
 {
     [SerializeField] private GameObject m_BattleEndGameObject;
     [SerializeField] private GameObject m_VictoryGameObject;
@@ -43,4 +44,6 @@ public class BattleProxy : Proxy<IBattle>
     {
         GameEventHandler.BattleEnded -= OnBattleEnded;
     }
+
+    public abstract NodeProxy GetNodeProxyByEntity(GameEntity entity);
 }

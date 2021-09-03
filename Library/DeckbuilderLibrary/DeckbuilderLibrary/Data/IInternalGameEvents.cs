@@ -1,4 +1,5 @@
 using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Battles;
 
 namespace DeckbuilderLibrary.Data
 {

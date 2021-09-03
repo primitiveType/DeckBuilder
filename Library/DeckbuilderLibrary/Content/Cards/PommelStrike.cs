@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using DeckbuilderLibrary.Data;
-using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 
@@ -9,20 +8,6 @@ namespace Content.Cards
 {
     public class PommelStrike : EnergyCard
     {
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Context.Events.CardPlayed += EventsOnCardPlayed;
-        }
-
-        private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
-        {
-            if (args.CardId == Id)
-            {
-                Context.TrySendToPile(Id, PileType.DiscardPile);
-            }
-        }
-
         private int DamageAmount = 6;
         private int DrawAmount = 1;
         public override string Name => "Pommel Strike";

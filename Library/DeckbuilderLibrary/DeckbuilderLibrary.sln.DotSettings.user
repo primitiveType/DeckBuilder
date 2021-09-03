@@ -5,6 +5,9 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=747694a8_002D9485_002D4ed5_002D8c19_002D20381ad86398/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::EA24DCE4-DEF3-42D3-951F-60DB5962C729::.NETFramework,Version=v4.6.1::DeckbuilderTests.ApiTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::EA24DCE4-DEF3-42D3-951F-60DB5962C729::.NETFramework,Version=v4.6.1::DeckbuilderTests.AdjacencyTests.TestGetAdjacentEnemies&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::EA24DCE4-DEF3-42D3-951F-60DB5962C729::.NETFramework,Version=v4.6.1::DeckbuilderTests.AdjacencyTests.TestMovement&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::EA24DCE4-DEF3-42D3-951F-60DB5962C729::.NETFramework,Version=v4.6.1::DeckbuilderTests.AdjacencyTests.TestMovementEvent&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	</wpf:ResourceDictionary>

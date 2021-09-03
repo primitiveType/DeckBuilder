@@ -9,22 +9,9 @@ namespace Content.Cards
 {
     public class Attack5Damage : EnergyCard
     {
-        private int DamageAmount => 5;  
+        private int DamageAmount => 5;
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-            // Context.Events.CardPlayed += EventsOnCardPlayed;
-        }
-
-        [BattleEvent]
-        private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
-        {
-            if (args.CardId == Id)
-            {
-                Context.TrySendToPile(Id, PileType.DiscardPile);
-            }
-        }
+        protected override PileType DefaultDestinationPile => PileType.DiscardPile;
 
         public override string Name => nameof(Attack5Damage);
 
@@ -36,7 +23,7 @@ namespace Content.Cards
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
-            return Context.GetEnemies();
+            return Context.GetCurrentBattle().GetAdjacentActors(Owner);
         }
 
         public override bool RequiresTarget => true;
@@ -49,4 +36,38 @@ namespace Content.Cards
 
         public override int EnergyCost { get; } = 0;
     }
+    
+    public class Attack5DamageAdjacent : EnergyCard
+    {
+        private int DamageAmount => 5;
+
+        protected override PileType DefaultDestinationPile => PileType.DiscardPile;
+
+        public override string Name => nameof(Attack5DamageAdjacent);
+
+        public override string GetCardText(IGameEntity target = null)
+        {
+            return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)} to adjacent enemies.";
+        }
+
+
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
+        {
+            return Context.GetCurrentBattle().GetAdjacentActors(Owner);
+        }
+
+        public override bool RequiresTarget => false;
+
+        protected override void DoPlayCard(IGameEntity target)
+        {
+            base.DoPlayCard(target);
+            foreach (var actor in Context.GetCurrentBattle().GetAdjacentActors(Owner))
+            {
+                Context.TryDealDamage(this, Owner, actor as IActor, 5);
+            }
+        }
+
+        public override int EnergyCost { get; } = 0;
+    }
+
 }

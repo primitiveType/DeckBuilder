@@ -11,25 +11,13 @@ namespace Content.Cards
         public override string Name => "Body Slam";
         private int DamageAmount = 0;
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Context.Events.CardPlayed += EventsOnCardPlayed;
-        }
-
+       
         protected override void DoPlayCard(IGameEntity target)
         {
             // Deal damage equal to your block.
             Context.TryDealDamage(this, Owner, target as IActor, DamageAmount + Owner.Armor);
         }
 
-        private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
-        {
-            if (args.CardId == Id)
-            {
-                Context.TrySendToPile(Id, PileType.DiscardPile);
-            }
-        }
 
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()

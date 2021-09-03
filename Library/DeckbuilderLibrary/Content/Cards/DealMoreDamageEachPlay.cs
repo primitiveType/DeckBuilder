@@ -16,11 +16,6 @@ namespace Content.Cards
 
         private int CurrentDamage => (TimesPlayed * DamageIncreasePerPlay) + BaseDamage;
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Context.Events.CardPlayed += EventsOnCardPlayed;
-        }
 
         public override string Name => nameof(DealMoreDamageEachPlay);
 
@@ -44,13 +39,7 @@ namespace Content.Cards
             TimesPlayed += 1;
         }
 
-        private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
-        {
-            if (args.CardId == Id)
-            {
-                Context.TrySendToPile(Id, PileType.DiscardPile);
-            }
-        }
+  
 
         public override int EnergyCost { get; } = 1;
     }

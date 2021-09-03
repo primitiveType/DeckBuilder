@@ -153,7 +153,7 @@ public class HandCardProxy : CardProxy
             Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3 pointPosition = new Vector3(mouseWorldPosition.x, mouseWorldPosition.y, .1f);
             lineRenderer.SetPosition(1, pointPosition);
-        }
+            }
 
         lineRenderer.SetPosition(0, transform.position + LineRendererStartOffset);
     }

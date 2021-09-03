@@ -5,10 +5,12 @@ using System.Runtime.Serialization;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Battles;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
 using DeckbuilderLibrary.Data.GameEntities.Rules;
 using JsonNet.ContractResolvers;
 using Newtonsoft.Json;
+using SCGraphTheory.AdjacencyList;
 
 namespace DeckbuilderLibrary.Data
 {
@@ -29,10 +31,6 @@ namespace DeckbuilderLibrary.Data
         public IGameEvents Events { get; } = new GameEvents();
 
         public static IContext CurrentContext { get; set; }
-
-   
-
-    
 
 
         public void EndTurn()
@@ -87,6 +85,13 @@ namespace DeckbuilderLibrary.Data
             T entity = CreateEntityNoInitialize<T>();
             InitializeEntity(entity);
             return entity;
+        }
+
+        public ActorNode CreateNodeEntity()
+        {
+            var node = CreateEntityNoInitialize<ActorNode>();
+            throw new NotImplementedException();
+            return null;
         }
 
         private T CreateEntityNoInitialize<T>() where T : GameEntity, new()
@@ -205,8 +210,9 @@ namespace DeckbuilderLibrary.Data
 
         public T CreateIntent<T>(Actor owner) where T : Intent, new()
         {
-            var intent = CreateEntity<T>();
+            var intent = CreateEntityNoInitialize<T>();
             intent.OwnerId = owner.Id;
+            InitializeEntity(intent);
             return intent;
         }
 
@@ -218,6 +224,8 @@ namespace DeckbuilderLibrary.Data
             return actor;
         }
 
+       
+        
         public IBattle StartBattle(PlayerActor player, BattleData data)
         {
             var battle = CreateEntityNoInitialize<Battle>();
@@ -236,16 +244,15 @@ namespace DeckbuilderLibrary.Data
 
             battle.SetDeck(battleDeck);
             battle.SetPlayer(player);
-
-            foreach (var enemy in data.GetStartingEnemies())
-            {
-                battle.AddEnemy(enemy); //might need set access instead.
-            }
+            battle.SetData(data);
+                
+            
 
             battle.AddRule(CreateEntity<ShuffleDiscardIntoDrawWhenEmpty>());
             battle.AddRule(CreateEntity<DiscardHandAtEndOfTurn>());
 
             InitializeEntity(battle);
+            
             //Player goes first. start the turn.
             var internalEvents = (IInternalBattleEventHandler)Events;
             ((GameEvents)Events).InvokeBattleStarted(this, new BattleStartedArgs());
@@ -253,5 +260,6 @@ namespace DeckbuilderLibrary.Data
 
             return battle;
         }
+
     }
 }
