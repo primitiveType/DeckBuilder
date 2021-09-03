@@ -8,8 +8,13 @@ namespace DeckbuilderLibrary.Data.GameEntities
         List<Actor> Enemies { get; }
         PlayerActor Player { get; }
 
-        IDeck Deck { get; }
+        IBattleDeck Deck { get; }
+
+        // IBattleEventHandler Events { get; }
+        IActor GetActorById(int id);
 
         void AddEnemy(Actor enemy);
+        void AddEntity(IGameEntity entity);
+        void TrySendToPile(int cardId, PileType pileType);
     }
 }

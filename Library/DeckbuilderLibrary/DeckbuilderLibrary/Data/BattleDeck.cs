@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
+using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data
 {
-    internal class Deck : GameEntity, IDeck
+    internal class BattleDeck : GameEntity, IBattleDeck
     {
         public IPile DrawPile { get; private set; }
         public IPile HandPile { get; private set; }
@@ -69,7 +70,7 @@ namespace DeckbuilderLibrary.Data
 
 
             GetPileCards(pileType).Add(card);
-            ((IInternalGameEventHandler)Context.Events).InvokeCardMoved(this,
+            ((IInternalBattleEventHandler)Context.Events).InvokeCardMoved(this,
                 new CardMovedEventArgs(card.Id, pileType, previousPileType));
         }
 

@@ -5,12 +5,22 @@ namespace DeckbuilderLibrary.Data.GameEntities
 {
     public abstract class Enemy : Actor
     {
-        public Intent Intent { get; private set; }
+        private Intent m_Intent;
+
+        public Intent Intent
+        {
+            get => m_Intent;
+            private set
+            {
+                m_Intent?.Dispose();
+                m_Intent = value;
+            }
+        }
 
         public void SetIntent(Intent intent)
         {
             Intent = intent;
-            ((IInternalGameEventHandler)Context.Events).InvokeIntentChanged(this, new IntentChangedEventArgs(this));
+            ((IInternalBattleEventHandler)Context.Events).InvokeIntentChanged(this, new IntentChangedEventArgs(this));
         }
     }
 }

@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Main : MonoBehaviour
 {
     void Start()
     {
-        SceneManager.LoadScene("BattleScene");
+        SceneManager.LoadScene("Overworld");
+
+        Tools.Initialize(new PlayerPrefsData());
+        
     }
 }

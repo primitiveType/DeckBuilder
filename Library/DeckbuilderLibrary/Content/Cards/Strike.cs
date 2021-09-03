@@ -13,6 +13,7 @@ namespace Content.Cards
             base.Initialize();
             Context.Events.CardPlayed += OnCardPlayed;
         }
+
         private void OnCardPlayed(object sender, CardPlayedEventArgs args)
         {
             if (args.CardId == Id)
@@ -20,9 +21,10 @@ namespace Content.Cards
                 Context.TrySendToPile(Id, PileType.DiscardPile);
             }
         }
-        
+
         private int DamageAmount = 6;
         public override string Name => nameof(Strike);
+
         public override string GetCardText(IGameEntity target = null)
         {
             return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)}.";

@@ -158,14 +158,3 @@ public class HandCardProxy : CardProxy
         lineRenderer.SetPosition(0, transform.position + LineRendererStartOffset);
     }
 }
-
-public interface ITargetingProvider
-{
-    TargetingType TargetingType { get; }
-}
-
-public enum TargetingType
-{
-    None,
-    Single
-}

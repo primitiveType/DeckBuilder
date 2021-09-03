@@ -2,7 +2,7 @@
 
 namespace DeckbuilderLibrary.Data
 {
-    public interface IGameEventHandler
+    public interface IBattleEventHandler
     {
         event CardMovedEvent CardMoved;
 

@@ -61,7 +61,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
                     throw new ArgumentException("Tried to initialize resource with no Owner info!");
                 }
 
-                Owner = Context.GetActorById(OwnerId);
+                Owner = Context.GetCurrentBattle().GetActorById(OwnerId);
             }
             else
             {

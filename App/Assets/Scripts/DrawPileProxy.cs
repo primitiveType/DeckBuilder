@@ -16,7 +16,7 @@ public class DrawPileProxy : PileProxy<CardProxy>
     private HandPileProxy handPileProxy;
 
     private IContext Api => GameEntity.Context;
-    private IGameEventHandler GameEventHandler => Api.Events;
+    private IGameEvents GameEventHandler => Api.Events;
 
     private IBattle CurrentBattle => Api.GetCurrentBattle();
 

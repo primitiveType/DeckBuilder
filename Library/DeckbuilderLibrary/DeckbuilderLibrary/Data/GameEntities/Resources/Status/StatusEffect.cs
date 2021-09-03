@@ -4,6 +4,8 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources.Status
 {
     public abstract class StatusEffect<T> : Resource<T> where T : StatusEffect<T>
     {
+        public virtual bool DecrementEachTurn => true;
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -13,7 +15,10 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources.Status
         private void OnTurnEnded(object sender, TurnEndedEventArgs args)
         {
             TriggerEffect();
-            Amount--;
+            if (DecrementEachTurn)
+            {
+                Amount--;
+            }
         }
 
         protected abstract void TriggerEffect();

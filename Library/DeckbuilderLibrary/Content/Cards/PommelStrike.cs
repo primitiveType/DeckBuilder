@@ -14,6 +14,7 @@ namespace Content.Cards
             base.Initialize();
             Context.Events.CardPlayed += EventsOnCardPlayed;
         }
+
         private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
         {
             if (args.CardId == Id)
@@ -21,17 +22,22 @@ namespace Content.Cards
                 Context.TrySendToPile(Id, PileType.DiscardPile);
             }
         }
+
         private int DamageAmount = 6;
         private int DrawAmount = 1;
         public override string Name => "Pommel Strike";
+
         public override string GetCardText(IGameEntity target = null)
         {
-            return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)}. Draw {Context.GetDrawAmount(this, DrawAmount, target as IActor, Owner)}";
+            return
+                $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)}. Draw {Context.GetDrawAmount(this, DrawAmount, target as IActor, Owner)}";
         }
+
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return Context.GetEnemies();
         }
+
         public override bool RequiresTarget => true;
 
         public override int EnergyCost => 1;
@@ -42,6 +48,7 @@ namespace Content.Cards
             {
                 throw new NotSupportedException("Tried to play a card on the wrong target type!");
             }
+
             // Deal x damage.
             Context.TryDealDamage(this, Owner, actor, DamageAmount);
             // Draw y cards.
@@ -55,6 +62,5 @@ namespace Content.Cards
                 deck.TrySendToPile(deck.DrawPile.Cards[0], PileType.HandPile);
             }
         }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
@@ -8,14 +9,15 @@ namespace Content.Cards
 {
     public class Attack5Damage : EnergyCard
     {
-        private int DamageAmount => 5;
+        private int DamageAmount => 5;  
 
         protected override void Initialize()
         {
             base.Initialize();
-            Context.Events.CardPlayed += EventsOnCardPlayed;
+            // Context.Events.CardPlayed += EventsOnCardPlayed;
         }
 
+        [BattleEvent]
         private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
         {
             if (args.CardId == Id)
@@ -46,7 +48,5 @@ namespace Content.Cards
         }
 
         public override int EnergyCost { get; } = 0;
-
-     
     }
 }

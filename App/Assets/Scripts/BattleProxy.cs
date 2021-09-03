@@ -17,7 +17,7 @@ public class BattleProxy : Proxy<IBattle>
     private GameObject BattleEndGameObject => m_BattleEndGameObject;
 
     private IContext Api => GameEntity.Context;
-    private IGameEventHandler GameEventHandler => Api.Events;
+    private IGameEvents GameEventHandler => Api.Events;
 
 
     protected override void OnInitialize()
@@ -29,7 +29,7 @@ public class BattleProxy : Proxy<IBattle>
 
     private void LeaveBattle()
     {
-        SceneManager.LoadScene("Init");
+        SceneManager.LoadScene("Overworld");//TODO
     }
 
     private void OnBattleEnded(object sender, BattleEndedEventArgs args)

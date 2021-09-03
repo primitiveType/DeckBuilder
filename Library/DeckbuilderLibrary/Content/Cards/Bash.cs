@@ -3,17 +3,20 @@ using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Resources.Status;
 
 namespace Content.Cards
 {
     public class Bash : EnergyCard
     {
         public override string Name => nameof(Bash);
+
         protected override void Initialize()
         {
             base.Initialize();
             Context.Events.CardPlayed += OnCardPlayed;
         }
+
         private void OnCardPlayed(object sender, CardPlayedEventArgs args)
         {
             if (args.CardId == Id)
@@ -21,12 +24,14 @@ namespace Content.Cards
                 Context.TrySendToPile(Id, PileType.DiscardPile);
             }
         }
-        
+
         private int DamageAmount = 8;
         private int VulnerableAmount = 2;
+
         public override string GetCardText(IGameEntity target = null)
         {
-            return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)}. Apply {Context.GetVulnerableAmount(this, VulnerableAmount, target as IActor, Owner)}";
+            return
+                $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)}. Apply {this.VulnerableAmount} vulnerable.";
         }
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
@@ -42,7 +47,7 @@ namespace Content.Cards
             // Deal x damage.
             Context.TryDealDamage(this, Owner, target as IActor, DamageAmount);
             // Apply y vulnerable.
-            Context.TryApplyVulnerable(this, Owner, target as IActor, VulnerableAmount);
+            ((IActor)target).Resources.AddResource<VulnerableStatusEffect>(VulnerableAmount);
         }
     }
 }

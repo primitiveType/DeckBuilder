@@ -23,50 +23,21 @@ namespace DeckbuilderLibrary.Data
         List<IInternalGameEntity> IInternalGameContext.ToInitialize { get; } = new List<IInternalGameEntity>();
 
         [JsonProperty] private IBattle CurrentBattle { get; set; }
-        [JsonIgnore] private Dictionary<int, IGameEntity> EntitiesById = new Dictionary<int, IGameEntity>();
 
-        public IGameEventHandler Events { get; } = new GameEventHandler();
+        // [JsonIgnore] private Dictionary<int, IGameEntity> EntitiesById = new Dictionary<int, IGameEntity>();
+        [JsonIgnore] public List<Card> PlayerDeck { get; } = new List<Card>();
+        public IGameEvents Events { get; } = new GameEvents();
+
         public static IContext CurrentContext { get; set; }
 
-        public void AddEntity(IGameEntity entity)
-        {
-            EntitiesById.Add(entity.Id, entity);
-        }
+   
 
-        public IActor GetActorById(int id)
-        {
-            return AllActors().First(actor => actor.Id == id);
-        }
+    
 
-        private IEnumerable<IActor> AllActors()
-        {
-            yield return CurrentBattle.Player;
-            foreach (var actor in CurrentBattle.Enemies)
-            {
-                yield return actor;
-            }
-        }
-
-        public void TrySendToPile(int cardId, PileType pileType)
-        {
-            if (!EntitiesById.TryGetValue(cardId, out IGameEntity entity))
-            {
-                throw new ArgumentException($"Failed to find card with id {cardId}!");
-            }
-
-            if (entity is Card card)
-            {
-                CurrentBattle.Deck.TrySendToPile(card, pileType);
-            }
-            else
-            {
-                throw new ArgumentException($"Tried to move entity with id {cardId} but it was not a card!");
-            }
-        }
 
         public void EndTurn()
         {
-            var internalEvents = ((IInternalGameEventHandler)Events);
+            var internalEvents = ((IInternalBattleEventHandler)Events);
             internalEvents.InvokeTurnEnded(this, new TurnEndedEventArgs());
             internalEvents.InvokeTurnStarted(this, new TurnStartedEventArgs());
         }
@@ -101,7 +72,8 @@ namespace DeckbuilderLibrary.Data
 
         public int GetDamageAmount(object sender, int baseDamage, IActor target, IActor owner)
         {
-            return ((IInternalGameEventHandler)Events).RequestDamageAmount(sender, baseDamage, owner, target);
+            return ((IInternalBattleEventHandler)Events).RequestDamageAmount(sender, baseDamage,
+                owner, target);
         }
 
         public void TryDealDamage(GameEntity source, IActor owner, IActor target, int baseDamage)
@@ -113,7 +85,7 @@ namespace DeckbuilderLibrary.Data
         public T CreateEntity<T>() where T : GameEntity, new()
         {
             T entity = CreateEntityNoInitialize<T>();
-            ((IInternalGameEntity)entity).InternalInitialize();
+            InitializeEntity(entity);
             return entity;
         }
 
@@ -123,8 +95,7 @@ namespace DeckbuilderLibrary.Data
             {
                 Id = GetNextEntityId()
             };
-            entity.SetContext(this);
-            EntitiesById.Add(entity.Id, entity);
+
             return entity;
         }
 
@@ -133,8 +104,13 @@ namespace DeckbuilderLibrary.Data
             T entity = CreateEntityNoInitialize<T>();
             entity.Owner = owner;
             ((IInternalResource)entity).Amount = Amount;
-            ((IInternalGameEntity)entity).InternalInitialize();
+            InitializeEntity(entity);
             return entity;
+        }
+
+        public void TrySendToPile(int cardId, PileType pileType)
+        {
+            CurrentBattle.TrySendToPile(cardId, pileType);
         }
 
         readonly JsonSerializerSettings m_JsonSerializerSettings = new JsonSerializerSettings
@@ -163,6 +139,7 @@ namespace DeckbuilderLibrary.Data
         private void OnDeserialized(StreamingContext context)
         {
             InitializeNewObjects();
+            ((IInternalGameEvents)Events).SetBattle((Battle)CurrentBattle);
         }
 
         private void InitializeNewObjects()
@@ -176,10 +153,18 @@ namespace DeckbuilderLibrary.Data
                 }
 
                 internalGameEntity.InternalInitialize();
-                AddEntity(internalGameEntity);
+                CurrentBattle.AddEntity(internalGameEntity);
             }
 
             ((IInternalGameContext)this).ToInitialize.Clear();
+        }
+
+        private void InitializeEntity(IGameEntity entity)
+        {
+            IInternalGameEntity internalGameEntity = (IInternalGameEntity)entity;
+            internalGameEntity.SetContext(this);
+            // CurrentBattle.AddEntity(entity);
+            internalGameEntity.InternalInitialize();
         }
 
         public T CopyCard<T>(T card) where T : Card
@@ -191,34 +176,25 @@ namespace DeckbuilderLibrary.Data
             return copy;
         }
 
-        public int GetBlockAmount(object sender, int baseDamage, IActor target, IActor owner)
+        private T CopyDeck<T>(T deck) where T : List<Card>
         {
-            throw new NotImplementedException();
+            CurrentContext = this;
+            string deckStr = JsonConvert.SerializeObject(deck, m_JsonSerializerSettings);
+            T copy = JsonConvert.DeserializeObject<T>(deckStr, m_JsonSerializerSettings);
+            InitializeNewObjects();
+            return copy;
         }
+
 
         public int GetDrawAmount(object sender, int baseDraw, IActor target, IActor owner)
         {
             throw new NotImplementedException();
         }
 
-        public int GetVulnerableAmount(object sender, int baseDamage, IActor target, IActor owner)
-        {
-            throw new NotImplementedException();
-        }
 
-        public void TryApplyBlock(GameEntity source, IActor owner, IActor target, int baseBlock)
+        public IBattleDeck CreateDeck()
         {
-            throw new NotImplementedException();
-        }
-
-        public void TryApplyVulnerable(GameEntity source, IActor owner, IActor target, int baseVulnerable)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDeck CreateDeck()
-        {
-            return CreateEntity<Deck>();
+            return CreateEntity<BattleDeck>();
         }
 
         public IPile CreatePile()
@@ -239,27 +215,40 @@ namespace DeckbuilderLibrary.Data
             var actor = CreateEntity<T>();
             actor.Resources.AddResource<Health>(health);
             actor.Resources.AddResource<Armor>(armor);
-
             return actor;
         }
 
-        public IBattle CreateBattle(IDeck deck, PlayerActor player, List<Enemy> enemies)
+        public IBattle StartBattle(PlayerActor player, BattleData data)
         {
-            var battle = CreateEntity<Battle>();
+            var battle = CreateEntityNoInitialize<Battle>();
             CurrentBattle = battle;
-            battle.SetDeck(deck);
+            ((IInternalGameEvents)Events).SetBattle(battle);
+            CurrentContext = this;
+            // var tempDeck = CopyDeck(PlayerDeck);
+
+            var battleDeck = CreateEntityNoInitialize<BattleDeck>();
+            InitializeEntity(battleDeck);
+            foreach (Card card in PlayerDeck)
+            {
+                battleDeck.DrawPile.Cards.Add(card);
+            }
+
+
+            battle.SetDeck(battleDeck);
             battle.SetPlayer(player);
-            player.Resources.AddResource<BaseCardDraw>(5);
-            foreach (var enemy in enemies)
+
+            foreach (var enemy in data.GetStartingEnemies())
             {
                 battle.AddEnemy(enemy); //might need set access instead.
             }
 
-            battle.Rules.Add(CreateEntity<ShuffleDiscardIntoDrawWhenEmpty>());
-            battle.Rules.Add(CreateEntity<DiscardHandAtEndOfTurn>());
-            
+            battle.AddRule(CreateEntity<ShuffleDiscardIntoDrawWhenEmpty>());
+            battle.AddRule(CreateEntity<DiscardHandAtEndOfTurn>());
+
+            InitializeEntity(battle);
             //Player goes first. start the turn.
-            var internalEvents = ((IInternalGameEventHandler)Events);
+            var internalEvents = (IInternalBattleEventHandler)Events;
+            ((GameEvents)Events).InvokeBattleStarted(this, new BattleStartedArgs());
             internalEvents.InvokeTurnStarted(this, new TurnStartedEventArgs());
 
             return battle;

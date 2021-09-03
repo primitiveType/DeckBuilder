@@ -17,7 +17,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
         public abstract IReadOnlyList<IGameEntity> GetValidTargets();
 
         public abstract bool RequiresTarget { get; }
-
+        
         [JsonIgnore] public IActor Owner => Context.GetCurrentBattle().Player;
 
 
@@ -35,7 +35,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
             }
 
             DoPlayCard(target);
-            ((IInternalGameEventHandler)Context.Events).InvokeCardPlayed(this, new CardPlayedEventArgs(Id));
+            ((IInternalBattleEventHandler)Context.Events).InvokeCardPlayed(this, new CardPlayedEventArgs(Id));
             if (IsPlayable())
             {
             
@@ -45,6 +45,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
                 Console.WriteLine("Attempted to play card that was not playable!");
             }
         }
+
 
         protected abstract void DoPlayCard(IGameEntity target);
 

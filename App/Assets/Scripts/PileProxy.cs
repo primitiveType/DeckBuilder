@@ -5,10 +5,9 @@ using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 
 public class PileProxy<TCardProxy> : Proxy<IPile> where TCardProxy : CardProxy
-{ //I think this thing would probably only care about how many cards are in it... and might have inheritors for different
+{ 
+    //I think this thing would probably only care about how many cards are in it... and might have inheritors for different
     //types of piles. Should it also initialize card proxies?
-
-
     [SerializeField] TCardProxy CardProxyPrefab;
 
     protected Dictionary<int, TCardProxy> CardProxies { get; set; } = new Dictionary<int, TCardProxy>();

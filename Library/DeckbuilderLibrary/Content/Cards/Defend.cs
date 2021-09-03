@@ -29,7 +29,7 @@ namespace Content.Cards
 
         public override string GetCardText(IGameEntity target = null)
         {
-            return $"Gain {Context.GetBlockAmount(this, BlockAmount, target as IActor, Owner)} to target enemy.";
+            return $"Gain {BlockAmount} to target enemy.";
         }
 
 
