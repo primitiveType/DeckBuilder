@@ -3,7 +3,7 @@ using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
-using DeckbuilderLibrary.Data.GameEntities.Resources;
+using DeckbuilderLibrary.Data.Property;
 using Newtonsoft.Json;
 
 namespace Content.Cards
