@@ -100,36 +100,6 @@ public class HandCardProxy : CardProxy, IPointerEnterHandler, IPointerExitHandle
         }
     }
 
-    //void OnMouseOver()
-    //{
-    //    MouseOver = true;
-    //    TargetPosition = HandPosition + HoverOffset;
-    //}
-
-    //void OnMouseExit()
-    //{
-    //    MouseOver = false;
-    //    if (!Hovered)
-    //    {
-    //        TargetPosition = HandPosition;
-    //    }
-    //}
-
-    //void OnMouseDown()
-    //{
-    //    if (!GameEntity.IsPlayable())
-    //    {
-    //        return;
-    //    }
-    //    if (!GameEntity.RequiresTarget)
-    //    {
-    //        GameEntity.PlayCard(null);
-    //    }
-
-    //    Selected = !Selected;
-    //    TargetPosition = HandPosition + HoverOffset;
-    //}
-
     private void HandleSelectedChanged()
     {
         if (Selected && GameEntity.RequiresTarget)
