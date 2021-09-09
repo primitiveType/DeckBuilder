@@ -29,7 +29,7 @@ namespace Content.Cards
         protected override void DoPlayCard(IGameEntity target)
         {
             base.DoPlayCard(target);
-            Context.TryDealDamage(this, Owner, target as IActor, 5);
+            Context.TryDealDamage(this, Owner, target as IActor, DamageAmount);
         }
 
         public override int EnergyCost { get; } = 0;
@@ -59,7 +59,7 @@ namespace Content.Cards
             base.DoPlayCard(target);
             foreach (var actor in Context.GetCurrentBattle().GetAdjacentActors(Owner))
             {
-                Context.TryDealDamage(this, Owner, actor as IActor, 5);
+                Context.TryDealDamage(this, Owner, actor as IActor, DamageAmount);
             }
         }
 

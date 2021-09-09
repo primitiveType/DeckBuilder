@@ -2,10 +2,11 @@
 using Content.Cards;
 using DeckbuilderLibrary.Data.Events;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 
-public class HandCardProxy : CardProxy
+public class HandCardProxy : CardProxy, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private TMPro.TMP_Text NameText;
     [SerializeField] private TMPro.TMP_Text DescriptionText;
@@ -84,13 +85,13 @@ public class HandCardProxy : CardProxy
         }
     }
 
-    void OnMouseOver()
+    public void OnPointerEnter(PointerEventData eventData)
     {
         MouseOver = true;
         TargetPosition = HandPosition + HoverOffset;
     }
 
-    void OnMouseExit()
+    public void OnPointerExit(PointerEventData eventData)
     {
         MouseOver = false;
         if (!Hovered)
@@ -99,20 +100,35 @@ public class HandCardProxy : CardProxy
         }
     }
 
-    void OnMouseDown()
-    {
-        if (!GameEntity.IsPlayable())
-        {
-            return;
-        }
-        if (!GameEntity.RequiresTarget)
-        {
-            GameEntity.PlayCard(null);
-        }
+    //void OnMouseOver()
+    //{
+    //    MouseOver = true;
+    //    TargetPosition = HandPosition + HoverOffset;
+    //}
 
-        Selected = !Selected;
-        TargetPosition = HandPosition + HoverOffset;
-    }
+    //void OnMouseExit()
+    //{
+    //    MouseOver = false;
+    //    if (!Hovered)
+    //    {
+    //        TargetPosition = HandPosition;
+    //    }
+    //}
+
+    //void OnMouseDown()
+    //{
+    //    if (!GameEntity.IsPlayable())
+    //    {
+    //        return;
+    //    }
+    //    if (!GameEntity.RequiresTarget)
+    //    {
+    //        GameEntity.PlayCard(null);
+    //    }
+
+    //    Selected = !Selected;
+    //    TargetPosition = HandPosition + HoverOffset;
+    //}
 
     private void HandleSelectedChanged()
     {
@@ -151,7 +167,7 @@ public class HandCardProxy : CardProxy
 
         if (Selected)
         {
-            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             Vector3 pointPosition = new Vector3(mouseWorldPosition.x, mouseWorldPosition.y, .1f);
             lineRenderer.SetPosition(1, pointPosition);
             }
