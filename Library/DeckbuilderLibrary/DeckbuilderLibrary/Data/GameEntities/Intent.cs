@@ -9,6 +9,8 @@ namespace DeckbuilderLibrary.Data.GameEntities
         public abstract string GetDescription { get; }
         public int OwnerId { get; internal set; } = -1;
 
+        public abstract GameEntity Target { get; }
+
         protected override void Initialize()
         {
             base.Initialize();

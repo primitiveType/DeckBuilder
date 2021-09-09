@@ -11,19 +11,6 @@ namespace Content.Cards
     {
         public override string Name => nameof(Bash);
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Context.Events.CardPlayed += OnCardPlayed;
-        }
-
-        private void OnCardPlayed(object sender, CardPlayedEventArgs args)
-        {
-            if (args.CardId == Id)
-            {
-                Context.TrySendToPile(Id, PileType.DiscardPile);
-            }
-        }
 
         private int DamageAmount = 8;
         private int VulnerableAmount = 2;

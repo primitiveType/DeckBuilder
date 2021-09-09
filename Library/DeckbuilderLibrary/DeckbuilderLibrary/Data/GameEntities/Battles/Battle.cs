@@ -4,8 +4,9 @@ using System.Linq;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using Newtonsoft.Json;
+using SCGraphTheory.AdjacencyList;
 
-namespace DeckbuilderLibrary.Data.GameEntities
+namespace DeckbuilderLibrary.Data.GameEntities.Battles
 {
     [Serializable]
     internal class Battle : GameEntity, IBattle
@@ -19,10 +20,65 @@ namespace DeckbuilderLibrary.Data.GameEntities
 
         [JsonIgnore] private Dictionary<int, IGameEntity> EntitiesById = new Dictionary<int, IGameEntity>();
 
+        internal Graph<ActorGraphNode, ActorEdge> Slots => Graph.Graph;
+        [JsonProperty] public BattleGraph Graph { get; private set; }
+
+
+        public List<IActor> GetAdjacentActors(IActor source)
+        {
+            return Slots.Edges.Where(n => n.From.ActorNode.Actor == source)
+                .Where(e=>e.To.ActorNode.Actor != null)
+                .Select(e => e.To.ActorNode.Actor)
+                .Distinct()
+                .ToList();
+        }
+
+        public List<IActor> GetAdjacentActors(ActorNode source)
+        {
+            return Slots.Edges.Where(n => n.From.ActorNode == source)
+                .Where(e=>e.To.ActorNode.Actor != null)
+                .Select(e => e.To.ActorNode.Actor)
+                .Distinct()
+                .ToList();
+        }
+
+        public List<ActorNode> GetAdjacentEmptyNodes(ActorNode source)
+        {
+            return Slots.Edges.Where(n => n.From.ActorNode == source)
+                .Select(n => n.To.ActorNode)
+                .Where(n => n.Actor == null)
+                .ToList();
+        }
+
+        public List<ActorNode> GetAdjacentEmptyNodes(IActor source)
+        {
+            return Slots.Edges.Where(n => n.From.ActorNode.Actor == source)
+                .Select(n => n.To.ActorNode)
+                .Where(n => n.Actor == null)
+                .ToList();
+        }
+
+        public ActorNode GetNodeOfActor(IActor actor)
+        {
+            return Slots.Nodes.Where(n => n.ActorNode.Actor == actor).Select(n => n.ActorNode).FirstOrDefault();
+        }
+
+        public void MoveIntoSpace(IActor owner, ActorNode target)
+        {
+            var targetActor = target.Actor;
+            var prevSpace = GetNodeOfActor(owner);
+            //fire event for swap? here or on properties? probably here so its one event? 
+            target.Actor = owner;
+            prevSpace.Actor = targetActor;
+            Events.InvokeActorsSwapped(this, new ActorsSwappedEventArgs(owner, targetActor));
+        }
+
         protected override void Initialize()
         {
             base.Initialize();
+            
             Events.ActorDied += EventsOnActorDied;
+            
         }
 
         private void EventsOnActorDied(object sender, ActorDiedEventArgs args)
@@ -136,6 +192,19 @@ namespace DeckbuilderLibrary.Data.GameEntities
             else
             {
                 throw new ArgumentException($"Tried to move entity with id {cardId} but it was not a card!");
+            }
+        }
+
+        public void SetData(BattleData data)
+        {
+            Graph = data.Graph;
+            data.PrepareBattle(Player);
+            
+
+            foreach (var slot in Slots.Nodes)
+            {
+                if (slot.ActorNode.Actor != null && slot.ActorNode.Actor != Player) //hack
+                    AddEnemy((Actor)slot.ActorNode.Actor); //might need set access instead.
             }
         }
     }

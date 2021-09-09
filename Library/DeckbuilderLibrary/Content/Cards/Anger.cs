@@ -8,20 +8,6 @@ namespace Content.Cards
 {
     public class Anger : EnergyCard
     {
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Context.Events.CardPlayed += OnCardPlayed;
-        }
-
-        private void OnCardPlayed(object sender, CardPlayedEventArgs args)
-        {
-            if (args.CardId == Id)
-            {
-                Context.TrySendToPile(Id, PileType.DiscardPile);
-            }
-        }
-
         private int DamageAmount => 6;
         public override string Name => nameof(Anger);
 
@@ -33,7 +19,7 @@ namespace Content.Cards
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
-            return Context.GetEnemies();
+            return Context.GetCurrentBattle().GetAdjacentActors((ActorNode)Owner);
         }
 
         public override bool RequiresTarget => true;

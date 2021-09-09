@@ -1,5 +1,6 @@
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Battles;
 
 namespace DeckbuilderLibrary.Data
 {
@@ -61,6 +62,11 @@ namespace DeckbuilderLibrary.Data
         public void InvokeIntentChanged(object sender, IntentChangedEventArgs args)
         {
             Battle.Events.InvokeIntentChanged(sender, args);
+        }
+
+        public void InvokeActorsSwapped(object sender, ActorsSwappedEventArgs actorsSwappedEventArgs)
+        {
+            Battle.Events.InvokeActorsSwapped(sender, actorsSwappedEventArgs);
         }
 
         public event CardMovedEvent CardMoved;
@@ -127,6 +133,7 @@ namespace DeckbuilderLibrary.Data
         }
 
         public event IntentChangedEvent IntentChanged;
+        public event ActorsSwappedEvent ActorsSwapped;
 
         private void MediateIntentChangedEvent(object sender, IntentChangedEventArgs args)
         {
@@ -152,6 +159,12 @@ namespace DeckbuilderLibrary.Data
             Battle.Events.TurnEnded += MediateTurnEndedEvent;
             Battle.Events.TurnStarted += MediateTurnStartedEvent;
             Battle.Events.IntentChanged += MediateIntentChangedEvent;
+            Battle.Events.ActorsSwapped += MediateActorsSwappedEvent;
+        }
+
+        private void MediateActorsSwappedEvent(object sender, ActorsSwappedEventArgs args)
+        {
+            ActorsSwapped?.Invoke(sender, args);
         }
 
         private void DetachListeners()
@@ -168,6 +181,7 @@ namespace DeckbuilderLibrary.Data
                 Battle.Events.TurnEnded -= MediateTurnEndedEvent;
                 Battle.Events.TurnStarted -= MediateTurnStartedEvent;
                 Battle.Events.IntentChanged -= MediateIntentChangedEvent;
+                Battle.Events.ActorsSwapped -= MediateActorsSwappedEvent;
             }
         }
     }

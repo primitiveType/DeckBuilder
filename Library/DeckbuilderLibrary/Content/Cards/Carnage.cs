@@ -11,16 +11,9 @@ namespace Content.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Context.Events.CardPlayed += EventsOnCardPlayed;
             Context.Events.TurnEnded += EventsOnTurnEnded;
         }
-        private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
-        {
-            if (args.CardId == Id)
-            {
-                Context.TrySendToPile(Id, PileType.DiscardPile);
-            }
-        }
+ 
 
         private void EventsOnTurnEnded(object sender, TurnEndedEventArgs args)
         {

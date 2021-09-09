@@ -1,5 +1,4 @@
 using System;
-using DeckbuilderLibrary.Data.GameEntities.Actors;
 
 namespace DeckbuilderLibrary.Data.GameEntities
 {
@@ -8,9 +7,27 @@ namespace DeckbuilderLibrary.Data.GameEntities
         public int DamageAmount { get; set; }
 
         public override string GetDescription =>
-            Context.GetDamageAmount(this, DamageAmount, Target, Context.GetCurrentBattle().GetActorById(OwnerId)).ToString();
+            Context.GetDamageAmount(this, DamageAmount, TargetNode.Actor,
+                Context.GetCurrentBattle().GetActorById(OwnerId)).ToString();
 
-        private IActor Target => Context.GetCurrentBattle().Player;
+        private ActorNode TargetNode { get; set; }
+
+        public override GameEntity Target => TargetNode;
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            var battle = Context.GetCurrentBattle();
+
+            if (battle.GetAdjacentActors(battle.GetActorById(OwnerId)).Contains(battle.Player))
+            {
+                TargetNode = battle.GetNodeOfActor(battle.Player);
+            }
+            else
+            {
+                TargetNode = null;
+            }
+        }
 
         protected override void Trigger()
         {
@@ -25,7 +42,10 @@ namespace DeckbuilderLibrary.Data.GameEntities
                 throw new NotSupportedException("Intent with no owner was triggered!");
             }
 
-            Context.TryDealDamage(this, battle.GetActorById(OwnerId), Target, DamageAmount);
+            if (TargetNode?.Actor != null)
+            { //SHould probably change this to actually target nodes
+                Context.TryDealDamage(this, battle.GetActorById(OwnerId), TargetNode.Actor, DamageAmount);
+            }
         }
     }
 }

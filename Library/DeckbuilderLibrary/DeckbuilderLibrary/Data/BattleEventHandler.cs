@@ -14,11 +14,18 @@ namespace DeckbuilderLibrary.Data
         public event TurnEndedEvent TurnEnded;
         public event TurnStartedEvent TurnStarted;
         public event IntentChangedEvent IntentChanged;
+        public event ActorsSwappedEvent ActorsSwapped;
 
         public void InvokeIntentChanged(object sender, IntentChangedEventArgs args)
         {
             IntentChanged?.Invoke(sender, args);
         }
+
+        public void InvokeActorsSwapped(object sender, ActorsSwappedEventArgs args)
+        {
+            ActorsSwapped?.Invoke(sender, args);
+        }
+
         public void InvokeTurnEnded(object sender, TurnEndedEventArgs args)
         {
             TurnEnded?.Invoke(sender, args);

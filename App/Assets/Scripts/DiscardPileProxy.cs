@@ -1,6 +1,7 @@
 ﻿using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Battles;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -16,6 +16,7 @@ namespace DeckbuilderLibrary.Data
         event TurnEndedEvent TurnEnded;
         event TurnStartedEvent TurnStarted;
         event IntentChangedEvent IntentChanged;
+        event ActorsSwappedEvent ActorsSwapped;
     }
 
     public delegate void TurnStartedEvent(object sender, TurnStartedEventArgs args); //turn number

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
-using DeckbuilderLibrary.Data.GameEntities.Actors;
 using Newtonsoft.Json;
 
 namespace Content.Cards
@@ -37,7 +36,6 @@ namespace Content.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Context.Events.CardPlayed += OnCardPlayed;
             Context.Events.DamageAmountRequested += EventsOnRequestDamageAmount;
         }
 
@@ -49,7 +47,7 @@ namespace Content.Cards
             }
         }
 
-        private void OnCardPlayed(object sender, CardPlayedEventArgs args)
+        protected override void OnCardPlayed(object sender, CardPlayedEventArgs args)
         {
             if (args.CardId == Id)
             {

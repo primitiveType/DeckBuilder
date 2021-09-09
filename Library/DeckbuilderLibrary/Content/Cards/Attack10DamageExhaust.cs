@@ -6,16 +6,37 @@ using DeckbuilderLibrary.Data.GameEntities.Actors;
 
 namespace Content.Cards
 {
+    public class MoveToEmptyAdjacentNode : EnergyCard
+    {
+        public override string Name => nameof(MoveToEmptyAdjacentNode);
+
+        public override string GetCardText(IGameEntity target = null)
+        {
+            return "Move to an adjacent empty space.";
+        }
+
+        public override IReadOnlyList<IGameEntity> GetValidTargets()
+        {
+            return Context.GetCurrentBattle().GetAdjacentEmptyNodes((Actor)Owner);
+        }
+        
+
+        protected override void DoPlayCard(IGameEntity target)
+        {
+            base.DoPlayCard(target);
+            
+            Context.GetCurrentBattle().MoveIntoSpace(Owner, (ActorNode)target);
+        }
+
+        public override bool RequiresTarget { get; } = true;
+        public override int EnergyCost { get; } = 0;
+    }
     public class Attack10DamageExhaust : EnergyCard
     {
         private int DamageAmount { get; } = 10;
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Context.Events.CardPlayed += EventsOnCardPlayed;
-        }
-
+        protected override PileType DefaultDestinationPile => PileType.ExhaustPile;
+        
         public override string Name { get; } = nameof(Attack10DamageExhaust);
 
         public override string GetCardText(IGameEntity target = null)
@@ -25,7 +46,7 @@ namespace Content.Cards
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
-            return Context.GetEnemies();
+            return Context.GetCurrentBattle().GetAdjacentActors(Owner);
         }
 
         public override bool RequiresTarget => true;
@@ -37,13 +58,6 @@ namespace Content.Cards
         }
 
 
-        private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
-        {
-            if (args.CardId == Id)
-            {
-                Context.TrySendToPile(Id, PileType.ExhaustPile);
-            }
-        }
 
         public override int EnergyCost => 1;
     }

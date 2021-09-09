@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 
-namespace DeckbuilderLibrary.Data.GameEntities
+namespace DeckbuilderLibrary.Data.GameEntities.Battles
 {
     public interface IBattle : IGameEntity
     {
@@ -9,6 +9,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
         PlayerActor Player { get; }
 
         IBattleDeck Deck { get; }
+        BattleGraph Graph { get; }
 
         // IBattleEventHandler Events { get; }
         IActor GetActorById(int id);
@@ -16,5 +17,11 @@ namespace DeckbuilderLibrary.Data.GameEntities
         void AddEnemy(Actor enemy);
         void AddEntity(IGameEntity entity);
         void TrySendToPile(int cardId, PileType pileType);
+        List<IActor> GetAdjacentActors(ActorNode source);
+        List<ActorNode> GetAdjacentEmptyNodes(ActorNode source);
+        List<IActor> GetAdjacentActors(IActor source);
+        List<ActorNode> GetAdjacentEmptyNodes(IActor source);
+        void MoveIntoSpace(IActor owner, ActorNode target);
+        ActorNode GetNodeOfActor(IActor actor);
     }
 }

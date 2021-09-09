@@ -1,6 +1,7 @@
 using Content.Cards;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Battles;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -21,9 +22,11 @@ public class OverWorld : MonoBehaviour
                 if (i % 2 == 0)
                 {
                     Context.PlayerDeck.Add(Context.CreateEntity<Attack5Damage>());
+                    Context.PlayerDeck.Add(Context.CreateEntity<MoveToEmptyAdjacentNode>());
                 }
                 else
                 {
+                    Context.PlayerDeck.Add(Context.CreateEntity<Attack5DamageAdjacent>());
                     Context.PlayerDeck.Add(Context.CreateEntity<Attack10DamageExhaust>());
                 }
 
@@ -45,7 +48,7 @@ public class OverWorld : MonoBehaviour
 
     private void Test2()
     {
-        Context.StartBattle(Tools.Player, Context.CreateEntity<BasicBattleData>());
+        Context.StartBattle(Tools.Player, Context.CreateEntity<FiveSlotBattleData>());
         //need to figure out how we are going to pass battle data to the scene.v
         SceneManager.LoadScene("BattleScene");
     }
