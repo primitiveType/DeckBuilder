@@ -7,8 +7,9 @@ using UnityEngine.UI;
 
 public class HandCardProxy : CardProxy
 {
-    [SerializeField] private Text NameText;
-    [SerializeField] private Text DescriptionText;
+    [SerializeField] private TMPro.TMP_Text NameText;
+    [SerializeField] private TMPro.TMP_Text DescriptionText;
+    [SerializeField] private TMPro.TMP_Text EnergyText;
 
     protected override void OnInitialize()
     {
@@ -29,8 +30,8 @@ public class HandCardProxy : CardProxy
 
     private void UpdateCardText()
     {
-        //throwing energy in here for now.. this is also a hack- energy cost should be a component or something.
-        NameText.text = $"({(GameEntity as EnergyCard)?.EnergyCost}) {GameEntity.Name}";
+        EnergyText.text = $"{(GameEntity as EnergyCard)?.EnergyCost}";
+        NameText.text = $"{GameEntity.Name}";
         DescriptionText.text = GameEntity.GetCardText();
     }
 
