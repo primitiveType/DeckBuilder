@@ -8,10 +8,6 @@ namespace Content.Cards
 {
     public class Anger : EnergyCard
     {
-        protected override PileType DefaultDestinationPile => PileType.DiscardPile;
-        
-
-
         private int DamageAmount => 6;
         public override string Name => nameof(Anger);
 

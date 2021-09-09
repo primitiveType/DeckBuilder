@@ -30,7 +30,6 @@ namespace Content.Cards
 
         public override bool RequiresTarget { get; } = true;
         public override int EnergyCost { get; } = 0;
-        protected override PileType DefaultDestinationPile => PileType.DiscardPile;
     }
     public class Attack10DamageExhaust : EnergyCard
     {

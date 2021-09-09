@@ -11,8 +11,6 @@ namespace Content.Cards
     {
         private int DamageAmount => 5;
 
-        protected override PileType DefaultDestinationPile => PileType.DiscardPile;
-
         public override string Name => nameof(Attack5Damage);
 
         public override string GetCardText(IGameEntity target = null)
@@ -40,8 +38,6 @@ namespace Content.Cards
     public class Attack5DamageAdjacent : EnergyCard
     {
         private int DamageAmount => 5;
-
-        protected override PileType DefaultDestinationPile => PileType.DiscardPile;
 
         public override string Name => nameof(Attack5DamageAdjacent);
 
