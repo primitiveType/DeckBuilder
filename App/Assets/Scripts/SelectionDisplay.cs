@@ -2,40 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DeckbuilderLibrary.Data.GameEntities;
+
 public class SelectionDisplay : MonoBehaviour
 {
+    [SerializeField] private float CardWidth;
 
-    [SerializeField]
-    private float CardWidth;
+    [SerializeField] private float CardDepth;
 
-    [SerializeField]
-    private float CardDepth;
+    [SerializeField] private float CardSeperation;
 
-    [SerializeField]
-    private float CardSeperation;
+    [SerializeField] private HandCardProxy HandCardProxyPrefab;
 
-    [SerializeField]
-    private HandCardProxy HandCardProxyPrefab;
+    [SerializeField] private Vector3 CenterPosition;
 
-    [SerializeField]
-    private Vector3 CenterPosition;
-
-    [SerializeField]
-    private GameObject GreyScreenObject;
+    [SerializeField] private GameObject GreyScreenObject;
 
     private List<HandCardProxy> SelectableCardProxies = new List<HandCardProxy>();
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public bool IsDisplaying { get; private set; }
 
@@ -44,19 +27,19 @@ public class SelectionDisplay : MonoBehaviour
         IsDisplaying = true;
         GreyScreenObject.SetActive(true);
 
-        foreach(Card card in selectableCards)
+        foreach (Card card in selectableCards)
         {
             HandCardProxy handCardProxy = Instantiate(HandCardProxyPrefab);
             handCardProxy.Initialize(card);
             SelectableCardProxies.Add(handCardProxy);
         }
 
-        for(int i = 0; i < SelectableCardProxies.Count; i++)
+        for (int i = 0; i < SelectableCardProxies.Count; i++)
         {
             SelectableCardProxies[i].HandPositionIndex = i;
         }
 
-        OrganzieDisplay();
+        OrganizeDisplay();
     }
 
     public void ClearDisplay()
@@ -71,7 +54,7 @@ public class SelectionDisplay : MonoBehaviour
         SelectableCardProxies.Clear();
     }
 
-    private void OrganzieDisplay()
+    private void OrganizeDisplay()
     {
         int numCards = SelectableCardProxies.Count;
 
@@ -81,9 +64,8 @@ public class SelectionDisplay : MonoBehaviour
 
         foreach (HandCardProxy card in SelectableCardProxies)
         {
-            card.ResetHandPosition(card.HandPositionIndex * ((CardWidth + CardSeperation) * Vector3.right) + startPosition + (Vector3.back * CardDepth * card.HandPositionIndex));
+            card.ResetHandPosition(card.HandPositionIndex * ((CardWidth + CardSeperation) * Vector3.right) +
+                                   startPosition + (Vector3.back * CardDepth * card.HandPositionIndex));
         }
     }
-
-
 }

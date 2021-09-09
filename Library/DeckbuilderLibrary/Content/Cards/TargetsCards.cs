@@ -27,7 +27,6 @@ namespace Content.Cards
         }
         protected override void DoPlayCard(IGameEntity target)
         {
-            // Deal x damage.
             Context.TrySendToPile(target.Id, PileType.DiscardPile);
         }
 
