@@ -1,3 +1,4 @@
+using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Battles;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Actors
@@ -11,6 +12,21 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
             base.Initialize();
 
             Context.Events.TurnStarted += OnTurnStarted;
+            Context.Events.BattleEnded += OnBattleEnded;
+            Context.Events.ActorDied += OnActorDied;
+        }
+
+        private void OnActorDied(object sender, ActorDiedEventArgs args)
+        {
+            if (args.Actor.Id == Id)
+            {
+                DetachEvents();
+            }
+        }
+
+        private void OnBattleEnded(object sender, BattleEndedEventArgs args)
+        {
+            DetachEvents();
         }
 
         private void OnTurnStarted(object sender, TurnStartedEventArgs args)
@@ -25,10 +41,18 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
             else
             {
                 //want to do movement intent, but there's some questions I have there
-                
+
                 var intent = Context.CreateIntent<MoveIntent>(this);
                 SetIntent(intent);
             }
+        }
+
+
+        private void DetachEvents()
+        {
+            Context.Events.TurnStarted -= OnTurnStarted;
+            Context.Events.BattleEnded -= OnBattleEnded;
+            Context.Events.ActorDied -= OnActorDied;
         }
     }
 }

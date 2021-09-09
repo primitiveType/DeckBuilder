@@ -1,3 +1,4 @@
+using System;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Actors
@@ -20,6 +21,10 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
             if (!Resources.HasResource<BaseEnergy>())
             {
                 Resources.SetResource<BaseEnergy>(3);
+            }
+            else
+            {
+                Console.WriteLine("test");
             }
 
             if (!Resources.HasResource<BaseCardDraw>())

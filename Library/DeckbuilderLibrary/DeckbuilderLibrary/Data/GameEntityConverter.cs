@@ -27,7 +27,10 @@ namespace DeckbuilderLibrary.Data
         {
             var token = JToken.Load(reader);
             if (!token.HasValues)
-                throw new InvalidOperationException("invalid object");
+            {
+                return null;
+                // throw new InvalidOperationException("invalid object");
+            }
 
             var typeToken = token["$type"];
             if (typeToken == null)
@@ -51,7 +54,7 @@ namespace DeckbuilderLibrary.Data
             {
                 ((GameEntity)internalGameEntity).Id = -1;
             }
-            ((IInternalGameContext)existingValue.Context).ToInitialize.Add(internalGameEntity);
+            ((IInternalGameContext)existingValue.Context).ToInitializeAdd(internalGameEntity);
             return existingValue;
            
         }

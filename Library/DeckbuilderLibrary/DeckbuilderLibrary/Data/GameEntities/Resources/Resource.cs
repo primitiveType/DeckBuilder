@@ -8,31 +8,74 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
     {
     }
 
-    public abstract class Resource<T> : GameEntity, IArithmetic<T>, IInternalResource where T : Resource<T>
+    public class EntityReference : IGameEntity, IInternalInitialize
     {
-        private IActor m_Owner;
-        private int m_Amount;
-        public abstract string Name { get; }
+        public int Id => Entity.Id;
 
         [JsonIgnore]
-        public IActor Owner
+        public IContext Context { get; set; }
+        private IGameEntity m_Entity;
+
+        [JsonIgnore]
+        public IGameEntity Entity
         {
-            get => m_Owner;
+            get => m_Entity;
             set
             {
-                m_Owner = value;
-                if (Owner == null)
+                m_Entity = value;
+                if (Entity == null)
                 {
-                    OwnerId = -1;
+                    EntityId = -1;
                 }
                 else
                 {
-                    OwnerId = Owner.Id;
+                    EntityId = Entity.Id;
                 }
             }
         }
 
-        [JsonProperty] public int OwnerId { get; set; } = -1;
+        [JsonProperty] public int EntityId { get; set; } = -1;
+
+        public EntityReference()
+        {
+            ((IInternalGameContext)GameContext.CurrentContext).ToInitializeAdd(this);
+        }
+
+        public void InternalInitialize()
+        {
+            if (Entity == null)
+            {
+                //     if (EntityId == -1)
+                //     {
+                //         throw new ArgumentException("Tried to initialize resource with no Entity info!");
+                //     }
+
+                Entity = GameContext.CurrentContext.GetCurrentBattle().GetActorById(EntityId);
+            }
+            else
+            {
+                EntityId = Entity.Id;
+            }
+        }
+
+        public void SetContext(IContext context)
+        {
+            Context = context;
+        }
+    }
+    public abstract class Resource<T> : GameEntity, IArithmetic<T>, IInternalResource where T : Resource<T>
+    {
+        private int m_Amount;
+        public abstract string Name { get; }
+        private EntityReference OwnerEntityReference { get; set; } = new EntityReference();
+
+        [JsonIgnore]
+        public IActor Owner
+        {
+            get => OwnerEntityReference.Entity as IActor;
+            set => OwnerEntityReference.Entity = value;
+        }
+
 
         public virtual int Amount
         {
@@ -54,19 +97,19 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
         protected override void Initialize()
         {
             base.Initialize();
-            if (Owner == null)
-            {
-                if (OwnerId == -1)
-                {
-                    throw new ArgumentException("Tried to initialize resource with no Owner info!");
-                }
-
-                Owner = Context.GetCurrentBattle().GetActorById(OwnerId);
-            }
-            else
-            {
-                OwnerId = Owner.Id;
-            }
+            // if (Owner == null)
+            // {
+            //     if (OwnerId == -1)
+            //     {
+            //         throw new ArgumentException("Tried to initialize resource with no Owner info!");
+            //     }
+            //
+            //     Owner = Context.GetCurrentBattle().GetActorById(OwnerId);
+            // }
+            // else
+            // {
+            //     OwnerId = Owner.Id;
+            // }
         }
 
         public virtual void Add(int amount)

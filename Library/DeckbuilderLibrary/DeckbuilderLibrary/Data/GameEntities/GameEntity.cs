@@ -17,7 +17,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
 
         private List<Action> TerminationActions = new List<Action>();
 
-        void IInternalGameEntity.InternalInitialize()
+        void IInternalInitialize.InternalInitialize()
         {
             if (Initialized)
             {
