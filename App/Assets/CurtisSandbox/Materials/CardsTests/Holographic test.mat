@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Holographic test
+  m_Shader: {fileID: -6465566751694194690, guid: c249a6eb82d16f547a7c9cf32697d548,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_2EE39062:
+        m_Texture: {fileID: 2800000, guid: 1d462a58eab0ac64a9edf75830c00cc4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_473FD732:
+        m_Texture: {fileID: 2800000, guid: d8946894d415cd4469e9c4819c12ef50, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_8B1956CA:
+        m_Texture: {fileID: 2800000, guid: c7248a8f733281a4cad6975c922309d5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_93F55853:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_DD54C799:
+        m_Texture: {fileID: 10305, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_E0ED027C_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 7b82d12aad56cc445b99fd1cf06a232d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_767F1B37: 1
+    - Vector1_B783F910: 0.3
+    - Vector1_C23485C: 0.3
+    m_Colors:
+    - Color_393D5D94: {r: 0, g: 0, b: 0, a: 1}
+    - Color_8D33522C: {r: 0.1767088, g: 0.17710513, b: 0.1792453, a: 1}
+    - Vector4_8D5DD6A5: {r: 2, g: 0, b: 0, a: 0.5}

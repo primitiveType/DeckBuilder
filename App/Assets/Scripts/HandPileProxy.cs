@@ -6,7 +6,8 @@ public class HandPileProxy : PileProxy<HandCardProxy>
 {
     [SerializeField]
     private float CardWidth;
-
+    [SerializeField]
+    private float CardDepth;
     [SerializeField]
     private float CardSeperation;
 
@@ -49,7 +50,7 @@ public class HandPileProxy : PileProxy<HandCardProxy>
 
         foreach (HandCardProxy card in CardProxies.Values)
         {
-            card.ResetHandPosition(card.HandPositionIndex * (CardWidth + CardSeperation) * Vector3.right + startPosition);
+            card.ResetHandPosition(card.HandPositionIndex * ((CardWidth + CardSeperation) * Vector3.right) + startPosition + (Vector3.back * CardDepth  * card.HandPositionIndex));
         }
 
     }
