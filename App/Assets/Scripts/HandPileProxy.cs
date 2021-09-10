@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class HandPileProxy : PileProxy<HandCardProxy>
 {
@@ -26,6 +27,12 @@ public class HandPileProxy : PileProxy<HandCardProxy>
         }
 
         return selectedCards;
+    }
+
+    public bool TryGetCardById(int id, out HandCardProxy handCardProxy)
+    {
+        handCardProxy = CardProxies.Values.FirstOrDefault(x => x.GameEntity.Id == id);
+        return handCardProxy != null;
     }
 
     protected override void CreateCardProxy(int argsMovedCard)
@@ -74,16 +81,4 @@ public class HandPileProxy : PileProxy<HandCardProxy>
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
-            foreach (HandCardProxy handCardProxy in CardProxies.Values)
-            {
-                handCardProxy.Selected = false;
-            }
-        }
-
-    }
 }

@@ -19,8 +19,10 @@ public class OverWorld : MonoBehaviour
         {
             for (int i = 0; i < 10; i++)
             {
+                Context.PlayerDeck.Add(Context.CreateEntity<TargetsCards>());
                 if (i % 2 == 0)
                 {
+                    Context.PlayerDeck.Add(Context.CreateEntity<SecondChance>());
                     Context.PlayerDeck.Add(Context.CreateEntity<Attack5Damage>());
                     Context.PlayerDeck.Add(Context.CreateEntity<MoveToEmptyAdjacentNode>());
                 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using UnityEngine;
-
-public class MouseTilt : MonoBehaviour
+using UnityEngine.EventSystems;
+public class MouseTilt : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
     private float MaxTilt = 15f;
@@ -22,14 +22,19 @@ public class MouseTilt : MonoBehaviour
     Collider m_Collider;
     Collider Collider => (m_Collider != null) ? m_Collider : m_Collider = GetComponent<Collider>();
 
-    private void OnMouseEnter()
+    private bool MouseHovering { get; set; }
+
+    private void Update()
     {
-        StopAllCoroutines();
+        if (MouseHovering)
+        {
+            OnMouseHover();
+        }
     }
 
-    private void OnMouseOver()
+    private void OnMouseHover()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         RaycastHit hit;
 
         if (Collider.Raycast(ray, out hit, 100.0f))
@@ -65,10 +70,7 @@ public class MouseTilt : MonoBehaviour
         return 1f;
     }
 
-    private void OnMouseExit()
-    {
-        StartCoroutine(ReturnToCenterCR());
-    }
+
 
     private IEnumerator ReturnToCenterCR()
     {
@@ -81,5 +83,17 @@ public class MouseTilt : MonoBehaviour
             Transform.localRotation = Quaternion.Lerp(startRotation, Quaternion.identity, phase);
             yield return null;
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        StopAllCoroutines();
+        MouseHovering = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        StartCoroutine(ReturnToCenterCR());
+        MouseHovering = false;
     }
 }
