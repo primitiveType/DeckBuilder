@@ -1,11 +1,20 @@
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Resources;
+using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities
 {
     public class ActorNode : GameEntity
     {
-        public IActor Actor { get; set; }
+        private EntityReference ActorEntityReference { get; set; }= new EntityReference();
+
+        [JsonIgnore]
+        public IActor Actor
+        {
+            get => ActorEntityReference.Entity as IActor;
+            set => ActorEntityReference.Entity = value;
+        }
 
         internal void SetActorNoEvent(IActor actor)
         {

@@ -22,7 +22,7 @@ namespace DeckbuilderLibrary.Data
             CurrentContext = this;
         }
 
-        List<IInternalGameEntity> IInternalGameContext.ToInitialize { get; } = new List<IInternalGameEntity>();
+        private List<IInternalInitialize> ToInitialize { get; } = new List<IInternalInitialize>();
 
         [JsonProperty] private IBattle CurrentBattle { get; set; }
 
@@ -149,19 +149,22 @@ namespace DeckbuilderLibrary.Data
 
         private void InitializeNewObjects()
         {
-            for (var i = 0; i < ((IInternalGameContext)this).ToInitialize.Count; i++)
+            for (var i = 0; i < ToInitialize.Count; i++)
             {
-                IInternalGameEntity internalGameEntity = (((IInternalGameContext)this).ToInitialize[i]);
-                if (internalGameEntity.Id < 0)
+                IInternalInitialize internalInit = ToInitialize[i];
+                if (internalInit is IInternalGameEntity internalGameEntity)
                 {
-                    ((GameEntity)internalGameEntity).Id = GetNextEntityId();
-                }
+                    if (internalGameEntity.Id < 0)
+                    {
+                        ((GameEntity)internalGameEntity).Id = GetNextEntityId();
+                    }
 
-                internalGameEntity.InternalInitialize();
-                CurrentBattle.AddEntity(internalGameEntity);
+                    internalGameEntity.InternalInitialize();
+                    CurrentBattle.AddEntity(internalGameEntity);
+                }
             }
 
-            ((IInternalGameContext)this).ToInitialize.Clear();
+            ToInitialize.Clear();
         }
 
         private void InitializeEntity(IGameEntity entity)
@@ -224,8 +227,7 @@ namespace DeckbuilderLibrary.Data
             return actor;
         }
 
-       
-        
+
         public IBattle StartBattle(PlayerActor player, BattleData data)
         {
             var battle = CreateEntityNoInitialize<Battle>();
@@ -245,14 +247,13 @@ namespace DeckbuilderLibrary.Data
             battle.SetDeck(battleDeck);
             battle.SetPlayer(player);
             battle.SetData(data);
-                
-            
+
 
             battle.AddRule(CreateEntity<ShuffleDiscardIntoDrawWhenEmpty>());
             battle.AddRule(CreateEntity<DiscardHandAtEndOfTurn>());
 
             InitializeEntity(battle);
-            
+
             //Player goes first. start the turn.
             var internalEvents = (IInternalBattleEventHandler)Events;
             ((GameEvents)Events).InvokeBattleStarted(this, new BattleStartedArgs());
@@ -261,5 +262,9 @@ namespace DeckbuilderLibrary.Data
             return battle;
         }
 
+        void IInternalGameContext.ToInitializeAdd(IInternalInitialize toInit)
+        {
+            ToInitialize.Add(toInit);
+        }
     }
 }

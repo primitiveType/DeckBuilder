@@ -5,6 +5,6 @@ namespace DeckbuilderLibrary.Data
 {
     internal interface IInternalGameContext
     {
-        List<IInternalGameEntity> ToInitialize { get; }
+        void ToInitializeAdd(IInternalInitialize toInit);
     }
 }

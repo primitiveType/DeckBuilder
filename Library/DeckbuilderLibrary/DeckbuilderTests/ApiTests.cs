@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Cards;
+using Content.Cards.TestCards;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.GameEntities.Battles;
+using DeckbuilderLibrary.Data.GameEntities.Battles.TestBattles;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
 using DeckbuilderLibrary.Data.GameEntities.Resources.Status;
 using JsonNet.ContractResolvers;
@@ -36,7 +38,7 @@ namespace DeckbuilderTests
             CreateDeck(Context);
 
 
-            IBattle battle = Context.StartBattle(Player, Context.CreateEntity<BasicBattleData>());
+            IBattle battle = Context.StartBattle(Player, Context.CreateEntity<TestBattleData>());
         }
 
         [Test]
@@ -68,7 +70,7 @@ namespace DeckbuilderTests
         public void DamageDoubleCard_DoublesDamage()
         {
             Card doubler = FindCardInDeck(nameof(DoubleNextCardDamage));
-            Card damage = FindCardInDeck(nameof(Attack5Damage));
+            Card damage = FindCardInDeck(nameof(TestAttack5Damage));
 
             var enemy = Context.GetEnemies().First();
             string text = damage.GetCardText(null);
@@ -99,7 +101,7 @@ namespace DeckbuilderTests
         public void EnemyKilled_Event_Works()
         {
             bool receivedEvent = false;
-            Card damage = FindCardInDeck(nameof(Attack5Damage));
+            Card damage = FindCardInDeck(nameof(TestAttack5Damage));
             var enemy = Context.GetEnemies().First();
             Context.Events.ActorDied += EventsOnActorDied;
             for (int i = 0; i < 20; i++)
@@ -128,18 +130,17 @@ namespace DeckbuilderTests
             bool receivedEvent = false;
             var drawCards = Context.GetCurrentBattle().Deck.DrawPile.Cards;
             var count = drawCards.Count;
-            var target = Context.GetCurrentBattle().Enemies.First();
             Assert.That(count, Is.GreaterThan(1));
             while (drawCards.Count > 1)
             {
-                drawCards[0].PlayCard(target);
+                Context.TrySendToPile(drawCards[0].Id, PileType.DiscardPile);
                 count--;
                 Assert.That(drawCards.Count, Is.EqualTo(count));
             }
 
             Assert.That(drawCards.Count, Is.EqualTo(1));
             Assert.That(receivedEvent, Is.False);
-            drawCards[0].PlayCard(target);
+            Context.TrySendToPile(drawCards[0].Id, PileType.DiscardPile);
             Assert.That(drawCards.Count,
                 Is.GreaterThan(1)); //some cards exhaust, but we should basically never have zero cards in draw.
             Assert.That(receivedEvent, Is.True);
@@ -190,7 +191,7 @@ namespace DeckbuilderTests
         [Test]
         public void WeakReducesDamageDealt()
         {
-            Card card = FindCardInDeck("Attack5Damage");
+            Card card = FindCardInDeck("TestAttack5Damage");
             IActor target = (IActor)card.GetValidTargets().First();
             Assert.That(target.Health, Is.EqualTo(100));
             card.PlayCard(target);
@@ -204,7 +205,7 @@ namespace DeckbuilderTests
         [Test]
         public void VulnerableIncreasesDamageDealt()
         {
-            Card card = FindCardInDeck("Attack5Damage");
+            Card card = FindCardInDeck("TestAttack5Damage");
             IActor target = (IActor)card.GetValidTargets().First();
             Assert.That(target.Health, Is.EqualTo(100));
             card.PlayCard(target);
@@ -247,7 +248,7 @@ namespace DeckbuilderTests
         {
             Context.Events.BattleEnded += EventsOnBattleEnded;
             bool receivedEvent = false;
-            Card damage = FindCardInDeck(nameof(Attack5Damage));
+            Card damage = FindCardInDeck(nameof(TestAttack5Damage));
             IActor enemy = Context.GetEnemies().First();
             int test = 0;
             for (int i = 0; i < 20; i++)
@@ -273,7 +274,7 @@ namespace DeckbuilderTests
         {
             Context.Events.BattleEnded += EventsOnBattleEnded;
             bool receivedEvent = false;
-            Card damage = FindCardInDeck(nameof(Attack5Damage));
+            Card damage = FindCardInDeck(nameof(TestAttack5Damage));
             IActor enemy = Context.GetEnemies().First();
             int test = 0;
             for (int i = 0; i < 20; i++)
@@ -287,7 +288,7 @@ namespace DeckbuilderTests
             Assert.That(enemy.Health, Is.EqualTo(0));
             Assert.That(receivedEvent);
 
-            Context.StartBattle(Player, Context.CreateEntity<BasicBattleData>());
+            Context.StartBattle(Player, Context.CreateEntity<TestBattleData>());
             enemy = Context.GetEnemies().First();
             for (int i = 0; i < 20; i++)
             {
@@ -328,7 +329,7 @@ namespace DeckbuilderTests
         [Test]
         public void TestGetValidTargets()
         {
-            Card card = FindCardInDeck("Attack5Damage");
+            Card card = FindCardInDeck("TestAttack5Damage");
             IReadOnlyList<IGameEntity> targets = card.GetValidTargets();
 
             Assert.That(targets, Has.Count.EqualTo(Context.GetEnemies().Count));
@@ -345,7 +346,7 @@ namespace DeckbuilderTests
         [Test]
         public void TestAttackDealsDamage()
         {
-            Card card = FindCardInDeck("Attack5Damage");
+            Card card = FindCardInDeck("TestAttack5Damage");
             IActor target = (IActor)card.GetValidTargets().First();
             Assert.That(target.Health, Is.EqualTo(100));
             card.PlayCard(target);
@@ -355,7 +356,7 @@ namespace DeckbuilderTests
         [Test]
         public void ClonedCardHasNewId()
         {
-            Card card = FindCardInDeck("Attack5Damage");
+            Card card = FindCardInDeck("TestAttack5Damage");
             var copy = Context.CopyCard(card);
             Assert.That(copy.Id, Is.Not.EqualTo(card.Id));
         }
@@ -365,7 +366,7 @@ namespace DeckbuilderTests
         public void TestAttackCausesEvent()
         {
             bool gotEvent = false;
-            Card card = FindCardInDeck("Attack5Damage");
+            Card card = FindCardInDeck("TestAttack5Damage");
             IActor target = (IActor)card.GetValidTargets().First();
             Context.Events.DamageDealt += GameEventHandlerOnDamageDealt;
             Assert.That(target.Health, Is.EqualTo(100));
@@ -388,7 +389,7 @@ namespace DeckbuilderTests
         public void TestCardIsDiscarded()
         {
             bool receivedMoveEvent = false;
-            Card cardToPlay = FindCardInDeck("Attack5Damage");
+            Card cardToPlay = FindCardInDeck("TestAttack5Damage");
 
             Assert.That(Context.GetCurrentBattle().Deck.HandPile.Cards, Contains.Item(cardToPlay));
             Assert.That(Context.GetCurrentBattle().Deck.DiscardPile.Cards, !Contains.Item(cardToPlay));
@@ -594,7 +595,7 @@ namespace DeckbuilderTests
         }
         private IEnumerable<Card> CreateCards(IContext context)
         {
-            yield return context.CreateEntity<Attack5Damage>();
+            yield return context.CreateEntity<TestAttack5Damage>();
             yield return context.CreateEntity<DoubleNextCardDamage>();
             yield return context.CreateEntity<Attack10DamageExhaust>();
             yield return context.CreateEntity<BattleStateAndPermanentState>();
