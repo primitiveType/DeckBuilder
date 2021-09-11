@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeckbuilderTests", "Deckbui
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Content", "Content\Content.csproj", "{644C2ED6-4A08-436A-8493-F7ECB333A4E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexGrid", "HexGrid-master\HexGrid\HexGrid.csproj", "{730CE1A8-6F93-424D-AAF1-057182BC21EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{644C2ED6-4A08-436A-8493-F7ECB333A4E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{644C2ED6-4A08-436A-8493-F7ECB333A4E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{644C2ED6-4A08-436A-8493-F7ECB333A4E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{730CE1A8-6F93-424D-AAF1-057182BC21EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{730CE1A8-6F93-424D-AAF1-057182BC21EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{730CE1A8-6F93-424D-AAF1-057182BC21EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{730CE1A8-6F93-424D-AAF1-057182BC21EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

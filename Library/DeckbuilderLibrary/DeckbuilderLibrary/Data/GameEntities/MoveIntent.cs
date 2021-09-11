@@ -1,23 +1,23 @@
 using System;
 using System.Linq;
+using DeckbuilderLibrary.Data.DataStructures;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Battles;
 
 namespace DeckbuilderLibrary.Data.GameEntities
 {
     public class MoveIntent : Intent
     {
+        public int MovementAmount { get; set; } = 3;
         public override string GetDescription => "Move to an empty adjacent slot if there is one.";
 
-        private ActorNode TargetNode { get; set; }
 
-        public override GameEntity Target => TargetNode;
+        public override GameEntity Target => null;
 
         protected override void Initialize()
         {
             base.Initialize();
             var battle = Context.GetCurrentBattle();
-
-            TargetNode = battle.GetAdjacentEmptyNodes(battle.GetActorById(OwnerId)).FirstOrDefault();
         }
 
         protected override void Trigger()
@@ -34,12 +34,24 @@ namespace DeckbuilderLibrary.Data.GameEntities
             }
 
             IActor actorById = battle.GetActorById(OwnerId);
-            TargetNode = battle.GetAdjacentEmptyNodes(actorById).FirstOrDefault();
+            var path = new ActorNodePath(battle.Graph.GetNodeOfActor(actorById),
+                battle.Graph.GetNodeOfActor(battle.Player));
 
-            if (TargetNode != null)
+
+            int moves = 0;
+            foreach (var node in path)
             {
-                battle.MoveIntoSpace(actorById, TargetNode);
+                
+                if (moves >= MovementAmount)
+                    break;
+
+                
+                battle.Graph.MoveIntoSpace(actorById, node);
+                moves++;
             }
         }
+        
+        
+        
     }
 }

@@ -16,8 +16,6 @@ namespace DeckbuilderTests
         public void Setup()
         {
             Context = new GameContext();
-
-
             Player = Context.CreateActor<PlayerActor>(100, 0);
             CreateDeck(Context);
         }
@@ -27,7 +25,7 @@ namespace DeckbuilderTests
         {
             Context.StartBattle(Player, Context.CreateEntity<TwoEnemyBattleData>());
             Assert.That(Context.GetEnemies().Count, Is.EqualTo(2));
-            Assert.That(Context.GetCurrentBattle().GetAdjacentActors(Player).Count, Is.EqualTo(1));
+            Assert.That(Context.GetCurrentBattle().Graph.GetAdjacentActors(Player).Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -35,10 +33,10 @@ namespace DeckbuilderTests
         {
             Context.StartBattle(Player, Context.CreateEntity<BasicBattleData>());
             Assert.That(Context.GetEnemies().Count, Is.EqualTo(1));
-            Assert.That(Context.GetCurrentBattle().GetAdjacentActors(Player).Count, Is.EqualTo(0));
+            Assert.That(Context.GetCurrentBattle().Graph.GetAdjacentActors(Player).Count, Is.EqualTo(0));
             var moveCard = FindCardInDeck(nameof(MoveToEmptyAdjacentNode));
-            moveCard.PlayCard(Context.GetCurrentBattle().GetAdjacentEmptyNodes(Player).First());
-            Assert.That(Context.GetCurrentBattle().GetAdjacentActors(Player).Count, Is.EqualTo(1));
+            moveCard.PlayCard(moveCard.GetValidTargets().First());
+            Assert.That(Context.GetCurrentBattle().Graph.GetAdjacentActors(Player).Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -48,12 +46,14 @@ namespace DeckbuilderTests
             Context.Events.ActorsSwapped += OnActorsSwapped;
             Context.StartBattle(Player, Context.CreateEntity<BasicBattleData>());
             Assert.That(Context.GetEnemies().Count, Is.EqualTo(1));
-            Assert.That(Context.GetCurrentBattle().GetAdjacentActors(Player).Count, Is.EqualTo(0));
+            Assert.That(Context.GetCurrentBattle().Graph.GetAdjacentActors(Player).Count, Is.EqualTo(0));
             var moveCard = FindCardInDeck(nameof(MoveToEmptyAdjacentNode));
-            moveCard.PlayCard(Context.GetCurrentBattle().GetAdjacentEmptyNodes(Player).First());
-            Assert.That(Context.GetCurrentBattle().GetAdjacentActors(Player).Count, Is.EqualTo(1));
+
+            moveCard.PlayCard(moveCard.GetValidTargets().First());
+            Assert.That(Context.GetCurrentBattle().Graph.GetAdjacentActors(Player).Count, Is.EqualTo(1));
 
             Assert.That(gotEvent);
+
             void OnActorsSwapped(object sender, ActorsSwappedEventArgs args)
             {
                 gotEvent = true;

@@ -9,7 +9,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
         PlayerActor Player { get; }
 
         IBattleDeck Deck { get; }
-        BattleGraph Graph { get; }
+        HexGraph Graph { get; }
 
         // IBattleEventHandler Events { get; }
         IActor GetActorById(int id);
@@ -17,11 +17,5 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
         void AddEnemy(Actor enemy);
         void AddEntity(IGameEntity entity);
         void TrySendToPile(int cardId, PileType pileType);
-        List<IActor> GetAdjacentActors(ActorNode source);
-        List<ActorNode> GetAdjacentEmptyNodes(ActorNode source);
-        List<IActor> GetAdjacentActors(IActor source);
-        List<ActorNode> GetAdjacentEmptyNodes(IActor source);
-        void MoveIntoSpace(IActor owner, ActorNode target);
-        ActorNode GetNodeOfActor(IActor actor);
     }
 }

@@ -332,6 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4048f83069fa3d94aaeac7415ae6a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PrintTrace: 0
 --- !u!4 &972226933
 Transform:
   m_ObjectHideFlags: 0
@@ -1062,9 +1063,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 429d88a84267413db08af5237ae8387d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ThreeColumnBattleProxy: {fileID: 5593432763180969759, guid: 29d234b048762c94aadee2d7c30644dc,
-    type: 3}
-  SquareWithCenterPointGraphProxy: {fileID: 8975854658770698910, guid: 3dcbf54e0a1ed524a8aed3bfb5793d07,
+  BattleProxy: {fileID: 4351709562191146148, guid: 0f67cefb80876184cb89d4a998e6bc3f,
     type: 3}
 --- !u!4 &2100646704
 Transform:

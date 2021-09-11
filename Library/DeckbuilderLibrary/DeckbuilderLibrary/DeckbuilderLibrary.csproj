@@ -5,23 +5,29 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="HexGrid" Version="1.0.0" />
       <PackageReference Include="JsonNet.ContractResolvers" Version="2.0.0" />
       <PackageReference Include="JsonSubTypes" Version="1.8.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="NUnit" Version="3.13.2" />
       <PackageReference Include="SCGraphTheory.AdjacencyList" Version="1.0.5" />
+      <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     </ItemGroup>
 
     <ItemGroup>
       <Compile Remove="Tests\Editor\ApiTests.cs" />
       <Compile Remove="Tests\**" />
+      <Compile Remove="Data\Hex\UnityHexGrid-master\**" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Remove="Tests\**" />
+      <EmbeddedResource Remove="Data\Hex\UnityHexGrid-master\**" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="Tests\**" />
+      <None Remove="Data\Hex\UnityHexGrid-master\**" />
     </ItemGroup>
 
 </Project>

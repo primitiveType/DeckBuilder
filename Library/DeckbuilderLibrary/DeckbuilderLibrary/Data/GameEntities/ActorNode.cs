@@ -1,37 +1,74 @@
-using DeckbuilderLibrary.Data.Events;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using ca.axoninteractive.Geometry.Hex;
+using DeckbuilderLibrary.Data.DataStructures;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Battles;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
-using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities
 {
-    public class ActorNode : GameEntity
+    public class ActorNode : GameEntity, IHasNeighbours<ActorNode>
     {
-        private EntityReference ActorEntityReference { get; set; }= new EntityReference();
+        private EntityReference HexGraph { get; set; } = new EntityReference();
 
-        [JsonIgnore]
-        public IActor Actor
-        {
-            get => ActorEntityReference.Entity as IActor;
-            set => ActorEntityReference.Entity = value;
-        }
+        public HexGraph Graph => HexGraph.Entity as HexGraph;
 
-        internal void SetActorNoEvent(IActor actor)
-        {
-            Actor = actor;
-        }
 
-        protected override void Initialize()
+        internal void Initialize(HexGraph graph, CubicHexCoord coord)
         {
             base.Initialize();
-            Context.Events.ActorDied += OnActorDied;
+            HexGraph.Entity = graph;
+            Coordinate = coord;
         }
 
-        private void OnActorDied(object sender, ActorDiedEventArgs args)
+        public CubicHexCoord Coordinate { get; private set; }
+
+
+        private List<IGameEntity> CurrentEntities = new List<IGameEntity>();
+
+        public void AddEntityNoEvent(IGameEntity player)
         {
-            if (Actor?.Id == args.Actor.Id)
+            CurrentEntities.Add(player);
+        }
+
+        public IActor GetActor()
+        {
+            return CurrentEntities.OfType<Actor>().FirstOrDefault();
+        }
+
+        public bool TryRemove(IGameEntity entity)
+        {
+            return CurrentEntities.Remove(entity);
+        }
+
+        public bool TryAdd(IGameEntity entity)
+        {
+            if (entity is Actor)
             {
-                Actor = null;
+                if (CurrentEntities.OfType<IActor>().Any())
+                {
+                    throw new NotSupportedException("Actor tried to enter square with actor already in it!");
+                    return false;
+                }
+
+                ((IInternalCoordinateProperty)entity).Coordinate = Coordinate;
+            }
+
+            CurrentEntities.Add(entity);
+            return true;
+        }
+
+        public IEnumerable<ActorNode> Neighbours
+        {
+            get
+            {
+                foreach (CubicHexCoord coord in Coordinate.Neighbors())
+                {
+                    if(Graph.Nodes.ContainsKey(coord))
+                        yield return Graph.Nodes[coord];
+                }
             }
         }
     }
