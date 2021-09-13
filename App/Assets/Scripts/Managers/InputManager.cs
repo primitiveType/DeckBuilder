@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System.Threading.Tasks;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.DataStructures;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using Scenes.Scripts.StateMachine;
@@ -108,7 +109,7 @@ public class DefaultBattleState : State
 
     private void ClearHoverStates()
     {
-        foreach (var handle in HoverHandles)
+        foreach (IDisposable handle in HoverHandles)
         {
             handle.Dispose();
         }
@@ -133,21 +134,21 @@ public class DefaultBattleState : State
         }
         else if (input.Selected is ActorNode node)
         {
-            var player = node.Context.GetCurrentBattle().Player;
-            var playerNode = node.Context.GetCurrentBattle().Graph.GetNodeOfActor(player);
+            PlayerActor player = node.Context.GetCurrentBattle().Player;
+            ActorNode playerNode = node.Context.GetCurrentBattle().Graph.GetNodeOfActor(player);
             ActorNodePath path =
                 new ActorNodePath(playerNode, node, false, node.GetActor() == null);
 
             MoveToPath(player, path);
         }
-        
+
 
         ClearHoverStates();
     }
 
     private async Task MoveToPath(IActor actor, Path<ActorNode> path)
     {
-        foreach (var node in path)
+        foreach (ActorNode node in path)
         {
             if (node.GetActor() == actor)
             {
@@ -180,40 +181,50 @@ public class DefaultBattleState : State
             IReadOnlyList<IGameEntity> targets = card.GetValidTargets();
             if (targets != null)
             {
-                foreach (var target in targets)
+                foreach (IGameEntity target in targets)
                 {
                     if (target is ActorNode node)
                     {
-                        HighlightNode(node);
+                        HighlightNode<NodeHighlightThreatEffectComponent>(node);
                     }
                 }
             }
         }
         else if (input.Selected is ActorNode node)
         {
-            var player = node.Context.GetCurrentBattle().Player;
-            var playerNode = node.Context.GetCurrentBattle().Graph.GetNodeOfActor(player);
+            PlayerActor player = node.Context.GetCurrentBattle().Player;
+            ActorNode playerNode = node.Context.GetCurrentBattle().Graph.GetNodeOfActor(player);
             ActorNodePath path =
                 new ActorNodePath(playerNode, node, false, node.GetActor() == null);
             foreach (ActorNode pathnode in path)
             {
-                HighlightNode(pathnode);
+                HighlightNode<NodeHighlightPathEffectComponent>(pathnode);
             }
         }
         else if (input.Selected is Enemy enemy)
         {
+            List<CubicHexCoord> affected = enemy.Intent.Target.GetAffectedCoordinates(enemy.Coordinate,
+                enemy.Intent.TargetNode.Coordinate);
+            IReadOnlyDictionary<CubicHexCoord, ActorNode> nodes = Battle.GameEntity.Graph.GetNodes();
+            foreach (CubicHexCoord affectedNode in affected)
+            {
+                if (nodes.TryGetValue(affectedNode, out ActorNode entity))
+                {
+                    HighlightNode<NodeHighlightThreatEffectComponent>(entity);
+                }
+            }
             ActorNodeRange range = new ActorNodeRange(enemy.Context.GetCurrentBattle().Graph.GetNodeOfActor(enemy), enemy.MoveSpeed);
             foreach (var rangeNode in range.Nodes)
             {
-                HighlightNode(rangeNode);
+                HighlightNode<NodeHighlightPathEffectComponent>(rangeNode);
             }
         }
     }
 
-    private void HighlightNode(ActorNode pathnode)
+    private void HighlightNode<T>(ActorNode pathnode) where T : EffectComponent
     {
         HoverHandles.Add(Battle.GetNodeProxyByEntity(pathnode)
-            .GetComponentInChildren<NodeHighlightPathEffectComponent>(true)
+            .GetComponentInChildren<T>(true)
             .GetEffectHandle());
     }
 }
@@ -235,7 +246,7 @@ public class CardSelectedState : State
         }
         else
         {
-            var targetCards = SelectedCard.GameEntity.GetValidTargets().OfType<Card>();
+            IEnumerable<Card> targetCards = SelectedCard.GameEntity.GetValidTargets().OfType<Card>();
             if (targetCards.Any())
             {
                 InputManager.Instance.SelectionDisplay.DisplaySelectableCards(targetCards);

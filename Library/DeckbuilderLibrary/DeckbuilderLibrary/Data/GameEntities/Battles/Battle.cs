@@ -154,7 +154,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
             data.PrepareBattle(Player);
             
 
-            foreach (ActorNode slot in Graph.Nodes.Values)
+            foreach (ActorNode slot in Graph.GetNodes().Values)
             {
                 if (slot.GetActor() != null && slot.GetActor() != Player) //hack
                     AddEnemy((Actor)slot.GetActor()); //might need set access instead.

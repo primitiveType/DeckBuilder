@@ -225,7 +225,7 @@ namespace DeckbuilderLibrary.Data
         public T CreateIntent<T>(Actor owner) where T : Intent, new()
         {
             T intent = CreateEntityNoInitialize<T>();
-            intent.OwnerId = owner.Id;
+            intent.Owner.Entity = owner;
             InitializeEntity(intent);
             return intent;
         }

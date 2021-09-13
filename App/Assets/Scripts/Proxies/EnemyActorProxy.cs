@@ -40,16 +40,16 @@ public class EnemyActorProxy : ActorProxy<Actor>
     {
         if (GameEntity is Enemy enemy)
         {
-            if (enemy.Intent?.Target != null)
-            {
-                NodeProxy node = GetComponentInParent<BattleProxy>()
-                    .GetNodeProxyByEntity(enemy.Intent.Target as ActorNode); //assumes nodes always target
-                IntentProxy intentProxy = Instantiate(IntentProxyPrefab, node.Visual.transform, false);
-                intentProxy.transform.localRotation = Quaternion.identity;
-                intentProxy.transform.localPosition = Vector3.up * .01f;
-
-                intentProxy.Initialize(enemy.Intent);
-            }
+            // if (enemy.Intent?.Target != null)
+            // {
+            //     NodeProxy node = GetComponentInParent<BattleProxy>()
+            //         .GetNodeProxyByEntity(enemy.Intent.Target as ActorNode); //assumes nodes always target
+            //     IntentProxy intentProxy = Instantiate(IntentProxyPrefab, node.Visual.transform, false);
+            //     intentProxy.transform.localRotation = Quaternion.identity;
+            //     intentProxy.transform.localPosition = Vector3.up * .01f;
+            //
+            //     intentProxy.Initialize(enemy.Intent);
+            // }
         }
     }
 

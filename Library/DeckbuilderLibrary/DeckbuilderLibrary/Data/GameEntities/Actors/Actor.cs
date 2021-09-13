@@ -12,7 +12,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
         public int Armor => Resources.GetResourceAmount<Armor>();
 
         [JsonProperty] public Resources.Resources Resources { get; private set; }
-        private CubicHexCoord Coordinate { get; set; }
+        public CubicHexCoord Coordinate { get; private set; }
         CubicHexCoord ICoordinateProperty.Coordinate => Coordinate;
 
         CubicHexCoord IInternalCoordinateProperty.Coordinate
@@ -31,6 +31,20 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
             }
 
             Resources.Owner = this;
+            Context.Events.ActorDied += OnActorDied;
+        }
+
+        private void OnActorDied(object sender, ActorDiedEventArgs args)
+        {
+            if (args.Actor != this)
+            {
+                return;
+            }
+
+            if (Context.GetCurrentBattle().Graph.TryGetNode(Coordinate, out ActorNode node))
+            {
+                node.TryRemove(this);
+            }
         }
 
         void IInternalActor.TryDealDamage(GameEntity source, int damage, out int totalDamage, out int healthDamage)

@@ -43,7 +43,7 @@ public class OverWorld : MonoBehaviour
 
     private void Test()
     {
-        Context.StartBattle(Tools.Player, Context.CreateEntity<BasicBattleData>());
+        Context.StartBattle(Tools.Player, Context.CreateEntity<FunBattleData>());
         //need to figure out how we are going to pass battle data to the scene.
         SceneManager.LoadScene("BattleScene");
     }

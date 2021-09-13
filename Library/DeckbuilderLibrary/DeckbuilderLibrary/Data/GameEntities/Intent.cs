@@ -1,5 +1,7 @@
 using System;
 using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Resources;
 
 namespace DeckbuilderLibrary.Data.GameEntities
 {
@@ -7,9 +9,10 @@ namespace DeckbuilderLibrary.Data.GameEntities
     public abstract class Intent : GameEntity, IDisposable
     {
         public abstract string GetDescription { get; }
-        public int OwnerId { get; internal set; } = -1;
+        public EntityReference<IActor> Owner { get; } = new EntityReference<IActor>();
 
-        public abstract GameEntity Target { get; }
+        public abstract TargetingInfo Target { get; }
+        public abstract ActorNode TargetNode { get;  }
 
         protected override void Initialize()
         {

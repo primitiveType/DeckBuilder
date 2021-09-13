@@ -35,12 +35,10 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
         {
             Move();
             IBattle currentBattle = Context.GetCurrentBattle();
-            if (currentBattle.Graph.GetAdjacentActors(this).Contains(currentBattle.Player))
-            {
-                var intent = Context.CreateIntent<DamageIntent>(this);
-                intent.DamageAmount = Strength;
-                SetIntent(intent);
-            }
+
+            var intent = Context.CreateIntent<DamageIntent>(this);
+            intent.DamageAmount = Strength;
+            SetIntent(intent);
         }
 
         private void Move()

@@ -11,12 +11,14 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles.TestBattles
             TestEnemyNoMovement enemy = Context.CreateActor<TestEnemyNoMovement>(100, 0);
             TestEnemyNoMovement enemy2 = Context.CreateActor<TestEnemyNoMovement>(100, 0);
             var playerCoord = new AxialHexCoord(0, 0).ToCubic();
-            Graph.Nodes[playerCoord].TryAdd(player);
+
+
+            Graph.GetNodes()[playerCoord].TryAdd(player);
 
             var enemyCoord = playerCoord.Neighbor(DirectionEnum.E);
-            Graph.Nodes[enemyCoord].TryAdd(enemy);
+            Graph.GetNodes()[enemyCoord].TryAdd(enemy);
             var enemyCoord2 = enemyCoord.Neighbor(DirectionEnum.E);
-            Graph.Nodes[enemyCoord2].TryAdd(enemy2);
+            Graph.GetNodes()[enemyCoord2].TryAdd(enemy2);
         }
     }
 }

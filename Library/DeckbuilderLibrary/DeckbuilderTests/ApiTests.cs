@@ -28,7 +28,6 @@ namespace DeckbuilderTests
         ///
         /// approach: at the start of battle, the deck is copied.
         /// cards that need to increment a permanent value store it on the context as a "rule", along with the id of the card, so that it works in a sim context.
-
         [SetUp]
         public void Setup()
         {
@@ -216,7 +215,7 @@ namespace DeckbuilderTests
             card.PlayCard(target);
             Assert.That(target.Health, Is.EqualTo(88)); //should deal 7 if target is vulnerable.
         }
-        
+
 
         [Test]
         public void PoisonDealsDamageAndDecrements()
@@ -314,8 +313,6 @@ namespace DeckbuilderTests
             }
         }
 
-
-    
 
         [Test]
         public void TestThatSetupWorks()
@@ -439,7 +436,6 @@ namespace DeckbuilderTests
             }
         }
 
-    
 
         private Card FindCardInDeck(int cardId)
         {
@@ -546,11 +542,13 @@ namespace DeckbuilderTests
 
             SerializableDictionary<CubicHexCoord, string> dict = new SerializableDictionary<CubicHexCoord, string>();
             dict.Add(tester, "testerino");
-            
-            string dictStr = JsonConvert.SerializeObject(dict, m_JsonSerializerSettings);
-            SerializableDictionary<CubicHexCoord, string> copyDict = JsonConvert.DeserializeObject<SerializableDictionary<CubicHexCoord, string>>(dictStr, m_JsonSerializerSettings);
 
+            string dictStr = JsonConvert.SerializeObject(dict, m_JsonSerializerSettings);
+            SerializableDictionary<CubicHexCoord, string> copyDict =
+                JsonConvert.DeserializeObject<SerializableDictionary<CubicHexCoord, string>>(dictStr,
+                    m_JsonSerializerSettings);
         }
+
         [Test]
         public void TestCopiedContextGetsSerializedData()
         {
@@ -568,7 +566,8 @@ namespace DeckbuilderTests
             Card copiedCard = copiedContext.GetCurrentBattle().Deck.AllCards().First(c => c.Id == card.Id);
             Assert.That(copiedCard.Context, Is.Not.Null);
             IActor copiedTarget = (IActor)copiedCard.GetValidTargets().First();
-            Assert.That(copiedContext.GetCurrentBattle().Graph.Nodes[coord].GetActor() , Is.EqualTo(copiedTarget));
+            copiedContext.GetCurrentBattle().Graph.TryGetNode(coord, out ActorNode node);
+            Assert.That(node.GetActor(), Is.EqualTo(copiedTarget));
             copiedCard.PlayCard(copiedTarget);
             Assert.That(copiedContext.GetEnemies().First().Health,
                 Is.EqualTo(97)); //context copied after the first play so it should deal 2 damage.
@@ -599,8 +598,8 @@ namespace DeckbuilderTests
             }
         };
 
-        protected PlayerActor Player { get;  set; }
-        
+        protected PlayerActor Player { get; set; }
+
         protected void CreateDeck(IContext context)
         {
             foreach (Card card in CreateCards(context))
@@ -608,10 +607,12 @@ namespace DeckbuilderTests
                 Context.PlayerDeck.Add(card);
             }
         }
+
         protected Card FindCardInDeck(string name)
         {
             return Context.GetCurrentBattle().Deck.AllCards().First(card => card.Name == name);
         }
+
         private IEnumerable<Card> CreateCards(IContext context)
         {
             yield return context.CreateEntity<TestAttack5Damage>();

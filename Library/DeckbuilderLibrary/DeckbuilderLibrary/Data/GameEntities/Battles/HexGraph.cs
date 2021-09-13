@@ -10,7 +10,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
     public class HexGraph : BattleGraph
     {
         [JsonProperty]
-        internal SerializableDictionary<CubicHexCoord, ActorNode> Nodes { get; } =
+        private SerializableDictionary<CubicHexCoord, ActorNode> Nodes { get; } =
             new SerializableDictionary<CubicHexCoord, ActorNode>();
 
         public HexGrid Grid { get; private set; }
@@ -20,6 +20,11 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
             return Nodes;
         }
 
+        public bool TryGetNode(CubicHexCoord coord, out ActorNode node)
+        {
+            return Nodes.TryGetValue(coord, out node);
+        }
+        
         private int radius = 10;
 
         protected override void Initialize()
