@@ -4,6 +4,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
 {
     public class EntityReference : IGameEntity, IInternalInitialize
     {
+        [JsonIgnore]
         public int Id => Entity.Id;
 
         [JsonIgnore]
@@ -35,20 +36,19 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
             ((IInternalGameContext)GameContext.CurrentContext).ToInitializeAdd(this);
         }
 
-        public EntityReference(GameEntity entity)
+        public EntityReference(IGameEntity entity)
         {
             Entity = entity;
         }
 
         public void InternalInitialize()
         {
-            if (Entity == null)
+            if (Entity == null )
             {
-                //     if (EntityId == -1)
-                //     {
-                //         throw new ArgumentException("Tried to initialize resource with no Entity info!");
-                //     }
-
+                if (EntityId == -1)
+                {
+                    return;
+                }
                 Entity = GameContext.CurrentContext.GetCurrentBattle().GetActorById(EntityId);
             }
             else

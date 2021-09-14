@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities
 {
@@ -10,7 +11,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
             Context.GetDamageAmount(this, DamageAmount, TargetNode.GetActor(),
                 Context.GetCurrentBattle().GetActorById(OwnerId)).ToString();
 
-        private ActorNode TargetNode { get; set; }
+        [JsonIgnore]private ActorNode TargetNode { get; set; }
 
         public override GameEntity Target => TargetNode;
 

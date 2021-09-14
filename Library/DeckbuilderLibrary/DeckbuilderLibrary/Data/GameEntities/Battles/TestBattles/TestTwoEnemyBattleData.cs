@@ -1,15 +1,15 @@
 using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Actors.Test;
 
-namespace DeckbuilderLibrary.Data.GameEntities.Battles
+namespace DeckbuilderLibrary.Data.GameEntities.Battles.TestBattles
 {
-    public class TwoEnemyBattleData : BattleData<HexGraph>
+    public class TestTwoEnemyBattleData : BattleData<HexGraph>
     {
         public override void PrepareBattle(Actor player)
         {
-
-            BasicEnemy enemy = Context.CreateActor<BasicEnemy>(100, 0);
-            BasicEnemy enemy2 = Context.CreateActor<BasicEnemy>(100, 0);
+            TestEnemyNoMovement enemy = Context.CreateActor<TestEnemyNoMovement>(100, 0);
+            TestEnemyNoMovement enemy2 = Context.CreateActor<TestEnemyNoMovement>(100, 0);
             var playerCoord = new AxialHexCoord(0, 0).ToCubic();
             Graph.Nodes[playerCoord].TryAdd(player);
 

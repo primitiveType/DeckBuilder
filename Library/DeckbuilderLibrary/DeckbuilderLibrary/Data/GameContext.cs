@@ -40,7 +40,7 @@ namespace DeckbuilderLibrary.Data
             internalEvents.InvokeTurnEnded(this, new TurnEndedEventArgs());
             internalEvents.InvokeTurnStarted(this, new TurnStartedEventArgs());
         }
-        
+
 
         public ActorNode CreateNode(HexGraph graph, CubicHexCoord coord)
         {
@@ -165,9 +165,14 @@ namespace DeckbuilderLibrary.Data
                         ((GameEntity)internalGameEntity).Id = GetNextEntityId();
                     }
 
-                    internalGameEntity.InternalInitialize();
                     CurrentBattle.AddEntity(internalGameEntity);
                 }
+            }
+
+            for (int i = 0; i < ToInitialize.Count; i++)
+            {
+                IInternalInitialize internalInit = ToInitialize[i];
+                internalInit.InternalInitialize();
             }
 
             ToInitialize.Clear();

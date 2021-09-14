@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ca.axoninteractive.Geometry.Hex;
 using Content.Cards;
 using Content.Cards.TestCards;
 using DeckbuilderLibrary.Data;
@@ -535,11 +536,27 @@ namespace DeckbuilderTests
                     "Deal 4 to target enemy. Then deal 1.")); //this indicates that the out-of-battle card had its battleproperty reset to zero.
         }
 
+
+        [Test]
+        public void HexSerialization()
+        {
+            CubicHexCoord tester = new CubicHexCoord(1, -1, 0);
+            string testerStr = JsonConvert.SerializeObject(tester, m_JsonSerializerSettings);
+            CubicHexCoord copy = JsonConvert.DeserializeObject<CubicHexCoord>(testerStr, m_JsonSerializerSettings);
+
+            SerializableDictionary<CubicHexCoord, string> dict = new SerializableDictionary<CubicHexCoord, string>();
+            dict.Add(tester, "testerino");
+            
+            string dictStr = JsonConvert.SerializeObject(dict, m_JsonSerializerSettings);
+            SerializableDictionary<CubicHexCoord, string> copyDict = JsonConvert.DeserializeObject<SerializableDictionary<CubicHexCoord, string>>(dictStr, m_JsonSerializerSettings);
+
+        }
         [Test]
         public void TestCopiedContextGetsSerializedData()
         {
             Card card = FindCardInDeck("DealMoreDamageEachPlay");
             IActor target = (IActor)card.GetValidTargets().First();
+            CubicHexCoord coord = target.Coordinate;
             Assert.That(target.Health, Is.EqualTo(100));
             card.PlayCard(target);
             Assert.That(target.Health, Is.EqualTo(99));
@@ -551,6 +568,7 @@ namespace DeckbuilderTests
             Card copiedCard = copiedContext.GetCurrentBattle().Deck.AllCards().First(c => c.Id == card.Id);
             Assert.That(copiedCard.Context, Is.Not.Null);
             IActor copiedTarget = (IActor)copiedCard.GetValidTargets().First();
+            Assert.That(copiedContext.GetCurrentBattle().Graph.Nodes[coord].GetActor() , Is.EqualTo(copiedTarget));
             copiedCard.PlayCard(copiedTarget);
             Assert.That(copiedContext.GetEnemies().First().Health,
                 Is.EqualTo(97)); //context copied after the first play so it should deal 2 damage.
@@ -576,7 +594,8 @@ namespace DeckbuilderTests
             ContractResolver = new PrivateSetterContractResolver(),
             Converters = new List<JsonConverter>
             {
-                new GameEntityConverter()
+                new GameEntityConverter(),
+                new StringToHexConverter()
             }
         };
 

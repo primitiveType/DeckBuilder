@@ -1,18 +1,24 @@
 using System.Collections.Generic;
+using System.Linq;
 using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Battles
 {
     public class HexGraph : BattleGraph
     {
-        internal Dictionary<CubicHexCoord, ActorNode> Nodes { get; } = new Dictionary<CubicHexCoord, ActorNode>();
+        [JsonProperty]
+        internal SerializableDictionary<CubicHexCoord, ActorNode> Nodes { get; } =
+            new SerializableDictionary<CubicHexCoord, ActorNode>();
+
         public HexGrid Grid { get; private set; }
 
         public IReadOnlyDictionary<CubicHexCoord, ActorNode> GetNodes()
         {
-            return Nodes;
+            return null;
+            // return Nodes;
         }
 
         private int radius = 10;
@@ -21,6 +27,10 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
         {
             base.Initialize();
             Grid = new HexGrid(.5f);
+            if (Nodes.Any())
+            {
+                return;
+            }
 
             for (int i = 0; i < radius; i++)
             {
@@ -37,6 +47,9 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
             List<IActor> neighbors = new List<IActor>();
             foreach (var neighbor in source.Coordinate.Neighbors())
             {
+                if (neighbor == source.Coordinate)
+                    continue;
+
                 if (Nodes.TryGetValue(neighbor, out ActorNode node))
                 {
                     var actor = node.GetActor();
@@ -116,8 +129,9 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
         {
             if (target.GetActor() == owner)
             {
-                return;//trying to move into own space, just do nothing.
+                return; //trying to move into own space, just do nothing.
             }
+
             var targetActor = target.GetActor();
             var prevSpace = GetNodeOfActor(owner);
             //fire event for swap? here or on properties? probably here so its one event? 

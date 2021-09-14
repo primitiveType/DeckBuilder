@@ -6,41 +6,61 @@ using DeckbuilderLibrary.Data.DataStructures;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.GameEntities.Battles;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
+using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities
 {
     public class ActorNode : GameEntity, IHasNeighbours<ActorNode>
     {
-        private EntityReference HexGraph { get; set; } = new EntityReference();
+        [JsonIgnore] private EntityReference HexGraph { get; set; } = new EntityReference();
 
-        public HexGraph Graph => HexGraph.Entity as HexGraph;
+        [JsonIgnore]  public HexGraph Graph => HexGraph.Entity as HexGraph;
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+        }
 
         internal void Initialize(HexGraph graph, CubicHexCoord coord)
         {
             base.Initialize();
             HexGraph.Entity = graph;
             Coordinate = coord;
+            if (CurrentEntities == null)
+            {
+                CurrentEntities = new List<EntityReference>();
+            }
         }
 
         public CubicHexCoord Coordinate { get; private set; }
 
 
-        private List<IGameEntity> CurrentEntities = new List<IGameEntity>();
+        [JsonProperty] public List<EntityReference> CurrentEntities { get; set; }
 
         public void AddEntityNoEvent(IGameEntity player)
         {
-            CurrentEntities.Add(player);
+            CurrentEntities.Add(new EntityReference(player));
         }
 
         public IActor GetActor()
         {
-            return CurrentEntities.OfType<Actor>().FirstOrDefault();
+            return CurrentEntities.Select(er => er.Entity).OfType<Actor>().FirstOrDefault();
         }
 
         public bool TryRemove(IGameEntity entity)
         {
-            return CurrentEntities.Remove(entity);
+            var matches = CurrentEntities.Where(ce => ce.Id == entity.Id).ToList();
+            var numMatches = matches.Count();
+            if (numMatches == 0)
+            {
+                return false;
+            }
+            else if (numMatches > 1)
+            {
+                throw new NotSupportedException("Multiple matches found for entity!");
+            }
+
+            return CurrentEntities.Remove(matches[0]);
         }
 
         public bool TryAdd(IGameEntity entity)
@@ -56,17 +76,18 @@ namespace DeckbuilderLibrary.Data.GameEntities
                 ((IInternalCoordinateProperty)entity).Coordinate = Coordinate;
             }
 
-            CurrentEntities.Add(entity);
+            CurrentEntities.Add(new EntityReference(entity));
             return true;
         }
 
+        [JsonIgnore]
         public IEnumerable<ActorNode> Neighbours
         {
             get
             {
                 foreach (CubicHexCoord coord in Coordinate.Neighbors())
                 {
-                    if(Graph.Nodes.ContainsKey(coord))
+                    if (Graph.Nodes.ContainsKey(coord))
                         yield return Graph.Nodes[coord];
                 }
             }
