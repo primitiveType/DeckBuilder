@@ -17,8 +17,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
 
         public IReadOnlyDictionary<CubicHexCoord, ActorNode> GetNodes()
         {
-            return null;
-            // return Nodes;
+            return Nodes;
         }
 
         private int radius = 10;
