@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using Newtonsoft.Json;
@@ -20,58 +21,10 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
 
         [JsonIgnore] private Dictionary<int, IGameEntity> EntitiesById = new Dictionary<int, IGameEntity>();
 
-        internal Graph<ActorGraphNode, ActorEdge> Slots => Graph.Graph;
-        [JsonProperty] public BattleGraph Graph { get; private set; }
+        [JsonProperty] public HexGraph Graph { get; private set; }
 
 
-        public List<IActor> GetAdjacentActors(IActor source)
-        {
-            return Slots.Edges.Where(n => n.From.ActorNode.Actor == source)
-                .Where(e=>e.To.ActorNode.Actor != null)
-                .Select(e => e.To.ActorNode.Actor)
-                .Distinct()
-                .ToList();
-        }
-
-        public List<IActor> GetAdjacentActors(ActorNode source)
-        {
-            return Slots.Edges.Where(n => n.From.ActorNode == source)
-                .Where(e=>e.To.ActorNode.Actor != null)
-                .Select(e => e.To.ActorNode.Actor)
-                .Distinct()
-                .ToList();
-        }
-
-        public List<ActorNode> GetAdjacentEmptyNodes(ActorNode source)
-        {
-            return Slots.Edges.Where(n => n.From.ActorNode == source)
-                .Select(n => n.To.ActorNode)
-                .Where(n => n.Actor == null)
-                .ToList();
-        }
-
-        public List<ActorNode> GetAdjacentEmptyNodes(IActor source)
-        {
-            return Slots.Edges.Where(n => n.From.ActorNode.Actor == source)
-                .Select(n => n.To.ActorNode)
-                .Where(n => n.Actor == null)
-                .ToList();
-        }
-
-        public ActorNode GetNodeOfActor(IActor actor)
-        {
-            return Slots.Nodes.Where(n => n.ActorNode.Actor == actor).Select(n => n.ActorNode).FirstOrDefault();
-        }
-
-        public void MoveIntoSpace(IActor owner, ActorNode target)
-        {
-            var targetActor = target.Actor;
-            var prevSpace = GetNodeOfActor(owner);
-            //fire event for swap? here or on properties? probably here so its one event? 
-            target.Actor = owner;
-            prevSpace.Actor = targetActor;
-            Events.InvokeActorsSwapped(this, new ActorsSwappedEventArgs(owner, targetActor));
-        }
+      
 
         protected override void Initialize()
         {
@@ -201,10 +154,10 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
             data.PrepareBattle(Player);
             
 
-            foreach (var slot in Slots.Nodes)
+            foreach (ActorNode slot in Graph.Nodes.Values)
             {
-                if (slot.ActorNode.Actor != null && slot.ActorNode.Actor != Player) //hack
-                    AddEnemy((Actor)slot.ActorNode.Actor); //might need set access instead.
+                if (slot.GetActor() != null && slot.GetActor() != Player) //hack
+                    AddEnemy((Actor)slot.GetActor()); //might need set access instead.
             }
         }
     }

@@ -17,6 +17,8 @@ namespace DeckbuilderLibrary.Data.GameEntities
             }
         }
 
+        public virtual int MoveSpeed { get; set; } = 1;
+
         public void SetIntent(Intent intent)
         {
             Intent = intent;

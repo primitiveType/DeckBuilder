@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
@@ -17,7 +18,10 @@ namespace Content.Cards
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
-            return Context.GetCurrentBattle().GetAdjacentEmptyNodes((Actor)Owner);
+            var battle = Context.GetCurrentBattle();
+            var enemy = battle.Enemies.First();
+            var slot = battle.Graph.GetAdjacentEmptyNodes(enemy);
+            return slot;
         }
         
 
@@ -25,7 +29,7 @@ namespace Content.Cards
         {
             base.DoPlayCard(target);
             
-            Context.GetCurrentBattle().MoveIntoSpace(Owner, (ActorNode)target);
+            Context.GetCurrentBattle().Graph.MoveIntoSpace(Owner, (ActorNode)target);
         }
 
         public override bool RequiresTarget { get; } = true;
@@ -46,7 +50,7 @@ namespace Content.Cards
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
-            return Context.GetCurrentBattle().GetAdjacentActors(Owner);
+            return Context.GetCurrentBattle().Graph.GetAdjacentActors(Owner);
         }
 
         public override bool RequiresTarget => true;

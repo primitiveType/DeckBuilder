@@ -1,10 +1,34 @@
 ﻿using System;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.GameEntities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace DeckbuilderLibrary.Data
 {
+ 
+    internal class StringToHexConverter : JsonConverter<CubicHexCoord>
+    {
+        public override bool CanRead { get; } = false;
+        public override bool CanWrite { get; } = false;
+
+        public override void WriteJson(JsonWriter writer, CubicHexCoord value, JsonSerializer serializer)
+        {
+            
+            writer.WriteStartObject();
+            string str = $"{value.x}, {value.y}, {value.z}";
+            writer.WriteRaw(str);
+            writer.WriteEndObject();
+        }
+
+        public override CubicHexCoord ReadJson(JsonReader reader, Type objectType, CubicHexCoord existingValue,
+            bool hasExistingValue,
+            JsonSerializer serializer)
+        {
+            return new CubicHexCoord();
+        }
+    }
+
     internal class GameEntityCloneConverter : GameEntityConverter
     {
         protected override bool IsCloning => true;
@@ -48,15 +72,15 @@ namespace DeckbuilderLibrary.Data
                 serializer.Populate(subReader, existingValue);
             }
 
-            IInternalGameEntity internalGameEntity = ((IInternalGameEntity)existingValue);
+            IInternalInitialize internalGameEntity = ((IInternalInitialize)existingValue);
             internalGameEntity.SetContext(GameContext.CurrentContext);
             if (IsCloning)
             {
                 ((GameEntity)internalGameEntity).Id = -1;
             }
+
             ((IInternalGameContext)existingValue.Context).ToInitializeAdd(internalGameEntity);
             return existingValue;
-           
         }
     }
 }

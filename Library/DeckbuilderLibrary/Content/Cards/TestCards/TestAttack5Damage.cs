@@ -47,7 +47,7 @@ namespace Content.Cards.TestCards
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
-            return Context.GetCurrentBattle().GetAdjacentActors(Owner);
+            return Context.GetCurrentBattle().Graph.GetAdjacentActors(Owner);
         }
 
         public override bool RequiresTarget => false;
@@ -55,7 +55,7 @@ namespace Content.Cards.TestCards
         protected override void DoPlayCard(IGameEntity target)
         {
             base.DoPlayCard(target);
-            foreach (var actor in Context.GetCurrentBattle().GetAdjacentActors(Owner))
+            foreach (var actor in Context.GetCurrentBattle().Graph.GetAdjacentActors(Owner))
             {
                 Context.TryDealDamage(this, Owner, actor as IActor, 5);
             }

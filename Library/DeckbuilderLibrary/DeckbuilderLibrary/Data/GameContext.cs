@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
@@ -35,9 +36,20 @@ namespace DeckbuilderLibrary.Data
 
         public void EndTurn()
         {
-            var internalEvents = ((IInternalBattleEventHandler)Events);
+            IInternalBattleEventHandler internalEvents = (IInternalBattleEventHandler)Events;
             internalEvents.InvokeTurnEnded(this, new TurnEndedEventArgs());
             internalEvents.InvokeTurnStarted(this, new TurnStartedEventArgs());
+        }
+
+
+        public ActorNode CreateNode(HexGraph graph, CubicHexCoord coord)
+        {
+            ActorNode node = CreateEntityNoInitialize<ActorNode>();
+            IInternalGameEntity internalGameEntity = node;
+            internalGameEntity.SetContext(this);
+            node.Initialize(graph, coord);
+
+            return node;
         }
 
         public IBattle GetCurrentBattle()
@@ -87,12 +99,6 @@ namespace DeckbuilderLibrary.Data
             return entity;
         }
 
-        public ActorNode CreateNodeEntity()
-        {
-            var node = CreateEntityNoInitialize<ActorNode>();
-            throw new NotImplementedException();
-            return null;
-        }
 
         private T CreateEntityNoInitialize<T>() where T : GameEntity, new()
         {
@@ -149,7 +155,7 @@ namespace DeckbuilderLibrary.Data
 
         private void InitializeNewObjects()
         {
-            for (var i = 0; i < ToInitialize.Count; i++)
+            for (int i = 0; i < ToInitialize.Count; i++)
             {
                 IInternalInitialize internalInit = ToInitialize[i];
                 if (internalInit is IInternalGameEntity internalGameEntity)
@@ -159,9 +165,14 @@ namespace DeckbuilderLibrary.Data
                         ((GameEntity)internalGameEntity).Id = GetNextEntityId();
                     }
 
-                    internalGameEntity.InternalInitialize();
                     CurrentBattle.AddEntity(internalGameEntity);
                 }
+            }
+
+            for (int i = 0; i < ToInitialize.Count; i++)
+            {
+                IInternalInitialize internalInit = ToInitialize[i];
+                internalInit.InternalInitialize();
             }
 
             ToInitialize.Clear();
@@ -213,7 +224,7 @@ namespace DeckbuilderLibrary.Data
 
         public T CreateIntent<T>(Actor owner) where T : Intent, new()
         {
-            var intent = CreateEntityNoInitialize<T>();
+            T intent = CreateEntityNoInitialize<T>();
             intent.OwnerId = owner.Id;
             InitializeEntity(intent);
             return intent;
@@ -221,7 +232,7 @@ namespace DeckbuilderLibrary.Data
 
         public T CreateActor<T>(int health, int armor) where T : Actor, new()
         {
-            var actor = CreateEntity<T>();
+            T actor = CreateEntity<T>();
             actor.Resources.AddResource<Health>(health);
             actor.Resources.AddResource<Armor>(armor);
             return actor;
@@ -230,13 +241,13 @@ namespace DeckbuilderLibrary.Data
 
         public IBattle StartBattle(PlayerActor player, BattleData data)
         {
-            var battle = CreateEntityNoInitialize<Battle>();
+            Battle battle = CreateEntityNoInitialize<Battle>();
             CurrentBattle = battle;
             ((IInternalGameEvents)Events).SetBattle(battle);
             CurrentContext = this;
             // var tempDeck = CopyDeck(PlayerDeck);
 
-            var battleDeck = CreateEntityNoInitialize<BattleDeck>();
+            BattleDeck battleDeck = CreateEntityNoInitialize<BattleDeck>();
             InitializeEntity(battleDeck);
             foreach (Card card in PlayerDeck)
             {
@@ -255,7 +266,7 @@ namespace DeckbuilderLibrary.Data
             InitializeEntity(battle);
 
             //Player goes first. start the turn.
-            var internalEvents = (IInternalBattleEventHandler)Events;
+            IInternalBattleEventHandler internalEvents = (IInternalBattleEventHandler)Events;
             ((GameEvents)Events).InvokeBattleStarted(this, new BattleStartedArgs());
             internalEvents.InvokeTurnStarted(this, new TurnStartedEventArgs());
 

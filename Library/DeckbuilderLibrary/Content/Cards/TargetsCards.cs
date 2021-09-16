@@ -7,6 +7,7 @@ namespace Content.Cards
 {
     public class TargetsCards : EnergyCard
     {
+        
         protected override void Initialize()
         {
             base.Initialize();

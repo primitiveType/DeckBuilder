@@ -2,7 +2,7 @@ using DeckbuilderLibrary.Data.GameEntities.Actors;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Battles
 {
-    public abstract class BattleData<TGraph> : BattleData where TGraph : BattleGraph, new()
+    public abstract class BattleData<TGraph> : BattleData where TGraph : HexGraph, new()
     {
         public new TGraph Graph => base.Graph as TGraph;
 
@@ -15,7 +15,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
 
     public abstract class BattleData : GameEntity
     {
-        public BattleGraph Graph { get; protected set; }
+        public HexGraph Graph { get; protected set; }
 
         public abstract void PrepareBattle(Actor player);
 
