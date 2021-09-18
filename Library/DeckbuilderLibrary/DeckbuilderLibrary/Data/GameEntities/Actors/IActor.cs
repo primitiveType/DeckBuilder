@@ -7,16 +7,17 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
         int Health { get; }
         int Armor { get; }
         Resources.Resources Resources { get; }
+
+        ActorNode Node { get; }
     }
 
     public interface ICoordinateProperty
     {
         CubicHexCoord Coordinate { get; }
     }
-    
+
     public interface IInternalCoordinateProperty
     {
         CubicHexCoord Coordinate { get; set; }
     }
-   
 }

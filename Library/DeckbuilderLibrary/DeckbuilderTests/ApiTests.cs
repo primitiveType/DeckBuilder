@@ -12,6 +12,7 @@ using DeckbuilderLibrary.Data.GameEntities.Battles;
 using DeckbuilderLibrary.Data.GameEntities.Battles.TestBattles;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
 using DeckbuilderLibrary.Data.GameEntities.Resources.Status;
+using DeckbuilderLibrary.Extensions;
 using JsonNet.ContractResolvers;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -72,11 +73,11 @@ namespace DeckbuilderTests
             Card doubler = FindCardInDeck(nameof(DoubleNextCardDamage));
             Card damage = FindCardInDeck(nameof(TestAttack5Damage));
 
-            var enemy = Context.GetEnemies().First();
+            IActor enemy = Context.GetEnemies().First();
             string text = damage.GetCardText(null);
             //enemy starts with 100 health
             Assert.That(enemy, Has.Property("Health").EqualTo(100));
-            damage.PlayCard(enemy);
+            damage.PlayCard(enemy.Node);
             //this card always deals 5 damage
             Assert.That(enemy, Has.Property("Health").EqualTo(95));
 
@@ -89,7 +90,7 @@ namespace DeckbuilderTests
             Assert.That(text, Does.StartWith("Deal 10 "));
 
             //now verify it actually deals 10 instead of five.
-            damage.PlayCard(enemy);
+            damage.PlayCard(enemy.Node);
             Assert.That(enemy, Has.Property("Health").EqualTo(85));
             //and that the text has reset.
             text = damage.GetCardText(null);
@@ -106,7 +107,7 @@ namespace DeckbuilderTests
             Context.Events.ActorDied += EventsOnActorDied;
             for (int i = 0; i < 20; i++)
             {
-                damage.PlayCard(enemy);
+                damage.PlayCard(enemy.Node);
             }
 
             Assert.That(receivedEvent);
@@ -188,60 +189,6 @@ namespace DeckbuilderTests
             Assert.That(Context.GetCurrentBattle().Player, Has.Property("Health").EqualTo(95));
         }
 
-        [Test]
-        public void WeakReducesDamageDealt()
-        {
-            Card card = FindCardInDeck("TestAttack5Damage");
-            IActor target = (IActor)card.GetValidTargets().First();
-            Assert.That(target.Health, Is.EqualTo(100));
-            card.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(95));
-            var player = Context.GetCurrentBattle().Player;
-            player.Resources.AddResource<WeakStatusEffect>(3);
-            card.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(92)); //should only deal 3 if player is weak.
-        }
-
-        [Test]
-        public void VulnerableIncreasesDamageDealt()
-        {
-            Card card = FindCardInDeck("TestAttack5Damage");
-            IActor target = (IActor)card.GetValidTargets().First();
-            Assert.That(target.Health, Is.EqualTo(100));
-            card.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(95));
-            var player = Context.GetCurrentBattle().Player;
-            target.Resources.AddResource<VulnerableStatusEffect>(3);
-            card.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(88)); //should deal 7 if target is vulnerable.
-        }
-
-
-        [Test]
-        public void PoisonDealsDamageAndDecrements()
-        {
-            var enemy = Context.GetCurrentBattle().Enemies.First();
-            enemy.Resources.AddResource<PoisonStatusEffect>(5);
-            Assert.That(enemy.Resources.GetResourceAmount<PoisonStatusEffect>(), Is.EqualTo(5));
-
-            Assert.That(enemy, Has.Property("Health").EqualTo(100));
-            Context.EndTurn();
-            Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5));
-            Context.EndTurn();
-            Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4));
-            Context.EndTurn();
-            Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3));
-            Context.EndTurn();
-            Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3 - 2));
-            Context.EndTurn();
-            Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3 - 2 - 1));
-
-            //poison should be gone at this point
-            Context.EndTurn();
-            Assert.That(enemy, Has.Property("Health").EqualTo(100 - 5 - 4 - 3 - 2 - 1));
-
-            Assert.That(enemy.Resources.GetResourceAmount<PoisonStatusEffect>(), Is.EqualTo(0));
-        }
 
         [Test]
         public void BattleEnds_WhenAllEnemiesKilled()
@@ -253,7 +200,7 @@ namespace DeckbuilderTests
             int test = 0;
             for (int i = 0; i < 20; i++)
             {
-                damage.PlayCard(enemy);
+                damage.PlayCard(enemy.Node);
                 test = i;
             }
 
@@ -279,7 +226,7 @@ namespace DeckbuilderTests
             int test = 0;
             for (int i = 0; i < 20; i++)
             {
-                damage.PlayCard(enemy);
+                damage.PlayCard(enemy.Node);
                 test = i;
             }
 
@@ -292,7 +239,7 @@ namespace DeckbuilderTests
             enemy = Context.GetEnemies().First();
             for (int i = 0; i < 20; i++)
             {
-                damage.PlayCard(enemy);
+                damage.PlayCard(enemy.Node);
                 if (i % 5 == 0)
                 {
                     Context.EndTurn();
@@ -332,12 +279,12 @@ namespace DeckbuilderTests
 
             Assert.That(targets, Has.Count.EqualTo(Context.GetEnemies().Count));
             Assert.That(targets, Has.Count.EqualTo(1));
-            IActor firstTarget = (IActor)targets[0];
+            ActorNode firstTarget = (ActorNode)targets[0];
             IActor firstEnemy = Context.GetEnemies()[0];
-            Assert.That(firstTarget.Armor, Is.EqualTo(firstEnemy.Armor));
-            Assert.That(firstTarget.Health, Is.EqualTo(firstEnemy.Health));
-            Assert.That(firstTarget.Id, Is.EqualTo(firstEnemy.Id));
-            Assert.That(firstTarget, Is.EqualTo(firstEnemy));
+            Assert.That(firstTarget.GetActor().Armor, Is.EqualTo(firstEnemy.Armor));
+            Assert.That(firstTarget.GetActor().Health, Is.EqualTo(firstEnemy.Health));
+            Assert.That(firstTarget.Id, Is.EqualTo(firstEnemy.Node.Id));
+            Assert.That(firstTarget, Is.EqualTo(firstEnemy.Node));
         }
 
 
@@ -345,10 +292,10 @@ namespace DeckbuilderTests
         public void TestAttackDealsDamage()
         {
             Card card = FindCardInDeck("TestAttack5Damage");
-            IActor target = (IActor)card.GetValidTargets().First();
-            Assert.That(target.Health, Is.EqualTo(100));
+            ActorNode target = (ActorNode)card.GetValidTargets().First();
+            Assert.That(target.GetActor().Health, Is.EqualTo(100));
             card.PlayCard(target);
-            Assert.That(target.Health, Is.LessThan(100));
+            Assert.That(target.GetActor().Health, Is.LessThan(100));
         }
 
         [Test]
@@ -365,11 +312,11 @@ namespace DeckbuilderTests
         {
             bool gotEvent = false;
             Card card = FindCardInDeck("TestAttack5Damage");
-            IActor target = (IActor)card.GetValidTargets().First();
+            ActorNode target = (ActorNode)card.GetValidTargets().First();
             Context.Events.DamageDealt += GameEventHandlerOnDamageDealt;
-            Assert.That(target.Health, Is.EqualTo(100));
+            Assert.That(target.GetActor().Health, Is.EqualTo(100));
             card.PlayCard(target);
-            Assert.That(target.Health, Is.LessThan(100));
+            Assert.That(target.GetActor().Health, Is.LessThan(100));
             Assert.That(gotEvent);
 
 
@@ -378,7 +325,7 @@ namespace DeckbuilderTests
                 gotEvent = true;
                 Assert.That(args.HealthDamage, Is.EqualTo(5));
                 Assert.That(args.TotalDamage, Is.EqualTo(5));
-                Assert.That(args.ActorId, Is.EqualTo(target.Id));
+                Assert.That(args.ActorId, Is.EqualTo(target.GetActor().Id));
             }
         }
 
@@ -392,7 +339,7 @@ namespace DeckbuilderTests
             Assert.That(Context.GetCurrentBattle().Deck.HandPile.Cards, Contains.Item(cardToPlay));
             Assert.That(Context.GetCurrentBattle().Deck.DiscardPile.Cards, !Contains.Item(cardToPlay));
 
-            IActor target = (IActor)cardToPlay.GetValidTargets()[0];
+            ActorNode target = (ActorNode)cardToPlay.GetValidTargets()[0];
             Context.Events.CardMoved += OnCardMoved;
             cardToPlay.PlayCard(target);
             Assert.That(Context.GetCurrentBattle().Deck.HandPile.Cards, !Contains.Item(cardToPlay));
@@ -417,7 +364,7 @@ namespace DeckbuilderTests
         {
             bool receivedMoveEvent = false;
             Card cardToPlay = FindCardInDeck("Attack10DamageExhaust");
-            IActor target = (IActor)cardToPlay.GetValidTargets()[0];
+            ActorNode target = (ActorNode)cardToPlay.GetValidTargets()[0];
             Context.Events.CardMoved += DeckOnCardMoved;
             cardToPlay.PlayCard(target);
             Assert.That(Context.GetCurrentBattle().Deck.DrawPile.Cards, !Contains.Item(cardToPlay));
@@ -455,14 +402,14 @@ namespace DeckbuilderTests
                 Is.EqualTo(Context.GetCurrentBattle().Enemies.First().Id));
 
             Card card = FindCardInDeck("DealMoreDamageEachPlay");
-            IActor target = (IActor)card.GetValidTargets().First();
-            Assert.That(target.Health, Is.EqualTo(100));
+            ActorNode target = (ActorNode)card.GetValidTargets().First();
+            Assert.That(target.GetActor().Health, Is.EqualTo(100));
             card.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(99));
+            Assert.That(target.GetActor().Health, Is.EqualTo(99));
 
             Assert.That(copiedContext.GetEnemies().First().Health, Is.EqualTo(100));
             Card copiedCard = copiedContext.GetCurrentBattle().Deck.AllCards().First(c => c.Id == card.Id);
-            IActor copiedTarget = (IActor)copiedCard.GetValidTargets().First();
+            ActorNode copiedTarget = (ActorNode)copiedCard.GetValidTargets().First();
             copiedCard.PlayCard(copiedTarget);
             Assert.That(copiedContext.GetEnemies().First().Health, Is.EqualTo(99)); //should have only dealt 1 damage
         }
@@ -478,15 +425,15 @@ namespace DeckbuilderTests
             Card card = FindCardInDeck("DealMoreDamageEachPlay");
             Card copy = Context.CopyCard(card);
             Context.GetCurrentBattle().Deck.HandPile.Cards.Add(copy);
-            IActor target = (IActor)card.GetValidTargets().First();
-            Assert.That(target.Health, Is.EqualTo(100));
+            ActorNode target = (ActorNode)card.GetValidTargets().First();
+            Assert.That(target.GetActor().Health, Is.EqualTo(100));
             card.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(99));
+            Assert.That(target.GetActor().Health, Is.EqualTo(99));
 
             copy.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(98));
+            Assert.That(target.GetActor().Health, Is.EqualTo(98));
             copy.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(96));
+            Assert.That(target.GetActor().Health, Is.EqualTo(96));
         }
 
         [Test]
@@ -496,20 +443,20 @@ namespace DeckbuilderTests
                 (BattleStateAndPermanentState)FindCardInDeck("BattleStateAndPermanentState");
             Assert.That(Context.PlayerDeck.Contains(card));
 
-            IActor target = (IActor)card.GetValidTargets().First();
-            Assert.That(target.Health, Is.EqualTo(100));
+            ActorNode target = (ActorNode)card.GetValidTargets().First();
+            Assert.That(target.GetActor().Health, Is.EqualTo(100));
             card.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(98));
+            Assert.That(target.GetActor().Health, Is.EqualTo(98));
 
             //end the battle
             ((IInternalBattleEventHandler)Context.Events).InvokeBattleEnded(this, new BattleEndedEventArgs(true));
             //start new battle
             var player = Context.GetCurrentBattle().Player;
             Context.StartBattle(player, Context.CreateEntity<BasicBattleData>());
-            target = (IActor)card.GetValidTargets().First();
-            Assert.That(target.Health, Is.EqualTo(100));
+            target = (ActorNode)card.GetValidTargets().First();
+            Assert.That(target.GetActor().Health, Is.EqualTo(100));
             card.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(97));
+            Assert.That(target.GetActor().Health, Is.EqualTo(97));
 
             BattleStateAndPermanentState copy = (BattleStateAndPermanentState)Context.CopyCard(card);
             Assert.That(copy.TimesPlayed, Is.EqualTo(card.TimesPlayed));
@@ -517,7 +464,7 @@ namespace DeckbuilderTests
             Context.GetCurrentBattle().Deck.DrawPile.Cards.Add(copy);
             //next attack should deal 5
             copy.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(92));
+            Assert.That(target.GetActor().Health, Is.EqualTo(92));
 
             //this code right here is probably what we need to do to create an out-of-battle context, but like every time the game state dirties and the player is checking their deck.
             GameContext outOfBattleContext = GetCopiedContext();
@@ -553,11 +500,11 @@ namespace DeckbuilderTests
         public void TestCopiedContextGetsSerializedData()
         {
             Card card = FindCardInDeck("DealMoreDamageEachPlay");
-            IActor target = (IActor)card.GetValidTargets().First();
+            ActorNode target = (ActorNode)card.GetValidTargets().First();
             CubicHexCoord coord = target.Coordinate;
-            Assert.That(target.Health, Is.EqualTo(100));
+            Assert.That(target.GetActor().Health, Is.EqualTo(100));
             card.PlayCard(target);
-            Assert.That(target.Health, Is.EqualTo(99));
+            Assert.That(target.GetActor().Health, Is.EqualTo(99));
 
             var copiedContext = GetCopiedContext();
             GameContext.CurrentContext = copiedContext;
@@ -565,9 +512,9 @@ namespace DeckbuilderTests
 
             Card copiedCard = copiedContext.GetCurrentBattle().Deck.AllCards().First(c => c.Id == card.Id);
             Assert.That(copiedCard.Context, Is.Not.Null);
-            IActor copiedTarget = (IActor)copiedCard.GetValidTargets().First();
+            ActorNode copiedTarget = (ActorNode)copiedCard.GetValidTargets().First();
             copiedContext.GetCurrentBattle().Graph.TryGetNode(coord, out ActorNode node);
-            Assert.That(node.GetActor(), Is.EqualTo(copiedTarget));
+            Assert.That(node, Is.EqualTo(copiedTarget));
             copiedCard.PlayCard(copiedTarget);
             Assert.That(copiedContext.GetEnemies().First().Health,
                 Is.EqualTo(97)); //context copied after the first play so it should deal 2 damage.

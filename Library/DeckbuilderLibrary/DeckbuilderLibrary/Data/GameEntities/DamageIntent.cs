@@ -1,45 +1,28 @@
 using System;
+using System.Collections.Generic;
 using ca.axoninteractive.Geometry.Hex;
-using DeckbuilderLibrary.Data.GameEntities.Actors;
 using Newtonsoft.Json;
-using NUnit.Framework.Constraints;
 
 namespace DeckbuilderLibrary.Data.GameEntities
 {
     public class DamageIntent : Intent
     {
-        private ActorNode m_TargetNode;
+        private TargetingInfo m_Target;
         public int DamageAmount { get; set; }
 
         public override string GetDescription =>
-            Context.GetDamageAmount(this, DamageAmount, TargetNode.GetActor(),
+            Context.GetDamageAmount(this, DamageAmount, null,
                 Owner.Entity).ToString();
 
-        [JsonIgnore] public override ActorNode TargetNode => m_TargetNode;
 
-        public override TargetingInfo Target { get; } = new HoneyCombTargeting();
+        public TargetingInfo Affected { get; } = new HoneyCombTargeting();
+
+        public override TargetingInfo Target => m_Target;
 
         protected override void Initialize()
         {
             base.Initialize();
-            var battle = Context.GetCurrentBattle();
-
-            var playerCoord = Context.GetCurrentBattle().Player.Coordinate;
-            var ownerCoord = Owner.Entity.Coordinate;
-            var distance = ownerCoord.DistanceTo(playerCoord);
-            if (Target.Range >= distance)
-            {
-                m_TargetNode = battle.Graph.GetNodeOfActor(battle.Player);
-            }
-            else
-            {
-                m_TargetNode = null;
-                var line = ownerCoord.LineTo(playerCoord);
-                if (Context.GetCurrentBattle().Graph.TryGetNode(line[Target.Range], out ActorNode node))
-                {
-                    m_TargetNode = node;
-                }
-            }
+            m_Target = new ClosestInRangeTargetingInfo(Owner.Entity, 4);
         }
 
         protected override void Trigger()
@@ -55,17 +38,34 @@ namespace DeckbuilderLibrary.Data.GameEntities
                 throw new NotSupportedException("Intent with no owner was triggered!");
             }
 
-            foreach (var coord in Target.GetAffectedCoordinates(Owner.Entity.Coordinate, TargetNode.Coordinate))
+            foreach (CubicHexCoord affected in GetAffectedCoords())
             {
-                if (battle.Graph.TryGetNode(coord, out ActorNode node))
+                if (battle.Graph.TryGetNode(affected, out ActorNode node))
                 {
-                    var actor = node.GetActor();
-                    if (actor != null)
-                    { //SHould probably change this to actually target nodes
-                        Context.TryDealDamage(this, Owner.Entity, actor, DamageAmount);
-                    }
+                    Context.TryDealDamage(this, Owner.Entity, node, DamageAmount);
                 }
             }
+        }
+
+        private CubicHexCoord GetTargetCoord()
+        {
+            return Context.GetCurrentBattle().Player.Coordinate;
+        }
+
+        public override List<CubicHexCoord> GetAffectedCoords()
+        {
+            List<CubicHexCoord> coords = new List<CubicHexCoord>();
+            var targetCoords = Target.GetCoordinates(GetTargetCoord());
+            foreach (var coord in targetCoords)
+            {
+                var affectedCoords = Affected.GetCoordinates(coord);
+                foreach (var affected in affectedCoords)
+                {
+                    coords.Add(affected);
+                }
+            }
+
+            return coords;
         }
     }
 }

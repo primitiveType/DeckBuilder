@@ -10,11 +10,71 @@ namespace DeckbuilderLibrary.Data.GameEntities
 {
     public class HoneyCombTargeting : TargetingInfo
     {
-        public override int Range { get; } = 4;
-
-        public override List<CubicHexCoord> GetAffectedCoordinates(CubicHexCoord sourceCoord, CubicHexCoord targetCoord)
+        public override List<CubicHexCoord> GetCoordinates(CubicHexCoord targetCoord)
         {
             return targetCoord.Neighbors().Append(targetCoord).ToList();
+        }
+    }
+
+    public class ClosestInRangeTargetingInfo : TargetingInfo
+    {
+        private readonly ICoordinateProperty m_Source;
+        private readonly int m_Range;
+
+        public ClosestInRangeTargetingInfo(ICoordinateProperty source, int range)
+        {
+            m_Source = source;
+            m_Range = range;
+        }
+
+        public override List<CubicHexCoord> GetCoordinates(CubicHexCoord targetCoord)
+        {
+            int distance = m_Source.Coordinate.DistanceTo(targetCoord);
+            if (m_Range >= distance)
+            {
+                return new List<CubicHexCoord> { targetCoord };
+            }
+
+            CubicHexCoord[] line = m_Source.Coordinate.LineTo(targetCoord);
+            return new List<CubicHexCoord> { line[m_Range] };
+        }
+    }
+
+    public class RangeTargeting : TargetingInfo
+    {
+        private readonly int m_Range;
+
+        public RangeTargeting(int range)
+        {
+            m_Range = range;
+        }
+
+        public override List<CubicHexCoord> GetCoordinates(CubicHexCoord targetCoord)
+        {
+            return targetCoord.AreaAround(m_Range).ToList();
+        }
+    }
+
+    public class SingleTargeting : TargetingInfo
+    {
+        public override List<CubicHexCoord> GetCoordinates(CubicHexCoord targetCoord)
+        {
+            return new List<CubicHexCoord> { targetCoord };
+        }
+    }
+
+    public class RingTargeting : TargetingInfo
+    {
+        private readonly int m_Range;
+
+        public RingTargeting(int range)
+        {
+            m_Range = range;
+        }
+
+        public override List<CubicHexCoord> GetCoordinates(CubicHexCoord targetCoord)
+        {
+            return targetCoord.RingAround(m_Range).ToList();
         }
     }
 
@@ -31,13 +91,24 @@ namespace DeckbuilderLibrary.Data.GameEntities
 
         public virtual bool RequiresTarget { get; } = true;
 
-        public virtual int Range { get; } = 1;
-
         public virtual bool Follows { get; } = false; //probably shouldn't be part of the targeting info????
 
         public abstract List<CubicHexCoord>
-            GetAffectedCoordinates(CubicHexCoord sourceCoord, CubicHexCoord targetCoord);
+            GetCoordinates(CubicHexCoord targetCoord);
 
+        public List<ActorNode> GetNodes(CubicHexCoord targetCoord, IContext context)
+        {
+            List<ActorNode> nodes = new List<ActorNode>();
+            foreach (var coord in GetCoordinates(targetCoord))
+            {
+                if (context.GetCurrentBattle().Graph.TryGetNode(coord, out ActorNode node))
+                {
+                    nodes.Add(node);
+                }
+            }
+
+            return nodes;
+        }
 
         //some attacks have a range and will hit X (1) number of targets within that range.
         //some attacks are a pre-declared aoe.
@@ -60,8 +131,8 @@ namespace DeckbuilderLibrary.Data.GameEntities
         public abstract string Name { get; }
 
         public abstract string GetCardText(IGameEntity target = null);
-
         public abstract IReadOnlyList<IGameEntity> GetValidTargets();
+        public abstract IReadOnlyList<IGameEntity> GetAffectedEntities(IGameEntity target);
 
         public abstract bool RequiresTarget { get; }
 
@@ -83,10 +154,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
 
             DoPlayCard(target);
             ((IInternalBattleEventHandler)Context.Events).InvokeCardPlayed(this, new CardPlayedEventArgs(Id));
-            if (IsPlayable())
-            {
-            }
-            else
+            if (!IsPlayable())
             {
                 Console.WriteLine("Attempted to play card that was not playable!");
             }

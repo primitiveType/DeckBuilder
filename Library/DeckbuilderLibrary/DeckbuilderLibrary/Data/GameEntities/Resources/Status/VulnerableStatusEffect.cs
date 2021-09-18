@@ -14,7 +14,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources.Status
 
         private void EventsOnDamageAmountRequested(object sender, RequestDamageAmountEventArgs args)
         {
-            if (args.Target == Owner)
+            if (args.Target == Owner.Node || args.Target == Owner)
             {
                 args.AddModifier(new DamageAmountModifier{MultiplicativeModifier = .5f});
             }

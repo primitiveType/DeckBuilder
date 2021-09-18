@@ -1,10 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.Property;
 using DeckbuilderLibrary.Data.Property;
+using DeckbuilderLibrary.Extensions;
 using Newtonsoft.Json;
 
 namespace Content.Cards
@@ -36,12 +39,17 @@ namespace Content.Cards
         public override string GetCardText(IGameEntity target = null)
         {
             return
-                $"Deal {Context.GetDamageAmount(this, CurrentDamage, target as IActor, Owner)} to target enemy. Then deal {Context.GetDamageAmount(this, CurrentDamageThisCombat, target as IActor, Owner)}.";
+                $"Deal {Context.GetDamageAmount(this, CurrentDamage, target as ActorNode, Owner)} to target enemy. Then deal {Context.GetDamageAmount(this, CurrentDamageThisCombat, target as ActorNode, Owner)}.";
         }
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
-            return Context.GetEnemies();
+            return Context.GetEnemies().Select(e => e.Node).ToList();
+        }
+
+        public override IReadOnlyList<IGameEntity> GetAffectedEntities(IGameEntity targetCoord)
+        {
+            return new[] { targetCoord };
         }
 
         public override bool RequiresTarget => true;
@@ -49,8 +57,8 @@ namespace Content.Cards
         protected override void DoPlayCard(IGameEntity target)
         {
             base.DoPlayCard(target);
-            Context.TryDealDamage(this, Owner, target as IActor, CurrentDamage);
-            Context.TryDealDamage(this, Owner, target as IActor, CurrentDamageThisCombat);
+            Context.TryDealDamage(this, Owner, target as ActorNode, CurrentDamage);
+            Context.TryDealDamage(this, Owner, target as ActorNode, CurrentDamageThisCombat);
             TimesPlayed += 1;
             TimesPlayedThisCombat.Value += 1;
         }

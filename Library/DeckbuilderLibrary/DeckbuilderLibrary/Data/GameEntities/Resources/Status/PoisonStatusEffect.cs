@@ -11,7 +11,9 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources.Status
         {
             //We don't have the "owner" in the sense that we don't know who applied the poison at this point.
             //Could be an issue... or it might not be.
-            Context.TryDealDamage(this, Owner as IActor, Owner as IActor, Amount);
+
+            var actor = (IActor)Owner;
+            Context.TryDealDamage(this, actor, actor.Node, Amount);
         }
     }
 }

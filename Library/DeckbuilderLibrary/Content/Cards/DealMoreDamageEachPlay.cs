@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using DeckbuilderLibrary.Data;
-using DeckbuilderLibrary.Data.Events;
+using System.Linq;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.GameEntities;
-using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Extensions;
 using Newtonsoft.Json;
 
 namespace Content.Cards
@@ -22,12 +22,17 @@ namespace Content.Cards
         public override string GetCardText(IGameEntity target = null)
         {
             return
-                $"Deal {Context.GetDamageAmount(this, CurrentDamage, target as IActor, Owner)} to target enemy. Increase this card's damage by 1 for the rest of combat.";
+                $"Deal {Context.GetDamageAmount(this, CurrentDamage, target as ActorNode, Owner)} to target enemy. Increase this card's damage by 1 for the rest of combat.";
         }
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
-            return Context.GetEnemies();
+            return Context.GetEnemies().Select(e => e.Node).ToList();
+        }
+
+        public override IReadOnlyList<IGameEntity> GetAffectedEntities(IGameEntity targetCoord)
+        {
+            return new[] { targetCoord };
         }
 
         public override bool RequiresTarget => true;
@@ -35,11 +40,10 @@ namespace Content.Cards
         protected override void DoPlayCard(IGameEntity target)
         {
             base.DoPlayCard(target);
-            Context.TryDealDamage(this, Owner, target as IActor, CurrentDamage);
+            Context.TryDealDamage(this, Owner, target as ActorNode, CurrentDamage);
             TimesPlayed += 1;
         }
 
-  
 
         public override int EnergyCost { get; } = 1;
     }

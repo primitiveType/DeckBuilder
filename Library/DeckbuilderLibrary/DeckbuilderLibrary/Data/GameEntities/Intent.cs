@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
@@ -12,7 +14,6 @@ namespace DeckbuilderLibrary.Data.GameEntities
         public EntityReference<IActor> Owner { get; } = new EntityReference<IActor>();
 
         public abstract TargetingInfo Target { get; }
-        public abstract ActorNode TargetNode { get;  }
 
         protected override void Initialize()
         {
@@ -38,5 +39,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
             Context.Events.TurnEnded -= EventsOnTurnEnded;
             Context.Events.BattleEnded -= OnBattleEnded;
         }
+
+        public abstract List<CubicHexCoord> GetAffectedCoords();
     }
 }

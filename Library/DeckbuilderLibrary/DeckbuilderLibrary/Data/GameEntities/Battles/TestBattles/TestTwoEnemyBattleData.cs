@@ -8,8 +8,8 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles.TestBattles
     {
         public override void PrepareBattle(Actor player)
         {
-            TestEnemyNoMovement enemy = Context.CreateActor<TestEnemyNoMovement>(100, 0);
-            TestEnemyNoMovement enemy2 = Context.CreateActor<TestEnemyNoMovement>(100, 0);
+            DummyEnemy enemy = Context.CreateActor<DummyEnemy>(100, 0);
+            DummyEnemy enemy2 = Context.CreateActor<DummyEnemy>(100, 0);
             var playerCoord = new AxialHexCoord(0, 0).ToCubic();
 
 

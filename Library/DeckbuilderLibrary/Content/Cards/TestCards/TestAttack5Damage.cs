@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Extensions;
 
 namespace Content.Cards.TestCards
 {
@@ -12,13 +15,18 @@ namespace Content.Cards.TestCards
 
         public override string GetCardText(IGameEntity target = null)
         {
-            return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)} to target enemy.";
+            return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as ActorNode, Owner)} to target enemy.";
         }
 
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
-            return Context.GetCurrentBattle().Enemies;
+            return Context.GetCurrentBattle().Enemies.Select(e=>e.Coordinate.ToActorNode(Context)).ToList();
+        }
+
+        public override IReadOnlyList<IGameEntity> GetAffectedEntities(IGameEntity targetCoord)
+        {
+            return new[] { targetCoord };
         }
 
         public override bool RequiresTarget => true;
@@ -26,7 +34,7 @@ namespace Content.Cards.TestCards
         protected override void DoPlayCard(IGameEntity target)
         {
             base.DoPlayCard(target);
-            Context.TryDealDamage(this, Owner, target as IActor, 5);
+            Context.TryDealDamage(this, Owner, target as ActorNode, 5);
         }
 
         public override int EnergyCost { get; } = 0;
@@ -41,13 +49,18 @@ namespace Content.Cards.TestCards
         public override string GetCardText(IGameEntity target = null)
         {
             return
-                $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)} to adjacent enemies.";
+                $"Deal {Context.GetDamageAmount(this, DamageAmount, target as ActorNode, Owner)} to adjacent enemies.";
         }
 
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return Context.GetCurrentBattle().Graph.GetAdjacentActors(Owner);
+        }
+
+        public override IReadOnlyList<IGameEntity> GetAffectedEntities(IGameEntity targetCoord)
+        {
+            return new[] { targetCoord };
         }
 
         public override bool RequiresTarget => false;
@@ -57,7 +70,7 @@ namespace Content.Cards.TestCards
             base.DoPlayCard(target);
             foreach (var actor in Context.GetCurrentBattle().Graph.GetAdjacentActors(Owner))
             {
-                Context.TryDealDamage(this, Owner, actor as IActor, 5);
+                Context.TryDealDamage(this, Owner, actor as ActorNode, 5);
             }
         }
 

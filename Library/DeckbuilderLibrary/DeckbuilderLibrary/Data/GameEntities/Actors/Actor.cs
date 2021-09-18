@@ -1,6 +1,7 @@
 ﻿using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
+using DeckbuilderLibrary.Extensions;
 using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Actors
@@ -12,6 +13,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
         public int Armor => Resources.GetResourceAmount<Armor>();
 
         [JsonProperty] public Resources.Resources Resources { get; private set; }
+        [JsonIgnore]public ActorNode Node => Coordinate.ToActorNode(Context);
         public CubicHexCoord Coordinate { get; private set; }
         CubicHexCoord ICoordinateProperty.Coordinate => Coordinate;
 

@@ -43,13 +43,14 @@ public class PileProxy<TCardProxy> : Proxy<IPile> where TCardProxy : CardProxy
         Destroy(CardProxy.gameObject);
     }
 
-    protected virtual void CreateCardProxy(int argsMovedCard)
+    protected virtual Proxy<Card> CreateCardProxy(int argsMovedCard)
     {
-        TCardProxy cardProxy = Instantiate(CardProxyPrefab);
+        TCardProxy cardProxy = Instantiate(CardProxyPrefab, transform);
         Card cardForProxy = GameEntity.Context.GetCurrentBattle().Deck.AllCards()
             .First(card => card.Id == argsMovedCard);
         cardProxy.Initialize(cardForProxy);
         CardProxies.Add(argsMovedCard, cardProxy);
+        return cardProxy;
     }
 
     private void OnDestroy()
