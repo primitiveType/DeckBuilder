@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
@@ -34,7 +35,7 @@ namespace Content.Cards
 
         public override int EnergyCost { get; } = 0;
     }
-    
+
     public class Attack5DamageAdjacent : EnergyCard
     {
         private int DamageAmount => 5;
@@ -77,16 +78,27 @@ namespace Content.Cards
             return $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)} to adjacent enemies.";
         }
 
+        private TargetingInfo TargetInfo;
+        private TargetingInfo AffectedTargetInfo;
+        private int Range { get; set; }
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             List<IGameEntity> neighborNodes = new List<IGameEntity>();
-            foreach (var node in Context.GetCurrentBattle().Graph.GetNodeOfActor(Owner).Neighbours)
+
+            var myCoord = Owner.Coordinate;
+            var coords = myCoord.AreaAround(Range);
+
+            List<IGameEntity> entities = new List<IGameEntity>();
+            foreach (var coord in coords)
             {
-                neighborNodes.Add(node);
+                if (Context.GetCurrentBattle().Graph.TryGetNode(coord, out ActorNode actorNode))
+                {
+                    entities.Add(actorNode);
+                }
             }
 
-            return neighborNodes;
+            return entities;
         }
 
         public override bool RequiresTarget => false;
@@ -94,24 +106,31 @@ namespace Content.Cards
         protected override void DoPlayCard(IGameEntity target)
         {
             base.DoPlayCard(target);
-            foreach (ActorNode actorNode in GetValidTargets())
+            if (target is ActorNode node)
             {
-                var targetActor = actorNode.GetActor();
-                if (targetActor != null)
+                foreach (CubicHexCoord coord in Info.GetAffectedCoordinates(Owner.Coordinate, node.Coordinate))
                 {
-                    Context.TryDealDamage(this, Owner, targetActor, DamageAmount);
+                    if (Context.GetCurrentBattle().Graph.TryGetNode(coord, out ActorNode targetNode))
+                    {
+                        var targetActor = targetNode.GetActor();
+                        Context.TryDealDamage(this, Owner, targetActor, DamageAmount);
+                    }
                 }
+            }
+            else
+            {
+                throw new ArgumentException("wrong type of entity! expected actor node");
             }
         }
 
         public override int EnergyCost { get; } = 0;
     }
-    
+
     public class RingOfFrost : EnergyCard
     {
         private int DamageAmount => 15;
 
-        public override string Name => nameof(Attack5DamageAdjacent);
+        public override string Name => @"Ring of <style=""blue-ice"">Frost</style>";
 
         public override string GetCardText(IGameEntity target = null)
         {

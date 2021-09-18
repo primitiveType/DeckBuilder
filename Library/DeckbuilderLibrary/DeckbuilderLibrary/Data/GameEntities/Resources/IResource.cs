@@ -4,7 +4,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
 {
     public interface IResource : IGameEntity
     {
-        IActor Owner { get; }
+        IGameEntity Owner { get; }
         int Amount { get; }
         void Add(int amount);
         void Subtract(int amount);
