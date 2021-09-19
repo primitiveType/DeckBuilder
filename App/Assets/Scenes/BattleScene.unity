@@ -357,7 +357,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1254303277}
   - component: {fileID: 1254303276}
-  - component: {fileID: 1254303275}
   - component: {fileID: 1254303274}
   - component: {fileID: 1254303273}
   m_Layer: 0
@@ -414,14 +413,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!81 &1254303275
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1254303272}
-  m_Enabled: 1
 --- !u!20 &1254303276
 Camera:
   m_ObjectHideFlags: 0
@@ -530,7 +521,7 @@ RectTransform:
   - {fileID: 7702882654073517064}
   - {fileID: 2083889974}
   m_Father: {fileID: 1692789472}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -652,8 +643,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 4963875226008180851}
   - {fileID: 1639673640}
+  - {fileID: 4963875226008180851}
   - {fileID: 1391915690}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -1896,7 +1887,7 @@ PrefabInstance:
     - target: {fileID: 7708141058731495316, guid: e4695863c1b579f4b8a3601426db0ba7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7708141058731495316, guid: e4695863c1b579f4b8a3601426db0ba7,
         type: 3}
