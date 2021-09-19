@@ -1,5 +1,7 @@
+using System;
 using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Terrain;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Battles
 {
@@ -38,6 +40,19 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
             if (Graph.TryGetNode(new AxialHexCoord(0, 0).ToCubic(), out var node2))
             {
                 node2.TryAdd(player);
+            }
+
+            var terrain = Context.CreateEntity<BlockedTerrain>();
+            if (Graph.TryGetNode(new AxialHexCoord(4, 5).ToCubic(), out var node3))
+            {
+                if (node3.TryAdd(terrain))
+                {
+                    
+                }
+                else
+                {
+                    throw new Exception("Failed to add terrain!");
+                }
             }
         }
 

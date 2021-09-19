@@ -1,4 +1,5 @@
 using ca.axoninteractive.Geometry.Hex;
+using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.GameEntities.Actors.Test;
 
@@ -23,7 +24,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles.TestBattles
             // Graph.Middle.AddEntityNoEvent(enemy);
         }
     }
-    
+
     public class TestBattleDataWithDummyEnemy : BattleData<HexGraph>
     {
         public override void PrepareBattle(Actor player)
@@ -39,6 +40,8 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles.TestBattles
             {
                 node2.TryAdd(player);
             }
+
+         
             // Graph.Left.AddEntityNoEvent(player);
             // Graph.Middle.AddEntityNoEvent(enemy);
         }

@@ -69,6 +69,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
             {
                 return false;
             }
+
             if (entity is Actor)
             {
                 if (CurrentEntities.OfType<IActor>().Any())
@@ -97,6 +98,32 @@ namespace DeckbuilderLibrary.Data.GameEntities
                     }
                 }
             }
+        }
+
+        public IEnumerable<ActorNode> TraversableNeighbours
+        {
+            get
+            {
+                foreach (CubicHexCoord coord in Coordinate.Neighbors())
+                {
+                    if (!Graph.TryGetNode(coord, out var node))
+                    {
+                        continue;
+                    }
+
+                    if (node.IsBlocked())
+                    {
+                        continue;
+                    }
+
+                    yield return node;
+                }
+            }
+        }
+
+        public bool IsBlocked()
+        {
+            return CurrentEntities.Any(entity => entity.Entity is IBlocksMovement);
         }
     }
 }
