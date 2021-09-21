@@ -9,7 +9,10 @@ public class SelectableComponent : GameEntityComponent, IPointerDownHandler, IPo
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        InputManager.GameEntitySelected(GameEntity);
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            InputManager.GameEntitySelected(GameEntity);
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
