@@ -1,3 +1,4 @@
+using System;
 using DeckbuilderLibrary.Data.DataStructures;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Battles;
@@ -46,14 +47,16 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
             var battle = Context.GetCurrentBattle();
 
             var path = new ActorNodePath(battle.Graph.GetNodeOfActor(this),
-                battle.Graph.GetNodeOfActor(battle.Player));
+                battle.Graph.GetNodeOfActor(battle.Player), MoveSpeed);
 
 
             int moves = 0;
             foreach (var node in path)
             {
                 if (moves >= MoveSpeed)
-                    break;
+                {
+                    throw new NotSupportedException("what in the sam hell.");
+                }
 
 
                 battle.Graph.MoveIntoSpace(this, node);

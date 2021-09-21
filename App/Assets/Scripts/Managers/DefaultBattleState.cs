@@ -34,7 +34,7 @@ public class DefaultBattleState : State
             PlayerActor player = node.Context.GetCurrentBattle().Player;
             ActorNode playerNode = node.Context.GetCurrentBattle().Graph.GetNodeOfActor(player);
             ActorNodePath path =
-                new ActorNodePath(playerNode, node, false, node.GetActor() == null);
+                new ActorNodePath(playerNode, node, 100, false, node.GetActor() == null);
 
             MoveToPath(player, path);
         }
@@ -85,7 +85,7 @@ public class DefaultBattleState : State
             PlayerActor player = node.Context.GetCurrentBattle().Player;
             ActorNode playerNode = node.Context.GetCurrentBattle().Graph.GetNodeOfActor(player);
             ActorNodePath path =
-                new ActorNodePath(playerNode, node, false, node.GetActor() == null);
+                new ActorNodePath(playerNode, node, 100, false, node.GetActor() == null);
             foreach (ActorNode pathnode in path)
             {
                 HighlightNode<NodeHighlightPathEffectComponent>(pathnode);

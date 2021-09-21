@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 
 namespace DeckbuilderLibrary.Data.DataStructures
 {
@@ -91,6 +92,7 @@ namespace DeckbuilderLibrary.Data.DataStructures
             {
                 return;
             }
+
             foreach (var node in start.Neighbours)
             {
                 var distanceRemaining = distanceBudget - distance(start, node);
