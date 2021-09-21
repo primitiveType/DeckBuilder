@@ -2,6 +2,8 @@
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.GameEntities;
 using System.Linq;
+using ca.axoninteractive.Geometry.Hex;
+using DeckbuilderLibrary.Extensions;
 
 namespace Content.Cards
 {
@@ -15,6 +17,11 @@ namespace Content.Cards
         }
         public override string Name => nameof(TargetsCards);
         public override int EnergyCost => 1;
+        public override IReadOnlyList<IGameEntity> GetAffectedEntities(IGameEntity targetCoord)
+        {
+            return new[] { targetCoord };
+        }
+
         public override bool RequiresTarget => true;
 
         public override string GetCardText(IGameEntity target)

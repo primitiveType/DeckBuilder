@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Generic;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Resources;
 
 namespace DeckbuilderLibrary.Data.GameEntities
 {
@@ -7,9 +11,9 @@ namespace DeckbuilderLibrary.Data.GameEntities
     public abstract class Intent : GameEntity, IDisposable
     {
         public abstract string GetDescription { get; }
-        public int OwnerId { get; internal set; } = -1;
+        public EntityReference<IActor> Owner { get; } = new EntityReference<IActor>();
 
-        public abstract GameEntity Target { get; }
+        public abstract TargetingInfo Target { get; }
 
         protected override void Initialize()
         {
@@ -35,5 +39,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
             Context.Events.TurnEnded -= EventsOnTurnEnded;
             Context.Events.BattleEnded -= OnBattleEnded;
         }
+
+        public abstract List<CubicHexCoord> GetAffectedCoords();
     }
 }

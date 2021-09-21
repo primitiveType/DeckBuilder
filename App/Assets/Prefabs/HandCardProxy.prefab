@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 723259747}
   - component: {fileID: 723259746}
   - component: {fileID: 723259745}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: UnlitBasicBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1313263510}
   - component: {fileID: 1313263509}
   - component: {fileID: 1313263508}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: DescriptionMain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,7 @@ GameObject:
   - component: {fileID: 1354951520}
   - component: {fileID: 1354951519}
   - component: {fileID: 1354951518}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Cost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -455,7 +455,7 @@ GameObject:
   - component: {fileID: 1771004828}
   - component: {fileID: 1771004827}
   - component: {fileID: 1771004826}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: DescriptionDropShadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -637,7 +637,7 @@ GameObject:
   - component: {fileID: 1865403303}
   - component: {fileID: 1865403302}
   - component: {fileID: 1865403301}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CardRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -701,7 +701,7 @@ GameObject:
   - component: {fileID: 1896441311}
   - component: {fileID: 1896441310}
   - component: {fileID: 1896441309}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1006,7 +1006,7 @@ GameObject:
   - component: {fileID: 7746833075081919966}
   - component: {fileID: 6679604571172037061}
   - component: {fileID: 6318488766175299358}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HandCardProxy
   m_TagString: Untagged
   m_Icon: {fileID: 0}

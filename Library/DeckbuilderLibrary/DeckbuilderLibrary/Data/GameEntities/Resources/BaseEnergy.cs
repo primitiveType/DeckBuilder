@@ -1,4 +1,5 @@
 using DeckbuilderLibrary.Data.Events;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Resources
 {
@@ -14,13 +15,13 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
 
         private void OnBattleStarted(object sender, BattleStartedArgs args)
         {
-            Owner.Resources.SetResource<Energy>(Amount);
+            ((IActor)Owner).Resources.SetResource<Energy>(Amount);
             Context.Events.TurnEnded += OnTurnEnded;
         }
 
         private void OnTurnEnded(object sender, TurnEndedEventArgs args)
         {
-            Owner.Resources.SetResource<Energy>(Amount);
+            ((IActor)Owner).Resources.SetResource<Energy>(Amount);
         }
     }
 }

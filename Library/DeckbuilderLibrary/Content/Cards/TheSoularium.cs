@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Extensions;
 
 namespace Content.Cards
 {
@@ -10,6 +12,7 @@ namespace Content.Cards
     {
         public override string Name => "The Soularium";
         private List<Card> DrawnCards => new List<Card>();
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -52,6 +55,11 @@ namespace Content.Cards
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return null;
+        }
+
+        public override IReadOnlyList<IGameEntity> GetAffectedEntities(IGameEntity targetCoord)
+        {
+            return new[] { targetCoord };
         }
 
         public override bool RequiresTarget => false;

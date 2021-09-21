@@ -9,11 +9,50 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
         {
             BasicEnemy enemy = Context.CreateActor<BasicEnemy>(100, 0);
 
-            Graph.Nodes[new AxialHexCoord(0, 2).ToCubic()].TryAdd(enemy);
-            Graph.Nodes[new AxialHexCoord(0, 0).ToCubic()].TryAdd(player);
+            if (Graph.TryGetNode(new AxialHexCoord(0, 2).ToCubic(), out var node1))
+            {
+                node1.TryAdd(enemy);
+            }
+
+            if (Graph.TryGetNode(new AxialHexCoord(0, 0).ToCubic(), out var node2))
+            {
+                node2.TryAdd(player);
+            }
             // Graph.
             // Graph.Left.AddEntityNoEvent(player);
             // Graph.Right.AddEntityNoEvent(enemy);
+        }
+    }
+
+    public class FunBattleData : BattleData<HexGraph>
+    {
+        public override void PrepareBattle(Actor player)
+        {
+            AddEnemy(0, 2);
+            AddEnemy(0, 4);
+            AddEnemy(6, 8);
+            AddEnemy(4, 8);
+            AddEnemy(8, 2);
+            AddEnemy(8, 5);
+
+            if (Graph.TryGetNode(new AxialHexCoord(0, 0).ToCubic(), out var node2))
+            {
+                node2.TryAdd(player);
+            }
+        }
+
+        private void AddEnemy(int x, int y)
+        {
+            BasicEnemy enemy = Context.CreateActor<BasicEnemy>(100, 0);
+            AddActor(enemy, new AxialHexCoord(x, y));
+        }
+
+        private void AddActor(BasicEnemy enemy, AxialHexCoord coord)
+        {
+            if (Graph.TryGetNode(coord.ToCubic(), out var node1))
+            {
+                node1.TryAdd(enemy);
+            }
         }
     }
 }

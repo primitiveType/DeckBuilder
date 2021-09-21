@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Extensions;
 
 namespace Content.Cards
 {
@@ -30,12 +32,17 @@ namespace Content.Cards
         public override string GetCardText(IGameEntity target = null)
         {
             return
-                $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)} to a random enemy {RepeatAmount}.";
+                $"Deal {Context.GetDamageAmount(this, DamageAmount, target as ActorNode, Owner)} to a random enemy {RepeatAmount}.";
         }
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return Context.GetEnemies();
+        }
+
+        public override IReadOnlyList<IGameEntity> GetAffectedEntities(IGameEntity targetCoord)
+        {
+            return new[] { targetCoord };
         }
 
         public override bool RequiresTarget => false;
@@ -57,7 +64,7 @@ namespace Content.Cards
 
                 var randomIndex = random.Next(enemies.Count);
                 IGameEntity target = enemies[randomIndex];
-                Context.TryDealDamage(this, Owner, target as Actor, DamageAmount);
+                Context.TryDealDamage(this, Owner, target as ActorNode, DamageAmount);
             }
         }
     }

@@ -2,17 +2,17 @@ using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Resources
 {
-    public class EntityReference : IGameEntity, IInternalInitialize
+    public class EntityReference<TGameEntity> : IGameEntity, IInternalInitialize where TGameEntity : IGameEntity
     {
         [JsonIgnore]
         public int Id => Entity.Id;
 
         [JsonIgnore]
         public IContext Context { get; set; }
-        private IGameEntity m_Entity;
+        private TGameEntity m_Entity;
 
         [JsonIgnore]
-        public IGameEntity Entity
+        public TGameEntity Entity
         {
             get => m_Entity;
             set
@@ -36,7 +36,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
             ((IInternalGameContext)GameContext.CurrentContext).ToInitializeAdd(this);
         }
 
-        public EntityReference(IGameEntity entity)
+        public EntityReference(TGameEntity entity)
         {
             Entity = entity;
         }
@@ -49,7 +49,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
                 {
                     return;
                 }
-                Entity = GameContext.CurrentContext.GetCurrentBattle().GetActorById(EntityId);
+                Entity = (TGameEntity)GameContext.CurrentContext.GetCurrentBattle().GetActorById(EntityId);
             }
             else
             {

@@ -12,12 +12,12 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
     {
         private int m_Amount;
         public abstract string Name { get; }
-        private EntityReference OwnerEntityReference { get; set; } = new EntityReference();
+        private EntityReference<IActor> OwnerEntityReference { get; set; } = new EntityReference<IActor>();
 
         [JsonIgnore]
         public IActor Owner
         {
-            get => OwnerEntityReference.Entity as IActor;
+            get => OwnerEntityReference.Entity ;
             set => OwnerEntityReference.Entity = value;
         }
 

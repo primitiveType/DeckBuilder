@@ -8,7 +8,7 @@ public class IntentProxy : Proxy<Intent>
 
     protected override void OnInitialize()
     {
-        OwnerId = GameEntity.OwnerId;
+        OwnerId = GameEntity.Owner.Id;
         GameEntity.Context.Events.IntentChanged += OnIntentChanged;
         GameEntity.Context.Events.ActorDied += OnActorDied;
         var r = GetComponentInChildren<Renderer>();

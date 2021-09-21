@@ -80,16 +80,20 @@ namespace DeckbuilderLibrary.Data
             return m_NextId++;
         }
 
-        public int GetDamageAmount(object sender, int baseDamage, IActor target, IActor owner)
+        public int GetDamageAmount(object sender, int baseDamage, ActorNode target, IActor owner)
         {
             return ((IInternalBattleEventHandler)Events).RequestDamageAmount(sender, baseDamage,
                 owner, target);
         }
 
-        public void TryDealDamage(GameEntity source, IActor owner, IActor target, int baseDamage)
+        public void TryDealDamage(GameEntity source, IActor owner, ActorNode target, int baseDamage)
         {
-            ((IInternalActor)target).TryDealDamage(source, GetDamageAmount(source, baseDamage, target, owner),
-                out int totalDamageDealt, out int healthDamageDealt);
+            IActor actor = target.GetActor();
+            if (actor != null)
+            {
+                ((IInternalActor)actor).TryDealDamage(source, GetDamageAmount(source, baseDamage, target, owner),
+                    out int totalDamageDealt, out int healthDamageDealt);
+            }
         }
 
         public T CreateEntity<T>() where T : GameEntity, new()
@@ -225,7 +229,7 @@ namespace DeckbuilderLibrary.Data
         public T CreateIntent<T>(Actor owner) where T : Intent, new()
         {
             T intent = CreateEntityNoInitialize<T>();
-            intent.OwnerId = owner.Id;
+            intent.Owner.Entity = owner;
             InitializeEntity(intent);
             return intent;
         }

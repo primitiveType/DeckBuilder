@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Extensions;
 
 namespace Content.Cards
 {
@@ -15,12 +17,17 @@ namespace Content.Cards
         public override string GetCardText(IGameEntity target = null)
         {
             return
-                $"Deal {Context.GetDamageAmount(this, DamageAmount, target as IActor, Owner)}. Draw {Context.GetDrawAmount(this, DrawAmount, target as IActor, Owner)}";
+                $"Deal {Context.GetDamageAmount(this, DamageAmount, target as ActorNode, Owner)}. Draw {Context.GetDrawAmount(this, DrawAmount, target as IActor, Owner)}";
         }
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
             return Context.GetEnemies();
+        }
+
+        public override IReadOnlyList<IGameEntity> GetAffectedEntities(IGameEntity targetCoord)
+        {
+            return new[] { targetCoord };
         }
 
         public override bool RequiresTarget => true;
@@ -29,13 +36,13 @@ namespace Content.Cards
 
         protected override void DoPlayCard(IGameEntity target)
         {
-            if (!(target is IActor actor))
+            if (!(target is ActorNode node))
             {
                 throw new NotSupportedException("Tried to play a card on the wrong target type!");
             }
 
             // Deal x damage.
-            Context.TryDealDamage(this, Owner, actor, DamageAmount);
+            Context.TryDealDamage(this, Owner, node, DamageAmount);
             // Draw y cards.
             // We desperately need a way to draw a card using Context.
             // This is currently broken. It will not recycle the discard pile when there are no cards left in the draw pile.

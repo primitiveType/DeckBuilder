@@ -12,9 +12,9 @@ namespace DeckbuilderLibrary.Data.GameEntities
 {
     public class ActorNode : GameEntity, IHasNeighbours<ActorNode>
     {
-        [JsonIgnore] private EntityReference HexGraph { get; set; } = new EntityReference();
+        [JsonIgnore] private EntityReference<HexGraph> HexGraph { get; set; } = new EntityReference<HexGraph>();
 
-        [JsonIgnore]  public HexGraph Graph => HexGraph.Entity as HexGraph;
+        [JsonIgnore] public HexGraph Graph => HexGraph.Entity as HexGraph;
 
         protected override void Initialize()
         {
@@ -28,18 +28,18 @@ namespace DeckbuilderLibrary.Data.GameEntities
             Coordinate = coord;
             if (CurrentEntities == null)
             {
-                CurrentEntities = new List<EntityReference>();
+                CurrentEntities = new List<EntityReference<IGameEntity>>();
             }
         }
 
         public CubicHexCoord Coordinate { get; private set; }
 
 
-        [JsonProperty] public List<EntityReference> CurrentEntities { get; set; }
+        [JsonProperty] public List<EntityReference<IGameEntity>> CurrentEntities { get; set; }
 
         public void AddEntityNoEvent(IGameEntity player)
         {
-            CurrentEntities.Add(new EntityReference(player));
+            CurrentEntities.Add(new EntityReference<IGameEntity>(player));
         }
 
         public IActor GetActor()
@@ -65,6 +65,10 @@ namespace DeckbuilderLibrary.Data.GameEntities
 
         public bool TryAdd(IGameEntity entity)
         {
+            if (entity == null)
+            {
+                return false;
+            }
             if (entity is Actor)
             {
                 if (CurrentEntities.OfType<IActor>().Any())
@@ -76,7 +80,7 @@ namespace DeckbuilderLibrary.Data.GameEntities
                 ((IInternalCoordinateProperty)entity).Coordinate = Coordinate;
             }
 
-            CurrentEntities.Add(new EntityReference(entity));
+            CurrentEntities.Add(new EntityReference<IGameEntity>(entity));
             return true;
         }
 
@@ -87,8 +91,10 @@ namespace DeckbuilderLibrary.Data.GameEntities
             {
                 foreach (CubicHexCoord coord in Coordinate.Neighbors())
                 {
-                    if (Graph.Nodes.ContainsKey(coord))
-                        yield return Graph.Nodes[coord];
+                    if (Graph.TryGetNode(coord, out var node))
+                    {
+                        yield return node;
+                    }
                 }
             }
         }

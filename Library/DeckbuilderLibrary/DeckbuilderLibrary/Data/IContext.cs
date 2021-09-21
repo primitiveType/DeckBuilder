@@ -18,8 +18,8 @@ namespace DeckbuilderLibrary.Data
         T CreateEntity<T>() where T : GameEntity, new();
         IBattleDeck CreateDeck();
         IPile CreatePile();
-        int GetDamageAmount(object sender, int baseDamage, IActor target, IActor owner);
-        void TryDealDamage(GameEntity source, IActor owner, IActor target, int baseDamage);
+        int GetDamageAmount(object sender, int baseDamage, ActorNode target, IActor owner);
+        void TryDealDamage(GameEntity source, IActor owner, ActorNode target, int baseDamage);
         T CreateActor<T>(int health, int armor) where T : Actor, new();
         IBattle StartBattle(PlayerActor player, BattleData data);
         T CreateIntent<T>(Actor owner) where T : Intent, new();

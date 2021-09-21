@@ -126,12 +126,12 @@ public class HandCardProxy : CardProxy, IPointerEnterHandler, IPointerExitHandle
 
     void Update()
     {
-        if (transform.position != TargetPosition)
+        if (transform.localPosition != TargetPosition)
         {
-            transform.position = Vector3.Lerp(transform.position, TargetPosition, .1f);
-            if (Vector3.Distance(transform.position, TargetPosition) < .1f)
+            transform.localPosition = Vector3.Lerp(transform.localPosition, TargetPosition, .1f);
+            if (Vector3.Distance(transform.localPosition, TargetPosition) < .1f)
             {
-                transform.position = TargetPosition;
+                transform.localPosition = TargetPosition;
             }
         }
 
@@ -140,7 +140,7 @@ public class HandCardProxy : CardProxy, IPointerEnterHandler, IPointerExitHandle
             Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             Vector3 pointPosition = new Vector3(mouseWorldPosition.x, mouseWorldPosition.y, .1f);
             lineRenderer.SetPosition(1, pointPosition);
-            }
+        }
 
         lineRenderer.SetPosition(0, transform.position + LineRendererStartOffset);
     }

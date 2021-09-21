@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Extensions;
 
 namespace Content.Cards
 {
@@ -11,8 +13,15 @@ namespace Content.Cards
             base.Initialize();
             Context.Events.CardPlayed += OnCardPlayed;
         }
+
         public override string Name => nameof(SecondChance);
         public override int EnergyCost => 1;
+
+        public override IReadOnlyList<IGameEntity> GetAffectedEntities(IGameEntity targetCoord)
+        {
+            return new[] { targetCoord };
+        }
+
         public override bool RequiresTarget => true;
 
         public override string GetCardText(IGameEntity target)
@@ -24,11 +33,10 @@ namespace Content.Cards
         {
             return Context.GetCurrentBattle().Deck.ExhaustPile.Cards;
         }
+
         protected override void DoPlayCard(IGameEntity target)
         {
-            
             Context.TrySendToPile(target.Id, PileType.HandPile);
         }
-
     }
 }
