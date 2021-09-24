@@ -8,13 +8,20 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
 {
     public abstract class Actor : GameEntity, IInternalActor
     {
+        private CubicHexCoord m_Coordinate;
         public int Health => Resources.GetResourceAmount<Health>();
 
         public int Armor => Resources.GetResourceAmount<Armor>();
 
         [JsonProperty] public Resources.Resources Resources { get; private set; }
-        [JsonIgnore]public ActorNode Node => Coordinate.ToActorNode(Context);
-        public CubicHexCoord Coordinate { get; private set; }
+        [JsonIgnore] public ActorNode Node => Coordinate.ToActorNode(Context);
+
+        public CubicHexCoord Coordinate
+        {
+            get => m_Coordinate;
+            private set => SetField(ref m_Coordinate, value);
+        }
+
         CubicHexCoord ICoordinateProperty.Coordinate => Coordinate;
 
         CubicHexCoord IInternalCoordinateProperty.Coordinate

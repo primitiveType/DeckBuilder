@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using DeckbuilderLibrary.Annotations;
 using DeckbuilderLibrary.Data.Events;
 using Newtonsoft.Json;
 
@@ -9,13 +12,19 @@ namespace DeckbuilderLibrary.Data.GameEntities
 {
     public abstract class GameEntity : IInternalGameEntity
     {
-        [JsonProperty] public int Id { get; internal set; } = -1;
+        [JsonProperty]
+        public int Id
+        {
+            get => m_Id;
+            internal set => SetField(ref m_Id, value);
+        }
 
         [JsonIgnore] public IContext Context { get; private set; }
 
         [JsonIgnore] private bool Initialized { get; set; }
 
         private List<Action> TerminationActions = new List<Action>();
+        private int m_Id = -1;
 
         void IInternalInitialize.InternalInitialize()
         {
@@ -44,10 +53,10 @@ namespace DeckbuilderLibrary.Data.GameEntities
                     var addMethod = eventInfo.GetAddMethod();
                     Object[] addHandlerArgs = { d };
                     addMethod.Invoke(Context.Events, addHandlerArgs);
-                    
+
                     // var removeMethod = eventInfo.GetRemoveMethod();
                     // removeMethod.Invoke(Context.Events, addHandlerArgs);
-                   
+
                     // Context.Events.CardPlayed += (o, args) => { method.Invoke(this, new[] { o, args }); };
                     // TerminationActions.Add(() => Conte);
                 }
@@ -84,6 +93,36 @@ namespace DeckbuilderLibrary.Data.GameEntities
         {
         }
 
-        // public Properties Properties { get; protected set; } = new Properties();
+        protected void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
+        {
+            if (!Equals(field, value))
+            {
+                field = value;
+                OnPropertyChanged(propertyName);
+            }
+        }
+
+        public void AddListener(Action<object, PropertyChangedEventArgs> action)
+        {
+            PropertyChanged += (sender, args) =>
+            {
+                try
+                {
+                    action.Invoke(sender, args);
+                }
+                catch (Exception e)
+                {
+                    // Debug.LogError($"Caught exception executing event! {e.Message}", this);
+                }
+            };
+        }
+
+        private event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.ComponentModel;
 using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Resources
@@ -9,6 +11,12 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
 
         [JsonIgnore]
         public IContext Context { get; set; }
+
+        public void AddListener(Action<object, PropertyChangedEventArgs> action)
+        {
+            m_Entity.AddListener(action);
+        }
+
         private TGameEntity m_Entity;
 
         [JsonIgnore]
@@ -61,5 +69,6 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
         {
             Context = context;
         }
+        
     }
 }

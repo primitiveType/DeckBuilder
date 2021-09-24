@@ -70,4 +70,6 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
             }
         }
     }
+    
+
 }

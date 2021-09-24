@@ -11,16 +11,16 @@ namespace DeckbuilderLibrary.Data.GameEntities.Actors
         ActorNode Node { get; }
     }
 
-    public interface IBlocksMovement
+    public interface IBlocksMovement : IInternalCoordinateProperty
     {
     }
 
-    public interface ICoordinateProperty
+    public interface ICoordinateProperty : IGameEntity
     {
         CubicHexCoord Coordinate { get; }
     }
 
-    public interface IInternalCoordinateProperty
+    public interface IInternalCoordinateProperty : ICoordinateProperty
     {
         CubicHexCoord Coordinate { get; set; }
     }

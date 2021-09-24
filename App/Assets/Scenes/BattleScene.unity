@@ -333,9 +333,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PrintTrace: 0
-  m_HandPileProxy: {fileID: 875622477}
-  m_DiscoverPileProxy: {fileID: 2144311387}
-  m_SelectionDisplay: {fileID: 2078023678}
 --- !u!4 &972226933
 Transform:
   m_ObjectHideFlags: 0
@@ -344,11 +341,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 972226931}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.0649546, y: -3.271102, z: -1.668058}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1254303272
 GameObject:
@@ -471,8 +468,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 927105879}
-  - {fileID: 2078023679}
-  - {fileID: 2144311386}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -1065,9 +1060,8 @@ MonoBehaviour:
   m_DiscardProxy: {fileID: 6265440844059985355}
   m_HandProxy: {fileID: 875622477}
   m_DrawPileProxy: {fileID: 4963875226008180850}
-  m_DiscoverPileProxy: {fileID: 2144311387}
   m_ExhaustPileProxy: {fileID: 7702882654073517063}
-  BattleFactory: {fileID: 2100646703}
+  BattleFactory: {fileID: 0}
   m_PlayerProxy: {fileID: 1391915691}
   m_NumCardsInTestDeck: 6
   m_EndTurnButton: {fileID: 2083889976}
@@ -1103,7 +1097,7 @@ MonoBehaviour:
   CardWidth: 1.5
   CardDepth: 1
   CardSeperation: 0.1
-  VisualCardProxyPrefab: {fileID: 5712462861274902701, guid: 3c610a8fdc5354248bbcd0fd89233139,
+  HandCardProxyPrefab: {fileID: -9702683617557761, guid: 6eb0eadf32b28204bbecb1d128b4a4db,
     type: 3}
   CenterPosition: {x: 0, y: 2, z: -2}
   GreyScreenObject: {fileID: 144726694}
@@ -1115,12 +1109,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2078023677}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0.1780825, y: -4.183472, z: 3.200393}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 144726697}
-  m_Father: {fileID: 1254303277}
-  m_RootOrder: 1
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2083889973
 GameObject:
@@ -1262,144 +1256,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2083889973}
   m_CullTransparentMesh: 0
---- !u!1 &2100646702
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2100646704}
-  - component: {fileID: 2100646703}
-  m_Layer: 0
-  m_Name: Battle Factory
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2100646703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2100646702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 429d88a84267413db08af5237ae8387d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BattleProxy: {fileID: 4351709562191146148, guid: 0f67cefb80876184cb89d4a998e6bc3f,
-    type: 3}
---- !u!4 &2100646704
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2100646702}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.190813, y: -0.2511921, z: 1.0236378}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &2144311385
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1254303277}
-    m_Modifications:
-    - target: {fileID: 4172745502917304872, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: m_Name
-      value: DiscoverPileProxy
-      objectReference: {fileID: 0}
-    - target: {fileID: 7790083579552630949, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: CardProxyPrefab
-      value: 
-      objectReference: {fileID: 834869730759676425, guid: 2e7cf91931a11964dbc5a99e8c04a557,
-        type: 3}
-    - target: {fileID: 8177470216866481500, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8177470216866481500, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8177470216866481500, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8177470216866481500, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8177470216866481500, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8177470216866481500, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8177470216866481500, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8177470216866481500, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8177470216866481500, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8177470216866481500, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8177470216866481500, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 46ec6e6473836754aa4bf7ae6baeb54e, type: 3}
---- !u!4 &2144311386 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8177470216866481500, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-    type: 3}
-  m_PrefabInstance: {fileID: 2144311385}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2144311387 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7790083579552630949, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
-    type: 3}
-  m_PrefabInstance: {fileID: 2144311385}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e200ae14eaeea84dbd76cb267ec202a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &4696829603891068929
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1407,12 +1263,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1254303277}
     m_Modifications:
-    - target: {fileID: 4696829604626149452, guid: 912803a1c1a29c44aa9f2c9d0a1d067d,
-        type: 3}
-      propertyPath: CardProxyPrefab
-      value: 
-      objectReference: {fileID: 4178195441228180857, guid: 084b2fe046d11144fb126f3a611f330b,
-        type: 3}
     - target: {fileID: 4696829604626149452, guid: 912803a1c1a29c44aa9f2c9d0a1d067d,
         type: 3}
       propertyPath: CenterPosition.z

@@ -513,7 +513,7 @@ MonoBehaviour:
   m_VictoryGameObject: {fileID: 419161076072159616}
   m_LossGameObject: {fileID: 419161075991384392}
   m_LeaveBattleButton: {fileID: 419161076843696440}
-  NodePrefab: {fileID: 7437927780289349693, guid: 2b71cc666872806478e8fb1d63e11d62,
+  NodePrefab: {fileID: 7451882663248443660, guid: 1052244b52a9f284486aa5aed943a928,
     type: 3}
 --- !u!1 &419161076843696446
 GameObject:

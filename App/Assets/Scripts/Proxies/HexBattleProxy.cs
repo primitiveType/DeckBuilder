@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using DeckbuilderLibrary.Data.GameEntities;
 using UnityEngine;
 
 public class HexBattleProxy : BattleProxy
 {
-    private Dictionary<ActorNode, NodeProxy> NodesByEntity = new Dictionary<ActorNode, NodeProxy>();
+    private Dictionary<ActorNode, Proxy> NodesByEntity = new Dictionary<ActorNode, Proxy>();
 
-    [SerializeField] private NodeProxy NodePrefab;
+    [SerializeField] private Proxy NodePrefab;
     protected override void OnInitialize()
     {
         base.OnInitialize();
@@ -23,8 +24,13 @@ public class HexBattleProxy : BattleProxy
         }
     }
 
-    public override NodeProxy GetNodeProxyByEntity(ActorNode entity)
+    public override Proxy GetNodeProxyByEntity(ActorNode entity)
     {
         return NodesByEntity[(ActorNode)entity];
+    }
+
+    public void OnDestroy()
+    {
+        Debug.Log("Battle destroyed.");
     }
 }

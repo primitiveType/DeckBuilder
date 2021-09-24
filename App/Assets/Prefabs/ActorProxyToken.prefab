@@ -360,7 +360,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5352484572553306859}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 231464140468088907}
@@ -394,8 +394,9 @@ GameObject:
   - component: {fileID: 3034505045620944327}
   - component: {fileID: 6337295490969882177}
   - component: {fileID: 6827445341069457699}
+  - component: {fileID: 3009603641323894773}
   m_Layer: 0
-  m_Name: EnemyActorProxy
+  m_Name: ActorProxyToken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -480,3 +481,16 @@ MonoBehaviour:
   ArmorText: {fileID: 2669919531410361712}
   IntentProxyPrefab: {fileID: 3993646129329178543, guid: 479cd62d4ca9d55479cba9dc84d31def,
     type: 3}
+--- !u!114 &3009603641323894773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5808107287359168203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fc79c5c98ac483ebc4fa80bd4631492, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortOrder: 0

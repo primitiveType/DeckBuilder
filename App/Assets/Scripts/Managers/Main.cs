@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DeckbuilderLibrary.Data.GameEntities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,7 +12,6 @@ public class Main : MonoBehaviour
         SceneManager.LoadScene("Overworld");
 
         Tools.Initialize(new PlayerPrefsData());
-        
     }
 
     private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)

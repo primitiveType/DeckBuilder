@@ -121,6 +121,74 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &489087905
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 489087906}
+  - component: {fileID: 489087908}
+  - component: {fileID: 489087907}
+  m_Layer: 0
+  m_Name: Battle Factory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &489087906
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489087905}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.190813, y: -0.2511921, z: 1.0236378}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1162784733}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &489087907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489087905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7683293b4f3841c8ad3e5142ffe03f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BattleProxy: {fileID: 4351709562191146148, guid: 0f67cefb80876184cb89d4a998e6bc3f,
+    type: 3}
+  ProxyPrefab: {fileID: 6827445341069457699, guid: 237b7a613b7f78548b6313a115fcd8f5,
+    type: 3}
+  TerrainProxy: {fileID: 1361764643456995197, guid: 1db5d5be61c7058408ba326346324b7d,
+    type: 3}
+  FireTerrainProxy: {fileID: 6981392520958408148, guid: ec9ef059a4232434384d9e2e57c03ce2,
+    type: 3}
+  CollectibleProxy: {fileID: 6981392520958408148, guid: de1fddcf72957954caf45cd926d7ec72,
+    type: 3}
+--- !u!114 &489087908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489087905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 429d88a84267413db08af5237ae8387d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BattleProxy: {fileID: 4351709562191146148, guid: 0f67cefb80876184cb89d4a998e6bc3f,
+    type: 3}
 --- !u!1 &1162784732
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,7 +217,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 489087906}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
