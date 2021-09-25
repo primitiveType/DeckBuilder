@@ -1097,7 +1097,7 @@ MonoBehaviour:
   CardWidth: 1.5
   CardDepth: 1
   CardSeperation: 0.1
-  HandCardProxyPrefab: {fileID: -9702683617557761, guid: 6eb0eadf32b28204bbecb1d128b4a4db,
+  VisualCardProxyPrefab: {fileID: 5712462861274902701, guid: 3c610a8fdc5354248bbcd0fd89233139,
     type: 3}
   CenterPosition: {x: 0, y: 2, z: -2}
   GreyScreenObject: {fileID: 144726694}
@@ -1308,6 +1308,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1254303277}
     m_Modifications:
+    - target: {fileID: 4696829604626149452, guid: 912803a1c1a29c44aa9f2c9d0a1d067d,
+        type: 3}
+      propertyPath: CardProxyPrefab
+      value: 
+      objectReference: {fileID: 4178195441228180857, guid: 084b2fe046d11144fb126f3a611f330b,
+        type: 3}
     - target: {fileID: 4696829604626149452, guid: 912803a1c1a29c44aa9f2c9d0a1d067d,
         type: 3}
       propertyPath: CenterPosition.z

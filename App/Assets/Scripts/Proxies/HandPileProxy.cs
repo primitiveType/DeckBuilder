@@ -38,7 +38,7 @@ public class HandPileProxy : PileProxy<HandCardProxy>
 
         int numCards = CardProxies.Count;
 
-        CardProxies[argsMovedCard].HandPositionIndex = numCards - 1;
+        CardProxies[argsMovedCard].DisplayIndex = numCards - 1;
 
         OrganizeHand();
 
@@ -55,23 +55,23 @@ public class HandPileProxy : PileProxy<HandCardProxy>
 
         foreach (HandCardProxy card in CardProxies.Values)
         {
-            card.ResetHandPosition(card.HandPositionIndex * ((CardWidth + CardSeperation) * Vector3.right) +
-                                   startPosition + (Vector3.back * CardDepth * card.HandPositionIndex));
+            card.ResetHandPosition(card.DisplayIndex * ((CardWidth + CardSeperation) * Vector3.right) +
+                                   startPosition + (Vector3.back * CardDepth * card.DisplayIndex));
         }
     }
 
     protected override void DestroyCardProxy(int argsMovedCard)
     {
         HandCardProxy cardProxy = CardProxies[argsMovedCard];
-        int position = cardProxy.HandPositionIndex;
+        int position = cardProxy.DisplayIndex;
 
         base.DestroyCardProxy(argsMovedCard);
 
         foreach (HandCardProxy card in CardProxies.Values)
         {
-            if (card.HandPositionIndex > position)
+            if (card.DisplayIndex > position)
             {
-                card.HandPositionIndex -= 1;
+                card.DisplayIndex -= 1;
             }
         }
 
