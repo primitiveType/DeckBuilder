@@ -6,11 +6,13 @@ using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.Events;
 
-public class VisualCardProxy : CardProxy
+public class VisibleCardProxy : CardProxy
 {
     [SerializeField] private TMPro.TMP_Text NameText;
     [SerializeField] private TMPro.TMP_Text DescriptionText;
     [SerializeField] private TMPro.TMP_Text EnergyText;
+
+    protected Vector3 BasePosition { get; set; }
 
     protected override void OnInitialize()
     {
@@ -40,6 +42,12 @@ public class VisualCardProxy : CardProxy
         EnergyText.text = $"{(GameEntity as EnergyCard)?.EnergyCost}";
         NameText.text = $"{GameEntity.Name}";
         DescriptionText.text = GameEntity.GetCardText();
+    }
+
+    public virtual void SetBasePosition(Vector3 basePosition)
+    {
+        BasePosition = basePosition;
+        transform.localPosition = BasePosition;
     }
 
     public int DisplayIndex { get; set; }

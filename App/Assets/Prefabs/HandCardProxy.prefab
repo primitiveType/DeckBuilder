@@ -29,7 +29,7 @@ PrefabInstance:
     - target: {fileID: 1168954441248023991, guid: 3c610a8fdc5354248bbcd0fd89233139,
         type: 3}
       propertyPath: m_Name
-      value: HandCardProxy Variant
+      value: HandCardProxy
       objectReference: {fileID: 0}
     - target: {fileID: 4744134917338845727, guid: 3c610a8fdc5354248bbcd0fd89233139,
         type: 3}

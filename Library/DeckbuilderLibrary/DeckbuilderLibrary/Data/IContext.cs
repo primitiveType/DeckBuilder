@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
@@ -16,6 +17,8 @@ namespace DeckbuilderLibrary.Data
         List<Card> PlayerDeck { get; }
 
         T CreateEntity<T>() where T : GameEntity, new();
+
+        GameEntity CreateEntity(Type entityType);
         IBattleDeck CreateDeck();
         IPile CreatePile();
         int GetDamageAmount(object sender, int baseDamage, ActorNode target, IActor owner);
@@ -27,6 +30,8 @@ namespace DeckbuilderLibrary.Data
         T CreateResource<T>(Actor owner, int amount) where T : Resource<T>, IResource, new();
 
         void TrySendToPile(int cardId, PileType pileType);
+
+        void Discover(IReadOnlyList<Type> typesToDiscover, PileType destinationPile);
 
         int GetDrawAmount(object sender, int baseDraw, IActor target, IActor owner);
 

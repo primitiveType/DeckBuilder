@@ -11,13 +11,13 @@ public class SelectionDisplay : MonoBehaviour
 
     [SerializeField] private float CardSeperation;
 
-    [SerializeField] private VisualCardProxy VisualCardProxyPrefab;
+    [SerializeField] private VisibleCardProxy VisualCardProxyPrefab;
 
     [SerializeField] private Vector3 CenterPosition;
 
     [SerializeField] private GameObject GreyScreenObject;
 
-    private List<VisualCardProxy> SelectableCardProxies = new List<VisualCardProxy>();
+    private List<VisibleCardProxy> SelectableCardProxies = new List<VisibleCardProxy>();
 
 
     public bool IsDisplaying { get; private set; }
@@ -29,7 +29,7 @@ public class SelectionDisplay : MonoBehaviour
 
         foreach (Card card in selectableCards)
         {
-            VisualCardProxy visualCardProxy = Instantiate(VisualCardProxyPrefab);
+            VisibleCardProxy visualCardProxy = Instantiate(VisualCardProxyPrefab, transform);
             visualCardProxy.Initialize(card);
             SelectableCardProxies.Add(visualCardProxy);
         }
@@ -46,7 +46,7 @@ public class SelectionDisplay : MonoBehaviour
     {
         IsDisplaying = false;
         GreyScreenObject.SetActive(false);
-        foreach (VisualCardProxy visualCardProxy in SelectableCardProxies)
+        foreach (VisibleCardProxy visualCardProxy in SelectableCardProxies)
         {
             Destroy(visualCardProxy.gameObject);
         }
@@ -62,9 +62,9 @@ public class SelectionDisplay : MonoBehaviour
 
         Vector3 startPosition = cardOffset * Vector3.left + CenterPosition;
 
-        foreach (HandCardProxy card in SelectableCardProxies)
+        foreach (VisibleCardProxy card in SelectableCardProxies)
         {
-            card.ResetHandPosition(card.DisplayIndex * ((CardWidth + CardSeperation) * Vector3.right) +
+            card.SetBasePosition(card.DisplayIndex * ((CardWidth + CardSeperation) * Vector3.right) +
                                    startPosition + (Vector3.back * CardDepth * card.DisplayIndex));
         }
     }

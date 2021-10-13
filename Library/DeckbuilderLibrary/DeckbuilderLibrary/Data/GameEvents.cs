@@ -69,6 +69,11 @@ namespace DeckbuilderLibrary.Data
             Battle.Events.InvokeActorsSwapped(sender, actorsSwappedEventArgs);
         }
 
+        public void InvokeDiscoverCards(object sender, DiscoverCardsEventArgs args)
+        {
+            Battle.Events.InvokeDiscoverCards(sender, args);
+        }
+
         public event CardMovedEvent CardMoved;
 
         private void MediateCardMovedEvent(object sender, CardMovedEventArgs args)
@@ -138,6 +143,13 @@ namespace DeckbuilderLibrary.Data
         private void MediateIntentChangedEvent(object sender, IntentChangedEventArgs args)
         {
             IntentChanged?.Invoke(sender, args);
+        }
+
+        public event DiscoverCardsEvent DiscoverCards;
+
+        private void MediateDiscoverCardsEvent(object sender, DiscoverCardsEventArgs args)
+        {
+            DiscoverCards?.Invoke(sender, args);
         }
 
         void IInternalGameEvents.SetBattle(Battle newBattle)

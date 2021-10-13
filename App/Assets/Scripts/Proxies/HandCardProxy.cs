@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 
 
-public class HandCardProxy : VisualCardProxy, IPointerEnterHandler, IPointerExitHandler
+public class HandCardProxy : VisibleCardProxy, IPointerEnterHandler, IPointerExitHandler
 {
  
     [SerializeField] private bool Hovered => MouseOver || Selected;
@@ -24,7 +24,7 @@ public class HandCardProxy : VisualCardProxy, IPointerEnterHandler, IPointerExit
         }
     }
 
-    private Vector3 HandPosition { get; set; }
+
 
     private Vector3 TargetPosition { get; set; }
 
@@ -39,23 +39,23 @@ public class HandCardProxy : VisualCardProxy, IPointerEnterHandler, IPointerExit
     [SerializeField] private Vector3 LineRendererStartOffset;
     private int HandPositionIndex1;
 
-    public void ResetHandPosition(Vector3 handPosition)
+    public override void SetBasePosition(Vector3 basePosition)
     {
-        HandPosition = handPosition;
+        base.SetBasePosition(basePosition);
         if (Hovered)
         {
-            TargetPosition = HandPosition + HoverOffset;
+            TargetPosition = BasePosition + HoverOffset;
         }
         else
         {
-            TargetPosition = HandPosition;
+            TargetPosition = BasePosition;
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         MouseOver = true;
-        TargetPosition = HandPosition + HoverOffset;
+        TargetPosition = BasePosition + HoverOffset;
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -63,7 +63,7 @@ public class HandCardProxy : VisualCardProxy, IPointerEnterHandler, IPointerExit
         MouseOver = false;
         if (!Hovered)
         {
-            TargetPosition = HandPosition;
+            TargetPosition = BasePosition;
         }
     }
 
@@ -81,7 +81,7 @@ public class HandCardProxy : VisualCardProxy, IPointerEnterHandler, IPointerExit
             lineRenderer.enabled = false;
             if (!Hovered)
             {
-                TargetPosition = HandPosition;
+                TargetPosition = BasePosition;
             }
         }
     }

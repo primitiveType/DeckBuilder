@@ -16,6 +16,9 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
 
         void AddEnemy(Actor enemy);
         void AddEntity(IGameEntity entity);
+
+        void RemoveCard(Card card);
+
         void TrySendToPile(int cardId, PileType pileType);
     }
 }

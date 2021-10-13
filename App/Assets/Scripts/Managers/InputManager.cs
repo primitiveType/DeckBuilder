@@ -1,48 +1,48 @@
 ﻿using DeckbuilderLibrary.Data.GameEntities;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
 
-
-public class InputManager : MonoBehaviourSingleton<InputManager>
+public enum InputState
 {
+    DefaultBattle,
+    CardSelected,
+    DiscoveringCard,
+    DeckCreation
+}
+
+public  class InputManager : MonoBehaviourSingleton<InputManager> {
+
+    [SerializeField]
     private HandPileProxy m_HandPileProxy;
     public HandPileProxy HandPileProxy => m_HandPileProxy;
 
+    [SerializeField]
+    private DiscoverPileProxy m_DiscoverPileProxy;
+    public DiscoverPileProxy DiscoverPileProxy => m_DiscoverPileProxy;
+
+    [SerializeField]
     private SelectionDisplay m_SelectionDisplay;
     public SelectionDisplay SelectionDisplay => m_SelectionDisplay;
 
     private State CurrentState { get; set; } = new DefaultBattleState();
 
-    public enum InputState
-    {
-        DefaultBattle,
-        CardSelected
-    }
-
-
     private Dictionary<InputState, State> States = new Dictionary<InputState, State>
     {
         { InputState.DefaultBattle, new DefaultBattleState() },
-        { InputState.CardSelected, new CardSelectedState() }
+        { InputState.CardSelected, new CardSelectedState() },
+        { InputState.DiscoveringCard, new DiscoveringCardState() },
+        {InputState.DeckCreation, new DeckCreationState() }
     };
 
     public void TransitionToState(InputState state)
     {
+        
         CurrentState?.Exit(new StateData(SelectedEntity));
         CurrentState = States[state];
         CurrentState.Enter(new StateData(SelectedEntity));
     }
-
-    private void Start()
-    {
-        TransitionToState(InputState.DefaultBattle);
-        m_HandPileProxy = GameObject.Find("HandPileProxy").GetComponent<HandPileProxy>();
-        m_SelectionDisplay = GameObject.Find("SelectionDisplay").GetComponent<SelectionDisplay>();
-    }
-
+  
 
     private void Update()
     {
@@ -54,6 +54,7 @@ public class InputManager : MonoBehaviourSingleton<InputManager>
 
     public void GameEntitySelected(IGameEntity gameEntity)
     {
+        Debug.Log("Selected entity in state: " + CurrentState);
         SelectedEntity = gameEntity;
         CurrentState.EntitySelected(new StateData(gameEntity));
     }

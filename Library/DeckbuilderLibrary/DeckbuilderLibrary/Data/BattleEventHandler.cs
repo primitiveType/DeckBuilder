@@ -15,10 +15,16 @@ namespace DeckbuilderLibrary.Data
         public event TurnStartedEvent TurnStarted;
         public event IntentChangedEvent IntentChanged;
         public event ActorsSwappedEvent ActorsSwapped;
+        public event DiscoverCardsEvent DiscoverCards;
 
         public void InvokeIntentChanged(object sender, IntentChangedEventArgs args)
         {
             IntentChanged?.Invoke(sender, args);
+        }
+
+        public void InvokeDiscoverCards(object sender, DiscoverCardsEventArgs args)
+        {
+            DiscoverCards?.Invoke(sender, args);
         }
 
         public void InvokeActorsSwapped(object sender, ActorsSwappedEventArgs args)

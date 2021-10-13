@@ -37,3 +37,4 @@ App/Assets/External/
 App/Assets/LevelMeshes/
 App/Assets/Dependencies/
 .idea
+*/.vs/*

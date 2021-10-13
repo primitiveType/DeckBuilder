@@ -8,6 +8,8 @@ namespace DeckbuilderLibrary.Data
         DrawPile,
         HandPile,
         DiscardPile,
-        ExhaustPile
+        ExhaustPile,
+        DiscoverPile,
+        None
     }
 }

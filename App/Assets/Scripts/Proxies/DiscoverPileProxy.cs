@@ -4,7 +4,8 @@ using UnityEngine;
 using System.Linq;
 using DeckbuilderLibrary.Data.GameEntities;
 
-public class HandPileProxy : PileProxy<HandCardProxy>
+
+public class DiscoverPileProxy : PileProxy<DiscoverCardProxy>
 {
     [SerializeField] private float CardWidth;
     [SerializeField] private float CardDepth;
@@ -12,27 +13,23 @@ public class HandPileProxy : PileProxy<HandCardProxy>
 
     [SerializeField] private Vector3 CenterPosition;
 
-    public IReadOnlyList<HandCardProxy> GetSelectedCards()
+    protected override void OnInitialize()
     {
-        List<HandCardProxy> selectedCards = new List<HandCardProxy>();
-        foreach (HandCardProxy cardProxy in CardProxies.Values)
-        {
-            if (cardProxy.Selected)
-            {
-                selectedCards.Add(cardProxy);
-            }
-        }
-
-        return selectedCards;
+        base.OnInitialize();
+      //  GameEntity.Context.Events.
     }
 
-
-
-    protected override HandCardProxy CreateCardProxy(int argsMovedCard)
+    protected override DiscoverCardProxy CreateCardProxy(int argsMovedCard)
     {
         var proxy = base.CreateCardProxy(argsMovedCard);
 
         int numCards = CardProxies.Count;
+
+        
+        if(numCards == 1)
+        {
+            InputManager.Instance.TransitionToState(InputState.DiscoveringCard);
+        }
 
         CardProxies[argsMovedCard].DisplayIndex = numCards - 1;
 
@@ -49,21 +46,32 @@ public class HandPileProxy : PileProxy<HandCardProxy>
 
         Vector3 startPosition = cardOffset * Vector3.left + CenterPosition;
 
-        foreach (HandCardProxy card in CardProxies.Values)
+        foreach (DiscoverCardProxy card in CardProxies.Values)
         {
             card.SetBasePosition(card.DisplayIndex * ((CardWidth + CardSeperation) * Vector3.right) +
                                    startPosition + (Vector3.back * CardDepth * card.DisplayIndex));
         }
     }
 
+    public void ClearSelection()
+    {
+        while(GameEntity.Cards.Count > 0)
+        {
+            Card card = GameEntity.Cards.First<Card>();
+           card.Context.GetCurrentBattle().RemoveCard(card);
+        }
+          
+        
+    }
+
     protected override void DestroyCardProxy(int argsMovedCard)
     {
-        HandCardProxy cardProxy = CardProxies[argsMovedCard];
+        DiscoverCardProxy cardProxy = CardProxies[argsMovedCard];
         int position = cardProxy.DisplayIndex;
 
         base.DestroyCardProxy(argsMovedCard);
 
-        foreach (HandCardProxy card in CardProxies.Values)
+        foreach (DiscoverCardProxy card in CardProxies.Values)
         {
             if (card.DisplayIndex > position)
             {
