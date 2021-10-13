@@ -442,12 +442,12 @@ namespace DeckbuilderTests
             BattleStateAndPermanentState card =
                 (BattleStateAndPermanentState)FindCardInDeck("BattleStateAndPermanentState");
             Assert.That(Context.PlayerDeck.Contains(card));
-
+            
             ActorNode target = (ActorNode)card.GetValidTargets().First();
             Assert.That(target.GetActor().Health, Is.EqualTo(100));
             card.PlayCard(target);
             Assert.That(target.GetActor().Health, Is.EqualTo(98));
-
+            
             //end the battle
             ((IInternalBattleEventHandler)Context.Events).InvokeBattleEnded(this, new BattleEndedEventArgs(true));
             //start new battle
@@ -457,7 +457,7 @@ namespace DeckbuilderTests
             Assert.That(target.GetActor().Health, Is.EqualTo(100));
             card.PlayCard(target);
             Assert.That(target.GetActor().Health, Is.EqualTo(97));
-
+            
             BattleStateAndPermanentState copy = (BattleStateAndPermanentState)Context.CopyCard(card);
             Assert.That(copy.TimesPlayed, Is.EqualTo(card.TimesPlayed));
             Assert.That(copy.TimesPlayedThisCombat, Is.EqualTo(card.TimesPlayedThisCombat));
@@ -465,7 +465,7 @@ namespace DeckbuilderTests
             //next attack should deal 5
             copy.PlayCard(target);
             Assert.That(target.GetActor().Health, Is.EqualTo(92));
-
+            
             //this code right here is probably what we need to do to create an out-of-battle context, but like every time the game state dirties and the player is checking their deck.
             GameContext outOfBattleContext = GetCopiedContext();
             ((IInternalBattleEventHandler)outOfBattleContext.Events).InvokeBattleEnded(this,
@@ -473,7 +473,7 @@ namespace DeckbuilderTests
             var outOfBattleCopiedCard =
                 outOfBattleContext.GetCurrentBattle().Deck.AllCards().First(c => c.Id == copy.Id);
             Assert.That(outOfBattleCopiedCard.GetCardText(), Is.Not.EqualTo(copy.GetCardText()));
-
+            
             Assert.That(outOfBattleCopiedCard.GetCardText(),
                 Is.EqualTo(
                     "Deal 4 to target enemy. Then deal 1.")); //this indicates that the out-of-battle card had its battleproperty reset to zero.
@@ -526,51 +526,6 @@ namespace DeckbuilderTests
             string contextStr = JsonConvert.SerializeObject(Context, m_JsonSerializerSettings);
             GameContext copy = JsonConvert.DeserializeObject<GameContext>(contextStr, m_JsonSerializerSettings);
             return copy;
-        }
-    }
-
-    internal class BaseTest
-    {
-        protected static IContext Context { get; set; }
-
-        protected readonly JsonSerializerSettings m_JsonSerializerSettings = new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.All,
-            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
-            ContractResolver = new PrivateSetterContractResolver(),
-            Converters = new List<JsonConverter>
-            {
-                new GameEntityConverter(),
-                new StringToHexConverter()
-            }
-        };
-
-        protected PlayerActor Player { get; set; }
-
-        protected void CreateDeck(IContext context)
-        {
-            foreach (Card card in CreateCards(context))
-            {
-                Context.PlayerDeck.Add(card);
-            }
-        }
-
-        protected Card FindCardInDeck(string name)
-        {
-            return Context.GetCurrentBattle().Deck.AllCards().First(card => card.Name == name);
-        }
-
-        private IEnumerable<Card> CreateCards(IContext context)
-        {
-            yield return context.CreateEntity<TestAttack5Damage>();
-            yield return context.CreateEntity<DoubleNextCardDamage>();
-            yield return context.CreateEntity<Attack10DamageExhaust>();
-            yield return context.CreateEntity<BattleStateAndPermanentState>();
-            yield return context.CreateEntity<DealMoreDamageEachPlay>();
-            yield return context.CreateEntity<PommelStrike>();
-            yield return context.CreateEntity<Strike>();
-            yield return context.CreateEntity<Defend>();
-            yield return context.CreateEntity<MoveToEmptyAdjacentNode>();
         }
     }
 }
