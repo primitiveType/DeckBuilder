@@ -11,13 +11,13 @@ public class SelectionDisplay : MonoBehaviour
 
     [SerializeField] private float CardSeperation;
 
-    [SerializeField] private HandCardProxy HandCardProxyPrefab;
+    [SerializeField] private VisibleCardProxy VisualCardProxyPrefab;
 
     [SerializeField] private Vector3 CenterPosition;
 
     [SerializeField] private GameObject GreyScreenObject;
 
-    private List<HandCardProxy> SelectableCardProxies = new List<HandCardProxy>();
+    private List<VisibleCardProxy> SelectableCardProxies = new List<VisibleCardProxy>();
 
 
     public bool IsDisplaying { get; private set; }
@@ -29,14 +29,14 @@ public class SelectionDisplay : MonoBehaviour
 
         foreach (Card card in selectableCards)
         {
-            HandCardProxy handCardProxy = Instantiate(HandCardProxyPrefab);
-            handCardProxy.Initialize(card);
-            SelectableCardProxies.Add(handCardProxy);
+            VisibleCardProxy visualCardProxy = Instantiate(VisualCardProxyPrefab, transform);
+            visualCardProxy.Initialize(card);
+            SelectableCardProxies.Add(visualCardProxy);
         }
 
         for (int i = 0; i < SelectableCardProxies.Count; i++)
         {
-            SelectableCardProxies[i].HandPositionIndex = i;
+            SelectableCardProxies[i].DisplayIndex = i;
         }
 
         OrganizeDisplay();
@@ -46,9 +46,9 @@ public class SelectionDisplay : MonoBehaviour
     {
         IsDisplaying = false;
         GreyScreenObject.SetActive(false);
-        foreach (HandCardProxy handCardProxy in SelectableCardProxies)
+        foreach (VisibleCardProxy visualCardProxy in SelectableCardProxies)
         {
-            Destroy(handCardProxy.gameObject);
+            Destroy(visualCardProxy.gameObject);
         }
 
         SelectableCardProxies.Clear();
@@ -62,10 +62,10 @@ public class SelectionDisplay : MonoBehaviour
 
         Vector3 startPosition = cardOffset * Vector3.left + CenterPosition;
 
-        foreach (HandCardProxy card in SelectableCardProxies)
+        foreach (VisibleCardProxy card in SelectableCardProxies)
         {
-            card.ResetHandPosition(card.HandPositionIndex * ((CardWidth + CardSeperation) * Vector3.right) +
-                                   startPosition + (Vector3.back * CardDepth * card.HandPositionIndex));
+            card.SetBasePosition(card.DisplayIndex * ((CardWidth + CardSeperation) * Vector3.right) +
+                                   startPosition + (Vector3.back * CardDepth * card.DisplayIndex));
         }
     }
 }

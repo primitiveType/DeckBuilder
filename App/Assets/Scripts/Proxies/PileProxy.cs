@@ -21,6 +21,12 @@ public class PileProxy<TCardProxy> : Proxy<IPile> where TCardProxy : CardProxy
         }
     }
 
+    public bool TryGetCardById(int id, out TCardProxy cardProxy)
+    {
+        cardProxy = CardProxies.Values.FirstOrDefault(x => x.GameEntity.Id == id);
+        return cardProxy != null;
+    }
+
     protected virtual void GameEventHandlerOnCardMoved(object sender, CardMovedEventArgs args)
     {
         //not sure pile type needs to exist. maybe that enum can just go away... not sure.
@@ -43,7 +49,7 @@ public class PileProxy<TCardProxy> : Proxy<IPile> where TCardProxy : CardProxy
         Destroy(CardProxy.gameObject);
     }
 
-    protected virtual Proxy<Card> CreateCardProxy(int argsMovedCard)
+    protected virtual TCardProxy CreateCardProxy(int argsMovedCard)
     {
         TCardProxy cardProxy = Instantiate(CardProxyPrefab, transform);
         Card cardForProxy = GameEntity.Context.GetCurrentBattle().Deck.AllCards()

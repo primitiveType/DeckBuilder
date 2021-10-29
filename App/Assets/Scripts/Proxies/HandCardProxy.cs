@@ -6,42 +6,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 
 
-public class HandCardProxy : CardProxy, IPointerEnterHandler, IPointerExitHandler
+public class HandCardProxy : VisibleCardProxy, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private TMPro.TMP_Text NameText;
-    [SerializeField] private TMPro.TMP_Text DescriptionText;
-    [SerializeField] private TMPro.TMP_Text EnergyText;
-
-    protected override void OnInitialize()
-    {
-        base.OnInitialize();
-        GameEntity.Context.Events.CardPlayed += EventsOnCardPlayed;
-        UpdateCardText();
-    }
-
-    private void OnDestroy()
-    {
-        GameEntity.Context.Events.CardPlayed -= EventsOnCardPlayed;
-    }
-
-    private void EventsOnCardPlayed(object sender, CardPlayedEventArgs args)
-    {
-        UpdateCardText(); //any card being played could cause our text to need to update.
-    }
-
-    private void UpdateCardText()
-    {
-        EnergyText.text = $"{(GameEntity as EnergyCard)?.EnergyCost}";
-        NameText.text = $"{GameEntity.Name}";
-        DescriptionText.text = GameEntity.GetCardText();
-    }
-
-    public int HandPositionIndex
-    {
-        get => HandPositionIndex1;
-        set => HandPositionIndex1 = value;
-    }
-
+ 
     [SerializeField] private bool Hovered => MouseOver || Selected;
 
     private bool MouseOver;
@@ -57,7 +24,7 @@ public class HandCardProxy : CardProxy, IPointerEnterHandler, IPointerExitHandle
         }
     }
 
-    private Vector3 HandPosition { get; set; }
+
 
     private Vector3 TargetPosition { get; set; }
 
@@ -72,23 +39,23 @@ public class HandCardProxy : CardProxy, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private Vector3 LineRendererStartOffset;
     private int HandPositionIndex1;
 
-    public void ResetHandPosition(Vector3 handPosition)
+    public override void SetBasePosition(Vector3 basePosition)
     {
-        HandPosition = handPosition;
+        base.SetBasePosition(basePosition);
         if (Hovered)
         {
-            TargetPosition = HandPosition + HoverOffset;
+            TargetPosition = BasePosition + HoverOffset;
         }
         else
         {
-            TargetPosition = HandPosition;
+            TargetPosition = BasePosition;
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         MouseOver = true;
-        TargetPosition = HandPosition + HoverOffset;
+        TargetPosition = BasePosition + HoverOffset;
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -96,7 +63,7 @@ public class HandCardProxy : CardProxy, IPointerEnterHandler, IPointerExitHandle
         MouseOver = false;
         if (!Hovered)
         {
-            TargetPosition = HandPosition;
+            TargetPosition = BasePosition;
         }
     }
 
@@ -114,7 +81,7 @@ public class HandCardProxy : CardProxy, IPointerEnterHandler, IPointerExitHandle
             lineRenderer.enabled = false;
             if (!Hovered)
             {
-                TargetPosition = HandPosition;
+                TargetPosition = BasePosition;
             }
         }
     }

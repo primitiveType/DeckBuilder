@@ -9,6 +9,9 @@ namespace DeckbuilderLibrary.Data
         IPile HandPile { get; }
         IPile DiscardPile { get; }
         IPile ExhaustPile { get; }
+
+        IPile DiscoverPile { get; }
+
         IEnumerable<Card> AllCards();
         void TrySendToPile(Card card, PileType pileType);
         IList<Card> GetPileCards(PileType pileType);

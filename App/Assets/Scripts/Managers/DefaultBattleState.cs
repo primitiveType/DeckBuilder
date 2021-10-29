@@ -27,7 +27,7 @@ public class DefaultBattleState : State
             }
 
 
-            InputManager.Instance.TransitionToState(InputManager.InputState.CardSelected);
+            InputManager.Instance.TransitionToState(InputState.CardSelected);
         }
         else if (input.Selected is ActorNode node)
         {

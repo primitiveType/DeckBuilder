@@ -15,7 +15,7 @@ namespace Content.Cards
         public override string Name => "Pommel Strike";
 
         public override string GetCardText(IGameEntity target = null)
-        {
+        {           
             return
                 $"Deal {Context.GetDamageAmount(this, DamageAmount, target as ActorNode, Owner)}. Draw {Context.GetDrawAmount(this, DrawAmount, target as IActor, Owner)}";
         }

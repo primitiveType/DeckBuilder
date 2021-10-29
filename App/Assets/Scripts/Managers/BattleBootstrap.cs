@@ -20,6 +20,9 @@ public class BattleBootstrap : MonoBehaviour
     [SerializeField] public DrawPileProxy m_DrawPileProxy;
     DrawPileProxy DrawPileProxy => m_DrawPileProxy;
 
+    [SerializeField] public DiscoverPileProxy m_DiscoverPileProxy;
+    DiscoverPileProxy DiscoverPileProxy => m_DiscoverPileProxy;
+
     [SerializeField] public ExhaustPileProxy m_ExhaustPileProxy;
     ExhaustPileProxy ExhaustPileProxy => m_ExhaustPileProxy;
     [SerializeField] public BattleFactory BattleFactory;
@@ -38,6 +41,8 @@ public class BattleBootstrap : MonoBehaviour
         //TODO: Set up the scene with data injected from elsewhere.
         EndTurnButton.onClick.AddListener(Context.EndTurn);
         InitializeProxies(Context.GetCurrentBattle());
+
+        InputManager.Instance.TransitionToState(InputState.DefaultBattle);
     }
 
     private void InitializeProxies(IBattle battle)
@@ -52,5 +57,7 @@ public class BattleBootstrap : MonoBehaviour
         HandProxy.Initialize(battle.Deck.HandPile);
         DrawPileProxy.Initialize(battle.Deck.DrawPile);
         ExhaustPileProxy.Initialize(battle.Deck.ExhaustPile);
+
+        DiscoverPileProxy.Initialize(battle.Deck.DiscoverPile);
     }
 }

@@ -18,5 +18,7 @@ namespace DeckbuilderLibrary.Data
         void InvokeTurnStarted(object sender, TurnStartedEventArgs args);
         void InvokeIntentChanged(object sender, IntentChangedEventArgs args);
         void InvokeActorsSwapped(object battle, ActorsSwappedEventArgs actorsSwappedEventArgs);
+
+        void InvokeDiscoverCards(object sender, DiscoverCardsEventArgs discoverCardEventArgs);
     }
 }

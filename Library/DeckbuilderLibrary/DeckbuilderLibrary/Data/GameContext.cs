@@ -96,10 +96,38 @@ namespace DeckbuilderLibrary.Data
             }
         }
 
+        //Types should implement IGameEntity
+        public void Discover(IReadOnlyList<Type> typesToDiscover, PileType destinationPile) 
+        {
+            ((IInternalBattleEventHandler)Events).InvokeDiscoverCards(this, new DiscoverCardsEventArgs(typesToDiscover.Count, destinationPile));
+
+            foreach (Type type in typesToDiscover)
+            {
+                //TODO
+                Card createdCard = (Card)CreateEntity(type);
+
+                //Should only the card you select get added to the battle
+                CurrentBattle.AddEntity(createdCard);
+                
+                TrySendToPile(createdCard.Id, PileType.DiscoverPile);
+            }
+        }
+
+
+
         public T CreateEntity<T>() where T : GameEntity, new()
         {
             T entity = CreateEntityNoInitialize<T>();
             InitializeEntity(entity);
+            return entity;
+        }
+
+        public GameEntity CreateEntity(Type entityType)
+        {
+            var entity = (GameEntity)Activator.CreateInstance(entityType);
+            entity.Id = GetNextEntityId();
+            InitializeEntity(entity);
+
             return entity;
         }
 
@@ -211,7 +239,8 @@ namespace DeckbuilderLibrary.Data
 
         public int GetDrawAmount(object sender, int baseDraw, IActor target, IActor owner)
         {
-            throw new NotImplementedException();
+            //TODO
+            return baseDraw;
         }
 
 

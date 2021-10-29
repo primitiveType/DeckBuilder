@@ -13,7 +13,10 @@ namespace DeckbuilderLibrary.Data
         public IPile DiscardPile { get; private set; }
         public IPile ExhaustPile { get; private set; }
 
+        public IPile DiscoverPile { get; private set; }
 
+
+       
         public IEnumerable<Card> AllCards()
         {
             foreach (Card card in DrawPile.Cards)
@@ -35,6 +38,12 @@ namespace DeckbuilderLibrary.Data
             {
                 yield return card;
             }
+
+            foreach (Card card in DiscoverPile.Cards)
+            {
+                yield return card;
+            }
+
         }
 
 
@@ -56,11 +65,17 @@ namespace DeckbuilderLibrary.Data
             else if (DiscardPile.Cards.Remove(card))
             {
                 previousPileType = PileType.DiscardPile;
+            }else if(DiscoverPile.Cards.Remove(card))
+            {
+                previousPileType = PileType.DiscoverPile;
             }
             else
             {
-                //There might actually be cases where this is legal, we'll see.
-                throw new ArgumentException($"Tried to send card to {pileType} that does not exist in deck!");
+                //Cards that were added to an ongoing battle do not have a previous pile type. This occurs in the case of the Discover mechanic.
+                //For now the previous pile type will just be "Discover". 
+                //throw new ArgumentException($"Tried to send card to {pileType} that does not exist in deck!");
+
+                previousPileType = PileType.None;
             }
 
             if (pileType == previousPileType)
@@ -86,6 +101,8 @@ namespace DeckbuilderLibrary.Data
                     return DiscardPile.Cards;
                 case PileType.ExhaustPile:
                     return ExhaustPile.Cards;
+                case PileType.DiscoverPile:
+                    return DiscoverPile.Cards;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(pileType), pileType, null);
             }
@@ -116,6 +133,12 @@ namespace DeckbuilderLibrary.Data
             {
                 ExhaustPile = Context.CreateEntity<Pile>();
                 ((Pile)ExhaustPile).PileType = PileType.ExhaustPile;
+            }
+
+            if (DiscoverPile == null)
+            {
+                DiscoverPile = Context.CreateEntity<Pile>();
+                ((Pile)DiscoverPile).PileType = PileType.DiscoverPile;
             }
         }
     }

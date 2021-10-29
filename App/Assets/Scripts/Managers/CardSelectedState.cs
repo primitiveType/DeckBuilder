@@ -16,8 +16,8 @@ public class CardSelectedState : State
         SelectedCard.Selected = true;
         if (!SelectedCard.GameEntity.RequiresTarget)
         {
-            SelectedCard.GameEntity.PlayCard(null);
-            InputManager.Instance.TransitionToState(InputManager.InputState.DefaultBattle);
+            InputManager.Instance.TransitionToState(InputState.DefaultBattle);
+            selectedCard.GameEntity.PlayCard(null);
         }
         else
         {
@@ -67,7 +67,7 @@ public class CardSelectedState : State
                 InputManager.Instance.SelectionDisplay.ClearDisplay();
             }
 
-            InputManager.Instance.TransitionToState(InputManager.InputState.DefaultBattle);
+            InputManager.Instance.TransitionToState(InputState.DefaultBattle);
         }
     }
 

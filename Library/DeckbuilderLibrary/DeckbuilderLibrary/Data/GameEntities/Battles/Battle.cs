@@ -116,6 +116,45 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
             EntitiesById.Add(entity.Id, entity);
         }
 
+        public void RemoveCard(Card card)
+        {
+            EntitiesById.Remove(card.Id);
+
+            PileType previousPileType;
+            if (Deck.DrawPile.Cards.Remove(card))
+            {
+                previousPileType = PileType.DrawPile;
+            }
+            else if (Deck.HandPile.Cards.Remove(card))
+            {
+                previousPileType = PileType.HandPile;
+            }
+            else if (Deck.ExhaustPile.Cards.Remove(card))
+            {
+                previousPileType = PileType.ExhaustPile;
+            }
+            else if (Deck.DiscardPile.Cards.Remove(card))
+            {
+                previousPileType = PileType.DiscardPile;
+            }
+            else if (Deck.DiscoverPile.Cards.Remove(card))
+            {
+                previousPileType = PileType.DiscoverPile;
+            }
+            else
+            {
+                //Cards that were added to an ongoing battle do not have a previous pile type. This occurs in the case of the Discover mechanic.
+                //For now the previous pile type will just be "Discover". 
+                //throw new ArgumentException($"Tried to send card to {pileType} that does not exist in deck!");
+
+                previousPileType = PileType.None;
+            }
+
+            ((IInternalBattleEventHandler)Deck.Context.Events).InvokeCardMoved(this,
+                new CardMovedEventArgs(card.Id, PileType.None, previousPileType));
+
+        }
+
         internal void SetDeck(IBattleDeck battleDeck)
         {
             if (Deck != null)
