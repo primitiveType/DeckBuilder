@@ -333,6 +333,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PrintTrace: 0
+  m_HandPileProxy: {fileID: 875622477}
+  m_DiscoverPileProxy: {fileID: 0}
+  m_SelectionDisplay: {fileID: 2078023678}
 --- !u!4 &972226933
 Transform:
   m_ObjectHideFlags: 0
@@ -341,7 +344,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 972226931}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0649546, y: -3.271102, z: -1.668058}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -468,6 +471,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 927105879}
+  - {fileID: 2078023679}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -1060,6 +1064,8 @@ MonoBehaviour:
   m_DiscardProxy: {fileID: 6265440844059985355}
   m_HandProxy: {fileID: 875622477}
   m_DrawPileProxy: {fileID: 4963875226008180850}
+  m_DiscoverPileProxy: {fileID: 7790083579552630949, guid: 46ec6e6473836754aa4bf7ae6baeb54e,
+    type: 3}
   m_ExhaustPileProxy: {fileID: 7702882654073517063}
   BattleFactory: {fileID: 0}
   m_PlayerProxy: {fileID: 1391915691}
@@ -1097,7 +1103,7 @@ MonoBehaviour:
   CardWidth: 1.5
   CardDepth: 1
   CardSeperation: 0.1
-  HandCardProxyPrefab: {fileID: -9702683617557761, guid: 6eb0eadf32b28204bbecb1d128b4a4db,
+  VisualCardProxyPrefab: {fileID: 5712462861274902701, guid: 3c610a8fdc5354248bbcd0fd89233139,
     type: 3}
   CenterPosition: {x: 0, y: 2, z: -2}
   GreyScreenObject: {fileID: 144726694}
@@ -1109,12 +1115,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2078023677}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.1780825, y: -4.183472, z: 3.200393}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 144726697}
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_Father: {fileID: 1254303277}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2083889973
 GameObject:
@@ -1263,6 +1269,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1254303277}
     m_Modifications:
+    - target: {fileID: 4696829604626149452, guid: 912803a1c1a29c44aa9f2c9d0a1d067d,
+        type: 3}
+      propertyPath: CardProxyPrefab
+      value: 
+      objectReference: {fileID: 4178195441228180857, guid: 084b2fe046d11144fb126f3a611f330b,
+        type: 3}
     - target: {fileID: 4696829604626149452, guid: 912803a1c1a29c44aa9f2c9d0a1d067d,
         type: 3}
       propertyPath: CenterPosition.z

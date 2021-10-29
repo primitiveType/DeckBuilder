@@ -5,6 +5,13 @@ using DeckbuilderLibrary.Data.GameEntities.Terrain;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Battles
 {
+    public class EmptyBattleData : BattleData<HexGraph>
+    {
+        public override void PrepareBattle(Actor player)
+        {
+        }
+    }
+
     public class BasicBattleData : BattleData<HexGraph>
     {
         public override void PrepareBattle(Actor player)
@@ -47,7 +54,6 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
             {
                 if (node3.TryAdd(terrain))
                 {
-                    
                 }
                 else
                 {
@@ -70,6 +76,4 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
             }
         }
     }
-    
-
 }

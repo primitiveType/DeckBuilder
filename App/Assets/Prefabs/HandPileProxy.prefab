@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e49765a13e48efc4e8699b27d905c6d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CardProxyPrefab: {fileID: -9702683617557761, guid: 6eb0eadf32b28204bbecb1d128b4a4db,
+  CardProxyPrefab: {fileID: 4178195441228180857, guid: 084b2fe046d11144fb126f3a611f330b,
     type: 3}
   CardWidth: 1.5
   CardDepth: 1

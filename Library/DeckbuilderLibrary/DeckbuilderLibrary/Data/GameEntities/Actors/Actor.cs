@@ -1,12 +1,13 @@
 ﻿using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
+using DeckbuilderLibrary.Data.GameEntities.Terrain;
 using DeckbuilderLibrary.Extensions;
 using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Actors
 {
-    public abstract class Actor : GameEntity, IInternalActor
+    public abstract class Actor : CoordinateEntity, IInternalActor
     {
         private CubicHexCoord m_Coordinate;
         public int Health => Resources.GetResourceAmount<Health>();

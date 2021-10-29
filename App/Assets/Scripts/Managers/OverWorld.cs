@@ -88,7 +88,7 @@ public class OverWorld : MonoBehaviour
 
         //}
 
-        Context.StartBattle(Tools.Player, Context.CreateEntity<BasicBattleData>());
+        Context.StartBattle(Tools.Player, Context.CreateEntity<EmptyBattleData>());
         SceneManager.LoadScene("DeckScene");
     }
 }
