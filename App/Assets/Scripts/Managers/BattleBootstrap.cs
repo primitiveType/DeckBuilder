@@ -4,6 +4,7 @@ using DeckbuilderLibrary.Data.GameEntities;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.GameEntities.Battles;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class BattleBootstrap : MonoBehaviour
@@ -25,9 +26,8 @@ public class BattleBootstrap : MonoBehaviour
 
     [SerializeField] public ExhaustPileProxy m_ExhaustPileProxy;
     ExhaustPileProxy ExhaustPileProxy => m_ExhaustPileProxy;
-    [SerializeField] public BattleFactory BattleFactory;
-    [SerializeField] public PlayerActorProxy m_PlayerProxy;
-    PlayerActorProxy PlayerProxy => m_PlayerProxy;
+    [FormerlySerializedAs("m_PlayerProxy")] [SerializeField] public PlayerActorProxy m_PlayerUIProxy;
+    PlayerActorProxy PlayerUIProxy => m_PlayerUIProxy;
 
     [SerializeField] private int m_NumCardsInTestDeck;
     [SerializeField] private Button m_EndTurnButton;
@@ -36,7 +36,7 @@ public class BattleBootstrap : MonoBehaviour
 
     private IContext Context => GameContextManager.Instance.Context;
 
-    void Awake()
+    void Start()
     {
         //TODO: Set up the scene with data injected from elsewhere.
         EndTurnButton.onClick.AddListener(Context.EndTurn);
@@ -47,12 +47,8 @@ public class BattleBootstrap : MonoBehaviour
 
     private void InitializeProxies(IBattle battle)
     {
-        var battleProxy = BattleFactory.GetBattleGO(battle);
-        battleProxy.transform.SetParent(transform);
-        battleProxy.Initialize(battle);
-
-        PlayerProxy.Initialize(battle.Player);
-        
+        PlayerUIProxy.Initialize(battle.Player);
+        Factory.Instance.CreateProxyForEntity(battle.Player);//creates the token.
         DiscardProxy.Initialize(battle.Deck.DiscardPile);
         HandProxy.Initialize(battle.Deck.HandPile);
         DrawPileProxy.Initialize(battle.Deck.DrawPile);

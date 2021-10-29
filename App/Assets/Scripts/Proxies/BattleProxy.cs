@@ -23,6 +23,7 @@ public abstract class BattleProxy : Proxy<IBattle>
 
     protected override void OnInitialize()
     {
+        base.OnInitialize();
         LeaveBattleButton.onClick.AddListener(LeaveBattle);
         GameEventHandler.BattleEnded += OnBattleEnded;
     }
@@ -45,5 +46,5 @@ public abstract class BattleProxy : Proxy<IBattle>
         GameEventHandler.BattleEnded -= OnBattleEnded;
     }
 
-    public abstract NodeProxy GetNodeProxyByEntity(ActorNode entity);
+    public abstract Proxy GetNodeProxyByEntity(ActorNode entity);
 }

@@ -1,7 +1,11 @@
+using System;
+using ca.axoninteractive.Geometry.Hex;
 using Content.Cards;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.GameEntities;
+using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.GameEntities.Battles;
+using DeckbuilderLibrary.Data.GameEntities.Terrain;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -60,15 +64,15 @@ public class OverWorld : MonoBehaviour
 
     private void Test()
     {
-        Context.StartBattle(Tools.Player, Context.CreateEntity<FunBattleData>());
-        //need to figure out how we are going to pass battle data to the scene.
-        SceneManager.LoadScene("BattleScene");
+        SceneManager.LoadSceneAsync("BattleScene").completed += delegate(AsyncOperation operation)
+        {
+            Context.StartBattle(Tools.Player, Context.CreateEntity<RandomBattleData>());
+        };
     }
 
     private void Test2()
     {
         // Context.StartBattle(Tools.Player, Context.CreateEntity<FiveSlotBattleData>());
-        //need to figure out how we are going to pass battle data to the scene.v
         SceneManager.LoadScene("BattleScene");
     }
 
@@ -84,7 +88,65 @@ public class OverWorld : MonoBehaviour
 
         //}
 
-        Context.StartBattle(Tools.Player, Context.CreateEntity<BasicBattleData>());
+        Context.StartBattle(Tools.Player, Context.CreateEntity<EmptyBattleData>());
         SceneManager.LoadScene("DeckScene");
+    }
+}
+
+
+public class RandomBattleData : BattleData<HexGraph>
+{
+    private int width => 50;
+    private int height => 50;
+
+    private Actor Player { get; set; }
+
+    public override void PrepareBattle(Actor player)
+    {
+        Player = player;
+        float[,] noiseValues = new float[width, height];
+        int seed = DateTime.Now.Second;
+        float increment = .1f;
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                noiseValues[i, j] = Mathf.PerlinNoise(increment * (i), increment * (j));
+                AddTile(i, j, noiseValues[i, j]);
+            }
+        }
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+            }
+        }
+    }
+
+    private bool playerPlaced;
+
+    private void AddTile(int x, int y, float noiseValue)
+    {
+        if (Graph.TryGetNode(new AxialHexCoord(x, y).ToCubic(), out var node))
+        {
+            if (noiseValue > .65)
+            {
+                node.AddEntityNoEvent(Context.CreateEntity<Collectible>());
+            }
+            else if (noiseValue > .6)
+            {
+                node.AddEntityNoEvent(Context.CreateEntity<BlockedTerrain>());
+            }
+            else if (noiseValue < .2)
+            {
+                node.AddEntityNoEvent(Context.CreateEntity<FireTerrain>());
+            }
+            else if (!playerPlaced)
+            {
+                node.AddEntityNoEvent(Player);
+                playerPlaced = true;
+            }
+        }
     }
 }

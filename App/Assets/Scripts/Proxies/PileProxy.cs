@@ -14,6 +14,8 @@ public class PileProxy<TCardProxy> : Proxy<IPile> where TCardProxy : CardProxy
 
     protected override void OnInitialize()
     {
+        base.OnInitialize();
+
         GameEntity.Context.Events.CardMoved += GameEventHandlerOnCardMoved;
         foreach (var card in GameEntity.Cards)
         {

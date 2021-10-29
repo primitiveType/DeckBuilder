@@ -216,6 +216,7 @@ namespace DeckbuilderLibrary.Data
             internalGameEntity.SetContext(this);
             // CurrentBattle.AddEntity(entity);
             internalGameEntity.InternalInitialize();
+            ((GameEvents)Events).InvokeEntityCreated(this, new EntityCreatedArgs(internalGameEntity));
         }
 
         public T CopyCard<T>(T card) where T : Card

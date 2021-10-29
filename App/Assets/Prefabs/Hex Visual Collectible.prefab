@@ -1,52 +1,22 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7052518400406470
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5884272738357916650}
-  m_Layer: 0
-  m_Name: MountainTerrain
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5884272738357916650
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7052518400406470}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1391308070790089788}
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &8732002964217480959
+--- !u!1001 &5729159549987942447
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 5884272738357916650}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1182767966464719632, guid: 087fdb6a198f0134d8e6bfcf0639cdfa,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 65ff16bfc03918346be3da76f36a7789, type: 2}
+      objectReference: {fileID: -3846018093981099296, guid: e16282838db8177489e8bc852f2ff97a,
+        type: 3}
     - target: {fileID: 3413996540146615803, guid: 087fdb6a198f0134d8e6bfcf0639cdfa,
         type: 3}
       propertyPath: m_Name
-      value: Hex Visual
+      value: Hex Visual Collectible
       objectReference: {fileID: 0}
     - target: {fileID: 7665308256579128003, guid: 087fdb6a198f0134d8e6bfcf0639cdfa,
         type: 3}
@@ -106,7 +76,7 @@ PrefabInstance:
     - target: {fileID: 7665308256579128003, guid: 087fdb6a198f0134d8e6bfcf0639cdfa,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7665308256579128003, guid: 087fdb6a198f0134d8e6bfcf0639cdfa,
         type: 3}
@@ -155,9 +125,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 087fdb6a198f0134d8e6bfcf0639cdfa, type: 3}
---- !u!224 &1391308070790089788 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7665308256579128003, guid: 087fdb6a198f0134d8e6bfcf0639cdfa,
-    type: 3}
-  m_PrefabInstance: {fileID: 8732002964217480959}
-  m_PrefabAsset: {fileID: 0}

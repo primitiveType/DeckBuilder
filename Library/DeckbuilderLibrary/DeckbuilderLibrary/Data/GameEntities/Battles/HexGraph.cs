@@ -25,7 +25,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
             return Nodes.TryGetValue(coord, out node);
         }
         
-        protected virtual int Radius => 10;
+        protected virtual int Radius => 50;
 
         protected override void Initialize()
         {
@@ -38,7 +38,7 @@ namespace DeckbuilderLibrary.Data.GameEntities.Battles
 
             for (int i = 0; i < Radius; i++)
             {
-                for (int j = 0; j < Radius*2; j++)
+                for (int j = 0; j < Radius; j++)
                 {
                     var coord = new AxialHexCoord(i, j).ToCubic();
                     Nodes.Add(coord, Context.CreateNode(this, coord));

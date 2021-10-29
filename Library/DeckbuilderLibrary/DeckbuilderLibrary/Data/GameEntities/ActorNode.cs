@@ -1,45 +1,44 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using ca.axoninteractive.Geometry.Hex;
+using DeckbuilderLibrary.Annotations;
 using DeckbuilderLibrary.Data.DataStructures;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using DeckbuilderLibrary.Data.GameEntities.Battles;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
+using DeckbuilderLibrary.Data.GameEntities.Terrain;
 using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities
 {
-    public class ActorNode : GameEntity, IHasNeighbours<ActorNode>
+    public class ActorNode : CoordinateEntity, IHasNeighbours<ActorNode>
     {
         [JsonIgnore] private EntityReference<HexGraph> HexGraph { get; set; } = new EntityReference<HexGraph>();
 
         [JsonIgnore] public HexGraph Graph => HexGraph.Entity as HexGraph;
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-        }
 
         internal void Initialize(HexGraph graph, CubicHexCoord coord)
         {
             base.Initialize();
             HexGraph.Entity = graph;
-            Coordinate = coord;
+            ((IInternalCoordinateProperty)this).Coordinate = coord;
             if (CurrentEntities == null)
             {
-                CurrentEntities = new List<EntityReference<IGameEntity>>();
+                CurrentEntities = new ObservableCollection<EntityReference<IGameEntity>>();
             }
         }
 
-        public CubicHexCoord Coordinate { get; private set; }
 
+        [JsonProperty] public ObservableCollection<EntityReference<IGameEntity>> CurrentEntities { get; set; }
 
-        [JsonProperty] public List<EntityReference<IGameEntity>> CurrentEntities { get; set; }
-
+        [PublicAPI]
         public void AddEntityNoEvent(IGameEntity player)
         {
-            CurrentEntities.Add(new EntityReference<IGameEntity>(player));
+            TryAdd(player);
+            // CurrentEntities.Add(new EntityReference<IGameEntity>(player));
         }
 
         public IActor GetActor()
@@ -70,15 +69,19 @@ namespace DeckbuilderLibrary.Data.GameEntities
                 return false;
             }
 
-            if (entity is Actor)
+            if (entity is IBlocksMovement)
             {
-                if (CurrentEntities.OfType<IActor>().Any())
+                if (CurrentEntities.OfType<IBlocksMovement>().Any())
                 {
-                    throw new NotSupportedException("Actor tried to enter square with actor already in it!");
+                    throw new NotSupportedException(
+                        "IBlocksMovement tried to enter square with IBlocksMovement already in it!");
                     return false;
                 }
+            }
 
-                ((IInternalCoordinateProperty)entity).Coordinate = Coordinate;
+            if (entity is IInternalCoordinateProperty coordinateProperty)
+            {
+                coordinateProperty.Coordinate = Coordinate;
             }
 
             CurrentEntities.Add(new EntityReference<IGameEntity>(entity));

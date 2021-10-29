@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Contexts;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
 using UnityEngine;
@@ -15,9 +16,8 @@ public class PlayerActorProxy : ActorProxy<PlayerActor>
     {
         base.OnInitialize();
         UpdateText();
-        
-        
-        
+
+
         GameEntity.Context.Events.CardPlayed += OnCardPlayed;
         GameEntity.Context.Events.TurnEnded += OnTurnEnded; //TODO: turn began?
     }
@@ -49,5 +49,6 @@ public class PlayerActorProxy : ActorProxy<PlayerActor>
         HealthText.text = $"Health : {GameEntity.Health}";
         EnergyText.text = $"Energy : {GameEntity.CurrentEnergy} / {GameEntity.BaseEnergy}";
     }
-}
 
+    
+}

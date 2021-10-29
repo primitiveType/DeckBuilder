@@ -8,10 +8,16 @@ namespace DeckbuilderLibrary.Data
     {
         private Battle Battle;
         public event BattleStarted BattleStarted;
+        public event EntityCreated EntityCreated;
 
         internal void InvokeBattleStarted(object sender, BattleStartedArgs args)
         {
             BattleStarted?.Invoke(sender, args);
+        }
+
+        public void InvokeEntityCreated(object sender, EntityCreatedArgs entityCreatedArgs)
+        {
+            EntityCreated?.Invoke(sender, entityCreatedArgs);
         }
 
         public int RequestDamageAmount(object sender, int baseDamage, IGameEntity owner, IGameEntity target)

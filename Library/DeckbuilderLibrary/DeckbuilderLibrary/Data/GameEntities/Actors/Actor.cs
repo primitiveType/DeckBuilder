@@ -1,20 +1,28 @@
 ﻿using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Resources;
+using DeckbuilderLibrary.Data.GameEntities.Terrain;
 using DeckbuilderLibrary.Extensions;
 using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Actors
 {
-    public abstract class Actor : GameEntity, IInternalActor
+    public abstract class Actor : CoordinateEntity, IInternalActor
     {
+        private CubicHexCoord m_Coordinate;
         public int Health => Resources.GetResourceAmount<Health>();
 
         public int Armor => Resources.GetResourceAmount<Armor>();
 
         [JsonProperty] public Resources.Resources Resources { get; private set; }
-        [JsonIgnore]public ActorNode Node => Coordinate.ToActorNode(Context);
-        public CubicHexCoord Coordinate { get; private set; }
+        [JsonIgnore] public ActorNode Node => Coordinate.ToActorNode(Context);
+
+        public CubicHexCoord Coordinate
+        {
+            get => m_Coordinate;
+            private set => SetField(ref m_Coordinate, value);
+        }
+
         CubicHexCoord ICoordinateProperty.Coordinate => Coordinate;
 
         CubicHexCoord IInternalCoordinateProperty.Coordinate
