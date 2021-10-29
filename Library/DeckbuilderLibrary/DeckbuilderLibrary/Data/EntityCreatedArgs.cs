@@ -11,4 +11,14 @@ namespace DeckbuilderLibrary.Data
             Entity = entity;
         }
     }
+    
+    public class EntityDestroyedArgs
+    {
+        public readonly IGameEntity Entity;
+
+        public EntityDestroyedArgs(IGameEntity entity)
+        {
+            Entity = entity;
+        }
+    }
 }

@@ -52,6 +52,11 @@ namespace DeckbuilderLibrary.Data
             return node;
         }
 
+        public void EntityDestroyed(GameEntity gameEntity)
+        {
+            ((GameEvents)Events).InvokeEntityDestroyed(this, new EntityDestroyedArgs(gameEntity));
+        }
+
         public IBattle GetCurrentBattle()
         {
             return CurrentBattle;

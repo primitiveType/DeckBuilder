@@ -2,6 +2,7 @@ using System.ComponentModel;
 using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
+using DeckbuilderLibrary.Data.GameEntities.Resources;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Terrain
 {
@@ -53,11 +54,14 @@ namespace DeckbuilderLibrary.Data.GameEntities.Terrain
         {
             if (e.PropertyName == nameof(PlayerActor.Coordinate))
             {
-                if (Context.GetCurrentBattle().Player.Coordinate.Equals(Coordinate))
+                var player = Context.GetCurrentBattle().Player;
+                if (player.Coordinate.Equals(Coordinate))
                 {
                     if (Context.GetCurrentBattle().Graph.TryGetNode(Coordinate, out var node))
                     {
                         node.TryRemove(this);
+                        player.Resources.AddResource<Energy>(1);
+                        Destroy();
                     }
                 }
             }

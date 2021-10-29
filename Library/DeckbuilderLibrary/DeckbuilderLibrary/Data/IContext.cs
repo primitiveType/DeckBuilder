@@ -37,5 +37,6 @@ namespace DeckbuilderLibrary.Data
 
         void EndTurn();
         ActorNode CreateNode(HexGraph graph, CubicHexCoord coord);
+        void EntityDestroyed(GameEntity gameEntity);
     }
 }

@@ -9,6 +9,7 @@ namespace DeckbuilderLibrary.Data
         private Battle Battle;
         public event BattleStarted BattleStarted;
         public event EntityCreated EntityCreated;
+        public event EntityDestroyed EntityDestroyed;
 
         internal void InvokeBattleStarted(object sender, BattleStartedArgs args)
         {
@@ -18,6 +19,11 @@ namespace DeckbuilderLibrary.Data
         public void InvokeEntityCreated(object sender, EntityCreatedArgs entityCreatedArgs)
         {
             EntityCreated?.Invoke(sender, entityCreatedArgs);
+        }
+
+        public void InvokeEntityDestroyed(object sender, EntityDestroyedArgs entityDestroyedArgs)
+        {
+            EntityDestroyed?.Invoke(sender, entityDestroyedArgs);
         }
 
         public int RequestDamageAmount(object sender, int baseDamage, IGameEntity owner, IGameEntity target)

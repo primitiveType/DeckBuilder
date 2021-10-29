@@ -6,16 +6,16 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
 {
     public class EntityReference<TGameEntity> : IGameEntity, IInternalInitialize where TGameEntity : IGameEntity
     {
-        [JsonIgnore]
-        public int Id => Entity.Id;
+        [JsonIgnore] public int Id => Entity.Id;
 
-        [JsonIgnore]
-        public IContext Context { get; set; }
+        [JsonIgnore] public IContext Context { get; set; }
 
         public void AddListener(Action<object, PropertyChangedEventArgs> action)
         {
             m_Entity.AddListener(action);
         }
+
+        public event EntityDestroyed DestroyedEvent;
 
         private TGameEntity m_Entity;
 
@@ -25,6 +25,11 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
             get => m_Entity;
             set
             {
+                if (m_Entity != null)
+                {
+                    m_Entity.DestroyedEvent -= EntityOnDestroyedEvent;
+                }
+
                 m_Entity = value;
                 if (Entity == null)
                 {
@@ -33,8 +38,14 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
                 else
                 {
                     EntityId = Entity.Id;
+                    m_Entity.DestroyedEvent += EntityOnDestroyedEvent;
                 }
             }
+        }
+
+        private void EntityOnDestroyedEvent(object sender, EntityDestroyedArgs args)
+        {
+            DestroyedEvent?.Invoke(sender, args);
         }
 
         [JsonProperty] public int EntityId { get; set; } = -1;
@@ -51,12 +62,13 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
 
         public void InternalInitialize()
         {
-            if (Entity == null )
+            if (Entity == null)
             {
                 if (EntityId == -1)
                 {
                     return;
                 }
+
                 Entity = (TGameEntity)GameContext.CurrentContext.GetCurrentBattle().GetActorById(EntityId);
             }
             else
@@ -69,6 +81,5 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
         {
             Context = context;
         }
-        
     }
 }

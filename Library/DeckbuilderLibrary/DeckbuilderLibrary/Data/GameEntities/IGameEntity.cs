@@ -8,5 +8,6 @@ namespace DeckbuilderLibrary.Data.GameEntities
         int Id { get; }
         IContext Context { get; }
         void AddListener(Action<object, PropertyChangedEventArgs> action);
+        event EntityDestroyed DestroyedEvent;
     }
 }

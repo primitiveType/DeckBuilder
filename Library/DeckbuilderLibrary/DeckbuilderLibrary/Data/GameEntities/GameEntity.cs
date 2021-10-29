@@ -23,6 +23,8 @@ namespace DeckbuilderLibrary.Data.GameEntities
 
         [JsonIgnore] private bool Initialized { get; set; }
 
+        public event EntityDestroyed DestroyedEvent;
+
         private List<Action> TerminationActions = new List<Action>();
         private int m_Id = -1;
 
@@ -69,8 +71,15 @@ namespace DeckbuilderLibrary.Data.GameEntities
             }
         }
 
-        private void Terminate()
+        protected virtual void Terminate()
         {
+        }
+
+        public void Destroy()
+        {
+            DestroyedEvent?.Invoke(this, new EntityDestroyedArgs(this));
+            Context.EntityDestroyed(this);
+            Terminate();
         }
 
         public void SetContext(IContext context)

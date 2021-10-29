@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.GameEntities;
 using UnityEngine;
 
@@ -58,10 +59,16 @@ public abstract class Proxy<T> : EntityBehaviour<T>, IGameEntityProperty, IProxy
     protected override void OnInitialize()
     {
         var components = gameObject.GetComponents<IProxyComponent>();
+        GameEntity.DestroyedEvent += OnEntityDestroyed;
         foreach (var component in components)
         {
             component.Initialize(GameEntity);
         }
+    }
+
+    protected virtual void OnEntityDestroyed(object sender, EntityDestroyedArgs args)
+    {
+        Destroy(gameObject);
     }
 
     public void Initialize(IGameEntity entity)
