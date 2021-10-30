@@ -9,6 +9,7 @@ using DeckbuilderLibrary.Data.GameEntities.Terrain;
 using System;
 using System.Linq;
 using System.Reflection;
+using Content.Collectible;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -132,7 +133,7 @@ public class RandomBattleData : BattleData<HexGraph>
         {
             if (noiseValue > .65)
             {
-                node.AddEntityNoEvent(Context.CreateEntity<Collectible>());
+                node.AddEntityNoEvent(Context.CreateEntity<CollectibleDiscoverCards>());
             }
             else if (noiseValue > .6)
             {

@@ -4,7 +4,8 @@ using Newtonsoft.Json;
 
 namespace DeckbuilderLibrary.Data.GameEntities.Resources
 {
-    public class EntityReference<TGameEntity> : IGameEntity, IInternalInitialize where TGameEntity : IGameEntity
+    public class EntityReference<TGameEntity> : IGameEntity, IEquatable<IGameEntity>, IInternalInitialize
+        where TGameEntity : IGameEntity
     {
         [JsonIgnore] public int Id => Entity.Id;
 
@@ -80,6 +81,50 @@ namespace DeckbuilderLibrary.Data.GameEntities.Resources
         public void SetContext(IContext context)
         {
             Context = context;
+        }
+
+        protected bool Equals(EntityReference<TGameEntity> other)
+        {
+            return EntityId == other.EntityId;
+        }
+
+        public bool Equals(IGameEntity other)
+        {
+            if (other == null)
+            {
+                return EntityId == -1;
+            }
+
+            return EntityId == other.Id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is IGameEntity iGameEntity)
+            {
+                return Equals(iGameEntity);
+            }
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((EntityReference<TGameEntity>)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return EntityId;
         }
     }
 }

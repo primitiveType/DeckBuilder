@@ -25,14 +25,7 @@ public class DeckCreationBootstrap : MonoBehaviour
 
         List<Type> AllCards = new List<Type>();
 
-        foreach (Type type in Assembly.GetAssembly(typeof(EnergyCard)).GetTypes().AsEnumerable().Where(x => typeof(Card).IsAssignableFrom(x)))
-        {
-            if (!type.IsAbstract)
-            {
-                AllCards.Add(type);
-            }
-
-        }
+    
 
         //For now, PileType.None is used to denote that cards should be added to the PlayerDeck. 
         Context.Discover(AllCards, PileType.None);

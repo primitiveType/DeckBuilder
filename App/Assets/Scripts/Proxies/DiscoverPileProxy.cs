@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.GameEntities;
 
 
@@ -16,26 +17,31 @@ public class DiscoverPileProxy : PileProxy<DiscoverCardProxy>
     protected override void OnInitialize()
     {
         base.OnInitialize();
-      //  GameEntity.Context.Events.
+        //  GameEntity.Context.Events.
     }
 
     protected override DiscoverCardProxy CreateCardProxy(int argsMovedCard)
     {
         var proxy = base.CreateCardProxy(argsMovedCard);
-
         int numCards = CardProxies.Count;
 
-        
-        if(numCards == 1)
+
+        if (numCards == 1)
         {
             InputManager.Instance.TransitionToState(InputState.DiscoveringCard);
         }
 
-        CardProxies[argsMovedCard].DisplayIndex = numCards - 1;
+        CardProxies[argsMovedCard].DisplayIndex = numCards;
 
         OrganizeHand();
 
         return proxy;
+    }
+
+    protected override void GameEntityOnDestroyedEvent(object sender, EntityDestroyedArgs args)
+    {
+        base.GameEntityOnDestroyedEvent(sender, args);
+        OrganizeHand();
     }
 
     private void OrganizeHand()
@@ -46,22 +52,21 @@ public class DiscoverPileProxy : PileProxy<DiscoverCardProxy>
 
         Vector3 startPosition = cardOffset * Vector3.left + CenterPosition;
 
+
         foreach (DiscoverCardProxy card in CardProxies.Values)
         {
             card.SetBasePosition(card.DisplayIndex * ((CardWidth + CardSeperation) * Vector3.right) +
-                                   startPosition + (Vector3.back * CardDepth * card.DisplayIndex));
+                                 startPosition + (Vector3.back * CardDepth * card.DisplayIndex));
         }
     }
 
     public void ClearSelection()
     {
-        while(GameEntity.Cards.Count > 0)
+        while (GameEntity.Cards.Count > 0)
         {
             Card card = GameEntity.Cards.First<Card>();
-           card.Context.GetCurrentBattle().RemoveCard(card);
+            card.Context.GetCurrentBattle().RemoveCard(card);
         }
-          
-        
     }
 
     protected override void DestroyCardProxy(int argsMovedCard)

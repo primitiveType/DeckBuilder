@@ -20,7 +20,7 @@ namespace Content.Cards
 
         public override IReadOnlyList<IGameEntity> GetValidTargets()
         {
-            return Context.GetCurrentBattle().Graph.GetAdjacentActors((ActorNode)Owner);
+            return Context.GetCurrentBattle().Graph.GetAdjacentActors(Owner);
         }
 
         public override IReadOnlyList<IGameEntity> GetAffectedEntities(IGameEntity targetCoord)

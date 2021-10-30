@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using ca.axoninteractive.Geometry.Hex;
 using Content.Cards;
@@ -418,6 +419,26 @@ namespace DeckbuilderTests
         public void TestAttributes()
         {
         }
+
+        [Test]
+        public void TestCollections()
+        {
+            Context.GetCurrentBattle().Graph.TryGetNode(new CubicHexCoord(0, 0, 0), out ActorNode node);
+            node.CurrentEntities.CollectionChanged += CurrentEntitiesOnCollectionChanged;
+            node.TryAdd(Context.GetCurrentBattle().Player);
+
+            void CurrentEntitiesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+            {
+                Assert.That(e.NewItems, Does.Contain(Context.GetCurrentBattle().Player));
+
+                foreach (object item in e.NewItems)
+                {
+                    Assert.That(item, Is.TypeOf<EntityReference<IGameEntity>>());
+                    Assert.That(item, Is.EqualTo(Context.GetCurrentBattle().Player));
+                }
+            }
+        }
+
 
         [Test]
         public void TestMultipleCardsDontShareState()

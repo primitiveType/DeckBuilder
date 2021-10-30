@@ -68,6 +68,7 @@ public abstract class Proxy<T> : EntityBehaviour<T>, IGameEntityProperty, IProxy
 
     protected virtual void OnEntityDestroyed(object sender, EntityDestroyedArgs args)
     {
+        if(gameObject)
         Destroy(gameObject);
     }
 

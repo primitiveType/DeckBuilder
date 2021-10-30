@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.Events;
@@ -17,10 +18,24 @@ namespace DeckbuilderLibrary.Data
 {
     public class GameContext : IContext, IInternalGameContext
     {
+        // private static List<Type> s_AllCards = new List<Type>();
+        // public static IReadOnlyList<Type> AllCards => s_AllCards;
         [JsonConstructor]
         public GameContext()
         {
             CurrentContext = this;
+        }
+
+        static GameContext()
+        {
+            // foreach (Type type in typeof(Card).GetTypeInfo()..GetTypes().AsEnumerable()
+            //     .Where(x => typeof(Card).IsAssignableFrom(x)))
+            // {
+            //     if (!type.IsAbstract)
+            //     {
+            //         s_AllCards.Add(type);
+            //     }
+            // }
         }
 
         private List<IInternalInitialize> ToInitialize { get; } = new List<IInternalInitialize>();
@@ -102,9 +117,10 @@ namespace DeckbuilderLibrary.Data
         }
 
         //Types should implement IGameEntity
-        public void Discover(IReadOnlyList<Type> typesToDiscover, PileType destinationPile) 
+        public void Discover(IReadOnlyList<Type> typesToDiscover, PileType destinationPile)
         {
-            ((IInternalBattleEventHandler)Events).InvokeDiscoverCards(this, new DiscoverCardsEventArgs(typesToDiscover.Count, destinationPile));
+            ((IInternalBattleEventHandler)Events).InvokeDiscoverCards(this,
+                new DiscoverCardsEventArgs(typesToDiscover.Count, destinationPile));
 
             foreach (Type type in typesToDiscover)
             {
@@ -113,11 +129,10 @@ namespace DeckbuilderLibrary.Data
 
                 //Should only the card you select get added to the battle
                 CurrentBattle.AddEntity(createdCard);
-                
+
                 TrySendToPile(createdCard.Id, PileType.DiscoverPile);
             }
         }
-
 
 
         public T CreateEntity<T>() where T : GameEntity, new()

@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using ca.axoninteractive.Geometry.Hex;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities.Actors;
@@ -41,30 +44,71 @@ namespace DeckbuilderLibrary.Data.GameEntities.Terrain
         }
     }
 
-    public class Collectible : CoordinateEntity, IInternalCoordinateProperty
+    public abstract class Collectible : CoordinateEntity, IInternalCoordinateProperty
     {
+        private ActorNode ParentNode { get; set; }
+
         protected override void Initialize()
         {
             base.Initialize();
-            Context.GetCurrentBattle().Player.AddListener(PlayerOnPropertyChanged);
+            this.AddListener(CoordinateChanged);
         }
 
 
-        private void PlayerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void CoordinateChanged(object o, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            if (e.PropertyName == nameof(PlayerActor.Coordinate))
+            if (propertyChangedEventArgs.PropertyName != nameof(Coordinate))
             {
-                var player = Context.GetCurrentBattle().Player;
-                if (player.Coordinate.Equals(Coordinate))
-                {
-                    if (Context.GetCurrentBattle().Graph.TryGetNode(Coordinate, out var node))
-                    {
-                        node.TryRemove(this);
-                        player.Resources.AddResource<Energy>(1);
-                        Destroy();
-                    }
-                }
+                return;
+            }
+
+            if (ParentNode?.CurrentEntities != null)
+            {
+                ParentNode.CurrentEntities.CollectionChanged -= CurrentEntitiesOnCollectionChanged;
+            }
+
+            if (Context.GetCurrentBattle().Graph.TryGetNode(Coordinate, out var node))
+            {
+                ParentNode = node;
+                node.CurrentEntities.CollectionChanged += CurrentEntitiesOnCollectionChanged;
+            }
+            else
+            {
+                ParentNode = null;
+                throw new NotSupportedException("Unable to find parent node of collectible!");
             }
         }
+
+
+        private void CurrentEntitiesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems == null)
+                return;
+
+                if (e.NewItems.Contains(Context.GetCurrentBattle().Player))
+                {
+                    RemoveAndDetach();
+                    OnCollected();
+                    Destroy();
+                }
+        }
+
+        private void RemoveAndDetach()
+        {
+            if (ParentNode != null)
+            {
+                ParentNode.CurrentEntities.CollectionChanged -= CurrentEntitiesOnCollectionChanged;
+                ParentNode.TryRemove(this);
+            }
+        }
+
+
+        protected override void Terminate()
+        {
+            base.Terminate();
+            RemoveAndDetach();
+        }
+
+        protected abstract void OnCollected();
     }
 }

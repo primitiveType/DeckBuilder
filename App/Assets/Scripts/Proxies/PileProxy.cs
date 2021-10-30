@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.Events;
 using DeckbuilderLibrary.Data.GameEntities;
 
@@ -40,6 +41,7 @@ public class PileProxy<TCardProxy> : Proxy<IPile> where TCardProxy : CardProxy
         {
             //destroy the card that's being moved away. the other pile should create a new proxy.
             //Not sure how this will work with timing/animations and such.
+            CardProxies[args.MovedCard].GameEntity.DestroyedEvent -= GameEntityOnDestroyedEvent;
             DestroyCardProxy(args.MovedCard);
         }
     }
@@ -54,11 +56,19 @@ public class PileProxy<TCardProxy> : Proxy<IPile> where TCardProxy : CardProxy
     protected virtual TCardProxy CreateCardProxy(int argsMovedCard)
     {
         TCardProxy cardProxy = Instantiate(CardProxyPrefab, transform);
+
         Card cardForProxy = GameEntity.Context.GetCurrentBattle().Deck.AllCards()
             .First(card => card.Id == argsMovedCard);
         cardProxy.Initialize(cardForProxy);
+        cardForProxy.DestroyedEvent += GameEntityOnDestroyedEvent;
         CardProxies.Add(argsMovedCard, cardProxy);
         return cardProxy;
+    }
+
+    protected virtual void GameEntityOnDestroyedEvent(object sender, EntityDestroyedArgs args)
+    {
+        args.Entity.DestroyedEvent -= GameEntityOnDestroyedEvent;
+        CardProxies.Remove(args.Entity.Id);
     }
 
     private void OnDestroy()

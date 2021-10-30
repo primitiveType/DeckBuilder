@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -73,6 +74,8 @@ namespace DeckbuilderLibrary.Data.GameEntities
 
         protected virtual void Terminate()
         {
+            DestroyedEvent = null;
+            PropertyChanged = null;
         }
 
         public void Destroy()
@@ -113,17 +116,11 @@ namespace DeckbuilderLibrary.Data.GameEntities
 
         public void AddListener(Action<object, PropertyChangedEventArgs> action)
         {
-            PropertyChanged += (sender, args) =>
-            {
-                try
-                {
-                    action.Invoke(sender, args);
-                }
-                catch (Exception e)
-                {
-                    // Debug.LogError($"Caught exception executing event! {e.Message}", this);
-                }
-            };
+            PropertyChanged += action.Invoke;
+        }
+        public void RemoveListener(Action<object, PropertyChangedEventArgs> action)
+        {
+            PropertyChanged -= action.Invoke;
         }
 
         private event PropertyChangedEventHandler PropertyChanged;
@@ -131,7 +128,25 @@ namespace DeckbuilderLibrary.Data.GameEntities
         [NotifyPropertyChangedInvocator]
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (PropertyChanged == null)
+            {
+                return;
+            }
+
+            foreach (Delegate deleg in PropertyChanged?.GetInvocationList())
+            {
+                try
+                {
+                    deleg.Method.Invoke(deleg.Target,
+                        new object[] { this, new PropertyChangedEventArgs(propertyName) });
+                }
+                catch (Exception e)
+                {
+                    // Debug.Log($"Caught exception executing event! {e.Message}", this);
+                }
+            }
+
+            // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
