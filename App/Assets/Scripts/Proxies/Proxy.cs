@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using DeckbuilderLibrary.Data;
 using DeckbuilderLibrary.Data.GameEntities;
@@ -104,6 +105,34 @@ public static class ReflectionService
 {
     private static readonly Dictionary<Type, List<PropertyListenerInfo>> PropertyListeners =
         new Dictionary<Type, List<PropertyListenerInfo>>();
+    private static Dictionary<FieldInfo, IReadOnlyList<Attribute>> FieldAttributes { get; } = new Dictionary<FieldInfo, IReadOnlyList<Attribute>>();
+
+    private static Dictionary<Type, IReadOnlyList<FieldInfo>> TypeMemberFields { get; } = new Dictionary<Type, IReadOnlyList<FieldInfo>>();
+
+    public static IReadOnlyList<FieldInfo> GetTypeMemberFields(Type type) {
+        if (!TypeMemberFields.TryGetValue(type, out IReadOnlyList<FieldInfo> fields)) {
+            fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            foreach (FieldInfo fieldInfo in fields) {
+                GetFieldAttributes(fieldInfo);
+            }
+
+            TypeMemberFields.Add(type, fields);
+        }
+        return fields;
+    }
+
+    public static T GetFieldAttribute<T>(FieldInfo field) where T : Attribute {
+        return (T) GetFieldAttributes(field).FirstOrDefault(attribute => attribute is T);
+    }
+
+    private static IReadOnlyList<Attribute> GetFieldAttributes(FieldInfo info) {
+        if (!FieldAttributes.TryGetValue(info, out IReadOnlyList<Attribute> attributes)) {
+            attributes = (IReadOnlyList<Attribute>) info.GetCustomAttributes(true).ToList();
+            FieldAttributes.Add(info, attributes);
+        }
+        return attributes;
+    }
 
     public static List<PropertyListenerInfo> GetPropertyListeners(Type type)
     {

@@ -9,7 +9,7 @@ public class Main : MonoBehaviour
     void Start()
     {
         TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
-        SceneManager.LoadScene("Overworld");
+        SceneManager.LoadScene("MainMenu");
 
         Tools.Initialize(new PlayerPrefsData());
     }
