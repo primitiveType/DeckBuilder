@@ -11,7 +11,7 @@ public class Proxy : Proxy<IGameEntity>
 {
 }
 
-public abstract class EntityBehaviour<T> : MonoBehaviour where T : IGameEntity
+public abstract class EntityBehaviour<T> : GameBehaviour where T : IGameEntity
 {
     public T GameEntity { get; private set; }
 
@@ -128,7 +128,7 @@ public static class ReflectionService
 
     private static IReadOnlyList<Attribute> GetFieldAttributes(FieldInfo info) {
         if (!FieldAttributes.TryGetValue(info, out IReadOnlyList<Attribute> attributes)) {
-            attributes = (IReadOnlyList<Attribute>) info.GetCustomAttributes(true).ToList();
+            attributes = info.GetCustomAttributes(true).Select(forSomeReasonAnObject => (Attribute) forSomeReasonAnObject).ToList().AsReadOnly();
             FieldAttributes.Add(info, attributes);
         }
         return attributes;
