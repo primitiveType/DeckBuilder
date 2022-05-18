@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<catalog>
+    <event id ="CardPlayed" >
+        <arg name="CardId" type="int"/>
+        <arg name="CardCost" type="int"/>
+    </event>
+    <event id ="CardDiscarded" >
+        <arg name="CardId" type="int"/>
+        <arg name="CardCost" type="int"/>
+    </event>
+</catalog>

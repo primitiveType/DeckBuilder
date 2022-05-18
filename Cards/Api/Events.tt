@@ -1,0 +1,98 @@
+<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Xml"#>
+<#@ import namespace="System.Xml" #>
+<#
+    XmlDocument doc = new XmlDocument();
+    // Replace this file path with yours:
+    doc.Load(@"./EventDefinitions.xml");
+#>
+public class Events {
+<#
+    foreach (XmlNode node in doc.SelectNodes("/catalog"))
+    {
+#>//Found catalog
+<#
+        foreach (XmlNode eventNode in node.SelectNodes("event"))
+        {
+#>//Found event 
+<#
+            CreateEvent(eventNode);
+            CreateAttribute(eventNode);
+        }
+#>
+
+
+  }
+<#
+        void CreateEvent(XmlNode eventNode)
+        {
+            string argsClassName = eventNode.Attributes["id"].Value + "EventArgs";
+#>
+    public delegate void <#= eventNode.Attributes["id"].Value #>Event (object sender, <#= argsClassName #> args);
+<#
+
+
+#>
+    public class <#= argsClassName #> {<#
+            var argnodes = eventNode.SelectNodes("arg");
+            int argCount = argnodes != null ? argnodes.Count : 0;
+            if (argCount > 0)
+            {
+                foreach (XmlNode argNode in argnodes)
+                {
+#>
+        public  <#=
+                        argNode.Attributes["type"].Value #> <#=
+                        argNode.Attributes["name"].Value #> { get; }
+<#
+                }
+#>
+        public  <#= argsClassName #> (<#
+                int currentArg = 0;
+                foreach (XmlNode argNode in argnodes)
+                {
+                    currentArg++;
+
+                    string postfix = "";
+                    if (currentArg != argCount)
+                    {
+                        //add comma between arguments
+                        postfix = ",";
+                    }
+#><#= argNode.Attributes["type"].Value #> <#=
+                            argNode.Attributes["name"].Value + postfix #> <#
+                }
+#>
+  ){
+    <#
+                foreach (XmlNode argNode in argnodes)
+                {
+//set in ctor
+#>
+              this.<#=
+                        argNode.Attributes["name"].Value #> = <#=
+                        argNode.Attributes["name"].Value #>; 
+<#
+                }
+#>
+}
+
+  }
+<#
+            }
+        }
+    }
+#>
+
+<#
+    void CreateAttribute(XmlNode eventNode)
+    {
+#>
+public class On<#= eventNode.Attributes["id"].Value #>Attribute : Attribute{}
+<#
+    }
+#>
+
+//TODO: generate attributes with static override functions that get the event handle from a game context.
+//TODO: add generation of invoke functions.? 
