@@ -6,7 +6,7 @@ namespace Tests
     {
         public bool CardPlayed { get; private set; }
 
-        [Events.OnCardPlayedAttribute]
+        [OnCardPlayedAttribute]
         private void OnCardPlayed()
         {
             CardPlayed = true;
@@ -16,7 +16,7 @@ namespace Tests
     {
         public bool CardDiscarded { get; private set; }
 
-        [Events.OnCardDiscardedAttribute]
+        [OnCardDiscardedAttribute]
         private void OnCardDiscarded()
         {
             CardDiscarded = true;

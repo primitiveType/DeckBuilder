@@ -4,8 +4,6 @@
 <#@ import namespace="System.Xml" #>
 <#@ import namespace="Api" #>
 <#
-
-
     XmlDocument doc = new XmlDocument();
     // Replace this file path with yours:
     doc.Load(@"./EventDefinitions.xml");
@@ -18,110 +16,111 @@ public class Events : Component{
 <#
     foreach (XmlNode node in doc.SelectNodes("/catalog"))
     {
-#>//Found catalog
-<#
         foreach (XmlNode eventNode in node.SelectNodes("event"))
         {
-#>#region Code for event <#= eventNode.Attributes["id"].Value #>
+#>    #region Code for event <#= eventNode.Attributes["id"].Value #>
 <#
-            CreateEvent(eventNode);
-            CreateAttribute(eventNode);
             CreateInvocator(eventNode);
-#>#endregion Code for event <#= eventNode.Attributes["id"].Value #>
+#>    #endregion Code for event <#= eventNode.Attributes["id"].Value #>
 <#
         }
+    }
 #>
-
-
-  }
+}
 <#
-        void CreateEvent(XmlNode eventNode)
+    foreach (XmlNode node in doc.SelectNodes("/catalog"))
+    {
+        foreach (XmlNode eventNode in node.SelectNodes("event"))
         {
-            string argsClassName = eventNode.Attributes["id"].Value + "EventArgs";
+            CreateAttribute(eventNode);
+            CreateEvent(eventNode);
+        }
+    }
+
+    void CreateEvent(XmlNode eventNode)
+    {
+        string argsClassName = eventNode.Attributes["id"].Value + "EventArgs";
 #>
     public delegate void <#= eventNode.Attributes["id"].Value #>Event (object sender, <#= argsClassName #> args);
-<#
 
-
-#>
     public class <#= argsClassName #> {<#
-            var argnodes = eventNode.SelectNodes("arg");
-            int argCount = argnodes != null ? argnodes.Count : 0;
-            if (argCount > 0)
+        var argnodes = eventNode.SelectNodes("arg");
+        int argCount = argnodes != null ? argnodes.Count : 0;
+        if (argCount > 0)
+        {
+            foreach (XmlNode argNode in argnodes)
             {
-                foreach (XmlNode argNode in argnodes)
-                {
 #>
         public  <#=
-                        argNode.Attributes["type"].Value #> <#=
-                        argNode.Attributes["name"].Value #> { get; }
+                    argNode.Attributes["type"].Value #> <#=
+                    argNode.Attributes["name"].Value #> { get; }
 <#
-                }
+            }
 #>
         public  <#= argsClassName #> (<#
-                int currentArg = 0;
-                foreach (XmlNode argNode in argnodes)
-                {
-                    currentArg++;
+            int currentArg = 0;
+            foreach (XmlNode argNode in argnodes)
+            {
+                currentArg++;
 
-                    string postfix = "";
-                    if (currentArg != argCount)
-                    {
-                        //add comma between arguments
-                        postfix = ",";
-                    }
-#><#= argNode.Attributes["type"].Value #> <#=
-                        argNode.Attributes["name"].Value + postfix #> <#
+                string postfix = "";
+                if (currentArg != argCount)
+                {
+                    //add comma between arguments
+                    postfix = ",";
                 }
+#><#= argNode.Attributes["type"].Value #> <#=
+                    argNode.Attributes["name"].Value + postfix #> <#
+            }
 #>
   ){
     <#
-                foreach (XmlNode argNode in argnodes)
-                {
+            foreach (XmlNode argNode in argnodes)
+            {
 //set in ctor
 #>
               this.<#=
-                        argNode.Attributes["name"].Value #> = <#=
-                        argNode.Attributes["name"].Value #>; 
+                    argNode.Attributes["name"].Value #> = <#=
+                    argNode.Attributes["name"].Value #>; 
 <#
-                }
+            }
 #>
 }
 
   }
 <#
-            }
         }
     }
 #>
+
 
 <#
     void CreateAttribute(XmlNode eventNode)
     {
 #>
-    public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventAttribute {
-        public override EventHandle GetEventHandle(MethodInfo attached, object instance, Events events)
+public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventAttribute {
+    public override EventHandle GetEventHandle(MethodInfo attached, object instance, Events events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
         {
-            var parameters = attached.GetParameters();
-            if (parameters.Length == 0)
-            {
-                return events.SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate(object sender, <#= eventNode.Attributes["id"].Value #>EventArgs args)
-                {
-                    attached.Invoke(instance, Array.Empty<object>());
-                });
-            }
-            if(parameters[0].ParameterType != typeof(object) ||
-            parameters[1].ParameterType != typeof(<#= eventNode.Attributes["id"].Value #>EventArgs)){
-                throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, <#= eventNode.Attributes["id"].Value #>EventArgs) args)");
-            }
             return events.SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate(object sender, <#= eventNode.Attributes["id"].Value #>EventArgs args)
             {
-                attached.Invoke(instance, new[] { sender, args });
+                attached.Invoke(instance, Array.Empty<object>());
             });
         }
-
-    
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(<#= eventNode.Attributes["id"].Value #>EventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, <#= eventNode.Attributes["id"].Value #>EventArgs) args)");
+        }
+        return events.SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate(object sender, <#= eventNode.Attributes["id"].Value #>EventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
     }
+
+
+}
 <#
     }
 
@@ -131,17 +130,17 @@ public class Events : Component{
         string eventTypeName = eventNode.Attributes["id"].Value + "Event";
         string argsName = eventNode.Attributes["id"].Value + "EventArgs";
 #>
-        private event Events.<#= eventTypeName #> <#= eventName #>;
-        internal void On<#= eventName #>(Events.<#= argsName #> args)
-        {
-            <#= eventName #>?.Invoke(this, args);
-        }
+private event <#= eventTypeName #> <#= eventName #>;
+internal void On<#= eventName #>(<#= argsName #> args)
+{
+    <#= eventName #>?.Invoke(this, args);
+}
 
-        public EventHandle SubscribeTo<#= eventName #>(<#= eventTypeName #> action)
-        {
-            <#= eventName #> += action;
-            return new EventHandle(() => <#= eventName #> -= action);
-        } 
+public EventHandle SubscribeTo<#= eventName #>(<#= eventTypeName #> action)
+{
+    <#= eventName #> += action;
+    return new EventHandle(() => <#= eventName #> -= action);
+} 
 <#
     }
 #>

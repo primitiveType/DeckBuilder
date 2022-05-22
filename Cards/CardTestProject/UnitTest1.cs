@@ -33,13 +33,13 @@ namespace Tests
             Assert.IsFalse(testComponent2.CardDiscarded);
             
             //Simulate a card being played
-            game.GetComponent<Events>().OnCardPlayed(new Events.CardPlayedEventArgs(0, 0));
+            game.GetComponent<Events>().OnCardPlayed(new CardPlayedEventArgs(0, 0));
             
             //Verify event was fired from attribute.
             Assert.IsTrue(testComponent.CardPlayed);
             
             //Simulate a card being discarded
-            game.GetComponent<Events>().OnCardDiscarded(new Events.CardDiscardedEventArgs(0, 0));
+            game.GetComponent<Events>().OnCardDiscarded(new CardDiscardedEventArgs(0, 0));
             
             
             //Verify event was fired from attribute.
