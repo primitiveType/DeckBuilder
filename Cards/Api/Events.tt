@@ -2,12 +2,19 @@
 <#@ output extension=".cs" #>
 <#@ assembly name="System.Xml"#>
 <#@ import namespace="System.Xml" #>
+<#@ import namespace="Api" #>
 <#
+
+
     XmlDocument doc = new XmlDocument();
     // Replace this file path with yours:
     doc.Load(@"./EventDefinitions.xml");
 #>
-public class Events {
+using System;
+using Api;
+using System.Reflection;
+
+public class Events : Component{
 <#
     foreach (XmlNode node in doc.SelectNodes("/catalog"))
     {
@@ -15,10 +22,13 @@ public class Events {
 <#
         foreach (XmlNode eventNode in node.SelectNodes("event"))
         {
-#>//Found event 
+#>#region Code for event <#= eventNode.Attributes["id"].Value #>
 <#
             CreateEvent(eventNode);
             CreateAttribute(eventNode);
+            CreateInvocator(eventNode);
+#>#endregion Code for event <#= eventNode.Attributes["id"].Value #>
+<#
         }
 #>
 
@@ -61,7 +71,7 @@ public class Events {
                         postfix = ",";
                     }
 #><#= argNode.Attributes["type"].Value #> <#=
-                            argNode.Attributes["name"].Value + postfix #> <#
+                        argNode.Attributes["name"].Value + postfix #> <#
                 }
 #>
   ){
@@ -89,10 +99,54 @@ public class Events {
     void CreateAttribute(XmlNode eventNode)
     {
 #>
-public class On<#= eventNode.Attributes["id"].Value #>Attribute : Attribute{}
+    public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventAttribute {
+        public override EventHandle GetEventHandle(MethodInfo attached, object instance, Events events)
+        {
+            var parameters = attached.GetParameters();
+            if (parameters.Length == 0)
+            {
+                return events.SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate(object sender, <#= eventNode.Attributes["id"].Value #>EventArgs args)
+                {
+                    attached.Invoke(instance, Array.Empty<object>());
+                });
+            }
+            if(parameters[0].ParameterType != typeof(object) ||
+            parameters[1].ParameterType != typeof(<#= eventNode.Attributes["id"].Value #>EventArgs)){
+                throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, <#= eventNode.Attributes["id"].Value #>EventArgs) args)");
+            }
+            return events.SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate(object sender, <#= eventNode.Attributes["id"].Value #>EventArgs args)
+            {
+                attached.Invoke(instance, new[] { sender, args });
+            });
+        }
+
+    
+    }
+<#
+    }
+
+    void CreateInvocator(XmlNode eventNode)
+    {
+        string eventName = eventNode.Attributes["id"].Value;
+        string eventTypeName = eventNode.Attributes["id"].Value + "Event";
+        string argsName = eventNode.Attributes["id"].Value + "EventArgs";
+#>
+        private event Events.<#= eventTypeName #> <#= eventName #>;
+        internal void On<#= eventName #>(Events.<#= argsName #> args)
+        {
+            <#= eventName #>?.Invoke(this, args);
+        }
+
+        public EventHandle SubscribeTo<#= eventName #>(<#= eventTypeName #> action)
+        {
+            <#= eventName #> += action;
+            return new EventHandle(() => <#= eventName #> -= action);
+        } 
 <#
     }
 #>
 
 //TODO: generate attributes with static override functions that get the event handle from a game context.
 //TODO: add generation of invoke functions.? 
+
+ 
