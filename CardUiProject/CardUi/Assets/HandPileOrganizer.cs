@@ -118,6 +118,7 @@ public class HandPileOrganizer : PileOrganizer
 
     protected override void OnPileChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
+        base.OnPileChanged(sender, e);
         if (e.Action == NotifyCollectionChangedAction.Remove)
         {
             foreach (MonoBehaviour removed in e.OldItems)
@@ -133,7 +134,6 @@ public class HandPileOrganizer : PileOrganizer
             foreach (MonoBehaviour added in e.NewItems)
             {
                 CardsInHand.Add(added.gameObject.AddComponent<CardInHand>());
-                added.transform.parent = transform;
             }
         }
     }

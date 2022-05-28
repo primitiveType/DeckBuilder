@@ -7,6 +7,7 @@ public class DeckPileOrganizer : PileOrganizer
 
     protected override void OnPileChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
+        //don't call base.
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
             foreach (MonoBehaviour added in e.NewItems)

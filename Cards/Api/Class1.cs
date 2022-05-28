@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -32,8 +34,8 @@ namespace Api
 
         public Entity Parent { get; private set; }
 
-        public IReadOnlyList<Entity> Children => m_Children;
-        [JsonProperty] private List<Entity> m_Children = new List<Entity>();
+        public IChildrenCollection<Entity> Children => m_Children;
+        [JsonProperty] private ChildrenCollection m_Children = new ChildrenCollection();
 
         internal void Initialize() //game context paramater?
         {
@@ -127,6 +129,13 @@ namespace Api
                 child.Parent = (this);
             }
         }
+    }
+
+    public class ChildrenCollection : ObservableCollection<Entity>, IChildrenCollection<Entity>
+    {}
+    public interface IChildrenCollection<T> : IReadOnlyCollection<T>, INotifyCollectionChanged
+    {
+        
     }
 
 
