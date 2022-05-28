@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace Api
 {
@@ -21,15 +23,17 @@ namespace Api
         }
     }
 
+    [JsonObject(MemberSerialization.OptIn)]
     public sealed class Entity
     {
-        public int Id { get; private set; }
-        public HashSet<Component> Components { get; } = new HashSet<Component>();
+        [JsonProperty] public int Id { get; private set; }
+
+        [JsonProperty] public List<Component> Components { get; } = new List<Component>();
+
         public Entity Parent { get; private set; }
-        private List<EventHandle> Handles { get; } = new List<EventHandle>();
 
         public IReadOnlyList<Entity> Children => m_Children;
-        private List<Entity> m_Children = new List<Entity>();
+        [JsonProperty] private List<Entity> m_Children = new List<Entity>();
 
         internal void Initialize() //game context paramater?
         {
@@ -38,24 +42,16 @@ namespace Api
 
             foreach (var component in Components)
             {
-                //get attributes on each component.
-                var type = component.GetType();
-                foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Default | BindingFlags.Public | BindingFlags.Instance))
-                {
-                    foreach (EventAttribute attribute in method.GetCustomAttributes<EventAttribute>())
-                    {
-                        Handles.Add(attribute.GetEventHandle(method, component, GetComponentInParent<Events>()));
-                    }
-                }
+                component.Initialize(this);
             }
         }
 
         internal void Terminate()
         {
             //dispose event handles we created from initialize.
-            foreach (var handle in Handles)
+            foreach (var component in Components)
             {
-                handle.Dispose();
+                component.Terminate();
             }
         }
 
@@ -80,6 +76,7 @@ namespace Api
         {
             return Components.OfType<T>().FirstOrDefault();
         }
+
         public T GetComponentInParent<T>()
         {
             T component = default(T);
@@ -97,12 +94,70 @@ namespace Api
 
             return component;
         }
-    }
-    
-    
 
-    public class Component
+        public T AddComponent<T>() where T : Component, new()
+        {
+            var t = new T();
+            Components.Add(t);
+
+            return t;
+        }
+
+        public bool RemoveComponent(Component toRemove)
+        {
+            if (!Components.Remove(toRemove))
+            {
+                return false;
+            }
+
+            toRemove.Terminate();
+            return true;
+        }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            foreach (var component in Components)
+            {
+                component.Initialize(this);
+            }
+
+            foreach (var child in Children)
+            {
+                child.Parent = (this);
+            }
+        }
+    }
+
+
+    public abstract class Component
     {
+        private List<EventHandle> EventHandles { get; } = new List<EventHandle>();
+        [JsonIgnore]
+        public Entity Parent { get; private set; }
+
+        public void Initialize(Entity parent)
+        {
+            Parent = parent;
+            //get attributes on each component.
+            var type = GetType();
+            foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Default | BindingFlags.Public |
+                                                   BindingFlags.Instance))
+            {
+                foreach (EventAttribute attribute in method.GetCustomAttributes<EventAttribute>())
+                {
+                    EventHandles.Add(attribute.GetEventHandle(method, this, Parent.GetComponentInParent<EventsBase>()));
+                }
+            }
+        }
+
+        public void Terminate()
+        {
+            foreach (var eventHandle in EventHandles)
+            {
+                eventHandle.Dispose();
+            }
+        }
     }
 
     public class Card : Component
@@ -111,6 +166,5 @@ namespace Api
 
     public class Context : Component
     {
-        
     }
 }

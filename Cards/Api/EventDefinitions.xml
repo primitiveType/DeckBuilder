@@ -8,4 +8,10 @@
         <arg name="CardId" type="int"/>
         <arg name="CardCost" type="int"/>
     </event>
+    <event id ="RequestDealDamage" >
+        <arg name="Amount" type="int"/>
+        <arg name="Source" type="Entity"/>
+        <arg name="Target" type="Entity"/>
+        <member name ="Multiplier" type="List&lt;float&gt;" value="new List&lt;float&gt;()"/>
+    </event>
 </catalog>

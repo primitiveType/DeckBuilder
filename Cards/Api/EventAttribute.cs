@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace Api
 {
@@ -9,16 +10,17 @@ namespace Api
         Permanent
     }
 
+    [MeansImplicitUse]
     public abstract class EventAttribute : Attribute
     {
         public readonly EventAttachmentLifetime Lifetime;
 
-        public EventAttribute(EventAttachmentLifetime lifetime = EventAttachmentLifetime.Permanent)
+        public EventAttribute(EventAttachmentLifetime lifetime = EventAttachmentLifetime.Permanent) 
         {
             Lifetime = lifetime;
         }
 
-        public abstract EventHandle GetEventHandle(MethodInfo attached, object instance, Events events);
+        public abstract EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events);
 
     }
 }

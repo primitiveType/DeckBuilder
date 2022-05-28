@@ -1,4 +1,4 @@
-<#@ template debug="false" hostspecific="true" language="C#" #>
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
 <#@ output extension=".cs" #>
 <#@ assembly name="System.Xml"#>
 <#@ import namespace="System.Xml" #>
@@ -11,8 +11,9 @@
 using System;
 using Api;
 using System.Reflection;
+using System.Collections.Generic;
 
-public class Events : Component{
+public abstract class EventsBase : Component{
 <#
     foreach (XmlNode node in doc.SelectNodes("/catalog"))
     {
@@ -45,6 +46,7 @@ public class Events : Component{
 
     public class <#= argsClassName #> {<#
         var argnodes = eventNode.SelectNodes("arg");
+        var memberNodes = eventNode.SelectNodes("member");
         int argCount = argnodes != null ? argnodes.Count : 0;
         if (argCount > 0)
         {
@@ -55,6 +57,19 @@ public class Events : Component{
                     argNode.Attributes["type"].Value #> <#=
                     argNode.Attributes["name"].Value #> { get; }
 <#
+            }
+            foreach (XmlNode argNode in memberNodes)
+            {
+#>
+        public  <#=
+                    argNode.Attributes["type"].Value #> <#=
+                    argNode.Attributes["name"].Value #> { get; set;} 
+<#
+                if (argNode.Attributes["value"]?.Value != null)
+                {
+#>=<#=
+                            argNode.Attributes["value"].Value #>;<#
+                }
             }
 #>
         public  <#= argsClassName #> (<#
@@ -98,8 +113,11 @@ public class Events : Component{
     void CreateAttribute(XmlNode eventNode)
     {
 #>
+/// <summary>
+/// (object sender, <#= eventNode.Attributes["id"].Value #>EventArgs) args)
+/// </summary>
 public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventAttribute {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, Events events)
+    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -131,7 +149,7 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventAttribute
         string argsName = eventNode.Attributes["id"].Value + "EventArgs";
 #>
 private event <#= eventTypeName #> <#= eventName #>;
-internal void On<#= eventName #>(<#= argsName #> args)
+internal virtual void On<#= eventName #>(<#= argsName #> args)
 {
     <#= eventName #>?.Invoke(this, args);
 }
