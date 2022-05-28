@@ -28,18 +28,27 @@ public class PileItem : MonoBehaviour, IEndDragHandler, IPileItem, IDragHandler,
 
     public void OnEndDrag(PointerEventData eventData)
     {
-
         IsDragging = false;
         if (TargetPile == null)
         {
             return;
         }
 
-        if (TargetPile.ReceiveItem(this))
+        TrySendToPile(TargetPile);
+    }
+
+    public bool TrySendToPile(IPile pile)
+    {
+        if (pile.ReceiveItem(this))
         {
             CurrentPile?.RemoveItem(this);
-            CurrentPile = TargetPile;
+            CurrentPile = pile;
+            return true;
         }
+        
+
+        Debug.Log($"Failed to add {name} to {pile}");
+        return false;
     }
 
 

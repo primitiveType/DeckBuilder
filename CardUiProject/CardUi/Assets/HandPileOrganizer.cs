@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using UnityEditorInternal;
 using UnityEngine;
+
 
 public class HandPileOrganizer : PileOrganizer
 {
@@ -12,6 +14,7 @@ public class HandPileOrganizer : PileOrganizer
     [SerializeField] private float overlapRatio = .9f;
     [SerializeField] private bool rotate = true;
     [SerializeField] private float offset = 0f;
+    [SerializeField] private float hoveredOverlapRotation = 1f;
 
 
     private List<CardInHand> CardsInHand { get; } = new List<CardInHand>();
@@ -34,11 +37,21 @@ public class HandPileOrganizer : PileOrganizer
 
 
             xPos += halfSize;
-            float h = 0;
-            float k = -radius;
-            float theta = (Mathf.PI / 2f) + offset + (-xPos / radius);
-            float x = radius * Mathf.Cos(theta) + h;
-            float y = radius * Mathf.Sin(theta) + k;
+            float x;
+            float y;
+            if (rotate)
+            {
+                float h = 0;
+                float k = -radius;
+                float theta = (Mathf.PI / 2f) + offset + (-xPos / radius);
+                x = radius * Mathf.Cos(theta) + h;
+                y = radius * Mathf.Sin(theta) + k;
+            }
+            else
+            {
+                x = xPos;
+                y = 0;
+            }
 
             Vector3 pileItemPosition = card.PileItem.GetLocalPosition();
             Vector3 target = new Vector3(x, y, pileItemPosition.z);
@@ -46,23 +59,12 @@ public class HandPileOrganizer : PileOrganizer
 
             if (card.IsHovered)
             {
-                var spriteRenderer = card.GetComponent<Renderer>();
-
-                //first move it to where it would be.
-                card.PileItem.SetLocalPosition(target, new Vector3());
-
-                //then clamp it to the screen and update its transform position.
-                Vector3 clampedPosition = spriteRenderer.ClampToViewport(Camera.main);
-                Vector3 clampedLocalPosition =
-                    transform.InverseTransformPoint(clampedPosition).WithZ(pileItemPosition.z);
-                card.PileItem.SetLocalPosition(clampedLocalPosition, new Vector3());
-
-                card.PileItem.SortHandler.SetDepth((int)Sorting.DraggedPileItem);
+                SetHoveredPosition(card, target, pileItemPosition);
             }
             else
             {
                 float rate = (-(lerpRate) * Time.deltaTime);
-                Vector3 lerpedTarget = Vector3.Lerp(target, pileItemPosition, Mathf.Pow(rate, 2f));
+                Vector3 lerpedTarget = VectorExtensions.Damp( pileItemPosition, target, lerpRate, Time.deltaTime);
                 card.PileItem.SetLocalPosition(lerpedTarget, GetRotation(xPos));
             }
 
@@ -70,9 +72,24 @@ public class HandPileOrganizer : PileOrganizer
         }
     }
 
+    private void SetHoveredPosition(CardInHand card, Vector3 target, Vector3 pileItemPosition)
+    {
+        //first move it to where it would be.
+        card.PileItem.SetLocalPosition(target, new Vector3());
+
+        //then clamp it to the screen and update its transform position.
+        var spriteRenderer = card.GetComponent<Renderer>();
+        Vector3 clampedPosition = spriteRenderer.ClampToViewport(Camera.main);
+        Vector3 clampedLocalPosition =
+            transform.InverseTransformPoint(clampedPosition).WithZ(pileItemPosition.z);
+        card.PileItem.SetLocalPosition(clampedLocalPosition, new Vector3());
+
+        card.PileItem.SortHandler.SetDepth((int)Sorting.DraggedPileItem);
+    }
+
     private float GetEffectiveCardWidth(CardInHand card)
     {
-        return card.PileItem.GetBounds().extents.x * (card.IsHovered ? 1 : overlapRatio);
+        return 2 * card.PileItem.GetBounds().extents.x * (card.IsHovered ? hoveredOverlapRotation : overlapRatio);
     }
 
     //theta = arclength/radius
@@ -84,7 +101,7 @@ public class HandPileOrganizer : PileOrganizer
             return Vector3.zero;
         }
 
-        return new Vector3(0, 0, offset + (-xPos / radius));
+        return new Vector3(0, 0, Mathf.Rad2Deg * (offset + (-xPos / radius)));
     }
 
     private float GetTotalWidth()

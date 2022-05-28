@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public interface IPileItem
+public interface IPileItem : IGameObject
 {
     void SetLocalPosition(Vector3 transformPosition, Vector3 transformRotation);
     Vector3 GetLocalPosition();
@@ -9,4 +9,5 @@ public interface IPileItem
     bool IsDragging { get; }
 
     ISortHandler SortHandler { get; }
+    bool TrySendToPile(IPile pile);
 }

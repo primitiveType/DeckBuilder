@@ -5,13 +5,17 @@ using UnityEngine.EventSystems;
 public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private HandPileOrganizer Organizer { get; set; }
-    public PileItem PileItem { get; private set; }
+    public IPileItem PileItem { get; private set; }
     public bool IsHovered { get; private set; }
 
     private void Awake()
     {
         Debug.Log("Card is in hand!");
-        PileItem = GetComponentInParent<PileItem>();
+        PileItem = GetComponentInParent<IPileItem>();
+        if (PileItem == null)
+        {
+            Debug.LogError("Pile item not found when adding card to hand!");
+        }
     }
 
 
