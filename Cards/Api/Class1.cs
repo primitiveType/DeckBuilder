@@ -30,21 +30,42 @@ namespace Api
     {
         [JsonProperty] public int Id { get; private set; }
 
-        [JsonProperty] public List<Component> Components { get; } = new List<Component>();
+        [JsonProperty] public IChildrenCollection<Component> Components => m_Components;
+        [JsonProperty] private ChildrenCollection<Component> m_Components = new ChildrenCollection<Component>();
+
 
         public Entity Parent { get; private set; }
 
         public IChildrenCollection<Entity> Children => m_Children;
-        [JsonProperty] private ChildrenCollection m_Children = new ChildrenCollection();
+        [JsonProperty] private ChildrenCollection<Entity> m_Children = new ChildrenCollection<Entity>();
 
         internal void Initialize() //game context paramater?
         {
+            Components.CollectionChanged += ComponentsOnCollectionChanged;
             //call generated code that does reflection to get all event attributes and subscribes to proper events
             //should also iterate components? OR should it only happen in components? depends on whether this stays sealed.
 
             foreach (var component in Components)
             {
-                component.Initialize(this);
+                component.InternalInitialize(this);
+            }
+        }
+
+        private void ComponentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (Component added in e.NewItems)
+                {
+                    added.InternalInitialize(this);
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (Component removed in e.OldItems)
+                {
+                    removed.Terminate();
+                }
             }
         }
 
@@ -97,22 +118,41 @@ namespace Api
             return component;
         }
 
+        public T GetComponentInChildren<T>()
+        {
+            T component = GetComponent<T>();
+            if (component != null)
+            {
+                return component;
+            }
+
+            foreach (Entity entity in Children)
+            { //looks like depth first... I guess that's ok for now.
+                component = entity.GetComponentInChildren<T>();
+                if (component != null)
+                {
+                    return component;
+                }
+            }
+
+            return component;
+        }
+
         public T AddComponent<T>() where T : Component, new()
         {
             var t = new T();
-            Components.Add(t);
+            m_Components.Add(t);
 
             return t;
         }
 
         public bool RemoveComponent(Component toRemove)
         {
-            if (!Components.Remove(toRemove))
+            if (!m_Components.Remove(toRemove))
             {
                 return false;
             }
 
-            toRemove.Terminate();
             return true;
         }
 
@@ -121,7 +161,7 @@ namespace Api
         {
             foreach (var component in Components)
             {
-                component.Initialize(this);
+                component.InternalInitialize(this);
             }
 
             foreach (var child in Children)
@@ -131,21 +171,21 @@ namespace Api
         }
     }
 
-    public class ChildrenCollection : ObservableCollection<Entity>, IChildrenCollection<Entity>
-    {}
+    public class ChildrenCollection<T> : ObservableCollection<T>, IChildrenCollection<T>
+    {
+    }
+
     public interface IChildrenCollection<T> : IReadOnlyCollection<T>, INotifyCollectionChanged
     {
-        
     }
 
 
     public abstract class Component
     {
         private List<EventHandle> EventHandles { get; } = new List<EventHandle>();
-        [JsonIgnore]
-        public Entity Parent { get; private set; }
+        [JsonIgnore] public Entity Parent { get; private set; }
 
-        public void Initialize(Entity parent)
+        public void InternalInitialize(Entity parent)
         {
             Parent = parent;
             //get attributes on each component.
@@ -158,6 +198,12 @@ namespace Api
                     EventHandles.Add(attribute.GetEventHandle(method, this, Parent.GetComponentInParent<EventsBase>()));
                 }
             }
+
+            Initialize();
+        }
+
+        protected virtual void Initialize()
+        {
         }
 
         public void Terminate()

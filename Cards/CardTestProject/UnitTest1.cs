@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Xml.Serialization;
 using Api;
 using Api.Components;
@@ -18,16 +19,14 @@ namespace Tests
         {
             //Create a game
             Entity game = new Entity();
-            game.Components.Add(new Events());
+            game.AddComponent<Events>();
             game.Initialize();
 
             //Add entity with test components
             Entity entity = new Entity();
-            var testComponent = new CardPlayedComponent();
-            entity.Components.Add(testComponent);
+            var testComponent = entity.AddComponent<CardPlayedComponent>();
 
-            var testComponent2 = new CardDiscardedComponent();
-            entity.Components.Add(testComponent2);
+            var testComponent2 = entity.AddComponent<CardDiscardedComponent>();
             entity.SetParent(game);
 
             //Verify initial value.
@@ -53,7 +52,7 @@ namespace Tests
         {
             //Create a game
             Entity game = new Entity();
-            game.Components.Add(new Events());
+            game.AddComponent<Events>();
             game.Initialize();
 
             //Add entity with test components
@@ -81,7 +80,7 @@ namespace Tests
         {
             //Create a game
             Entity game = new Entity();
-            game.Components.Add(new Events());
+            game.AddComponent<Events>();
             game.Initialize();
 
             //Add entity with test components
@@ -94,7 +93,7 @@ namespace Tests
             var gameString = Serializer.Serialize(game);
             var gameCopy = Serializer.Deserialize<Entity>(gameString);
 
-            var healthCopy = gameCopy.Children[0].GetComponent<Health>();
+            var healthCopy = gameCopy.Children.First().GetComponent<Health>();
 
             Assert.NotNull(healthCopy);
             Assert.AreEqual(healthCopy.Amount, health.Amount);
@@ -115,7 +114,7 @@ namespace Tests
         {
             //Create a game
             Entity game = new Entity();
-            game.Components.Add(new Events());
+            game.AddComponent<Events>();
             game.Initialize();
 
             //Add entity with test components
