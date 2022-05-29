@@ -20,11 +20,6 @@ public class View<T> : MonoBehaviour, IView<T> where T : IComponent
     }
 }
 
-public interface IView<out T> : IView
-{
-    T Model { get; }
-}
-
 public interface IView
 {
     Entity Entity { get; }

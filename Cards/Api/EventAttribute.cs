@@ -4,12 +4,6 @@ using JetBrains.Annotations;
 
 namespace Api
 {
-    public enum EventAttachmentLifetime
-    {
-        Battle,
-        Permanent
-    }
-
     [MeansImplicitUse]
     public abstract class EventAttribute : Attribute
     {

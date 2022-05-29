@@ -16,9 +16,4 @@ namespace Api.Components
             return diff;
         }
     }
-
-    public interface ITakesDamage
-    {
-        int DealDamage(int damage);
-    }
 }

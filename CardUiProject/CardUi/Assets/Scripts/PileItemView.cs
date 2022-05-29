@@ -102,8 +102,3 @@ public class PileItemView : View<IPileItem>, IEndDragHandler, IPileItemView, IDr
         transform.localRotation = Quaternion.identity;
     }
 }
-
-public interface ISortHandler
-{
-    void SetDepth(int depth);
-}

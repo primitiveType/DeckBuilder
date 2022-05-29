@@ -1,32 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Api
 {
-    public class EventHandle : IDisposable
-    {
-        private Action OnDispose { get; set; }
-
-        public EventHandle(Action onDispose)
-        {
-            OnDispose = onDispose;
-        }
-
-        public void Dispose()
-        {
-            OnDispose.Invoke();
-            OnDispose = null;
-        }
-    }
-
     [JsonObject(MemberSerialization.OptIn)]
     public sealed class Entity
     {
@@ -191,134 +169,5 @@ namespace Api
                 child.Parent = (this);
             }
         }
-    }
-
-    public class ChildrenCollection<T> : INotifyCollectionChanged, IChildrenCollection<T>, ICollection<T>
-    {
-        [ItemNotNull] private ICollection<T> m_CollectionImplementation = new Collection<T>();
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return m_CollectionImplementation.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public void Add(T item, Action invokeBeforeEvent)
-        {
-            m_CollectionImplementation.Add(item);
-            invokeBeforeEvent?.Invoke();
-            CollectionChanged?.Invoke(this,
-                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new List<T> { item }));
-        }
-
-        public void Add(T item)
-        {
-            Add(item, null);
-        }
-
-
-        public void Clear()
-        {
-            var oldItems = m_CollectionImplementation.ToList();
-            m_CollectionImplementation.Clear();
-            CollectionChanged?.Invoke(this,
-                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItems));
-        }
-
-        public bool Contains(T item)
-        {
-            return m_CollectionImplementation.Contains(item);
-        }
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            m_CollectionImplementation.CopyTo(array, arrayIndex);
-        }
-
-        public bool Remove(T item, Action invokeBeforeEvent)
-        {
-            bool removed = m_CollectionImplementation.Remove(item);
-            if (removed)
-            {
-                invokeBeforeEvent?.Invoke();
-                CollectionChanged?.Invoke(this,
-                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, new List<T> { item }));
-            }
-
-            return removed;
-        }
-
-        public bool Remove(T item)
-        {
-            return Remove(item, null);
-        }
-
-        public int Count => m_CollectionImplementation.Count;
-        public bool IsReadOnly => m_CollectionImplementation.IsReadOnly;
-    }
-
-    public interface IChildrenCollection<T> : IReadOnlyCollection<T>, INotifyCollectionChanged
-    {
-    }
-
-
-    public abstract class Component : IComponent
-    {
-        private List<EventHandle> EventHandles { get; } = new List<EventHandle>();
-        [JsonIgnore] public Entity Parent { get; private set; }
-        private bool Initialized { get; set; }
-
-        public void InternalInitialize(Entity parent)
-        {
-            if (Initialized)
-            {
-                return;
-            }
-
-            Initialized = true;
-            Parent = parent;
-            //get attributes on each component.
-            var type = GetType();
-            foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Default | BindingFlags.Public |
-                                                   BindingFlags.Instance))
-            {
-                foreach (EventAttribute attribute in method.GetCustomAttributes<EventAttribute>())
-                {
-                    EventHandles.Add(attribute.GetEventHandle(method, this, Parent.GetComponentInParent<EventsBase>()));
-                }
-            }
-
-            Initialize();
-        }
-
-        protected virtual void Initialize()
-        {
-        }
-
-        public void Terminate()
-        {
-            foreach (var eventHandle in EventHandles)
-            {
-                eventHandle.Dispose();
-            }
-        }
-    }
-
-    public interface IComponent
-    {
-    }
-
-    public class Card : Component
-    {
-    }
-
-    public class Context : Component
-    {
     }
 }

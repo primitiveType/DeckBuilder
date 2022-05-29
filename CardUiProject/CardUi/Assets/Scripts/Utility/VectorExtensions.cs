@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using Api;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public static class VectorExtensions
 {
@@ -32,49 +28,5 @@ public static class VectorExtensions
     public static Vector3 Damp(Vector3 a, Vector3 b, float lambda, float dt)
     {
         return Vector3.Lerp(a, b, 1 - Mathf.Exp(-lambda * dt));
-    }
-}
-
-public static class CameraExtensions
-{
-    public static Bounds GetViewportBounds(this Camera camera, float distance)
-    {
-        if (camera.orthographic)
-        {
-            float frustumHeight = camera.orthographicSize * 2;
-            float frustumWidth = frustumHeight * camera.aspect;
-            return new Bounds(camera.transform.position, new Vector3(frustumWidth, frustumHeight));
-        }
-        else
-        {
-            //Untested.
-            throw new NotSupportedException("This implementation is untested! remove this error and try it out.");
-            float frustumHeight = 2.0f * distance * Mathf.Tan(camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
-            float frustumWidth = frustumHeight * camera.aspect;
-            return new Bounds(camera.transform.position, new Vector3(frustumWidth, frustumHeight));
-        }
-    }
-}
-
-public static class RendererExtensions
-{
-    public static Vector3 ClampToViewport(this Renderer renderer, Camera camera)
-    {
-        Vector3 position = renderer.transform.position;
-        Bounds viewportBounds = camera.GetViewportBounds(Vector3.Distance(position, camera.transform.position));
-        Bounds encapsulated = viewportBounds;
-        encapsulated.Encapsulate(renderer.bounds);
-
-        Vector3 diff = encapsulated.center - viewportBounds.center;
-        return position - (diff * 2);
-    }
-}
-
-public static class CollectionExtensions
-{
-    public static T GetRandom<T>(this IChildrenCollection<T> collection)
-    {
-        int index = Random.Range(0, collection.Count - 1);
-        return collection.ElementAt(index);
     }
 }
