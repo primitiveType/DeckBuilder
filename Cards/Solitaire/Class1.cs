@@ -1,8 +1,10 @@
-﻿using Api;
+﻿using System.Linq;
+using Api;
+using CardsAndPiles;
 
 namespace Solitaire
 {
-    public class StandardDeckCard : Component
+    public class StandardDeckCard : Component, IPileItem
     {
         public Suit Suit { get; private set; }
         public int Number { get; private set; }
@@ -12,6 +14,12 @@ namespace Solitaire
         {
             Suit = suit;
             Number = number;
+        }
+
+        //Should this just be an extension method?
+        public bool TrySendToPile(IPile pile)
+        {
+            return pile.ReceiveItem(this);
         }
     }
 
@@ -23,36 +31,51 @@ namespace Solitaire
         Diamonds
     }
 
-    public abstract class Pile : Component
+    public class SolitaireDeckPileConstraint : Component, IPileConstraint
     {
-        public abstract bool TryAddCard(StandardDeckCard entity);
+        public bool CanReceive(Entity itemView)
+        {
+            return !Parent.GetComponentInParent<SolitaireGame>().GameStarted;
+        }
+    }
+
+    public abstract class Pile : Component, IPile
+    {
+        public abstract bool ReceiveItem(IPileItem itemView);
+
+        public void RemoveItem(IPileItem itemView)
+        {
+        }
+
     }
 
     public class DeckPile : Pile
     {
-        public override bool TryAddCard(StandardDeckCard entity)
+        public override bool ReceiveItem(IPileItem item)
         {
-            if (Parent.GetComponentInParent<SolitaireGame>().GameStarted)
+            if ((!(item is StandardDeckCard card)) || Parent.GetComponentInParent<SolitaireGame>().GameStarted)
             {
                 return false;
             }
-            
-            entity.Parent.SetParent(Parent);
+
+            card.Parent.SetParent(Parent);
             return true;
         }
     }
-    
+
     public class HandPile : Pile
     {
         private int MaxHandSize = 5;
-        public override bool TryAddCard(StandardDeckCard entity)
+
+
+        public override bool ReceiveItem(IPileItem item)
         {
-            if (Parent.Children.Count >= MaxHandSize)
+            if ((!(item is StandardDeckCard card)) || Parent.Children.Count >= MaxHandSize)
             {
                 return false;
             }
-            
-            entity.Parent.SetParent(Parent);
+
+            card.Parent.SetParent(Parent);
             return true;
         }
     }
@@ -68,11 +91,11 @@ namespace Solitaire
             Entity deckEntity = new Entity();
             deckEntity.AddComponent<DeckPile>();
             deckEntity.SetParent(Parent);
-            
+
             Entity handEntity = new Entity();
             handEntity.AddComponent<HandPile>();
             handEntity.SetParent(Parent);
-            
+
             for (int i = 0; i < 13; i++)
             {
                 MakeCard(i, Suit.Clubs).SetParent(deckEntity);
@@ -89,6 +112,36 @@ namespace Solitaire
             card.SetCard(num, suit);
 
             return cardEntity;
+        }
+    }
+
+    public class SolitairePileConstraint : Component, IPileConstraint
+    {
+        public bool CanReceive(Entity item)
+        {
+            var card = item.GetComponent<StandardDeckCard>();
+
+            return card != null && SuitCompatible(card.Suit) && IsNextSequence(card.Number);
+        }
+
+        private bool IsNextSequence(int number)
+        {
+            if (Parent.Children.Last().GetComponent<StandardDeckCard>().Number == number - 1)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool SuitCompatible(Suit suit)
+        {
+            if (Parent.Children.Count == 0)
+            {
+                return true;
+            }
+
+            return Parent.Children.First().GetComponent<StandardDeckCard>().Suit == suit;
         }
     }
 }

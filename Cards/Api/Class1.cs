@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Api
@@ -38,9 +40,14 @@ namespace Api
 
         public IChildrenCollection<Entity> Children => m_Children;
         [JsonProperty] private ChildrenCollection<Entity> m_Children = new ChildrenCollection<Entity>();
+        private bool Initialized { get; set; }
 
         internal void Initialize() //game context paramater?
         {
+            if (Initialized)
+            {
+                return;
+            }
             Components.CollectionChanged += ComponentsOnCollectionChanged;
             //call generated code that does reflection to get all event attributes and subscribes to proper events
             //should also iterate components? OR should it only happen in components? depends on whether this stays sealed.
@@ -49,6 +56,8 @@ namespace Api
             {
                 component.InternalInitialize(this);
             }
+
+            Initialized = true;
         }
 
         private void ComponentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -80,9 +89,15 @@ namespace Api
 
         public void AddChild(Entity entity)
         {
-            m_Children.Add(entity);
-            entity.Parent = this;
-            entity.Initialize();
+            //Add to collection.
+            //set parent./
+            //initialize
+            //fire added event.
+            m_Children.Add(entity, () =>
+            {
+                entity.Parent = this;
+                entity.Initialize();
+            });
         }
 
         public bool RemoveChild(Entity entity)
@@ -140,15 +155,22 @@ namespace Api
 
         public T AddComponent<T>() where T : Component, new()
         {
-            var t = new T();
-            m_Components.Add(t);
+            T component = new T();
+            if (Initialized)
+            {
+                m_Components.Add(component, () => { component.InternalInitialize(this); });
+            }
+            else
+            {
+                m_Components.Add(component);
+            }
 
-            return t;
+            return component;
         }
 
         public bool RemoveComponent(Component toRemove)
         {
-            if (!m_Components.Remove(toRemove))
+            if (!m_Components.Remove(toRemove, toRemove.Terminate))
             {
                 return false;
             }
@@ -171,8 +193,74 @@ namespace Api
         }
     }
 
-    public class ChildrenCollection<T> : ObservableCollection<T>, IChildrenCollection<T>
+    public class ChildrenCollection<T> : INotifyCollectionChanged, IChildrenCollection<T>, ICollection<T>
     {
+        [ItemNotNull] private ICollection<T> m_CollectionImplementation = new Collection<T>();
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return m_CollectionImplementation.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Add(T item, Action invokeBeforeEvent)
+        {
+            m_CollectionImplementation.Add(item);
+            invokeBeforeEvent?.Invoke();
+            CollectionChanged?.Invoke(this,
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new List<T> { item }));
+        }
+
+        public void Add(T item)
+        {
+            Add(item, null);
+        }
+
+
+        public void Clear()
+        {
+            var oldItems = m_CollectionImplementation.ToList();
+            m_CollectionImplementation.Clear();
+            CollectionChanged?.Invoke(this,
+                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItems));
+        }
+
+        public bool Contains(T item)
+        {
+            return m_CollectionImplementation.Contains(item);
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            m_CollectionImplementation.CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(T item, Action invokeBeforeEvent)
+        {
+            bool removed = m_CollectionImplementation.Remove(item);
+            if (removed)
+            {
+                invokeBeforeEvent?.Invoke();
+                CollectionChanged?.Invoke(this,
+                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, new List<T> { item }));
+            }
+
+            return removed;
+        }
+
+        public bool Remove(T item)
+        {
+            return Remove(item, null);
+        }
+
+        public int Count => m_CollectionImplementation.Count;
+        public bool IsReadOnly => m_CollectionImplementation.IsReadOnly;
     }
 
     public interface IChildrenCollection<T> : IReadOnlyCollection<T>, INotifyCollectionChanged
@@ -180,13 +268,20 @@ namespace Api
     }
 
 
-    public abstract class Component
+    public abstract class Component : IComponent
     {
         private List<EventHandle> EventHandles { get; } = new List<EventHandle>();
         [JsonIgnore] public Entity Parent { get; private set; }
+        private bool Initialized { get; set; }
 
         public void InternalInitialize(Entity parent)
         {
+            if (Initialized)
+            {
+                return;
+            }
+
+            Initialized = true;
             Parent = parent;
             //get attributes on each component.
             var type = GetType();
@@ -213,6 +308,10 @@ namespace Api
                 eventHandle.Dispose();
             }
         }
+    }
+
+    public interface IComponent
+    {
     }
 
     public class Card : Component

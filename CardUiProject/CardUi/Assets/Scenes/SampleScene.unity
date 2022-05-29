@@ -352,8 +352,9 @@ MonoBehaviour:
   - {fileID: -3579520602560944142, guid: 1a557343d3ab40d428761f09bc70811e, type: 3}
   - {fileID: -8400460703064076358, guid: 1a557343d3ab40d428761f09bc70811e, type: 3}
   - {fileID: 5942381542478621416, guid: 1a557343d3ab40d428761f09bc70811e, type: 3}
-  CardPrefab: {fileID: 168395530597155128, guid: 672ab5a2adfd9c04a9a2e7ecdfc624b4, type: 3}
-  DeckPile: {fileID: 1608505771}
+  m_CardPrefab: {fileID: 168395530597155128, guid: 672ab5a2adfd9c04a9a2e7ecdfc624b4, type: 3}
+  m_DeckPileView: {fileID: 1608505771}
+  m_HandPileView: {fileID: 1886750118}
 --- !u!4 &143889790
 Transform:
   m_ObjectHideFlags: 0
@@ -521,7 +522,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &758234479
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -884,7 +885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3affb1ae4da756b48a7be3d2ce473ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pileToSendTo: {fileID: 1886750118}
+  m_PileViewToSendTo: {fileID: 1886750118}
 --- !u!1 &1799434582
 GameObject:
   m_ObjectHideFlags: 0
@@ -895,7 +896,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1799434583}
   - component: {fileID: 1799434585}
-  - component: {fileID: 1799434584}
   m_Layer: 0
   m_Name: Organizer
   m_TagString: Untagged
@@ -918,18 +918,6 @@ Transform:
   m_Father: {fileID: 1608505772}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1799434584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1799434582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30fc40310cac486ea9974bc6d8700b16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1799434585
 MonoBehaviour:
   m_ObjectHideFlags: 0

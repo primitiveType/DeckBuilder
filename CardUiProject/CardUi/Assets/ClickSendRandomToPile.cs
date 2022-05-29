@@ -1,27 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CardsAndPiles;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class ClickSendRandomToPile : MonoBehaviour, IPointerClickHandler
 {
-    private IPile Pile { get; set; }
+    private IPileView PileView { get; set; }
 
-    [SerializeField] private Pile pileToSendTo; 
+    [SerializeField] private PileView m_PileViewToSendTo; 
     // Start is called before the first frame update
     void Start()
     {
-        Pile = GetComponent<Pile>();
+        PileView = GetComponent<PileView>();
     }
 
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (Pile.Items.Count > 0)
+        if (PileView.Entity.Children.Count > 0)
         {
-            IPileItem card = Pile.Items.GetRandom();
-            card.TrySendToPile(pileToSendTo);
+            IPileItem card = PileView.Entity.Children.GetRandom().GetComponent<IPileItem>();
+            card.TrySendToPile(m_PileViewToSendTo.Model);
         }
     }
 }

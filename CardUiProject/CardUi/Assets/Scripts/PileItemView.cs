@@ -1,13 +1,15 @@
 ﻿using System;
+using CardsAndPiles;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.PlayerLoop;
 
 [RequireComponent(typeof(ISortHandler))]
-public class PileItem : MonoBehaviour, IEndDragHandler, IPileItem, IDragHandler, IGameObject, IBeginDragHandler
+public class PileItemView : View<IPileItem>, IEndDragHandler, IPileItemView, IDragHandler, IGameObject,
+    IBeginDragHandler
 {
-    private Pile TargetPile { get; set; }
-    private IPile CurrentPile { get; set; }
+    private PileView TargetPileView { get; set; }
+    private IPileView CurrentPileView { get; set; }
 
     private Renderer Renderer { get; set; }
 
@@ -23,32 +25,36 @@ public class PileItem : MonoBehaviour, IEndDragHandler, IPileItem, IDragHandler,
     public void OnTriggerEnter(Collider other)
     {
         Debug.Log($"collided with {other.gameObject.name}!");
-        TargetPile = other.gameObject.GetComponent<Pile>();
+        TargetPileView = other.gameObject.GetComponent<PileView>();
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         IsDragging = false;
-        if (TargetPile == null)
+        if (TargetPileView == null)
         {
             return;
         }
 
-        TrySendToPile(TargetPile);
+        if (!TrySendToPile(TargetPileView))
+        {
+            Debug.Log($"Failed to add {name} to {TargetPileView.name}.");
+        }
     }
 
-    public bool TrySendToPile(IPile pile)
+    public bool TrySendToPile(IPileView pileView)
     {
-        if (pile.ReceiveItem(this))
-        {
-            CurrentPile?.RemoveItem(this);
-            CurrentPile = pile;
-            return true;
-        }
-        
-
-        Debug.Log($"Failed to add {name} to {pile}");
-        return false;
+        return pileView.Model.ReceiveItem(this.Model);
+        // if (pileView.ReceiveItem(this))
+        // {
+        //     CurrentPileView?.RemoveItem(this);
+        //     CurrentPileView = pileView;
+        //     return true;
+        // }
+        //
+        //
+        // Debug.Log($"Failed to add {name} to {pileView}");
+        // return false;
     }
 
 
@@ -68,7 +74,7 @@ public class PileItem : MonoBehaviour, IEndDragHandler, IPileItem, IDragHandler,
         return Renderer.bounds;
     }
 
-    public bool CanEnterPile(IPile pile)
+    public bool CanEnterPile(IPileView pileView)
     {
         return true;
     }
@@ -81,11 +87,11 @@ public class PileItem : MonoBehaviour, IEndDragHandler, IPileItem, IDragHandler,
         RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
         foreach (var result in results)
         {
-            Pile pile = result.transform.GetComponent<Pile>();
-            if (pile != null)
+            PileView pileView = result.transform.GetComponent<PileView>();
+            if (pileView != null)
             {
-                TargetPile = pile;
-                Debug.Log($"Found target pile {pile.name}!");
+                TargetPileView = pileView;
+                Debug.Log($"Found target pile {pileView.name}!");
             }
         }
     }

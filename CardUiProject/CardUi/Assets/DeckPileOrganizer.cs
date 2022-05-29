@@ -1,19 +1,18 @@
 ﻿using System.Collections.Specialized;
+using Api;
 using UnityEngine;
 
 public class DeckPileOrganizer : PileOrganizer
 {
     [SerializeField] private Transform parentTransform;
 
-    protected override void OnPileChanged(object sender, NotifyCollectionChangedEventArgs e)
+
+    protected override void ParentViewToPile(Entity added)
     {
-        //don't call base.
-        if (e.Action == NotifyCollectionChangedAction.Add)
-        {
-            foreach (MonoBehaviour added in e.NewItems)
-            {
-                added.transform.SetParent(parentTransform);
-            }
-        }
+        IGameObject viewGO = added.GetComponent<IGameObject>();
+        
+        PileItemView view = viewGO.gameObject.GetComponent<PileItemView>();
+        view.gameObject.transform.SetParent(parentTransform);
+        view.SetLocalPosition(new Vector3(), new Vector3());
     }
 }

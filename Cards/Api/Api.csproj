@@ -25,7 +25,8 @@
 
     <ItemGroup>
       <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
-        <HintPath>..\..\..\..\..\..\..\Program Files\JetBrains\JetBrains Rider 2020.1.4\lib\ReSharperHost\TestRunner\net461\JetBrains.Annotations.dll</HintPath>
+          <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+          <HintPath>..\..\..\..\..\..\..\Program Files\JetBrains\JetBrains Rider 2020.1.4\lib\ReSharperHost\TestRunner\net461\JetBrains.Annotations.dll</HintPath>
       </Reference>
     </ItemGroup>
 

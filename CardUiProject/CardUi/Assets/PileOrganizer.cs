@@ -1,23 +1,41 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
+using Api;
 using UnityEngine;
 
 public class PileOrganizer : MonoBehaviour
 {
-    protected IPile Pile { get; set; }
-    private void Awake()
+    protected IPileView PileView { get; set; }
+
+    private void Start()
     {
-        Pile = GetComponentInParent<IPile>();
-        Pile.Items.CollectionChanged += OnPileChanged;
+        PileView = GetComponentInParent<IPileView>();
+        PileView.Entity.Children.CollectionChanged += OnPileChanged;
+        foreach (Entity child in PileView.Entity.Children)
+        {
+            ParentViewToPile(child);
+        }
     }
 
     protected virtual void OnPileChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
-            foreach (MonoBehaviour added in e.NewItems)
+            foreach (Entity added in e.NewItems)
             {
-                added.transform.parent = transform;
+                ParentViewToPile(added);
             }
         }
+    }
+
+    protected virtual void ParentViewToPile(Entity added)
+    {
+        IGameObject view = added.GetComponent<IGameObject>();
+        view.gameObject.transform.parent = transform;
+    }
+
+    private void OnDestroy()
+    {
+        PileView.Entity.Children.CollectionChanged -= OnPileChanged;
     }
 }

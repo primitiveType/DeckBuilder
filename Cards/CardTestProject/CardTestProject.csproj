@@ -7,19 +7,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="nunit" Version="3.10.1" />
-        <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+        <PackageReference Include="nunit" Version="3.10.1"/>
+        <PackageReference Include="NUnit3TestAdapter" Version="3.10.0"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Api\Api.csproj" />
+        <ProjectReference Include="..\Api\Api.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
-        <HintPath>..\..\..\..\..\..\..\Program Files\JetBrains\JetBrains Rider 2020.1.4\lib\ReSharperHost\TestRunner\net461\JetBrains.Annotations.dll</HintPath>
-      </Reference>
+        <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325" CopyToPublishDirectory="Never">
+            <HintPath>..\..\..\..\..\..\..\Program Files\JetBrains\JetBrains Rider 2020.1.4\lib\ReSharperHost\TestRunner\net461\JetBrains.Annotations.dll</HintPath>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </Reference>
     </ItemGroup>
 
 </Project>

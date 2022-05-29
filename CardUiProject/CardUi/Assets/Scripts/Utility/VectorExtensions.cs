@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Api;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -69,9 +72,9 @@ public static class RendererExtensions
 
 public static class CollectionExtensions
 {
-    public static T GetRandom<T>(this Collection<T> collection)
+    public static T GetRandom<T>(this IChildrenCollection<T> collection)
     {
         int index = Random.Range(0, collection.Count - 1);
-        return collection[index];
+        return collection.ElementAt(index);
     }
 }

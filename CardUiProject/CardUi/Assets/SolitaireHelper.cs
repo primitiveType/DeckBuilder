@@ -1,16 +1,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using Api;
+using Solitaire;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Component = Api.Component;
 
 public class SolitaireHelper : MonoBehaviourSingleton<SolitaireHelper>
 {
     public List<Sprite> Sprites;
-    public bool GameStarted { get; private set; }
+    public StandardDeckCardView CardPrefab => m_CardPrefab;
 
-    [SerializeField] private StandardDeckCard CardPrefab;
 
-    [SerializeField] private Pile DeckPile;
+    [SerializeField] private StandardDeckCardView m_CardPrefab;
+
+    [FormerlySerializedAs("DeckPile")] [SerializeField]
+    private PileView m_DeckPileView;
+
+    [SerializeField] private PileView m_HandPileView;
+
+    private SolitaireGame Game { get; set; }
 
     public Sprite GetCardSprite(int number, Suit suit)
     {
@@ -34,7 +45,7 @@ public class SolitaireHelper : MonoBehaviourSingleton<SolitaireHelper>
                 throw new ArgumentOutOfRangeException(nameof(suit), suit, null);
         }
 
-        startIndex += 4;//card backs and jokers.
+        startIndex += 4; //card backs and jokers.
         return Sprites[startIndex + number];
     }
 
@@ -45,22 +56,76 @@ public class SolitaireHelper : MonoBehaviourSingleton<SolitaireHelper>
 
     private void SetupGame()
     {
-        GameStarted = false;
-        for (int i = 0; i < 13; i++)
+        var root = new Entity();
+        var game = new Entity();
+        game.AddComponent<CardViewBridge>();
+        game.SetParent(root);
+        Game = game.AddComponent<SolitaireGame>();
+        PileViewBridge deckBridge = game.GetComponentInChildren<DeckPile>().Parent.AddComponent<PileViewBridge>();
+        deckBridge.gameObject = m_DeckPileView.gameObject;
+        m_DeckPileView.SetModel(deckBridge.Parent);
+        PileViewBridge handBridge = game.GetComponentInChildren<HandPile>().Parent.AddComponent<PileViewBridge>();
+        handBridge.gameObject = m_HandPileView.gameObject;
+        m_HandPileView.SetModel(handBridge.Parent);
+    }
+}
+
+public class ViewFactory
+{
+}
+
+public class PileViewBridge : Component, IGameObject
+{ //piles are pre-determined so there is much less logic.
+    public GameObject gameObject { get; set; }
+}
+
+
+public class CardViewBridge : Component, IGameObject
+{
+    public StandardDeckCardView CardPrefab => SolitaireHelper.Instance.CardPrefab;
+
+    protected override void Initialize()
+    {
+        base.Initialize();
+        StandardDeckCard card = Parent.GetComponent<StandardDeckCard>();
+        if (card != null)
         {
-            MakeCard(i, Suit.Clubs);
-            MakeCard(i, Suit.Hearts);
-            MakeCard(i, Suit.Spades);
-            MakeCard(i, Suit.Diamonds);
+            MakeCard(card);
         }
 
-        GameStarted = true;
+
+        Parent.Children.CollectionChanged += ChildrenOnCollectionChanged;
+        foreach (Entity child in Parent.Children)
+        {
+            AddBridgeIfMissing(child);
+        }
     }
 
-    private void MakeCard(int i, Suit suit)
+    private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        StandardDeckCard card = Instantiate(CardPrefab).GetComponent<StandardDeckCard>();
-        card.SetCard(i, suit);
-        DeckPile.ReceiveItem(card.GetComponentInParent<IPileItem>());
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            foreach (Entity item in e.NewItems)
+            {
+                AddBridgeIfMissing(item);
+            }
+        }
     }
+
+    private static void AddBridgeIfMissing(Entity item)
+    {
+        if (item.GetComponent<CardViewBridge>() == null)
+        {
+            item.AddComponent<CardViewBridge>();
+        }
+    }
+
+    private void MakeCard(StandardDeckCard cardModel)
+    {
+        StandardDeckCardView card = GameObject.Instantiate(CardPrefab).GetComponent<StandardDeckCardView>();
+        gameObject = card.gameObject;
+        card.SetModel(cardModel.Parent);
+    }
+
+    public GameObject gameObject { get; private set; }
 }
