@@ -31,10 +31,8 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-/Assets/SpriteOutputs/
-/.idea/.idea.3DSprites/
-App/Assets/External/
-App/Assets/LevelMeshes/
-App/Assets/Dependencies/
+/CardUiProject/CardUi/Assets/External/
+/CardUiProject/CardUi/Assets/LevelMeshes/
+/CardUiProject/CardUi/Assets/Dependencies/
 .idea
 */.vs/*
