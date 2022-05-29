@@ -1,4 +1,5 @@
 using CardsAndPiles;
+using Common;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -6,7 +7,8 @@ public class ClickSendRandomToPile : MonoBehaviour, IPointerClickHandler
 {
     private IPileView PileView { get; set; }
 
-    [SerializeField] private PileView m_PileViewToSendTo; 
+    [SerializeField] private PileView m_PileViewToSendTo;
+
     // Start is called before the first frame update
     void Start()
     {

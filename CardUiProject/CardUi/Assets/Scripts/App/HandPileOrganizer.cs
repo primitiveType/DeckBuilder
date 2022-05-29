@@ -6,7 +6,6 @@ using Api;
 using UnityEditorInternal;
 using UnityEngine;
 
-
 public class HandPileOrganizer : PileOrganizer
 {
     [SerializeField] private float lerpRate = .01f;
