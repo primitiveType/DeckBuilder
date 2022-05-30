@@ -20,5 +20,32 @@ namespace Solitaire
         {
             return pile.ReceiveItem(this);
         }
+
+        public string GetName()
+        {
+            int cardNumber = Number + 2;
+            string numberName = cardNumber.ToString();
+            if (cardNumber == 11)
+            {
+                numberName = "Jack";
+            }
+            else if (cardNumber == 12)
+            {
+                numberName = "Queen";
+                
+            }
+            else if (cardNumber == 13)
+            {
+                numberName = "King";
+                
+            }
+            else if (cardNumber == 14)
+            {
+                numberName = "Ace";
+                
+            }
+
+            return $"{numberName} of {Suit.ToString()}";
+        }
     }
 }

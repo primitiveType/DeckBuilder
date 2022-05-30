@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IEndDragHandler
 {
     private HandPileOrganizer Organizer { get; set; }
     public IPileItemView PileItemView { get; private set; }
@@ -39,5 +39,10 @@ public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private void ResetScale()
     {
         transform.localScale = Vector3.one;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        IsHovered = false;
     }
 }

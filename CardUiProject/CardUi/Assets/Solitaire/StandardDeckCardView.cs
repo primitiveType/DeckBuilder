@@ -15,6 +15,6 @@ public class StandardDeckCardView : View<StandardDeckCard>
     {
         base.OnInitialized();
         SpriteRenderer.sprite = SolitaireHelper.Instance.GetCardSprite(Number, Suit);
-        gameObject.name = $"{Number} of {Suit.ToString()}";
+        gameObject.name = Model.GetName();
     }
 }

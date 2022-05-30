@@ -31,13 +31,13 @@ public class SolitaireHelper : MonoBehaviourSingleton<SolitaireHelper>
             case Suit.Hearts:
                 startIndex = 0;
                 break;
-            case Suit.Spades:
+            case Suit.Clubs:
                 startIndex = 13;
                 break;
-            case Suit.Clubs:
+            case Suit.Diamonds:
                 startIndex = 26;
                 break;
-            case Suit.Diamonds:
+            case Suit.Spades:
                 startIndex = 39;
                 break;
             default:
