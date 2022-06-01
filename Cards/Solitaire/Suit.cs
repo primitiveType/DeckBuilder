@@ -7,4 +7,10 @@
         Hearts,
         Diamonds
     }
+
+    public enum SuitColor
+    {
+        Red,
+        Black
+    }
 }

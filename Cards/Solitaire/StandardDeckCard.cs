@@ -1,18 +1,25 @@
-﻿using Api;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using CardsAndPiles;
+using Solitaire.Annotations;
+using Component = Api.Component;
 
 namespace Solitaire
 {
-    public class StandardDeckCard : Component, IPileItem
+    public class StandardDeckCard : Component, IPileItem, INotifyPropertyChanged
     {
         public Suit Suit { get; private set; }
         public int Number { get; private set; }
+        public bool IsFaceDown { get; set; }
+
+        public SuitColor SuitColor => Suit == Suit.Clubs || Suit == Suit.Spades ? SuitColor.Black : SuitColor.Red;
 
 
-        public void SetCard(int number, Suit suit)
+        public void SetCard(int number, Suit suit, bool isFaceDown = false)
         {
             Suit = suit;
             Number = number;
+            IsFaceDown = isFaceDown;
         }
 
         //Should this just be an extension method?
@@ -32,20 +39,19 @@ namespace Solitaire
             else if (cardNumber == 12)
             {
                 numberName = "Queen";
-                
             }
             else if (cardNumber == 13)
             {
                 numberName = "King";
-                
             }
             else if (cardNumber == 14)
             {
                 numberName = "Ace";
-                
             }
 
             return $"{numberName} of {Suit.ToString()}";
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

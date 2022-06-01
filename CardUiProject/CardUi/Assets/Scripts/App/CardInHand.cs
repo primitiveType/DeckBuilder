@@ -22,7 +22,6 @@ public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             Debug.LogError("Pile item not found when adding card to hand!");
         }
-
         StartCoroutine(WarmUp());
     }
 

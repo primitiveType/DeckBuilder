@@ -9,4 +9,8 @@
       <ProjectReference Include="..\CardsAndPiles\CardsAndPiles.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
+    </ItemGroup>
+
 </Project>

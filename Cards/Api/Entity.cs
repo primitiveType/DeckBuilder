@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
@@ -26,6 +27,7 @@ namespace Api
             {
                 return;
             }
+
             Components.CollectionChanged += ComponentsOnCollectionChanged;
             //call generated code that does reflection to get all event attributes and subscribes to proper events
             //should also iterate components? OR should it only happen in components? depends on whether this stays sealed.
@@ -89,6 +91,7 @@ namespace Api
             {
                 Parent.RemoveChild(this);
             }
+
             parent.AddChild(this);
         }
 
@@ -133,6 +136,31 @@ namespace Api
             }
 
             return component;
+        }
+
+        public List<T> GetComponentsInChildren<T>()
+        {
+            List<T> components = new List<T>();
+
+            DoGetComponentsInChildren(this);
+
+            void DoGetComponentsInChildren(Entity entity)
+            {
+                T component = entity.GetComponent<T>();
+                if (component != null)
+                {
+                    components.Add(component);
+                }
+
+
+                foreach (Entity child in entity.Children)
+                {
+                    DoGetComponentsInChildren(child);
+                }
+            }
+
+
+            return components;
         }
 
         public T AddComponent<T>() where T : Component, new()
