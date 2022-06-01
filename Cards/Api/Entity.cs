@@ -85,6 +85,10 @@ namespace Api
 
         public void SetParent(Entity parent)
         {
+            if (Parent != null)
+            {
+                Parent.RemoveChild(this);
+            }
             parent.AddChild(this);
         }
 

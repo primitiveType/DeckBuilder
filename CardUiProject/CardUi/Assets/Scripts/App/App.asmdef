@@ -1,14 +1,17 @@
 {
     "name": "App",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:20dd3b8abe46ccd44a3e4721d0782412"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
         "Api.dll",
-        "CardsAndPiles.dll"
+        "CardsAndPiles.dll",
+        "Stateless.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

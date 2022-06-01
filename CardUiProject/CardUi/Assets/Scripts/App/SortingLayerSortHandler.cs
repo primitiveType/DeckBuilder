@@ -7,6 +7,6 @@ public class SortingLayerSortHandler : MonoBehaviour, ISortHandler
     public void SetDepth(int depth)
     {
         SpriteRenderer.sortingOrder = depth;
-        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -depth * .01f);
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -depth * .25f);
     }
 }

@@ -57,7 +57,7 @@ public class HandPileOrganizer : PileOrganizer
             Vector3 target = new Vector3(x, y, pileItemPosition.z);
 
 
-            if (card.IsHovered)
+            if (card.DisplayWholeCard)
             {
                 SetHoveredPosition(card, target, pileItemPosition);
             }
@@ -89,7 +89,8 @@ public class HandPileOrganizer : PileOrganizer
 
     private float GetEffectiveCardWidth(CardInHand card)
     {
-        return 2 * card.PileItemView.GetBounds().extents.x * (card.IsHovered ? hoveredOverlapRotation : overlapRatio);
+        return 2 * card.PileItemView.GetBounds().extents.x *
+               (card.DisplayWholeCard ? hoveredOverlapRotation : overlapRatio);
     }
 
     //theta = arclength/radius
@@ -135,9 +136,15 @@ public class HandPileOrganizer : PileOrganizer
 
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
+            Debug.Log($"adding {e.NewItems.Count} items.");
             foreach (Entity added in e.NewItems)
             {
                 GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
+                if (entityGO != null && entityGO.GetComponent<CardInHand>() != null)
+                {
+                    Debug.LogError($"{entityGO.name} was already in hand!?");
+                }
+
                 if (entityGO != null)
                 {
                     CardsInHand.Add(entityGO.AddComponent<CardInHand>());

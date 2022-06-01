@@ -4,7 +4,7 @@ namespace Solitaire
 {
     public class HandPile : Pile
     {
-        private int MaxHandSize = 5;
+        private int MaxHandSize = 52;
 
 
         public override bool ReceiveItem(IPileItem item)

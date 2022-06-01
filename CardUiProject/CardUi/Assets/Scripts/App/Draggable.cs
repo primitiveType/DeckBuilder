@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Stateless;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.PlayerLoop;
 
 public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
@@ -12,36 +9,49 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     private Vector3 offset { get; set; }
     private bool dragging { get; set; }
 
-    // [SerializeField] private Camera m_EventCamera;
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        InputStateManager.Instance.StateMachine.OnTransitioned(OnInputStateChanged);
+        SetEnabledStateFromMachine();
+    }
+
+    private void OnInputStateChanged(StateMachine<InputState, InputAction>.Transition obj)
+    {
+        SetEnabledStateFromMachine();
+    }
+
+    private void SetEnabledStateFromMachine()
+    {
+        enabled = InputStateManager.Instance.StateMachine.CanFire(InputAction.Drag);
     }
 
     // Update is called once per frame
     void Update()
     {
         if (dragging)
-        {//should lerp
+        { //should lerp
             transform.position = targetPosition;
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        var cursorWorld =
-            eventData.pressEventCamera.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y,
-                transform.position.z));
+        Vector3 cursorWorld = GetWorldPoint(eventData);
         targetPosition = new Vector3(offset.x + cursorWorld.x, offset.y + cursorWorld.y, transform.position.z);
+    }
+
+    private Vector3 GetWorldPoint(PointerEventData eventData)
+    {
+        return eventData.pressEventCamera.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y,
+            transform.position.z));
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         dragging = true;
+        InputStateManager.Instance.StateMachine.Fire(InputAction.Drag);
         Debug.Log("Begin drag!");
-        var cursorWorld =
-            eventData.pressEventCamera.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y,
-                transform.position.z));
+        Vector3 cursorWorld = GetWorldPoint(eventData);
 
         offset = transform.position - cursorWorld;
     }
@@ -49,6 +59,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     public void OnEndDrag(PointerEventData eventData)
     {
         dragging = false;
+        InputStateManager.Instance.StateMachine.Fire(InputAction.EndDrag);
+
         Debug.Log("End drag!");
     }
 }

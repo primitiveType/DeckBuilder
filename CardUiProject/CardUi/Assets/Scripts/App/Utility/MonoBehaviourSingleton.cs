@@ -131,7 +131,7 @@ public class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBehaviour
     #endregion
 
     #region Unity3d Messages - DO NOT OVERRRIDE / IMPLEMENT THESE METHODS in child classes!
-    void Awake()
+    protected virtual void Awake()
     {
         T thisInstance = this.GetComponent<T>();
 
