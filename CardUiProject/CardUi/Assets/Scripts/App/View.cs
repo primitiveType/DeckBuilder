@@ -39,4 +39,9 @@ namespace Common
     {
         Entity Entity { get; }
     }
+
+    public class PropertyChangedAttribute : Attribute
+    {
+        
+    }
 }
