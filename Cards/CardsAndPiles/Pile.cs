@@ -11,5 +11,10 @@ namespace Solitaire
         {
         }
 
+        public void Shuffle()
+        {
+            Parent.ShuffleChildren();
+        }
+
     }
 }

@@ -10,9 +10,9 @@ public class DeckPileOrganizer : PileOrganizer
     protected override void ParentViewToPile(Entity added)
     {
         IGameObject viewGO = added.GetComponent<IGameObject>();
-        
-        PileItemView view = viewGO.gameObject.GetComponent<PileItemView>();
-        view.gameObject.transform.SetParent(parentTransform);
+
+        IPileItemView view = viewGO.gameObject.GetComponent<IPileItemView>();
+        viewGO.gameObject.transform.SetParent(parentTransform);
         view.SetLocalPosition(new Vector3(), new Vector3());
     }
 }

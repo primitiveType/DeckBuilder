@@ -1,28 +1,46 @@
+using System;
+using System.ComponentModel;
+using CardsAndPiles;
+using Common;
 using Stateless;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class DraggableComponent : View<IDraggable>, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     private Vector3 targetPosition { get; set; }
 
     private Vector3 offset { get; set; }
     private bool dragging { get; set; }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         InputStateManager.Instance.StateMachine.OnTransitioned(OnInputStateChanged);
-        SetEnabledStateFromMachine();
+        Model.PropertyChanged += ModelOnPropertyChanged;
+        SetEnabledState();
+    }
+
+    private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        SetEnabledState();
+    }
+
+    private void OnDestroy()
+    {
+        Model.PropertyChanged -= ModelOnPropertyChanged;
     }
 
     private void OnInputStateChanged(StateMachine<InputState, InputAction>.Transition obj)
     {
-        SetEnabledStateFromMachine();
+        SetEnabledState();
     }
 
-    private void SetEnabledStateFromMachine()
+    private void SetEnabledState()
     {
-        enabled = InputStateManager.Instance.StateMachine.CanFire(InputAction.Drag);
+        if (this == null)
+            return; //hack
+        enabled = Model.CanDrag && InputStateManager.Instance.StateMachine.CanFire(InputAction.Drag);
     }
 
     // Update is called once per frame

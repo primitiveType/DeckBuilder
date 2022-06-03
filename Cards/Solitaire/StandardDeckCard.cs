@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using CardsAndPiles;
-using Solitaire.Annotations;
 using Component = Api.Component;
 
 namespace Solitaire
 {
-    public class StandardDeckCard : Component, IPileItem, INotifyPropertyChanged
+    public class StandardDeckCard : Component, IPileItem, IDraggable
     {
         public Suit Suit { get; private set; }
         public int Number { get; private set; }
         public bool IsFaceDown { get; set; }
+        public bool CanDrag { get; set; } = true;
 
         public SuitColor SuitColor => Suit == Suit.Clubs || Suit == Suit.Spades ? SuitColor.Black : SuitColor.Red;
 

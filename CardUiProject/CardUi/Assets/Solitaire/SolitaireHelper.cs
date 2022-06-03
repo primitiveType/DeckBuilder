@@ -20,8 +20,8 @@ public class SolitaireHelper : MonoBehaviourSingleton<SolitaireHelper>
     private PileView m_DeckPileView;
 
     [SerializeField] private PileView m_HandPileView;
-    
-    [SerializeField] private List<PileView> m_BankPiles;
+
+    [SerializeField] private PileView m_BankPrefab;
 
 
     private SolitaireGame Game { get; set; }
@@ -52,8 +52,9 @@ public class SolitaireHelper : MonoBehaviourSingleton<SolitaireHelper>
         return Sprites[startIndex + number];
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         SetupGame();
     }
 
@@ -71,18 +72,19 @@ public class SolitaireHelper : MonoBehaviourSingleton<SolitaireHelper>
         handBridge.gameObject = m_HandPileView.gameObject;
         m_HandPileView.SetModel(handBridge.Parent);
 
-        var bankPiles = game.GetComponentInChildren<BankPile>();
-        
-        
-        var card = game.GetComponentInChildren<HandPile>().Parent.AddComponent<StandardDeckCard>();
-        
-        card.PropertyChanged += CardOnPropertyChanged;
-        card.IsFaceDown = true;
+        List<BankPile> bankPiles = game.GetComponentsInChildren<BankPile>();
 
-    }
-
-    private void CardOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        Debug.Log("Got Property Change!");
+        int i = 0;
+        foreach (var bankPile in bankPiles)
+        {
+            i++;
+            PileViewBridge bankBridge = bankPile.Parent.AddComponent<PileViewBridge>();
+            var bankView = Instantiate(m_BankPrefab);
+            bankView.transform.position = transform.position + new Vector3(i * 5, 0, 0);
+            bankBridge.gameObject = bankView.gameObject;
+            bankView.SetModel(bankBridge.Parent);
+        }
+        
+        Game.StartGame();
     }
 }

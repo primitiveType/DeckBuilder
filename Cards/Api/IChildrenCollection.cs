@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 
 namespace Api
 {
-    public interface IChildrenCollection<T> : IReadOnlyCollection<T>, INotifyCollectionChanged
+    public interface IChildrenCollection<T> : INotifyCollectionChanged, IReadOnlyList<T>
     {
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using CardsAndPiles;
 using Common;
 using Stateless;
@@ -22,6 +23,7 @@ public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             Debug.LogError("Pile item not found when adding card to hand!");
         }
+
         StartCoroutine(WarmUp());
     }
 
@@ -38,8 +40,14 @@ public class CardInHand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         SetEnabledStateFromMachine();
     }
 
+
     private void OnInputStateChanged(StateMachine<InputState, InputAction>.Transition obj)
     {
+        if (this == null)
+        {
+            return;//hack for now. Can't unsubscribe from state machine.
+        }
+
         SetEnabledStateFromMachine();
     }
 

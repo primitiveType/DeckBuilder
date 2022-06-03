@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.PlayerLoop;
 
 [RequireComponent(typeof(ISortHandler))]
-public class PileItemView : View<IPileItem>, IEndDragHandler, IPileItemView, IDragHandler, IGameObject,
-    IBeginDragHandler
+public class PileItemView<T> : View<T>, IEndDragHandler, IPileItemView, IDragHandler, IGameObject,
+    IBeginDragHandler where T : IPileItem
 {
     private PileView TargetPileView { get; set; }
     private IPileView CurrentPileView { get; set; }
@@ -45,6 +45,11 @@ public class PileItemView : View<IPileItem>, IEndDragHandler, IPileItemView, IDr
 
     public bool TrySendToPile(IPileView pileView)
     {
+        if (pileView.Entity == Entity.Parent)
+        {
+            return false;
+        }
+
         return pileView.Model.ReceiveItem(this.Model);
         // if (pileView.ReceiveItem(this))
         // {

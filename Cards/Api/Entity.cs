@@ -3,6 +3,8 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using RandN;
+using RandN.Rngs;
 
 namespace Api
 {
@@ -56,6 +58,11 @@ namespace Api
                     removed.Terminate();
                 }
             }
+        }
+
+        public void ShuffleChildren()//this is the wrong way to do this. I should probably just use an order property where it matters. 
+        {
+            GetComponentInParent<Random>().Rng.ShuffleInPlace(m_Children);
         }
 
         internal void Terminate()
@@ -201,5 +208,7 @@ namespace Api
                 child.Parent = (this);
             }
         }
+        
+        
     }
 }

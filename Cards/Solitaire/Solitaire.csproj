@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
+      <PackageReference Include="RandN" Version="0.3.0" />
     </ItemGroup>
 
 </Project>

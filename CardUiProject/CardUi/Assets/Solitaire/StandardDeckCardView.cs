@@ -3,7 +3,7 @@ using Common;
 using Solitaire;
 using UnityEngine;
 
-public class StandardDeckCardView : View<StandardDeckCard>
+public class StandardDeckCardView : PileItemView<StandardDeckCard>
 {
     public Suit Suit => Model.Suit;
     public int Number => Model.Number;

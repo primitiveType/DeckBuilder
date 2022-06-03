@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Api;
 using UnityEngine;
 
@@ -17,7 +20,18 @@ namespace Common
 
         protected virtual void OnInitialized()
         {
-        
+        }
+
+        protected virtual void Start()
+        {
+            if (Entity == null)
+            {
+                IView parentView = GetComponents<IView>().Where(item => item != this).FirstOrDefault();
+                if (parentView?.Entity != null)
+                {
+                    SetModel(parentView.Entity);
+                }
+            }
         }
     }
 

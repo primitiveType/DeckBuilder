@@ -8,10 +8,18 @@ using JetBrains.Annotations;
 
 namespace Api
 {
-    public class ChildrenCollection<T> : INotifyCollectionChanged, IChildrenCollection<T>, ICollection<T>
+    public static class CollectionExtensions
     {
-        [ItemNotNull] private ICollection<T> m_CollectionImplementation = new Collection<T>();
+        public static void Shuffle(this ICollection collection)
+        {
+        }
+    }
+
+    public class ChildrenCollection<T> : INotifyCollectionChanged, IChildrenCollection<T>, IList<T>
+    {
+        [ItemNotNull] private List<T> m_CollectionImplementation = new List<T>();
         public event NotifyCollectionChangedEventHandler CollectionChanged;
+
 
 
         public IEnumerator<T> GetEnumerator()
@@ -75,6 +83,23 @@ namespace Api
         }
 
         public int Count => m_CollectionImplementation.Count;
-        public bool IsReadOnly => m_CollectionImplementation.IsReadOnly;
+        public bool IsReadOnly => false;
+        public int IndexOf(T item) => m_CollectionImplementation.FindIndex((child) => Equals(child, item));
+
+        public void Insert(int index, T item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAt(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T this[int index]
+        {
+            get => m_CollectionImplementation[index];
+            set => m_CollectionImplementation[index] = value;
+        }
     }
 }
