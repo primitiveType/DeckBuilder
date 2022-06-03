@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Api;
 using UnityEngine;
+using IComponent = Api.IComponent;
 
 namespace Common
 {
@@ -15,6 +17,7 @@ namespace Common
         {
             Entity = entity;
             Model = entity.GetComponent<T>();
+            AttachListeners();
             OnInitialized();
         }
 
@@ -33,15 +36,44 @@ namespace Common
                 }
             }
         }
+
+        private List<PropertyChangedEventHandler> EventHandlers = new List<PropertyChangedEventHandler>();
+
+        private void AttachListeners()
+        {
+            foreach (PropertyListenerInfo method in ReflectionService.GetPropertyListeners(GetType()))
+            {
+                PropertyChangedEventHandler action = (sender, args) =>
+                {
+                    try
+                    {
+                        if (method.Filter == null || method.Filter == args.PropertyName)
+                        {
+                            method.MethodInfo.Invoke(this, new[] { sender, args });
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"Caught exception executing event! {e.Message}", this);
+                    }
+                };
+                Model.PropertyChanged += action;
+                EventHandlers.Add(action);
+                method.MethodInfo.Invoke(this, new object[] { this, new PropertyChangedEventArgs(method.Filter) });
+            }
+        }
+
+        protected void OnDestroy()
+        {
+            foreach (PropertyChangedEventHandler action in EventHandlers)
+            {
+                Model.PropertyChanged -= action;
+            }
+        }
     }
 
     public interface IView
     {
         Entity Entity { get; }
-    }
-
-    public class PropertyChangedAttribute : Attribute
-    {
-        
     }
 }

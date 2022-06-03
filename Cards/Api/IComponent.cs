@@ -1,6 +1,8 @@
-﻿namespace Api
+﻿using System.ComponentModel;
+
+namespace Api
 {
-    public interface IComponent
+    public interface IComponent : INotifyPropertyChanged
     {
     }
 }

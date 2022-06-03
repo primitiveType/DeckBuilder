@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 using Newtonsoft.Json;
 
@@ -44,5 +45,7 @@ namespace Api
                 eventHandle.Dispose();
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

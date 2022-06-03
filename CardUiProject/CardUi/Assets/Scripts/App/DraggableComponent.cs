@@ -17,19 +17,15 @@ public class DraggableComponent : View<IDraggable>, IDragHandler, IBeginDragHand
     {
         base.Start();
         InputStateManager.Instance.StateMachine.OnTransitioned(OnInputStateChanged);
-        Model.PropertyChanged += ModelOnPropertyChanged;
         SetEnabledState();
     }
 
+    [PropertyListener(nameof(Draggable.CanDrag))]
     private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         SetEnabledState();
     }
 
-    private void OnDestroy()
-    {
-        Model.PropertyChanged -= ModelOnPropertyChanged;
-    }
 
     private void OnInputStateChanged(StateMachine<InputState, InputAction>.Transition obj)
     {
