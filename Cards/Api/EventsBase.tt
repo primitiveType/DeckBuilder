@@ -13,19 +13,20 @@
     {
 #>
 
-using System;
 using Api;
-using System.Reflection;
-using System.Collections.Generic;
 <#
         string catalogName = "EventsBase";
         string eventAttributeName = "EventAttribute";
+        string namespaceName = "namespace";
         foreach (XmlNode node in doc.SelectNodes("/catalog"))
         {
             catalogName = node.Attributes["name"].Value;
             eventAttributeName = catalogName + "Attribute";
             string inherits = node.Attributes["inherits"].Value;
+            namespaceName = node.Attributes["namespace"].Value;
 #>
+
+namespace <#= namespaceName #>{
 public abstract class <#= catalogName #> : <#= inherits #>{
 <#
             foreach (XmlNode eventNode in node.SelectNodes("event"))
@@ -127,13 +128,13 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 /// <summary>
 /// (object sender, <#= eventNode.Attributes["id"].Value #>EventArgs) args)
 /// </summary>
-public class On<#= eventNode.Attributes["id"].Value #>Attribute : <#=eventAttributeName#> {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, <#= catalogName #> events)
+public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttribute {
+    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
-            return events.SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate(object sender, <#= eventNode.Attributes["id"].Value #>EventArgs args)
+            return ((<#= catalogName #>)events).SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate(object sender, <#= eventNode.Attributes["id"].Value #>EventArgs args)
             {
                 attached.Invoke(instance, Array.Empty<object>());
             });
@@ -142,7 +143,7 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : <#=eventAttrib
         parameters[1].ParameterType != typeof(<#= eventNode.Attributes["id"].Value #>EventArgs)){
             throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, <#= eventNode.Attributes["id"].Value #>EventArgs) args)");
         }
-        return events.SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate(object sender, <#= eventNode.Attributes["id"].Value #>EventArgs args)
+        return ((<#= catalogName #>)events).SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate(object sender, <#= eventNode.Attributes["id"].Value #>EventArgs args)
         {
             attached.Invoke(instance, new[] { sender, args });
         });
@@ -177,23 +178,12 @@ public EventHandle SubscribeTo<#= eventName #>(<#= eventTypeName #> action)
 //TODO: generate attributes with static override functions that get the event handle from a game context.
 //TODO: add generation of invoke functions.? 
 
-  [MeansImplicitUse]
-    public abstract class <#=eventAttributeName#> : Attribute
-    {
-        public readonly EventAttachmentLifetime Lifetime;
-
-        public <#=eventAttributeName#>(EventAttachmentLifetime lifetime = EventAttachmentLifetime.Permanent) 
-        {
-            Lifetime = lifetime;
-        }
-
-        public abstract EventHandle GetEventHandle(MethodInfo attached, object instance, <#= catalogName #> events);
-
-    }
+ }
 
     
 <#
     }
+
 #>
 
  

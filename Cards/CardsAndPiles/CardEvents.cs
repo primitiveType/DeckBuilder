@@ -1,9 +1,9 @@
 ﻿using System;
 using Api.Components;
 
-namespace Api
+namespace CardsAndPiles
 {
-    public class Events : EventsBase
+    public class CardEvents : CardEventsBase
     {
         internal override void OnRequestDealDamage(RequestDealDamageEventArgs args)
         {

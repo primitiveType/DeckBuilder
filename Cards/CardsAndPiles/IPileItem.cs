@@ -1,5 +1,4 @@
-﻿using System;
-using Api;
+﻿using Api;
 
 namespace CardsAndPiles
 {
@@ -7,6 +6,5 @@ namespace CardsAndPiles
     {
         //move to Ipileitem
         // bool CanEnterPile(IPile pile);
-        bool TrySendToPile(IPile pile);
     }
 }

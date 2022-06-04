@@ -1,18 +1,15 @@
-﻿using CardsAndPiles;
+﻿using Api;
+using CardsAndPiles;
 
 namespace Solitaire
 {
     public class DeckPile : Pile
     {
-        public override bool ReceiveItem(IPileItem item)
+        public override bool AcceptsChild(IEntity item)
         {
-            if ((!(item is StandardDeckCard card)) || Parent.GetComponentInParent<SolitaireGame>().GameStarted)
-            {
-                return false;
-            }
+            StandardDeckCard card = item.GetComponent<StandardDeckCard>();
 
-            card.Parent.SetParent(Parent);
-            return true;
+            return card != null && !Entity.GetComponentInParent<SolitaireGame>().GameStarted;
         }
     }
 }

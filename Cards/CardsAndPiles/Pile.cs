@@ -2,14 +2,14 @@
 
 namespace CardsAndPiles
 {
-    public abstract class Pile : Component, IPile
+    public abstract class Pile : Component, IPile, IParentConstraint
+        
     {
-        public abstract bool ReceiveItem(IPileItem itemView);
-
-        public void RemoveItem(IPileItem itemView)
+        public virtual bool AcceptsParent(IEntity parent)
         {
+            return true;
         }
 
-
+        public abstract bool AcceptsChild(IEntity child);
     }
 }

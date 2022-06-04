@@ -12,4 +12,25 @@
       <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="EventsGen.ttinclude">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>EventsGen.cs</LastGenOutput>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="EventsGen.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>EventsGen.ttinclude</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
+        <HintPath>..\..\..\..\..\..\..\Program Files\JetBrains\JetBrains Rider 2020.1.4\lib\ReSharperHost\TestRunner\net461\JetBrains.Annotations.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

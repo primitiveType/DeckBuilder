@@ -1,11 +1,10 @@
 using System.Linq;
-using System.Xml.Serialization;
 using Api;
 using Api.Components;
-using Newtonsoft.Json;
+using CardsAndPiles;
 using NUnit.Framework;
 
-namespace Tests
+namespace CardTestProject
 {
     public class Tests
     {
@@ -22,11 +21,11 @@ namespace Tests
         {
             //Create a game
             IEntity game = Context.CreateEntity();
-            game.AddComponent<Events>();
+            game.AddComponent<CardEvents>();
 
             //Add entity with test components
             IEntity entity = Context.CreateEntity();
-            entity.SetParent(game);
+            entity.TrySetParent(game);
 
             var testComponent = entity.AddComponent<CardPlayedComponent>();
 
@@ -37,13 +36,13 @@ namespace Tests
             Assert.IsFalse(testComponent2.CardDiscarded);
 
             //Simulate a card being played
-            game.GetComponent<Events>().OnCardPlayed(new CardPlayedEventArgs(0, 0));
+            game.GetComponent<CardEvents>().OnCardPlayed(new CardPlayedEventArgs(null, game));
 
             //Verify event was fired from attribute.
             Assert.IsTrue(testComponent.CardPlayed);
 
             //Simulate a card being discarded
-            game.GetComponent<Events>().OnCardDiscarded(new CardDiscardedEventArgs(0, 0));
+            game.GetComponent<CardEvents>().OnCardDiscarded(new CardDiscardedEventArgs(null));
 
 
             //Verify event was fired from attribute.
@@ -55,25 +54,25 @@ namespace Tests
         {
             //Create a game
             IEntity game = Context.CreateEntity();
-            game.AddComponent<Events>();
+            game.AddComponent<CardEvents>();
 
             //Add entity with test components
-            IEntity entity = Context.CreateEntity();
+            IEntity entity = Context.CreateEntity(game);
             Health health = entity.AddComponent<Health>();
             Assert.That(health.Amount, Is.EqualTo(10));
-            entity.SetParent(game);
+            entity.TrySetParent(game);
 
 
             RequestDealDamageEventArgs
                 args = new RequestDealDamageEventArgs(3, entity, entity); //stop hitting yourself!
-            game.GetComponent<Events>().OnRequestDealDamage(args);
+            game.GetComponent<CardEvents>().OnRequestDealDamage(args);
 
 
             Assert.That(health.Amount, Is.EqualTo(7));
 
             RequestDealDamageEventArgs
                 args2 = new RequestDealDamageEventArgs(30, entity, entity); //stop hitting yourself!
-            game.GetComponent<Events>().OnRequestDealDamage(args2);
+            game.GetComponent<CardEvents>().OnRequestDealDamage(args2);
             Assert.That(health.Amount, Is.EqualTo(0));
         }
 
@@ -82,17 +81,17 @@ namespace Tests
         {
             //Create a game
             IEntity game = Context.CreateEntity();
-            game.AddComponent<Events>();
+            game.AddComponent<CardEvents>();
 
             //Add entity with test components
-            IEntity entity = Context.CreateEntity();
+            IEntity entity = Context.CreateEntity(game);
             Health health = entity.AddComponent<Health>();
             Assert.That(health.Amount, Is.EqualTo(10));
-            entity.SetParent(game);
+            entity.TrySetParent(game);
 
 
             var gameString = Serializer.Serialize(game);
-            var gameCopy = Serializer.Deserialize<Entity>(gameString);
+            var gameCopy = Serializer.Deserialize<IEntity>(gameString);
 
             var healthCopy = gameCopy.Children.First().GetComponent<Health>();
 
@@ -101,13 +100,13 @@ namespace Tests
 
             RequestDealDamageEventArgs
                 args2 = new RequestDealDamageEventArgs(30, entity, entity); //stop hitting yourself!
-            gameCopy.GetComponent<Events>().OnRequestDealDamage(args2);
+            gameCopy.GetComponent<CardEvents>().OnRequestDealDamage(args2);
 
 
             Assert.NotNull(healthCopy);
             Assert.AreNotEqual(healthCopy.Amount, health.Amount);
-            Assert.NotNull(healthCopy.Parent);
-            Assert.AreEqual(healthCopy.Parent.Id, health.Parent.Id);
+            Assert.NotNull(healthCopy.Entity);
+            Assert.AreEqual(healthCopy.Entity.Id, health.Entity.Id);
         }
 
         [Test]
@@ -115,7 +114,7 @@ namespace Tests
         {
             //Create a game
             IEntity game = Context.CreateEntity();
-            game.AddComponent<Events>();
+            game.AddComponent<CardEvents>();
 
             //Add entity with test components
             IEntity entity = Context.CreateEntity(game);
@@ -127,13 +126,13 @@ namespace Tests
 
             RequestDealDamageEventArgs
                 args2 = new RequestDealDamageEventArgs(30, entity, entity); //stop hitting yourself!
-            game.GetComponent<Events>().OnRequestDealDamage(args2);
+            game.GetComponent<CardEvents>().OnRequestDealDamage(args2);
             //damage should have been prevented.
             Assert.That(health.Amount, Is.EqualTo(10));
 
             RequestDealDamageEventArgs
                 args3 = new RequestDealDamageEventArgs(30, entity, entity); //stop hitting yourself!
-            game.GetComponent<Events>().OnRequestDealDamage(args3);
+            game.GetComponent<CardEvents>().OnRequestDealDamage(args3);
             //damage should not have been prevented.
             Assert.That(health.Amount, Is.EqualTo(0));
         }

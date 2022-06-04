@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("CardTestProject")]
+[assembly: InternalsVisibleTo("ApiTestProject")]

@@ -7,16 +7,17 @@ namespace Tests
 {
     public class Tests
     {
-        private Entity Root;
+        private Context Context { get; set; }
+        private SolitaireGame Game { get; set; }
+
+        private IEntity Root => Game.Entity;
 
         [SetUp]
         public void Setup()
         {
-            var game = new Entity();
-
-            Root = new Entity();
-            Root.AddComponent<SolitaireGame>();
-            Root.SetParent(game);
+            Context = new Context();
+            var gameEntity = Context.CreateEntity(null);
+            Game = gameEntity.AddComponent<SolitaireGame>();
         }
 
         [Test]
@@ -26,7 +27,7 @@ namespace Tests
             var deck = Root.GetComponentInChildren<DeckPile>();
             Assert.NotNull(deck);
             Assert.NotNull(Root.GetComponentInChildren<HandPile>());
-            Assert.That(deck.Parent.Children, Has.Count.EqualTo(52));
+            Assert.That(deck.Entity.Children, Has.Count.EqualTo(52));
         }
 
         [Test]

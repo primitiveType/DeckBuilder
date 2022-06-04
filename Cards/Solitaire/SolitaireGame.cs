@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Api;
-using RandN;
 
 namespace Solitaire
 {
@@ -11,69 +10,69 @@ namespace Solitaire
         public bool GameStarted { get; private set; }
         private int NumPiles => 7;
 
-        private List<StandardDeckCard> Cards = new List<StandardDeckCard>();
+        public List<StandardDeckCard> Cards { get; } = new List<StandardDeckCard>();
 
         protected override void Initialize()
         {
             base.Initialize();
             GameStarted = false;
-            var random = Parent.AddComponent<Random>();
+            var random = Entity.AddComponent<Random>();
 
 
-            IEntity deckEntity = Context.CreateEntity();
+            IEntity deckEntity = Context.CreateEntity(Entity);
             Deck = deckEntity.AddComponent<DeckPile>();
-            deckEntity.SetParent(Parent);
 
 
-            IEntity handEntity = Context.CreateEntity();
+            IEntity handEntity = Context.CreateEntity(Entity);
             handEntity.AddComponent<HandPile>();
-            handEntity.SetParent(Parent);
 
             for (int i = 0; i < 13; i++)
             {
-                MakeCard(i, Suit.Clubs).SetParent(deckEntity);
-                MakeCard(i, Suit.Hearts).SetParent(deckEntity);
-                MakeCard(i, Suit.Spades).SetParent(deckEntity);
-                MakeCard(i, Suit.Diamonds).SetParent(deckEntity);
+                MakeCard(i, Suit.Clubs, deckEntity);
+                MakeCard(i, Suit.Hearts, deckEntity);
+                MakeCard(i, Suit.Spades, deckEntity);
+                MakeCard(i, Suit.Diamonds, deckEntity);
             }
 
             for (int i = 0; i < NumPiles; i++)
             {
-                IEntity bankEntity = Context.CreateEntity();
+                IEntity bankEntity = Context.CreateEntity(Entity);
                 bankEntity.AddComponent<BankPile>();
-                bankEntity.SetParent(Parent);
+                bankEntity.TrySetParent(Entity);
             }
 
-            IEntity heartsEntity = Context.CreateEntity();
+            IEntity heartsEntity = Context.CreateEntity(Entity);
             heartsEntity.AddComponent<SolutionPile>().Suit = Suit.Hearts;
-            heartsEntity.SetParent(Parent);
+            heartsEntity.TrySetParent(Entity);
 
-            IEntity clubsEntity = Context.CreateEntity();
+            IEntity clubsEntity = Context.CreateEntity(Entity);
             clubsEntity.AddComponent<SolutionPile>().Suit = Suit.Clubs;
-            clubsEntity.SetParent(Parent);
+            clubsEntity.TrySetParent(Entity);
 
-            IEntity diamondsEntity = Context.CreateEntity();
+            IEntity diamondsEntity = Context.CreateEntity(Entity);
             diamondsEntity.AddComponent<SolutionPile>().Suit = Suit.Diamonds;
-            diamondsEntity.SetParent(Parent);
+            diamondsEntity.TrySetParent(Entity);
 
-            IEntity spadesEntity = Context.CreateEntity();
+            IEntity spadesEntity = Context.CreateEntity(Entity);
             spadesEntity.AddComponent<SolutionPile>().Suit = Suit.Spades;
-            spadesEntity.SetParent(Parent);
+            spadesEntity.TrySetParent(Entity);
         }
 
-        private IEntity MakeCard(int num, Suit suit)
+        private IEntity MakeCard(int num, Suit suit, IEntity parent)
         {
-            IEntity cardEntity = Context.CreateEntity();
-            StandardDeckCard card = cardEntity.AddComponent<StandardDeckCard>();
-            card.SetCard(num, suit);
+            IEntity cardEntity = Context.CreateEntity(parent, entity =>
+            {
+                StandardDeckCard card = entity.AddComponent<StandardDeckCard>();
+                card.SetCard(num, suit);
+                Cards.Add(card);
+            });
 
-            Cards.Add(card);
             return cardEntity;
         }
 
         public void StartGame()
         {
-            List<BankPile> banks = Parent.GetComponentsInChildren<BankPile>();
+            List<BankPile> banks = Entity.GetComponentsInChildren<BankPile>();
 
             int i = 2;
 
@@ -82,7 +81,7 @@ namespace Solitaire
             {
                 for (int j = 0; j < i; j++)
                 {
-                    Deck.Parent.Children.First().SetParent(bankPile.Parent);
+                    Deck.Entity.Children.First().TrySetParent(bankPile.Entity);
                 }
 
                 i++;

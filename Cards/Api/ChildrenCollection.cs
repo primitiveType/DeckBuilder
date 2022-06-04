@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using JetBrains.Annotations;
@@ -15,7 +14,7 @@ namespace Api
         }
     }
 
-    public class ChildrenCollection<T> : INotifyCollectionChanged, IChildrenCollection<T>, IList<T>
+    public class ChildrenCollection<T> : IChildrenCollection<T>, IList<T>
     {
         [ItemNotNull] private List<T> m_CollectionImplementation = new List<T>();
         public event NotifyCollectionChangedEventHandler CollectionChanged;

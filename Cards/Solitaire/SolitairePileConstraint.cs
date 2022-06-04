@@ -1,21 +1,13 @@
 ﻿using System.Linq;
 using Api;
-using CardsAndPiles;
 
 namespace Solitaire
 {
-    public class SolitairePileConstraint : Component, IPileConstraint
+    public class SolitairePileConstraint : Component, IParentConstraint
     {
-        public bool CanReceive(Entity item)
-        {
-            var card = item.GetComponent<StandardDeckCard>();
-
-            return card != null && SuitCompatible(card.Suit) && IsNextSequence(card.Number);
-        }
-
         private bool IsNextSequence(int number)
         {
-            if (Parent.Children.Last().GetComponent<StandardDeckCard>().Number == number - 1)
+            if (Entity.Children.Last().GetComponent<StandardDeckCard>().Number == number - 1)
             {
                 return true;
             }
@@ -25,12 +17,24 @@ namespace Solitaire
 
         private bool SuitCompatible(Suit suit)
         {
-            if (Parent.Children.Count == 0)
+            if (Entity.Children.Count == 0)
             {
                 return true;
             }
 
-            return Parent.Children.First().GetComponent<StandardDeckCard>().Suit == suit;
+            return Entity.Children.First().GetComponent<StandardDeckCard>().Suit == suit;
+        }
+
+        public bool AcceptsParent(IEntity parent)
+        {
+            return true;
+        }
+
+        public bool AcceptsChild(IEntity child)
+        {
+            var card = child.GetComponent<StandardDeckCard>();
+
+            return card != null && SuitCompatible(card.Suit) && IsNextSequence(card.Number);
         }
     }
 }

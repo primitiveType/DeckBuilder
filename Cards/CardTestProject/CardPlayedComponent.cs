@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-using JetBrains.Annotations;
-using Component = Api.Component;
+﻿using Component = Api.Component;
 
-namespace Tests
+namespace CardTestProject
 {
     public class CardPlayedComponent : Component
     {

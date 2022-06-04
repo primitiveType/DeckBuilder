@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using CardsAndPiles;
+﻿using CardsAndPiles;
 using Component = Api.Component;
 
 namespace Solitaire
@@ -21,11 +20,6 @@ namespace Solitaire
             IsFaceDown = isFaceDown;
         }
 
-        //Should this just be an extension method?
-        public bool TrySendToPile(IPile pile)
-        {
-            return pile.ReceiveItem(this);
-        }
 
         public string GetName()
         {
@@ -50,7 +44,5 @@ namespace Solitaire
 
             return $"{numberName} of {Suit.ToString()}";
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

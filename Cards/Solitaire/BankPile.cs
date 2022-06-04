@@ -11,14 +11,14 @@ namespace Solitaire
         protected override void Initialize()
         {
             base.Initialize();
-            Game = Parent.GetComponentInParent<SolitaireGame>();
+            Game = Entity.GetComponentInParent<SolitaireGame>();
         }
 
-        public override bool ReceiveItem(IPileItem item)
+        public override bool AcceptsChild(IEntity item)
         {
             if (!Game.GameStarted)
             {
-                foreach (IEntity parentChild in Parent.Children)
+                foreach (IEntity parentChild in Entity.Children)
                 {
                     parentChild.GetComponent<StandardDeckCard>().IsFaceDown = true;
                 }
@@ -26,14 +26,9 @@ namespace Solitaire
                 return true;
             }
 
-            if (!(item is StandardDeckCard card) ||
-                Parent.Children.LastOrDefault()?.GetComponent<StandardDeckCard>().SuitColor == card.SuitColor)
-            {
-                return false;
-            }
-
-            card.Parent.SetParent(Parent);
-            return true;
+            StandardDeckCard card = item.GetComponent<StandardDeckCard>();
+            return card != null && Entity.Children.LastOrDefault()?.GetComponent<StandardDeckCard>().SuitColor !=
+                card.SuitColor;
         }
     }
 
@@ -41,17 +36,18 @@ namespace Solitaire
     {
         public Suit Suit { get; internal set; }
 
-        public override bool ReceiveItem(IPileItem item)
+        public override bool AcceptsChild(IEntity item)
         {
-            StandardDeckCard lastChild = Parent.Children.LastOrDefault()?.GetComponent<StandardDeckCard>();
+            StandardDeckCard lastChild = Entity.Children.LastOrDefault()?.GetComponent<StandardDeckCard>();
+            StandardDeckCard card = item.GetComponent<StandardDeckCard>();
 
-            if (!(item is StandardDeckCard card) || card.Suit != Suit ||
+            if ((card == null) || card.Suit != Suit ||
                 lastChild != null && lastChild.Number != card.Number - 1)
             {
                 return false;
             }
 
-            card.Parent.SetParent(Parent);
+
             return true;
         }
     }

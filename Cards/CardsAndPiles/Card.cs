@@ -1,19 +1,31 @@
-﻿using System.Linq;
-using Api;
+﻿using Api;
 
 namespace CardsAndPiles
 {
-    public class Card : Component, IPileItem
+    public abstract class Card : Component, IPileItem, IParentConstraint
     {
-        public bool TrySendToPile(IPile pile)
+        public bool TryPlayCard(IEntity target)
         {
-            bool canMove =  Parent.GetComponents<ICardMovementConstraint>().All(constraint => constraint.CanMoveToPile(pile));
-            return canMove && pile.ReceiveItem(this);
-        }
-    }
+            if (!PlayCard(target))
+            {
+                return false;
+            }
 
-    public interface ICardMovementConstraint : IComponent
-    {
-        bool CanMoveToPile(IPile pile);
+            Entity.GetComponentInParent<CardEventsBase>().OnCardPlayed(new CardPlayedEventArgs(Entity, target));
+            return true;
+
+        }
+
+        protected abstract bool PlayCard(IEntity target);
+
+        public bool AcceptsParent(IEntity parent)
+        {
+            return parent.GetComponent<IPile>() != null;
+        }
+
+        public virtual bool AcceptsChild(IEntity child)
+        {
+            return true;
+        }
     }
 }

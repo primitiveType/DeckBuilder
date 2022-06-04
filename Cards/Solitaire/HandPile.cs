@@ -1,4 +1,5 @@
-﻿using CardsAndPiles;
+﻿using Api;
+using CardsAndPiles;
 
 namespace Solitaire
 {
@@ -7,14 +8,15 @@ namespace Solitaire
         private int MaxHandSize = 52;
 
 
-        public override bool ReceiveItem(IPileItem item)
+        public override bool AcceptsChild(IEntity item)
         {
-            if ((!(item is StandardDeckCard card)) || Parent.Children.Count >= MaxHandSize)
+            StandardDeckCard card = item.GetComponent<StandardDeckCard>();
+
+            if (card != null || Entity.Children.Count >= MaxHandSize)
             {
                 return false;
             }
 
-            card.Parent.SetParent(Parent);
             return true;
         }
     }

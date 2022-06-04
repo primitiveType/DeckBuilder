@@ -1,6 +1,6 @@
 ﻿using Api;
 
-namespace Tests
+namespace CardTestProject
 {
     public class CardDiscardedComponent : Component
     {

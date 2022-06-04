@@ -4,5 +4,6 @@ namespace Api
 {
     public interface IComponent : INotifyPropertyChanged
     {
+        IEntity Entity { get; }
     }
 }

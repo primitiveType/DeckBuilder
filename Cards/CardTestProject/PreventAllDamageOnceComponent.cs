@@ -1,6 +1,6 @@
 ﻿using Api;
 
-namespace Tests
+namespace CardTestProject
 {
     public class PreventAllDamageOnceComponent : Component
     {
@@ -8,7 +8,7 @@ namespace Tests
         private void OnTryDealDamage(object sender, RequestDealDamageEventArgs args)
         {
             args.Multiplier.Add(0);
-            Parent.RemoveComponent(this);
+            Entity.RemoveComponent(this);
         }
     }
 }

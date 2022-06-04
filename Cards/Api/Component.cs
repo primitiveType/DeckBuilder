@@ -8,9 +8,9 @@ namespace Api
    
     public abstract class Component : IComponent
     {
-        protected Context Context => Parent.Context;
+        protected Context Context => Entity.Context;
         private List<EventHandle> EventHandles { get; } = new List<EventHandle>();
-        [JsonIgnore] public IEntity Parent { get; private set; }
+        [JsonIgnore] public IEntity Entity { get; private set; }
         private bool Initialized { get; set; }
 
         public void InternalInitialize(IEntity parent)
@@ -21,7 +21,7 @@ namespace Api
             }
 
             Initialized = true;
-            Parent = parent;
+            Entity = parent;
             //get attributes on each component.
             var type = GetType();
             foreach (MethodInfo method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Default | BindingFlags.Public |
@@ -29,7 +29,7 @@ namespace Api
             {
                 foreach (EventsBaseAttribute attribute in method.GetCustomAttributes<EventsBaseAttribute>())
                 {
-                    EventHandles.Add(attribute.GetEventHandle(method, this, Parent.GetComponentInParent<EventsBase>()));
+                    EventHandles.Add(attribute.GetEventHandle(method, this, Entity.GetComponentInParent<EventsBase>()));
                 }
             }
 

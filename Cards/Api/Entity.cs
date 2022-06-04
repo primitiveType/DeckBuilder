@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using RandN;
-using RandN.Rngs;
 
 namespace Api
 {
@@ -94,7 +93,7 @@ namespace Api
             return m_Children.Remove(entity);
         }
 
-        public void SetParent(IEntity parent)
+        private void SetParent(IEntity parent)
         {
             if (Parent != null)
             {
@@ -111,6 +110,31 @@ namespace Api
             }
         }
 
+
+        public bool TrySetParent(IEntity parent)
+        {
+            foreach (IParentConstraint component in GetComponents<IParentConstraint>())
+            {
+                if (!component.AcceptsParent(parent))
+                {
+                    return false;
+                }
+            }
+
+            if (parent != null)
+            {
+                foreach (IParentConstraint component in parent.GetComponents<IParentConstraint>())
+                {
+                    if (!component.AcceptsChild(this))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            SetParent(parent);
+            return true;
+        }
 
         public T GetComponent<T>()
         {
@@ -148,7 +172,7 @@ namespace Api
                 return component;
             }
 
-            foreach (Entity entity in Children)
+            foreach (IEntity entity in Children)
             { //looks like depth first... I guess that's ok for now.
                 component = entity.GetComponentInChildren<T>();
                 if (component != null)
@@ -166,7 +190,7 @@ namespace Api
 
             DoGetComponentsInChildren(this);
 
-            void DoGetComponentsInChildren(Entity entity)
+            void DoGetComponentsInChildren(IEntity entity)
             {
                 T component = entity.GetComponent<T>();
                 if (component != null)
@@ -175,7 +199,7 @@ namespace Api
                 }
 
 
-                foreach (Entity child in entity.Children)
+                foreach (IEntity child in entity.Children)
                 {
                     DoGetComponentsInChildren(child);
                 }
@@ -225,13 +249,19 @@ namespace Api
         }
     }
 
+    public interface IParentConstraint
+    {
+        bool AcceptsParent(IEntity parent);
+        bool AcceptsChild(IEntity child);
+    }
+
     public interface IEntity
     {
         Context Context { get; }
         int Id { get; }
         IEntity Parent { get; }
         IChildrenCollection<IEntity> Children { get; }
-        void SetParent(IEntity parent);
+        bool TrySetParent(IEntity parent);
         T GetComponent<T>();
         List<T> GetComponents<T>();
         T GetComponentInParent<T>();
