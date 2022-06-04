@@ -34,8 +34,11 @@ public class DraggableComponent : View<IDraggable>, IDragHandler, IBeginDragHand
 
     private void SetEnabledState()
     {
-        if (this == null)
+        if (this == null || this.Model == null)
+        {
             return; //hack
+        }
+
         enabled = Model.CanDrag && InputStateManager.Instance.StateMachine.CanFire(InputAction.Drag);
     }
 

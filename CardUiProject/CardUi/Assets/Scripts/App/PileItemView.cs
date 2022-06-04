@@ -18,7 +18,7 @@ public class PileItemView<T> : View<T>, IEndDragHandler, IPileItemView, IDragHan
 
     private void Awake()
     {
-        Renderer = GetComponent<Renderer>();
+        Renderer = GetComponentInChildren<Renderer>();
         SortHandler = GetComponent<ISortHandler>();
         SortHandler.SetDepth((int)Sorting.PileItem);
     }

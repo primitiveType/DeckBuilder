@@ -11,7 +11,7 @@ namespace Api
     [JsonObject(MemberSerialization.OptIn)]
     public sealed class Entity
     {
-        [JsonProperty] public int Id { get; private set; }
+        [JsonProperty] public int Id { get; private set; } = -1;
 
         [JsonProperty] public IChildrenCollection<Component> Components => m_Components;
         [JsonProperty] private ChildrenCollection<Component> m_Components = new ChildrenCollection<Component>();
@@ -104,7 +104,12 @@ namespace Api
 
         public T GetComponent<T>()
         {
-            return Components.OfType<T>().FirstOrDefault();
+            return GetComponents<T>().FirstOrDefault();
+        }
+
+        public List<T> GetComponents<T>()
+        {
+            return (List<T>)Components.OfType<T>();
         }
 
         public T GetComponentInParent<T>()

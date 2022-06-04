@@ -78,7 +78,7 @@ public class HandPileOrganizer : PileOrganizer
         card.PileItemView.SetLocalPosition(target, new Vector3());
 
         //then clamp it to the screen and update its transform position.
-        var spriteRenderer = card.GetComponent<Renderer>();
+        var spriteRenderer = card.GetComponentInChildren<Renderer>();
         Vector3 clampedPosition = spriteRenderer.ClampToViewport(Camera.main);
         Vector3 clampedLocalPosition =
             transform.InverseTransformPoint(clampedPosition).WithZ(pileItemPosition.z);

@@ -22,10 +22,10 @@ namespace Api
             Parent = parent;
             //get attributes on each component.
             var type = GetType();
-            foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Default | BindingFlags.Public |
-                                                   BindingFlags.Instance))
+            foreach (MethodInfo method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Default | BindingFlags.Public |
+                                                          BindingFlags.Instance))
             {
-                foreach (EventAttribute attribute in method.GetCustomAttributes<EventAttribute>())
+                foreach (EventsBaseAttribute attribute in method.GetCustomAttributes<EventsBaseAttribute>())
                 {
                     EventHandles.Add(attribute.GetEventHandle(method, this, Parent.GetComponentInParent<EventsBase>()));
                 }

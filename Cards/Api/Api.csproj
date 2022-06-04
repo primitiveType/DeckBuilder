@@ -5,21 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Update="EventsBase.tt">
-        <Generator>TextTemplatingFileGenerator</Generator>
-        <LastGenOutput>EventsBase.cs</LastGenOutput>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="EventsBase.cs">
-        <AutoGen>True</AutoGen>
-        <DesignTime>True</DesignTime>
-        <DependentUpon>EventsBase.tt</DependentUpon>
-      </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta1" />
       <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
       <PackageReference Include="RandN" Version="0.3.0" />
@@ -30,6 +15,25 @@
           <CopyToPublishDirectory>Never</CopyToPublishDirectory>
           <HintPath>..\..\..\..\..\..\..\Program Files\JetBrains\JetBrains Rider 2020.1.4\lib\ReSharperHost\TestRunner\net461\JetBrains.Annotations.dll</HintPath>
       </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="EventsBase.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>EventsBase.cs</LastGenOutput>
+      </None>
+      <None Update="EventsInclude.ttinclude">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>EventsInclude.cs</LastGenOutput>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="EventsInclude.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>EventsInclude.ttinclude</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

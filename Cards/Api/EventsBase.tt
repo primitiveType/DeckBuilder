@@ -2,122 +2,133 @@
 <#@ output extension=".cs" #>
 <#@ assembly name="System.Xml"#>
 <#@ import namespace="System.Xml" #>
-<#@ import namespace="Api" #>
+
 <#
     XmlDocument doc = new XmlDocument();
     // Replace this file path with yours:
     doc.Load(@"./EventDefinitions.xml");
+    Generate();
+
+    void Generate()
+    {
 #>
+
 using System;
 using Api;
 using System.Reflection;
 using System.Collections.Generic;
-
-public abstract class EventsBase : Component{
 <#
-    foreach (XmlNode node in doc.SelectNodes("/catalog"))
-    {
-        foreach (XmlNode eventNode in node.SelectNodes("event"))
+        string catalogName = "EventsBase";
+        string eventAttributeName = "EventAttribute";
+        foreach (XmlNode node in doc.SelectNodes("/catalog"))
         {
+            catalogName = node.Attributes["name"].Value;
+            eventAttributeName = catalogName + "Attribute";
+            string inherits = node.Attributes["inherits"].Value;
+#>
+public abstract class <#= catalogName #> : <#= inherits #>{
+<#
+            foreach (XmlNode eventNode in node.SelectNodes("event"))
+            {
 #>    #region Code for event <#= eventNode.Attributes["id"].Value #>
 <#
-            CreateInvocator(eventNode);
+                CreateInvocator(eventNode);
 #>    #endregion Code for event <#= eventNode.Attributes["id"].Value #>
 <#
+            }
         }
-    }
 #>
 }
 <#
-    foreach (XmlNode node in doc.SelectNodes("/catalog"))
-    {
-        foreach (XmlNode eventNode in node.SelectNodes("event"))
+        foreach (XmlNode node in doc.SelectNodes("/catalog"))
         {
-            CreateAttribute(eventNode);
-            CreateEvent(eventNode);
+            foreach (XmlNode eventNode in node.SelectNodes("event"))
+            {
+                CreateAttribute(eventNode);
+                CreateEvent(eventNode);
+            }
         }
-    }
 
-    void CreateEvent(XmlNode eventNode)
-    {
-        string argsClassName = eventNode.Attributes["id"].Value + "EventArgs";
+        void CreateEvent(XmlNode eventNode)
+        {
+            string argsClassName = eventNode.Attributes["id"].Value + "EventArgs";
 #>
     public delegate void <#= eventNode.Attributes["id"].Value #>Event (object sender, <#= argsClassName #> args);
 
     public class <#= argsClassName #> {<#
-        var argnodes = eventNode.SelectNodes("arg");
-        var memberNodes = eventNode.SelectNodes("member");
-        int argCount = argnodes != null ? argnodes.Count : 0;
-        if (argCount > 0)
-        {
-            foreach (XmlNode argNode in argnodes)
+            var argnodes = eventNode.SelectNodes("arg");
+            var memberNodes = eventNode.SelectNodes("member");
+            int argCount = argnodes != null ? argnodes.Count : 0;
+            if (argCount > 0)
             {
-#>
-        public  <#=
-                    argNode.Attributes["type"].Value #> <#=
-                    argNode.Attributes["name"].Value #> { get; }
-<#
-            }
-            foreach (XmlNode argNode in memberNodes)
-            {
-#>
-        public  <#=
-                    argNode.Attributes["type"].Value #> <#=
-                    argNode.Attributes["name"].Value #> { get; set;} 
-<#
-                if (argNode.Attributes["value"]?.Value != null)
+                foreach (XmlNode argNode in argnodes)
                 {
+#>
+        public  <#=
+                        argNode.Attributes["type"].Value #> <#=
+                        argNode.Attributes["name"].Value #> { get; }
+<#
+                }
+                foreach (XmlNode argNode in memberNodes)
+                {
+#>
+        public  <#=
+                        argNode.Attributes["type"].Value #> <#=
+                        argNode.Attributes["name"].Value #> { get; set;} 
+<#
+                    if (argNode.Attributes["value"]?.Value != null)
+                    {
 #>=<#=
                             argNode.Attributes["value"].Value #>;<#
+                    }
                 }
-            }
 #>
         public  <#= argsClassName #> (<#
-            int currentArg = 0;
-            foreach (XmlNode argNode in argnodes)
-            {
-                currentArg++;
-
-                string postfix = "";
-                if (currentArg != argCount)
+                int currentArg = 0;
+                foreach (XmlNode argNode in argnodes)
                 {
-                    //add comma between arguments
-                    postfix = ",";
-                }
+                    currentArg++;
+
+                    string postfix = "";
+                    if (currentArg != argCount)
+                    {
+                        //add comma between arguments
+                        postfix = ",";
+                    }
 #><#= argNode.Attributes["type"].Value #> <#=
-                    argNode.Attributes["name"].Value + postfix #> <#
-            }
+                        argNode.Attributes["name"].Value + postfix #> <#
+                }
 #>
   ){
     <#
-            foreach (XmlNode argNode in argnodes)
-            {
+                foreach (XmlNode argNode in argnodes)
+                {
 //set in ctor
 #>
               this.<#=
-                    argNode.Attributes["name"].Value #> = <#=
-                    argNode.Attributes["name"].Value #>; 
+                        argNode.Attributes["name"].Value #> = <#=
+                        argNode.Attributes["name"].Value #>; 
 <#
-            }
+                }
 #>
 }
 
   }
 <#
+            }
         }
-    }
 #>
 
 
 <#
-    void CreateAttribute(XmlNode eventNode)
-    {
+        void CreateAttribute(XmlNode eventNode)
+        {
 #>
 /// <summary>
 /// (object sender, <#= eventNode.Attributes["id"].Value #>EventArgs) args)
 /// </summary>
-public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventAttribute {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+public class On<#= eventNode.Attributes["id"].Value #>Attribute : <#=eventAttributeName#> {
+    public override EventHandle GetEventHandle(MethodInfo attached, object instance, <#= catalogName #> events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -140,13 +151,13 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventAttribute
 
 }
 <#
-    }
+        }
 
-    void CreateInvocator(XmlNode eventNode)
-    {
-        string eventName = eventNode.Attributes["id"].Value;
-        string eventTypeName = eventNode.Attributes["id"].Value + "Event";
-        string argsName = eventNode.Attributes["id"].Value + "EventArgs";
+        void CreateInvocator(XmlNode eventNode)
+        {
+            string eventName = eventNode.Attributes["id"].Value;
+            string eventTypeName = eventNode.Attributes["id"].Value + "Event";
+            string argsName = eventNode.Attributes["id"].Value + "EventArgs";
 #>
 private event <#= eventTypeName #> <#= eventName #>;
 internal virtual void On<#= eventName #>(<#= argsName #> args)
@@ -160,10 +171,29 @@ public EventHandle SubscribeTo<#= eventName #>(<#= eventTypeName #> action)
     return new EventHandle(() => <#= eventName #> -= action);
 } 
 <#
-    }
+        }
 #>
 
 //TODO: generate attributes with static override functions that get the event handle from a game context.
 //TODO: add generation of invoke functions.? 
+
+  [MeansImplicitUse]
+    public abstract class <#=eventAttributeName#> : Attribute
+    {
+        public readonly EventAttachmentLifetime Lifetime;
+
+        public <#=eventAttributeName#>(EventAttachmentLifetime lifetime = EventAttachmentLifetime.Permanent) 
+        {
+            Lifetime = lifetime;
+        }
+
+        public abstract EventHandle GetEventHandle(MethodInfo attached, object instance, <#= catalogName #> events);
+
+    }
+
+    
+<#
+    }
+#>
 
  

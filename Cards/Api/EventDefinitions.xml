@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<catalog>
-    <event id ="CardPlayed" >
+<catalog name="EventsBase" inherits="Component">
+    <event id="CardPlayed">
         <arg name="CardId" type="int"/>
         <arg name="CardCost" type="int"/>
     </event>
-    <event id ="CardDiscarded" >
+    <event id="CardDiscarded">
         <arg name="CardId" type="int"/>
         <arg name="CardCost" type="int"/>
     </event>
-    <event id ="RequestDealDamage" >
+    <event id="RequestDealDamage">
         <arg name="Amount" type="int"/>
         <arg name="Source" type="Entity"/>
         <arg name="Target" type="Entity"/>
-        <member name ="Multiplier" type="List&lt;float&gt;" value="new List&lt;float&gt;()"/>
+        <member name="Multiplier" type="List&lt;float&gt;" value="new List&lt;float&gt;()"/>
     </event>
 </catalog>

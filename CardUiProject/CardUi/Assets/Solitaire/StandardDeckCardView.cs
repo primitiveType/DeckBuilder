@@ -14,7 +14,11 @@ public class StandardDeckCardView : PileItemView<StandardDeckCard>
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        SpriteRenderer.sprite = SolitaireHelper.Instance.GetCardSprite(Number, Suit);
+        if(SpriteRenderer)
+        {
+            SpriteRenderer.sprite = SolitaireHelper.Instance.GetCardSprite(Number, Suit);
+        }
+
         gameObject.name = Model.GetName();
     }
 }

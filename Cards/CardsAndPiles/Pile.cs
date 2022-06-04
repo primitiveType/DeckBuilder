@@ -1,7 +1,6 @@
 ﻿using Api;
-using CardsAndPiles;
 
-namespace Solitaire
+namespace CardsAndPiles
 {
     public abstract class Pile : Component, IPile
     {
