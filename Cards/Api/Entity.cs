@@ -9,26 +9,31 @@ using RandN.Rngs;
 namespace Api
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public sealed class Entity
+    internal sealed class Entity : IEntity
     {
+        public Context Context { get; private set; }
         [JsonProperty] public int Id { get; private set; } = -1;
 
         [JsonProperty] public IChildrenCollection<Component> Components => m_Components;
         [JsonProperty] private ChildrenCollection<Component> m_Components = new ChildrenCollection<Component>();
 
 
-        public Entity Parent { get; private set; }
+        public IEntity Parent { get; private set; }
 
-        public IChildrenCollection<Entity> Children => m_Children;
-        [JsonProperty] private ChildrenCollection<Entity> m_Children = new ChildrenCollection<Entity>();
+        public IChildrenCollection<IEntity> Children => m_Children;
+        [JsonProperty] private ChildrenCollection<IEntity> m_Children = new ChildrenCollection<IEntity>();
         private bool Initialized { get; set; }
 
-        internal void Initialize() //game context paramater?
+        internal void Initialize(Context context, int id) //game context parameter?
         {
             if (Initialized)
             {
                 return;
             }
+
+            Id = id;
+
+            Context = context;
 
             Components.CollectionChanged += ComponentsOnCollectionChanged;
             //call generated code that does reflection to get all event attributes and subscribes to proper events
@@ -60,7 +65,8 @@ namespace Api
             }
         }
 
-        public void ShuffleChildren()//this is the wrong way to do this. I should probably just use an order property where it matters. 
+        public void
+            ShuffleChildren() //this is the wrong way to do this. I should probably just use an order property where it matters. 
         {
             GetComponentInParent<Random>().Rng.ShuffleInPlace(m_Children);
         }
@@ -80,11 +86,7 @@ namespace Api
             //set parent./
             //initialize
             //fire added event.
-            m_Children.Add(entity, () =>
-            {
-                entity.Parent = this;
-                entity.Initialize();
-            });
+            m_Children.Add(entity, () => { entity.Parent = this; });
         }
 
         public bool RemoveChild(Entity entity)
@@ -92,15 +94,23 @@ namespace Api
             return m_Children.Remove(entity);
         }
 
-        public void SetParent(Entity parent)
+        public void SetParent(IEntity parent)
         {
             if (Parent != null)
             {
-                Parent.RemoveChild(this);
+                ((Entity)Parent).RemoveChild(this);
             }
 
-            parent.AddChild(this);
+            if (parent != null)
+            {
+                ((Entity)parent).AddChild(this);
+            }
+            else
+            {
+                Parent = null;
+            }
         }
+
 
         public T GetComponent<T>()
         {
@@ -109,7 +119,7 @@ namespace Api
 
         public List<T> GetComponents<T>()
         {
-            return (List<T>)Components.OfType<T>();
+            return Components.OfType<T>().ToList();
         }
 
         public T GetComponentInParent<T>()
@@ -192,7 +202,7 @@ namespace Api
 
         public bool RemoveComponent(Component toRemove)
         {
-            if (!m_Components.Remove(toRemove, toRemove.Terminate))
+            if (!m_Components.Remove(toRemove))
             {
                 return false;
             }
@@ -210,10 +220,24 @@ namespace Api
 
             foreach (var child in Children)
             {
-                child.Parent = (this);
+                (child as Entity).Parent = (this);
             }
         }
-        
-        
+    }
+
+    public interface IEntity
+    {
+        Context Context { get; }
+        int Id { get; }
+        IEntity Parent { get; }
+        IChildrenCollection<IEntity> Children { get; }
+        void SetParent(IEntity parent);
+        T GetComponent<T>();
+        List<T> GetComponents<T>();
+        T GetComponentInParent<T>();
+        T GetComponentInChildren<T>();
+        List<T> GetComponentsInChildren<T>();
+        T AddComponent<T>() where T : Component, new();
+        bool RemoveComponent(Component toRemove);
     }
 }

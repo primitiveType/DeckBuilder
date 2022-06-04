@@ -18,7 +18,7 @@ namespace Solitaire
         {
             if (!Game.GameStarted)
             {
-                foreach (Entity parentChild in Parent.Children)
+                foreach (IEntity parentChild in Parent.Children)
                 {
                     parentChild.GetComponent<StandardDeckCard>().IsFaceDown = true;
                 }

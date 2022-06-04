@@ -10,10 +10,6 @@ namespace CardsAndPiles
         {
         }
 
-        public void Shuffle()
-        {
-            Parent.ShuffleChildren();
-        }
 
     }
 }

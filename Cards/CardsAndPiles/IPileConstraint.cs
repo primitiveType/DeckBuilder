@@ -4,6 +4,6 @@ namespace CardsAndPiles
 {
     public interface IPileConstraint : IComponent
     {
-        bool CanReceive(Entity itemView);
+        bool CanReceive(IEntity itemView);
     }
 }

@@ -10,8 +10,8 @@
     </event>
     <event id="RequestDealDamage">
         <arg name="Amount" type="int"/>
-        <arg name="Source" type="Entity"/>
-        <arg name="Target" type="Entity"/>
+        <arg name="Source" type="IEntity"/>
+        <arg name="Target" type="IEntity"/>
         <member name="Multiplier" type="List&lt;float&gt;" value="new List&lt;float&gt;()"/>
     </event>
 </catalog>

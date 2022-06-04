@@ -9,25 +9,28 @@ namespace Tests
 {
     public class Tests
     {
+        private Context Context { get; set; }
+
         [SetUp]
         public void Setup()
         {
+            Context = new Context();
         }
 
         [Test]
         public void Test1()
         {
             //Create a game
-            Entity game = new Entity();
+            IEntity game = Context.CreateEntity();
             game.AddComponent<Events>();
-            game.Initialize();
 
             //Add entity with test components
-            Entity entity = new Entity();
+            IEntity entity = Context.CreateEntity();
+            entity.SetParent(game);
+
             var testComponent = entity.AddComponent<CardPlayedComponent>();
 
             var testComponent2 = entity.AddComponent<CardDiscardedComponent>();
-            entity.SetParent(game);
 
             //Verify initial value.
             Assert.IsFalse(testComponent.CardPlayed);
@@ -51,12 +54,11 @@ namespace Tests
         public void TestDealDamage()
         {
             //Create a game
-            Entity game = new Entity();
+            IEntity game = Context.CreateEntity();
             game.AddComponent<Events>();
-            game.Initialize();
 
             //Add entity with test components
-            Entity entity = new Entity();
+            IEntity entity = Context.CreateEntity();
             Health health = entity.AddComponent<Health>();
             Assert.That(health.Amount, Is.EqualTo(10));
             entity.SetParent(game);
@@ -79,12 +81,11 @@ namespace Tests
         public void TestPredictDamage()
         {
             //Create a game
-            Entity game = new Entity();
+            IEntity game = Context.CreateEntity();
             game.AddComponent<Events>();
-            game.Initialize();
 
             //Add entity with test components
-            Entity entity = new Entity();
+            IEntity entity = Context.CreateEntity();
             Health health = entity.AddComponent<Health>();
             Assert.That(health.Amount, Is.EqualTo(10));
             entity.SetParent(game);
@@ -113,17 +114,15 @@ namespace Tests
         public void TestPreventDamage()
         {
             //Create a game
-            Entity game = new Entity();
+            IEntity game = Context.CreateEntity();
             game.AddComponent<Events>();
-            game.Initialize();
 
             //Add entity with test components
-            Entity entity = new Entity();
+            IEntity entity = Context.CreateEntity(game);
             Health health = entity.AddComponent<Health>();
             //Prevent the next source of damage.
             entity.AddComponent<PreventAllDamageOnceComponent>();
             Assert.That(health.Amount, Is.EqualTo(10));
-            entity.SetParent(game);
 
 
             RequestDealDamageEventArgs

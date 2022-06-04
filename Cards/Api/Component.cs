@@ -5,13 +5,15 @@ using Newtonsoft.Json;
 
 namespace Api
 {
+   
     public abstract class Component : IComponent
     {
+        protected Context Context => Parent.Context;
         private List<EventHandle> EventHandles { get; } = new List<EventHandle>();
-        [JsonIgnore] public Entity Parent { get; private set; }
+        [JsonIgnore] public IEntity Parent { get; private set; }
         private bool Initialized { get; set; }
 
-        public void InternalInitialize(Entity parent)
+        public void InternalInitialize(IEntity parent)
         {
             if (Initialized)
             {

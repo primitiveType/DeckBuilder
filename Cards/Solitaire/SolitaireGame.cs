@@ -19,13 +19,13 @@ namespace Solitaire
             GameStarted = false;
             var random = Parent.AddComponent<Random>();
 
-            Entity deckEntity = new Entity();
+
+            IEntity deckEntity = Context.CreateEntity();
             Deck = deckEntity.AddComponent<DeckPile>();
             deckEntity.SetParent(Parent);
 
-            Deck.Shuffle();
 
-            Entity handEntity = new Entity();
+            IEntity handEntity = Context.CreateEntity();
             handEntity.AddComponent<HandPile>();
             handEntity.SetParent(Parent);
 
@@ -39,31 +39,31 @@ namespace Solitaire
 
             for (int i = 0; i < NumPiles; i++)
             {
-                Entity bankEntity = new Entity();
+                IEntity bankEntity = Context.CreateEntity();
                 bankEntity.AddComponent<BankPile>();
                 bankEntity.SetParent(Parent);
             }
 
-            Entity heartsEntity = new Entity();
+            IEntity heartsEntity = Context.CreateEntity();
             heartsEntity.AddComponent<SolutionPile>().Suit = Suit.Hearts;
             heartsEntity.SetParent(Parent);
 
-            Entity clubsEntity = new Entity();
+            IEntity clubsEntity = Context.CreateEntity();
             clubsEntity.AddComponent<SolutionPile>().Suit = Suit.Clubs;
             clubsEntity.SetParent(Parent);
 
-            Entity diamondsEntity = new Entity();
+            IEntity diamondsEntity = Context.CreateEntity();
             diamondsEntity.AddComponent<SolutionPile>().Suit = Suit.Diamonds;
             diamondsEntity.SetParent(Parent);
 
-            Entity spadesEntity = new Entity();
+            IEntity spadesEntity = Context.CreateEntity();
             spadesEntity.AddComponent<SolutionPile>().Suit = Suit.Spades;
             spadesEntity.SetParent(Parent);
         }
 
-        private Entity MakeCard(int num, Suit suit)
+        private IEntity MakeCard(int num, Suit suit)
         {
-            Entity cardEntity = new Entity();
+            IEntity cardEntity = Context.CreateEntity();
             StandardDeckCard card = cardEntity.AddComponent<StandardDeckCard>();
             card.SetCard(num, suit);
 
