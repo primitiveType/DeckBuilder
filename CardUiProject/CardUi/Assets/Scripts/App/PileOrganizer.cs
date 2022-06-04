@@ -11,7 +11,7 @@ public class PileOrganizer : MonoBehaviour
     {
         PileView = GetComponentInParent<IPileView>();
         PileView.Entity.Children.CollectionChanged += OnPileChanged;
-        foreach (Entity child in PileView.Entity.Children)
+        foreach (IEntity child in PileView.Entity.Children)
         {
             ParentViewToPile(child);
         }
@@ -21,14 +21,14 @@ public class PileOrganizer : MonoBehaviour
     {
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
-            foreach (Entity added in e.NewItems)
+            foreach (IEntity added in e.NewItems)
             {
                 ParentViewToPile(added);
             }
         }
     }
 
-    protected virtual void ParentViewToPile(Entity added)
+    protected virtual void ParentViewToPile(IEntity added)
     {
         IGameObject view = added.GetComponent<IGameObject>();
         view.gameObject.transform.parent = transform;

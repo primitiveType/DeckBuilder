@@ -10,10 +10,10 @@ namespace Common
 {
     public class View<T> : MonoBehaviour, IView<T> where T : IComponent
     {
-        public Entity Entity { get; private set; }
+        public IEntity Entity { get; private set; }
         public T Model { get; private set; }
 
-        public void SetModel(Entity entity)
+        public void SetModel(IEntity entity)
         {
             Entity = entity;
             Model = entity.GetComponent<T>();
@@ -74,6 +74,6 @@ namespace Common
 
     public interface IView
     {
-        Entity Entity { get; }
+        IEntity Entity { get; }
     }
 }

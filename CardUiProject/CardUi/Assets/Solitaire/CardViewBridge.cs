@@ -12,15 +12,15 @@ public class CardViewBridge : Component, IGameObject
     protected override void Initialize()
     {
         base.Initialize();
-        StandardDeckCard card = Parent.GetComponent<StandardDeckCard>();
+        StandardDeckCard card = Entity.GetComponent<StandardDeckCard>();
         if (card != null)
         {
             MakeCard(card);
         }
 
 
-        Parent.Children.CollectionChanged += ChildrenOnCollectionChanged;
-        foreach (Entity child in Parent.Children)
+        Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
+        foreach (IEntity child in Entity.Children)
         {
             AddBridgeIfMissing(child);
         }
@@ -30,14 +30,14 @@ public class CardViewBridge : Component, IGameObject
     {
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
-            foreach (Entity item in e.NewItems)
+            foreach (IEntity item in e.NewItems)
             {
                 AddBridgeIfMissing(item);
             }
         }
     }
 
-    private static void AddBridgeIfMissing(Entity item)
+    private static void AddBridgeIfMissing(IEntity item)
     {
         if (item.GetComponent<CardViewBridge>() == null)
         {
@@ -49,7 +49,7 @@ public class CardViewBridge : Component, IGameObject
     {
         StandardDeckCardView card = GameObject.Instantiate(CardPrefab).GetComponent<StandardDeckCardView>();
         gameObject = card.gameObject;
-        card.SetModel(cardModel.Parent);
+        card.SetModel(cardModel.Entity);
     }
 
     public GameObject gameObject { get; private set; }

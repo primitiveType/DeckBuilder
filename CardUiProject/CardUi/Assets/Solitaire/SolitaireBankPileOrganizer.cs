@@ -27,7 +27,7 @@ namespace Solitaire
             }
         }
 
-        protected override void ParentViewToPile(Entity added)
+        protected override void ParentViewToPile(IEntity added)
         {
             base.ParentViewToPile(added);
             GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
@@ -50,7 +50,7 @@ namespace Solitaire
             {
                 case NotifyCollectionChangedAction.Remove:
                 {
-                    foreach (Entity removed in e.OldItems)
+                    foreach (IEntity removed in e.OldItems)
                     {
                         GameObject entityGO = removed.GetComponent<IGameObject>()?.gameObject;
                         if (entityGO != null)

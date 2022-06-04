@@ -12,7 +12,7 @@ namespace Solitaire
         {
             StandardDeckCard card = item.GetComponent<StandardDeckCard>();
 
-            if (card != null || Entity.Children.Count >= MaxHandSize)
+            if (card == null || Entity.Children.Count >= MaxHandSize)
             {
                 return false;
             }

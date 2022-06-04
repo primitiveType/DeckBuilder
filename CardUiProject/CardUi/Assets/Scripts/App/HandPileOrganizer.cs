@@ -122,7 +122,7 @@ public class HandPileOrganizer : PileOrganizer
         base.OnPileChanged(sender, e);
         if (e.Action == NotifyCollectionChangedAction.Remove)
         {
-            foreach (Entity removed in e.OldItems)
+            foreach (IEntity removed in e.OldItems)
             {
                 GameObject entityGO = removed.GetComponent<IGameObject>()?.gameObject;
                 if (entityGO != null)
@@ -137,7 +137,7 @@ public class HandPileOrganizer : PileOrganizer
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
             Debug.Log($"adding {e.NewItems.Count} items.");
-            foreach (Entity added in e.NewItems)
+            foreach (IEntity added in e.NewItems)
             {
                 GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
                 if (entityGO != null && entityGO.GetComponent<CardInHand>() != null)

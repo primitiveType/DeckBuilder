@@ -45,22 +45,7 @@ public class PileItemView<T> : View<T>, IEndDragHandler, IPileItemView, IDragHan
 
     public bool TrySendToPile(IPileView pileView)
     {
-        if (pileView.Entity == Entity.Parent)
-        {
-            return false;
-        }
-
-        return pileView.Model.ReceiveItem(this.Model);
-        // if (pileView.ReceiveItem(this))
-        // {
-        //     CurrentPileView?.RemoveItem(this);
-        //     CurrentPileView = pileView;
-        //     return true;
-        // }
-        //
-        //
-        // Debug.Log($"Failed to add {name} to {pileView}");
-        // return false;
+        return Entity.TrySetParent(pileView.Entity);
     }
 
 

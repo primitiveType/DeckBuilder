@@ -21,7 +21,7 @@ public class ClickSendRandomToPile : MonoBehaviour, IPointerClickHandler
         if (PileView.Entity.Children.Count > 0)
         {
             IPileItem card = PileView.Entity.Children.GetRandom().GetComponent<IPileItem>();
-            card.TrySendToPile(m_PileViewToSendTo.Model);
+            card.Entity.TrySetParent(m_PileViewToSendTo.Entity);
         }
     }
 }

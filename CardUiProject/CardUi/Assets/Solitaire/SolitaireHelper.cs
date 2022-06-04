@@ -60,17 +60,18 @@ public class SolitaireHelper : MonoBehaviourSingleton<SolitaireHelper>
 
     private void SetupGame()
     {
-        Entity root = new Entity();
-        Entity game = new Entity();
+        Context context = new Context();
+        IEntity root = context.CreateEntity();
+        IEntity game = context.CreateEntity();
         game.AddComponent<CardViewBridge>();
-        game.SetParent(root);
+        game.TrySetParent(root);
         Game = game.AddComponent<SolitaireGame>();
-        PileViewBridge deckBridge = game.GetComponentInChildren<DeckPile>().Parent.AddComponent<PileViewBridge>();
+        PileViewBridge deckBridge = game.GetComponentInChildren<DeckPile>().Entity.AddComponent<PileViewBridge>();
         deckBridge.gameObject = m_DeckPileView.gameObject;
-        m_DeckPileView.SetModel(deckBridge.Parent);
-        PileViewBridge handBridge = game.GetComponentInChildren<HandPile>().Parent.AddComponent<PileViewBridge>();
+        m_DeckPileView.SetModel(deckBridge.Entity);
+        PileViewBridge handBridge = game.GetComponentInChildren<HandPile>().Entity.AddComponent<PileViewBridge>();
         handBridge.gameObject = m_HandPileView.gameObject;
-        m_HandPileView.SetModel(handBridge.Parent);
+        m_HandPileView.SetModel(handBridge.Entity);
 
         List<BankPile> bankPiles = game.GetComponentsInChildren<BankPile>();
 
@@ -78,11 +79,11 @@ public class SolitaireHelper : MonoBehaviourSingleton<SolitaireHelper>
         foreach (var bankPile in bankPiles)
         {
             i++;
-            PileViewBridge bankBridge = bankPile.Parent.AddComponent<PileViewBridge>();
+            PileViewBridge bankBridge = bankPile.Entity.AddComponent<PileViewBridge>();
             var bankView = Instantiate(m_BankPrefab);
             bankView.transform.position = transform.position + new Vector3(i * 5, 0, 0);
             bankBridge.gameObject = bankView.gameObject;
-            bankView.SetModel(bankBridge.Parent);
+            bankView.SetModel(bankBridge.Entity);
         }
         
         Game.StartGame();

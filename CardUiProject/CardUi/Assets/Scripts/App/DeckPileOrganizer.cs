@@ -7,7 +7,7 @@ public class DeckPileOrganizer : PileOrganizer
     [SerializeField] private Transform parentTransform;
 
 
-    protected override void ParentViewToPile(Entity added)
+    protected override void ParentViewToPile(IEntity added)
     {
         IGameObject viewGO = added.GetComponent<IGameObject>();
 
