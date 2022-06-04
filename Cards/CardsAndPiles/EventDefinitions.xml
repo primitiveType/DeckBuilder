@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<catalog name="CardEventsBase" inherits="EventsBase">
+<catalog name="CardEventsBase" inherits="EventsBase" namespace="CardsAndPiles">
     <event id="CardPlayed">
         <arg name="CardId" type="IEntity"/>
         <arg name="Target" type="IEntity"/>

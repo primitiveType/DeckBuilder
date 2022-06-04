@@ -3,7 +3,7 @@ using Api;
 using NUnit.Framework;
 using Solitaire;
 
-namespace Tests
+namespace SolitaireTester
 {
     public class Tests
     {
@@ -16,7 +16,7 @@ namespace Tests
         public void Setup()
         {
             Context = new Context();
-            var gameEntity = Context.CreateEntity(null);
+            var gameEntity = Context.CreateEntity();
             Game = gameEntity.AddComponent<SolitaireGame>();
         }
 

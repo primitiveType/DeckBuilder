@@ -1,6 +1,0 @@
-<#@ template language="C#" #>
-<#+
-    // features to be included to other t4 files
-    string DefinitionsPath = @"./EventDefinitions.xml";
-#>
-<#@ include file="..\Api\EventsBase.tt" #>

@@ -12,18 +12,22 @@
     void Generate()
     {
 #>
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable PossibleNullReferenceException
+// ReSharper disable InconsistentNaming
 
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Api;
+
 <#
         string catalogName = "EventsBase";
-        string eventAttributeName = "EventAttribute";
-        string namespaceName = "namespace";
         foreach (XmlNode node in doc.SelectNodes("/catalog"))
         {
             catalogName = node.Attributes["name"].Value;
-            eventAttributeName = catalogName + "Attribute";
             string inherits = node.Attributes["inherits"].Value;
-            namespaceName = node.Attributes["namespace"].Value;
+            string namespaceName = node.Attributes["namespace"].Value;
 #>
 
 namespace <#= namespaceName #>{
@@ -134,7 +138,7 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttr
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
-            return ((<#= catalogName #>)events).SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate(object sender, <#= eventNode.Attributes["id"].Value #>EventArgs args)
+            return ((<#= catalogName #>)events).SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate
             {
                 attached.Invoke(instance, Array.Empty<object>());
             });

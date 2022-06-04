@@ -16,8 +16,6 @@ namespace Solitaire
         {
             base.Initialize();
             GameStarted = false;
-            var random = Entity.AddComponent<Random>();
-
 
             IEntity deckEntity = Context.CreateEntity(Entity);
             Deck = deckEntity.AddComponent<DeckPile>();
@@ -58,16 +56,14 @@ namespace Solitaire
             spadesEntity.TrySetParent(Entity);
         }
 
-        private IEntity MakeCard(int num, Suit suit, IEntity parent)
+        private void MakeCard(int num, Suit suit, IEntity parent)
         {
-            IEntity cardEntity = Context.CreateEntity(parent, entity =>
+            Context.CreateEntity(parent, entity =>
             {
                 StandardDeckCard card = entity.AddComponent<StandardDeckCard>();
                 card.SetCard(num, suit);
                 Cards.Add(card);
             });
-
-            return cardEntity;
         }
 
         public void StartGame()

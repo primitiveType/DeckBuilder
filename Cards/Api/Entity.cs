@@ -181,7 +181,7 @@ namespace Api
                 }
             }
 
-            return component;
+            return default(T);
         }
 
         public List<T> GetComponentsInChildren<T>()

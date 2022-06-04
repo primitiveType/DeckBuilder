@@ -1,9 +1,14 @@
 
+// ReSharper disable RedundantUsingDirective
+// ReSharper disable InconsistentNaming
 
 using System;
-using Api;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
+using Api;
+
+
+namespace CardsAndPiles{
 public abstract class CardEventsBase : EventsBase{
     #region Code for event CardPlayed
 private event CardPlayedEvent CardPlayed;
@@ -54,7 +59,7 @@ public class OnCardPlayedAttribute : EventsBaseAttribute {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
-            return ((CardEventsBase)events).SubscribeToCardPlayed(delegate(object sender, CardPlayedEventArgs args)
+            return ((CardEventsBase)events).SubscribeToCardPlayed(delegate
             {
                 attached.Invoke(instance, Array.Empty<object>());
             });
@@ -73,11 +78,11 @@ public class OnCardPlayedAttribute : EventsBaseAttribute {
 }
     public delegate void CardPlayedEvent (object sender, CardPlayedEventArgs args);
 
-    public class CardPlayedEventArgs {        public  IEntity cardId { get; }
-        public  IEntity target { get; }
-        public  CardPlayedEventArgs (IEntity cardId, IEntity target   ){
-                  this.cardId = cardId; 
-              this.target = target; 
+    public class CardPlayedEventArgs {        public  IEntity CardId { get; }
+        public  IEntity Target { get; }
+        public  CardPlayedEventArgs (IEntity CardId, IEntity Target   ){
+                  this.CardId = CardId; 
+              this.Target = Target; 
 }
 
   }
@@ -90,7 +95,7 @@ public class OnCardDiscardedAttribute : EventsBaseAttribute {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
-            return ((CardEventsBase)events).SubscribeToCardDiscarded(delegate(object sender, CardDiscardedEventArgs args)
+            return ((CardEventsBase)events).SubscribeToCardDiscarded(delegate
             {
                 attached.Invoke(instance, Array.Empty<object>());
             });
@@ -109,9 +114,9 @@ public class OnCardDiscardedAttribute : EventsBaseAttribute {
 }
     public delegate void CardDiscardedEvent (object sender, CardDiscardedEventArgs args);
 
-    public class CardDiscardedEventArgs {        public  IEntity cardId { get; }
-        public  CardDiscardedEventArgs (IEntity cardId   ){
-                  this.cardId = cardId; 
+    public class CardDiscardedEventArgs {        public  IEntity CardId { get; }
+        public  CardDiscardedEventArgs (IEntity CardId   ){
+                  this.CardId = CardId; 
 }
 
   }
@@ -124,7 +129,7 @@ public class OnRequestDealDamageAttribute : EventsBaseAttribute {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
-            return ((CardEventsBase)events).SubscribeToRequestDealDamage(delegate(object sender, RequestDealDamageEventArgs args)
+            return ((CardEventsBase)events).SubscribeToRequestDealDamage(delegate
             {
                 attached.Invoke(instance, Array.Empty<object>());
             });
@@ -143,14 +148,14 @@ public class OnRequestDealDamageAttribute : EventsBaseAttribute {
 }
     public delegate void RequestDealDamageEvent (object sender, RequestDealDamageEventArgs args);
 
-    public class RequestDealDamageEventArgs {        public  int amount { get; }
-        public  IEntity source { get; }
-        public  IEntity target { get; }
+    public class RequestDealDamageEventArgs {        public  int Amount { get; }
+        public  IEntity Source { get; }
+        public  IEntity Target { get; }
         public  List<float> Multiplier { get; set;} 
-=new List<float>();        public  RequestDealDamageEventArgs (int amount, IEntity source, IEntity target   ){
-                  this.amount = amount; 
-              this.source = source; 
-              this.target = target; 
+=new List<float>();        public  RequestDealDamageEventArgs (int Amount, IEntity Source, IEntity Target   ){
+                  this.Amount = Amount; 
+              this.Source = Source; 
+              this.Target = Target; 
 }
 
   }
@@ -160,7 +165,7 @@ public class OnRequestDealDamageAttribute : EventsBaseAttribute {
 //TODO: generate attributes with static override functions that get the event handle from a game context.
 //TODO: add generation of invoke functions.? 
 
- 
+ }
 
     
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<catalog name="SummerJam1EventsBase" inherits="CardEventsBase">
+<catalog name="SummerJam1EventsBase" inherits="CardsAndPiles.CardEventsBase" namespace="SummerJam1">
     <event id="UnitCreated">
         <arg name="EntityId" type="IEntity"/>
     </event>
