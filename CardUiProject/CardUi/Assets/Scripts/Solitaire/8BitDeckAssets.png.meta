@@ -1,0 +1,1458 @@
+fileFormatVersion: 2
+guid: 1a557343d3ab40d428761f09bc70811e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1535244524692844915
+    second: 8BitDeckAssets_back1
+  - first:
+      213: -6595781994077090958
+    second: 8BitDeckAssets_1
+  - first:
+      213: -7709040272094715751
+    second: 8BitDeckAssets_2
+  - first:
+      213: 8002119216224854869
+    second: 8BitDeckAssets_3
+  - first:
+      213: -8597738847345059004
+    second: 8BitDeckAssets_4
+  - first:
+      213: -1762899490127655764
+    second: 8BitDeckAssets_5
+  - first:
+      213: -5483608749270851397
+    second: 8BitDeckAssets_6
+  - first:
+      213: -299258118475828617
+    second: 8BitDeckAssets_7
+  - first:
+      213: 1287477335644201787
+    second: 8BitDeckAssets_8
+  - first:
+      213: 9138478252050595607
+    second: 8BitDeckAssets_9
+  - first:
+      213: 3498103547527549379
+    second: 8BitDeckAssets_10
+  - first:
+      213: -2905558514409974660
+    second: 8BitDeckAssets_11
+  - first:
+      213: 1704082628835227883
+    second: 8BitDeckAssets_12
+  - first:
+      213: -7733743142069244911
+    second: 8BitDeckAssets_13
+  - first:
+      213: 5466358583426109798
+    second: 8BitDeckAssets_14
+  - first:
+      213: -6531438337539286634
+    second: 8BitDeckAssets_back2
+  - first:
+      213: 5108746832893246654
+    second: 8BitDeckAssets_16
+  - first:
+      213: 1834547135466191316
+    second: 8BitDeckAssets_17
+  - first:
+      213: -5892645596774105255
+    second: 8BitDeckAssets_18
+  - first:
+      213: 2536981172073748883
+    second: 8BitDeckAssets_19
+  - first:
+      213: -6976312399419530836
+    second: 8BitDeckAssets_20
+  - first:
+      213: 8972821770460227603
+    second: 8BitDeckAssets_21
+  - first:
+      213: -7873867098201456254
+    second: 8BitDeckAssets_22
+  - first:
+      213: 8546098440679624361
+    second: 8BitDeckAssets_23
+  - first:
+      213: -6259575037450742600
+    second: 8BitDeckAssets_24
+  - first:
+      213: -5629551069344004242
+    second: 8BitDeckAssets_25
+  - first:
+      213: 5389238820240882804
+    second: 8BitDeckAssets_26
+  - first:
+      213: 659046735627377108
+    second: 8BitDeckAssets_27
+  - first:
+      213: 2041332794081832404
+    second: 8BitDeckAssets_28
+  - first:
+      213: 987224590173998692
+    second: 8BitDeckAssets_29
+  - first:
+      213: 4843414572028866387
+    second: 8BitDeckAssets_30
+  - first:
+      213: 1643134627994013614
+    second: 8BitDeckAssets_31
+  - first:
+      213: -7789761996989939200
+    second: 8BitDeckAssets_32
+  - first:
+      213: 8381280752204152853
+    second: 8BitDeckAssets_33
+  - first:
+      213: 8365328819036124340
+    second: 8BitDeckAssets_34
+  - first:
+      213: 1736256657205141101
+    second: 8BitDeckAssets_35
+  - first:
+      213: -1554706614796760067
+    second: 8BitDeckAssets_36
+  - first:
+      213: 6622807587235977615
+    second: 8BitDeckAssets_37
+  - first:
+      213: 8006835533354258308
+    second: 8BitDeckAssets_38
+  - first:
+      213: -3518169887475478178
+    second: 8BitDeckAssets_39
+  - first:
+      213: -1432889945774224704
+    second: 8BitDeckAssets_40
+  - first:
+      213: -1639799043813891702
+    second: 8BitDeckAssets_41
+  - first:
+      213: -2272721608834117857
+    second: 8BitDeckAssets_42
+  - first:
+      213: 264777423523733670
+    second: 8BitDeckAssets_43
+  - first:
+      213: 5949856349481144707
+    second: 8BitDeckAssets_44
+  - first:
+      213: -129039881323564314
+    second: 8BitDeckAssets_45
+  - first:
+      213: 5722153545295331252
+    second: 8BitDeckAssets_46
+  - first:
+      213: 7881601550259347632
+    second: 8BitDeckAssets_47
+  - first:
+      213: 1888704447278586260
+    second: 8BitDeckAssets_48
+  - first:
+      213: -5707941539380000155
+    second: 8BitDeckAssets_49
+  - first:
+      213: -3978956660203194776
+    second: 8BitDeckAssets_50
+  - first:
+      213: 8971195533914883617
+    second: 8BitDeckAssets_51
+  - first:
+      213: -8128205494039784886
+    second: 8BitDeckAssets_52
+  - first:
+      213: -839227416142153083
+    second: 8BitDeckAssets_53
+  - first:
+      213: 7225193009496767498
+    second: 8BitDeckAssets_54
+  - first:
+      213: -3579520602560944142
+    second: 8BitDeckAssets_55
+  - first:
+      213: -8400460703064076358
+    second: 8BitDeckAssets_56
+  - first:
+      213: 5942381542478621416
+    second: 8BitDeckAssets_57
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 10
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: 8BitDeckAssets_back1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8ec1562d37b1bae0800000000000000
+      internalID: -1535244524692844915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_1
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27b0e1be8331774a0800000000000000
+      internalID: -6595781994077090958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_2
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9902d9e77bcf30590800000000000000
+      internalID: -7709040272094715751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_3
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 553e865b70d3d0f60800000000000000
+      internalID: 8002119216224854869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_4
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44bdb643212bea880800000000000000
+      internalID: -8597738847345059004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_5
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cac4934014ce887e0800000000000000
+      internalID: -1762899490127655764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_6
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb0ac7c55ee46e3b0800000000000000
+      internalID: -5483608749270851397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_7
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 772b818a352d8dbf0800000000000000
+      internalID: -299258118475828617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_8
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b33607fb0d90ed110800000000000000
+      internalID: 1287477335644201787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_9
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71fbb117d8562de70800000000000000
+      internalID: 9138478252050595607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_10
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c1d9e984a2cb8030800000000000000
+      internalID: 3498103547527549379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_11
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c745b7aece16da7d0800000000000000
+      internalID: -2905558514409974660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_12
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be833af4f1e16a710800000000000000
+      internalID: 1704082628835227883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_13
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 141
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11c69d066993ca490800000000000000
+      internalID: -7733743142069244911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_back2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6995a92ef6bab55a0800000000000000
+      internalID: -6531438337539286634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_16
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebcf00e5d2ae5e640800000000000000
+      internalID: 5108746832893246654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_17
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d93c2d56ee957910800000000000000
+      internalID: 1834547135466191316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_18
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95f7201ec0e193ea0800000000000000
+      internalID: -5892645596774105255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_19
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3995f4b3fea253320800000000000000
+      internalID: 2536981172073748883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_20
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca12276b5d82f2f90800000000000000
+      internalID: -6976312399419530836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_21
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3186c253cddd58c70800000000000000
+      internalID: 8972821770460227603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_22
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 281011b77976ab290800000000000000
+      internalID: -7873867098201456254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_23
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ae8a3ca047d99670800000000000000
+      internalID: 8546098440679624361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_24
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b498d70ba58129a0800000000000000
+      internalID: -6259575037450742600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_25
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6784da0121dfd1b0800000000000000
+      internalID: -5629551069344004242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_26
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47cf332572c6aca40800000000000000
+      internalID: 5389238820240882804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_27
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d95377a387652900800000000000000
+      internalID: 659046735627377108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_28
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 94
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4dd6a9b5c55445c10800000000000000
+      internalID: 2041332794081832404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35f2bb944e3473340800000000000000
+      internalID: 4843414572028866387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_31
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eaf0abb0d369dc610800000000000000
+      internalID: 1643134627994013614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_32
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 002c3945cb435e390800000000000000
+      internalID: -7789761996989939200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_33
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51082fd207a405470800000000000000
+      internalID: 8381280752204152853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_34
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b47cff4d3e971470800000000000000
+      internalID: 8365328819036124340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_35
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6e9e9b0b3c681810800000000000000
+      internalID: 1736256657205141101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_36
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfbc61f22929c6ae0800000000000000
+      internalID: -1554706614796760067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_37
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8956f45960f8eb50800000000000000
+      internalID: 6622807587235977615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_38
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48f4e8cde7efd1f60800000000000000
+      internalID: 8006835533354258308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_39
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e515c8d9023fc2fc0800000000000000
+      internalID: -3518169887475478178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_40
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ca06e3af2a5d1ce0800000000000000
+      internalID: -1432889945774224704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_41
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a81a27a25734e39e0800000000000000
+      internalID: -1639799043813891702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_42
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1f8618fcbba570e0800000000000000
+      internalID: -2272721608834117857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_43
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 47
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a0eca1f9adaca300800000000000000
+      internalID: 264777423523733670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_44
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3811d6f73d2229250800000000000000
+      internalID: 5949856349481144707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_45
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e2b9df59ee853ef0800000000000000
+      internalID: -129039881323564314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_46
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bff199055c296f40800000000000000
+      internalID: 5722153545295331252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_47
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b06068f9d2116d60800000000000000
+      internalID: 7881601550259347632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_48
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4999db120b6063a10800000000000000
+      internalID: 1888704447278586260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_49
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56a0f82796159c0b0800000000000000
+      internalID: -5707941539380000155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_50
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 866f9ebbff7e7c8c0800000000000000
+      internalID: -3978956660203194776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_51
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12641918ec6108c70800000000000000
+      internalID: 8971195533914883617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_52
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4251621b20d23f80800000000000000
+      internalID: -8128205494039784886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_53
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58af3178c177a54f0800000000000000
+      internalID: -839227416142153083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_54
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0cb0bce2ca054460800000000000000
+      internalID: 7225193009496767498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_55
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f7a9222afcf25ec0800000000000000
+      internalID: -3579520602560944142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_56
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abfcc348f719b6b80800000000000000
+      internalID: -8400460703064076358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 8BitDeckAssets_57
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 0
+        width: 35.6
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8eaa64f5784977250800000000000000
+      internalID: 5942381542478621416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

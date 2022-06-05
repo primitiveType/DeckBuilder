@@ -1,0 +1,20 @@
+{
+    "name": "SummerJam1App",
+    "rootNamespace": "",
+    "references": [
+        "App"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "SummerJam1.dll",
+        "Api.dll",
+        "CardsAndPiles.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

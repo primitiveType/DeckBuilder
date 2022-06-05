@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CardsAndPiles\CardsAndPiles.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="EventsGen.ttinclude">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>EventsGen.cs</LastGenOutput>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="EventsGen.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>EventsGen.ttinclude</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+</Project>
