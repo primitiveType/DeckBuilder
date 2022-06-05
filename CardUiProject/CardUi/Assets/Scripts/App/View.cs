@@ -13,10 +13,18 @@ namespace Common
         public IEntity Entity { get; private set; }
         public T Model { get; private set; }
 
+        [SerializeField] private bool m_Initialized_Tester;
+
         public void SetModel(IEntity entity)
         {
+            m_Initialized_Tester = true;
             Entity = entity;
             Model = entity.GetComponent<T>();
+            if (Model == null)
+            {
+                throw new NullReferenceException($"Failed to find model {typeof(T).Name} on Entity Component");
+            }
+                
             AttachListeners();
             OnInitialized();
         }

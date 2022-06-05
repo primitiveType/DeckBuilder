@@ -7,4 +7,5 @@ namespace Common
     public class PileView : View<IPile>, IPileView
     {
     }
+    
 }

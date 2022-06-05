@@ -2,7 +2,7 @@
 
 namespace CardsAndPiles
 {
-    public abstract class Card : Component, IPileItem, IParentConstraint
+    public abstract class Card : Component, IPileItem
     {
         public bool TryPlayCard(IEntity target)
         {
@@ -18,7 +18,7 @@ namespace CardsAndPiles
 
         protected abstract bool PlayCard(IEntity target);
 
-        public bool AcceptsParent(IEntity parent)
+        public virtual bool AcceptsParent(IEntity parent)
         {
             return parent.GetComponent<IPile>() != null;
         }

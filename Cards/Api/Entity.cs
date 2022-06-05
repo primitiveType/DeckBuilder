@@ -8,7 +8,7 @@ using RandN;
 namespace Api
 {
     [JsonObject(MemberSerialization.OptIn)]
-    internal sealed class Entity : IEntity
+    internal class Entity : IEntity
     {
         public Context Context { get; private set; }
         [JsonProperty] public int Id { get; private set; } = -1;
@@ -95,6 +95,11 @@ namespace Api
 
         private void SetParent(IEntity parent)
         {
+            if (Parent == parent)
+            {
+                return;
+            }
+
             if (Parent != null)
             {
                 ((Entity)Parent).RemoveChild(this);
@@ -113,16 +118,17 @@ namespace Api
 
         public bool TrySetParent(IEntity parent)
         {
-            foreach (IParentConstraint component in GetComponents<IParentConstraint>())
+            if (parent != null) //setting null is always valid.... ?
             {
-                if (!component.AcceptsParent(parent))
+                foreach (IParentConstraint component in GetComponents<IParentConstraint>())
                 {
-                    return false;
+                    if (!component.AcceptsParent(parent))
+                    {
+                        return false;
+                    }
                 }
-            }
 
-            if (parent != null)
-            {
+
                 foreach (IParentConstraint component in parent.GetComponents<IParentConstraint>())
                 {
                     if (!component.AcceptsChild(this))

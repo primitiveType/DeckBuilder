@@ -1,4 +1,5 @@
-﻿using CardsAndPiles;
+﻿using Api;
+using CardsAndPiles;
 using Component = Api.Component;
 
 namespace Solitaire
@@ -43,6 +44,16 @@ namespace Solitaire
             }
 
             return $"{numberName} of {Suit.ToString()}";
+        }
+
+        public bool AcceptsParent(IEntity parent)
+        {
+            return parent.GetComponent<Pile>() != null;
+        }
+
+        public bool AcceptsChild(IEntity child)
+        {
+            return false;
         }
     }
 }

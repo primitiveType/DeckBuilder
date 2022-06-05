@@ -43,7 +43,7 @@ public class PileItemView<T> : View<T>, IEndDragHandler, IPileItemView, IDragHan
         }
     }
 
-    public bool TrySendToPile(IPileView pileView)
+    public virtual bool TrySendToPile(IPileView pileView)
     {
         return Entity.TrySetParent(pileView.Entity);
     }
@@ -65,10 +65,6 @@ public class PileItemView<T> : View<T>, IEndDragHandler, IPileItemView, IDragHan
         return Renderer.bounds;
     }
 
-    public bool CanEnterPile(IPileView pileView)
-    {
-        return true;
-    }
 
     public bool IsDragging { get; private set; }
 

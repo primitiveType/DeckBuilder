@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -12,6 +13,18 @@ namespace Api
         private List<EventHandle> EventHandles { get; } = new List<EventHandle>();
         [JsonIgnore] public IEntity Entity { get; private set; }
         private bool Initialized { get; set; }
+        private Lazy<EventsBase> LazyEvents { get; }
+        protected EventsBase Events => LazyEvents.Value;
+
+        protected Component()
+        {
+            LazyEvents = new Lazy<EventsBase>(GetEvents);
+        }
+
+        private EventsBase GetEvents()
+        {
+            return Entity.GetComponentInParent<EventsBase>();
+        }
 
         public void InternalInitialize(IEntity parent)
         {
@@ -40,7 +53,7 @@ namespace Api
         {
         }
 
-        public void Terminate()
+        public virtual void Terminate()
         {
             foreach (var eventHandle in EventHandles)
             {

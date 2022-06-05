@@ -2,7 +2,7 @@
 
 namespace CardsAndPiles
 {
-    public interface IPileItem : IComponent
+    public interface IPileItem : IComponent, IParentConstraint
     {
         //move to Ipileitem
         // bool CanEnterPile(IPile pile);

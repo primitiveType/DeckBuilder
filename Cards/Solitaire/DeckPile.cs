@@ -7,7 +7,7 @@ namespace Solitaire
     {
         public override bool AcceptsChild(IEntity item)
         {
-            StandardDeckCard card = item.GetComponent<StandardDeckCard>();
+            Card card = item.GetComponent<Card>();
 
             return card != null && !Entity.GetComponentInParent<SolitaireGame>().GameStarted;
         }

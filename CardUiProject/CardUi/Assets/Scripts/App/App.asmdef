@@ -1,9 +1,7 @@
 {
     "name": "App",
     "rootNamespace": "",
-    "references": [
-        "GUID:20dd3b8abe46ccd44a3e4721d0782412"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

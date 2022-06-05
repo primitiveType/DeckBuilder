@@ -1,7 +1,9 @@
 using System.ComponentModel;
 using Api;
+using CardsAndPiles;
 using NUnit.Framework;
 using Solitaire;
+using DeckPile = Solitaire.DeckPile;
 
 namespace SolitaireTester
 {
