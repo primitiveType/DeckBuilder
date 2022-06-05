@@ -7,12 +7,6 @@ using JetBrains.Annotations;
 
 namespace Api
 {
-    public static class CollectionExtensions
-    {
-        public static void Shuffle(this ICollection collection)
-        {
-        }
-    }
 
     public class ChildrenCollection<T> : IChildrenCollection<T>, IList<T>
     {

@@ -2,11 +2,8 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
-using RandN;
 
 namespace Api
 {
@@ -67,11 +64,6 @@ namespace Api
             }
         }
 
-        public void
-            ShuffleChildren() //this is the wrong way to do this. I should probably just use an order property where it matters. 
-        {
-            GetComponentInParent<Random>().Rng.ShuffleInPlace(m_Children);
-        }
 
         internal void Terminate()
         {
@@ -246,14 +238,14 @@ namespace Api
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            foreach (var component in Components)
-            {
-                component.InternalInitialize(this);
-            }
+            // foreach (Component component in Components)
+            // {
+            //     component.InternalInitialize(this);
+            // }
 
-            foreach (var child in Children)
+            foreach (IEntity child in Children)
             {
-                (child as Entity).Parent = (this);
+                ((Entity)child).Parent = (this);
             }
         }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using Api;
+﻿using Api;
 
 namespace CardsAndPiles
 {
@@ -12,7 +11,7 @@ namespace CardsAndPiles
                 return false;
             }
 
-            Entity.GetComponentInParent<CardEventsBase>().OnCardPlayed(new CardPlayedEventArgs(Entity, target));
+            ((CardEvents)Context.Events).OnCardPlayed(new CardPlayedEventArgs(Entity, target));
             return true;
 
         }

@@ -12,7 +12,6 @@ namespace SummerJam1
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.AddComponent<SummerJam1Events>();
 
             for (int i = 0; i < NumSlots; i++)
             {

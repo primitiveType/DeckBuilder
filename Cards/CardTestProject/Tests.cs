@@ -9,11 +9,12 @@ namespace CardTestProject
     public class Tests
     {
         private Context Context { get; set; }
+        private CardEvents Events => (CardEvents)Context.Events;
 
         [SetUp]
         public void Setup()
         {
-            Context = new Context();
+            Context = new Context(new CardEvents());
         }
 
         [Test]
@@ -21,7 +22,6 @@ namespace CardTestProject
         {
             //Create a game
             IEntity game = Context.CreateEntity();
-            game.AddComponent<CardEvents>();
 
             //Add entity with test components
             IEntity entity = Context.CreateEntity();
@@ -36,13 +36,13 @@ namespace CardTestProject
             Assert.IsFalse(testComponent2.CardDiscarded);
 
             //Simulate a card being played
-            game.GetComponent<CardEvents>().OnCardPlayed(new CardPlayedEventArgs(null, game));
+            Events.OnCardPlayed(new CardPlayedEventArgs(null, game));
 
             //Verify event was fired from attribute.
             Assert.IsTrue(testComponent.CardPlayed);
 
             //Simulate a card being discarded
-            game.GetComponent<CardEvents>().OnCardDiscarded(new CardDiscardedEventArgs(null));
+            Events.OnCardDiscarded(new CardDiscardedEventArgs(null));
 
 
             //Verify event was fired from attribute.
@@ -54,7 +54,6 @@ namespace CardTestProject
         {
             //Create a game
             IEntity game = Context.CreateEntity();
-            game.AddComponent<CardEvents>();
 
             //Add entity with test components
             IEntity entity = Context.CreateEntity(game);
@@ -65,14 +64,14 @@ namespace CardTestProject
 
             RequestDealDamageEventArgs
                 args = new RequestDealDamageEventArgs(3, entity, entity); //stop hitting yourself!
-            game.GetComponent<CardEvents>().OnRequestDealDamage(args);
+            Events.OnRequestDealDamage(args);
 
 
             Assert.That(health.Amount, Is.EqualTo(7));
 
             RequestDealDamageEventArgs
                 args2 = new RequestDealDamageEventArgs(30, entity, entity); //stop hitting yourself!
-            game.GetComponent<CardEvents>().OnRequestDealDamage(args2);
+            Events.OnRequestDealDamage(args2);
             Assert.That(health.Amount, Is.EqualTo(0));
         }
 
@@ -80,8 +79,7 @@ namespace CardTestProject
         public void TestPredictDamage()
         {
             //Create a game
-            IEntity game = Context.CreateEntity();
-            game.AddComponent<CardEvents>();
+            IEntity game = Context.Root;
 
             //Add entity with test components
             IEntity entity = Context.CreateEntity(game);
@@ -90,17 +88,17 @@ namespace CardTestProject
             entity.TrySetParent(game);
 
 
-            var gameString = Serializer.Serialize(game);
-            var gameCopy = Serializer.Deserialize<IEntity>(gameString);
+            var gameString = Serializer.Serialize(Context);
+            var gameCopy = Serializer.Deserialize<Context>(gameString);
 
-            var healthCopy = gameCopy.Children.First().GetComponent<Health>();
+            var healthCopy = gameCopy.Root.Children.First().GetComponent<Health>();
 
             Assert.NotNull(healthCopy);
             Assert.AreEqual(healthCopy.Amount, health.Amount);
 
             RequestDealDamageEventArgs
                 args2 = new RequestDealDamageEventArgs(30, entity, entity); //stop hitting yourself!
-            gameCopy.GetComponent<CardEvents>().OnRequestDealDamage(args2);
+            Events.OnRequestDealDamage(args2);
 
 
             Assert.NotNull(healthCopy);
@@ -114,7 +112,6 @@ namespace CardTestProject
         {
             //Create a game
             IEntity game = Context.CreateEntity();
-            game.AddComponent<CardEvents>();
 
             //Add entity with test components
             IEntity entity = Context.CreateEntity(game);
@@ -126,13 +123,13 @@ namespace CardTestProject
 
             RequestDealDamageEventArgs
                 args2 = new RequestDealDamageEventArgs(30, entity, entity); //stop hitting yourself!
-            game.GetComponent<CardEvents>().OnRequestDealDamage(args2);
+            Events.OnRequestDealDamage(args2);
             //damage should have been prevented.
             Assert.That(health.Amount, Is.EqualTo(10));
 
             RequestDealDamageEventArgs
                 args3 = new RequestDealDamageEventArgs(30, entity, entity); //stop hitting yourself!
-            game.GetComponent<CardEvents>().OnRequestDealDamage(args3);
+            Events.OnRequestDealDamage(args3);
             //damage should not have been prevented.
             Assert.That(health.Amount, Is.EqualTo(0));
         }

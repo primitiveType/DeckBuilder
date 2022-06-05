@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using Api;
 using CardsAndPiles;
 using Component = Api.Component;
@@ -31,26 +30,13 @@ namespace SummerJam1
 
         public bool CanDrag { get; set; } = true;
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Entity.PropertyChanged += EntityOnPropertyChanged;
-        }
-
-        private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Entity.Parent))
-            {
-                Events.SubscribeToCardPlayed(OnCardPlayed);
-            }
-        }
 
         [OnCardPlayed]
         private void OnCardPlayed(object sender, CardPlayedEventArgs args)
         {
             if (args.CardId == Entity)
             {
-                args.CardId.TrySetParent(Events.Entity.GetComponent<SummerJam1Game>().Discard);
+                args.CardId.TrySetParent(Context.Root.GetComponent<SummerJam1Game>().Discard);
             }
         }
     }
@@ -63,7 +49,6 @@ namespace SummerJam1
             Console.WriteLine("Initialized card.");
         }
 
-     
 
         protected override bool PlayCard(IEntity target)
         {

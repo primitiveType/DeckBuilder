@@ -24,7 +24,7 @@ namespace Api
 
         private EventsBase GetEvents()
         {
-            var events = Entity.GetComponentInParent<EventsBase>();
+            EventsBase events = Context.Events;
             if (events == null)
             {
                 throw new NullReferenceException($"Failed to find events for entity {Entity.Id}:{Entity.GetComponents<IComponent>().First().GetType().Name}!");
@@ -42,6 +42,11 @@ namespace Api
 
             Initialized = true;
             Entity = parent;
+
+            if (Context.Events == null)
+            {
+                throw new NullReferenceException("No Events object found while initializing component!");
+            }
             //get attributes on each component.
             var type = GetType();
             foreach (MethodInfo method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Default | BindingFlags.Public |
@@ -49,7 +54,7 @@ namespace Api
             {
                 foreach (EventsBaseAttribute attribute in method.GetCustomAttributes<EventsBaseAttribute>())
                 {
-                    EventHandles.Add(attribute.GetEventHandle(method, this, Entity.GetComponentInParent<EventsBase>()));
+                    EventHandles.Add(attribute.GetEventHandle(method, this, Context.Events));
                 }
             }
 

@@ -17,7 +17,7 @@ namespace SolitaireTester
         [SetUp]
         public void Setup()
         {
-            Context = new Context();
+            Context = new Context(new CardEvents());
             var gameEntity = Context.CreateEntity();
             Game = gameEntity.AddComponent<SolitaireGame>();
         }
