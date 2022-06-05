@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using RandN;
 
@@ -253,6 +256,8 @@ namespace Api
                 (child as Entity).Parent = (this);
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
     public interface IParentConstraint
@@ -261,7 +266,7 @@ namespace Api
         bool AcceptsChild(IEntity child);
     }
 
-    public interface IEntity
+    public interface IEntity : INotifyPropertyChanged
     {
         Context Context { get; }
         int Id { get; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 
@@ -23,7 +24,13 @@ namespace Api
 
         private EventsBase GetEvents()
         {
-            return Entity.GetComponentInParent<EventsBase>();
+            var events = Entity.GetComponentInParent<EventsBase>();
+            if (events == null)
+            {
+                throw new NullReferenceException($"Failed to find events for entity {Entity.Id}:{Entity.GetComponents<IComponent>().First().GetType().Name}!");
+            }
+
+            return events;
         }
 
         public void InternalInitialize(IEntity parent)

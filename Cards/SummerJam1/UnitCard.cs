@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using Api;
 using CardsAndPiles;
 using Component = Api.Component;
@@ -29,7 +30,21 @@ namespace SummerJam1
         protected new SummerJam1Events Events => (SummerJam1Events)base.Events;
 
         public bool CanDrag { get; set; } = true;
-        
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Entity.PropertyChanged += EntityOnPropertyChanged;
+        }
+
+        private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Entity.Parent))
+            {
+                Events.SubscribeToCardPlayed(OnCardPlayed);
+            }
+        }
+
         [OnCardPlayed]
         private void OnCardPlayed(object sender, CardPlayedEventArgs args)
         {
@@ -57,10 +72,9 @@ namespace SummerJam1
             {
                 if (Entity.TrySetParent(target))
                 {
-                    var unit = CreateUnit();
+                    Unit unit = CreateUnit();
                     Events.OnUnitCreated(new UnitCreatedEventArgs(unit.Entity));
                     unit.Entity.TrySetParent(target);
-                    
                     return true;
                 }
             }

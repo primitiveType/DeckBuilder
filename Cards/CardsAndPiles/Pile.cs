@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using Api;
 
 namespace CardsAndPiles
@@ -20,14 +21,19 @@ namespace CardsAndPiles
         {
             return true;
         }
+
         protected override void OnCardEnteredPile(IEntity eNewItem)
         {
-            
         }
     }
 
     public class PlayerDiscard : NotifiedPile
     {
+        public PlayerDiscard()
+        {
+            Console.WriteLine("Created discard.");
+        }
+
         protected override void OnCardEnteredPile(IEntity eNewItem)
         {
             Events.OnCardDiscarded(new CardDiscardedEventArgs(eNewItem));
@@ -41,7 +47,7 @@ namespace CardsAndPiles
 
     public abstract class NotifiedPile : Pile
     {
-        protected new CardEvents Events => base.Events as CardEvents;
+        protected new CardEvents Events => (CardEvents)base.Events;
 
         protected override void Initialize()
         {
