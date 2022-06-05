@@ -264,6 +264,7 @@ namespace Api
         int Id { get; }
         IEntity Parent { get; }
         IChildrenCollection<IEntity> Children { get; }
+        IChildrenCollection<Component> Components { get; }
         bool TrySetParent(IEntity parent);
         T GetComponent<T>();
         List<T> GetComponents<T>();

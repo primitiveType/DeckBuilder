@@ -7,10 +7,11 @@ namespace SummerJam1
     public class UnitView : View<Unit>, IPileItemView //seems sus
     {
         private Renderer Renderer { get; set; }
+
         private void Awake()
         {
             Renderer = GetComponentInChildren<Renderer>();
-            
+
             SortHandler = GetComponent<ISortHandler>();
             SortHandler.SetDepth((int)Sorting.PileItem);
         }

@@ -72,6 +72,7 @@ namespace SummerJam1
             Debug.Log("Unit created.");
 
             GameObject unitView = Instantiate(UnitPrefab);
+            unitView.GetComponent<IView>().SetModel(args.EntityId);
             args.EntityId.AddComponent<SummerJam1UnitViewBridge>().gameObject = unitView;
         }
     }

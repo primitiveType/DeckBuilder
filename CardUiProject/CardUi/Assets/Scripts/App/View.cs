@@ -83,5 +83,6 @@ namespace Common
     public interface IView
     {
         IEntity Entity { get; }
+        void SetModel(IEntity entity);
     }
 }

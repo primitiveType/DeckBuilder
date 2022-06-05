@@ -1,5 +1,6 @@
 using System;
 using Api;
+using Api.Components;
 using CardsAndPiles;
 using Component = Api.Component;
 
@@ -79,7 +80,10 @@ namespace SummerJam1
     {
         protected override Unit CreateUnit()
         {
-            IEntity unitEntity = Context.CreateEntity(null, entity => entity.AddComponent<StarterUnit>());
+            IEntity unitEntity = Context.CreateEntity(null, entity =>
+            {
+                entity.AddComponent<StarterUnit>();
+            });
 
             return unitEntity.GetComponent<StarterUnit>();
         }
@@ -87,5 +91,13 @@ namespace SummerJam1
 
     public class StarterUnit : Unit
     {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            //This will screw with deserialization
+            var health = Entity.AddComponent<Health>();
+            health.SetMax(10);
+            health.SetHealth(10);
+        }
     }
 }
