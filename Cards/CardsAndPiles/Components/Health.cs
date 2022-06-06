@@ -35,7 +35,7 @@ namespace CardsAndPiles.Components
 
             foreach (var clamp in args.Clamps)
             {
-                calculated = Math.Max(calculated, clamp);
+                calculated = Math.Min(calculated, clamp);
             }
 
             return calculated;
@@ -48,6 +48,7 @@ namespace CardsAndPiles.Components
             if (Amount <= 0)
             {
                 Events.OnEntityKilled(new EntityKilledEventArgs(Entity, source));
+                Entity.Destroy();
             }
         }
 

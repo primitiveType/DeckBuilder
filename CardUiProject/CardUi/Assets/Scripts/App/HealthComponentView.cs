@@ -17,7 +17,7 @@ namespace App
 
         private IEnumerator SomeRoutine(int health, int max)
         {
-            HealthText.UpdateBar(Component.Amount, Component.Max);
+            HealthText.UpdateBar(health, max);
             yield return null;
         }
     }

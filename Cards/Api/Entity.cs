@@ -7,6 +7,13 @@ using Newtonsoft.Json;
 
 namespace Api
 {
+    public enum LifecycleState
+    {
+        Created,
+        Initialized,
+        Destroyed
+    }
+
     [JsonObject(MemberSerialization.OptIn)]
     internal class Entity : IEntity
     {
@@ -16,17 +23,16 @@ namespace Api
         [JsonProperty] public IChildrenCollection<Component> Components => m_Components;
         [JsonProperty] private ChildrenCollection<Component> m_Components = new ChildrenCollection<Component>();
 
-        public event EntityDestroyedEvent EntityDestroyed;
+        public LifecycleState State { get; private set; }
 
         public IEntity Parent { get; private set; }
 
         public IChildrenCollection<IEntity> Children => m_Children;
         [JsonProperty] private ChildrenCollection<IEntity> m_Children = new ChildrenCollection<IEntity>();
-        private bool Initialized { get; set; }
 
         internal void Initialize(Context context, int id) //game context parameter?
         {
-            if (Initialized)
+            if (State != LifecycleState.Created)
             {
                 return;
             }
@@ -44,13 +50,13 @@ namespace Api
                 component.InternalInitialize(this);
             }
 
-            Initialized = true;
+            State = LifecycleState.Initialized;
         }
 
         public void Destroy()
         {
             Terminate();
-            EntityDestroyed?.Invoke(this, new EntityDestroyedEventArgs());
+            State = LifecycleState.Destroyed;
         }
 
         private void ComponentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -220,7 +226,7 @@ namespace Api
         public T AddComponent<T>() where T : Component, new()
         {
             T component = new T();
-            if (Initialized)
+            if (State == LifecycleState.Initialized)
             {
                 m_Components.Add(component, () => { component.InternalInitialize(this); });
             }
@@ -242,6 +248,7 @@ namespace Api
             return true;
         }
 
+
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
@@ -259,9 +266,9 @@ namespace Api
         public event PropertyChangedEventHandler PropertyChanged;
     }
 
-    internal delegate void EntityDestroyedEvent(object sender, EntityDestroyedEventArgs args);
+    public delegate void EntityDestroyedEvent(object sender, EntityDestroyedEventArgs args);
 
-    internal class EntityDestroyedEventArgs
+    public class EntityDestroyedEventArgs
     {
     }
 
@@ -286,7 +293,7 @@ namespace Api
         List<T> GetComponentsInChildren<T>();
         T AddComponent<T>() where T : Component, new();
         bool RemoveComponent(Component toRemove);
-        event EntityDestroyedEvent EntityDestroyed;
+        LifecycleState State { get; }
         void Destroy();
     }
 }

@@ -10,9 +10,10 @@ namespace Api
     public abstract class Component : IComponent
     {
         protected Context Context => Entity.Context;
-        private List<EventHandle> EventHandles { get; } = new List<EventHandle>();
+        private List<IDisposable> EventHandles { get; } = new List<IDisposable>();
         [JsonIgnore] public IEntity Entity { get; private set; }
-        private bool Initialized { get; set; }
+
+        private LifecycleState State { get; set; }
         private Lazy<EventsBase> LazyEvents { get; }
         protected EventsBase Events => LazyEvents.Value;
 
@@ -35,12 +36,11 @@ namespace Api
 
         public void InternalInitialize(IEntity parent)
         {
-            if (Initialized)
+            if (State != LifecycleState.Created)
             {
                 return;
             }
 
-            Initialized = true;
             Entity = parent;
 
             if (Context.Events == null)
@@ -76,6 +76,7 @@ namespace Api
             }
 
             Initialize();
+            State = LifecycleState.Initialized;
         }
 
         protected virtual void Initialize()
@@ -84,10 +85,17 @@ namespace Api
 
         public virtual void Terminate()
         {
+            if (State != LifecycleState.Initialized)
+            {
+                return;
+            }
+
             foreach (var eventHandle in EventHandles)
             {
                 eventHandle.Dispose();
             }
+
+            State = LifecycleState.Destroyed;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

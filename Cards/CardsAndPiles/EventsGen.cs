@@ -12,68 +12,73 @@ using Api;
 namespace CardsAndPiles{
 public abstract class CardEventsBase : EventsBase{
     #region Code for event CardPlayed
-private event CardPlayedEvent CardPlayed;
+private event EventHandleDelegate<CardPlayedEventArgs> CardPlayed;
 internal virtual void OnCardPlayed(CardPlayedEventArgs args)
 {
     CardPlayed?.Invoke(this, args);
 }
 
-public EventHandle SubscribeToCardPlayed(CardPlayedEvent action)
+public EventHandle<CardPlayedEventArgs> SubscribeToCardPlayed(EventHandleDelegate<CardPlayedEventArgs> action)
 {
-    CardPlayed += action;
-    return new EventHandle(() => CardPlayed -= action);
+    var handler = new EventHandle<CardPlayedEventArgs>(action, () => CardPlayed -= action);
+    CardPlayed += handler.Invoke;
+    return handler;
 } 
     #endregion Code for event CardPlayed
     #region Code for event CardDiscarded
-private event CardDiscardedEvent CardDiscarded;
+private event EventHandleDelegate<CardDiscardedEventArgs> CardDiscarded;
 internal virtual void OnCardDiscarded(CardDiscardedEventArgs args)
 {
     CardDiscarded?.Invoke(this, args);
 }
 
-public EventHandle SubscribeToCardDiscarded(CardDiscardedEvent action)
+public EventHandle<CardDiscardedEventArgs> SubscribeToCardDiscarded(EventHandleDelegate<CardDiscardedEventArgs> action)
 {
-    CardDiscarded += action;
-    return new EventHandle(() => CardDiscarded -= action);
+    var handler = new EventHandle<CardDiscardedEventArgs>(action, () => CardDiscarded -= action);
+    CardDiscarded += handler.Invoke;
+    return handler;
 } 
     #endregion Code for event CardDiscarded
     #region Code for event RequestDealDamage
-private event RequestDealDamageEvent RequestDealDamage;
+private event EventHandleDelegate<RequestDealDamageEventArgs> RequestDealDamage;
 internal virtual void OnRequestDealDamage(RequestDealDamageEventArgs args)
 {
     RequestDealDamage?.Invoke(this, args);
 }
 
-public EventHandle SubscribeToRequestDealDamage(RequestDealDamageEvent action)
+public EventHandle<RequestDealDamageEventArgs> SubscribeToRequestDealDamage(EventHandleDelegate<RequestDealDamageEventArgs> action)
 {
-    RequestDealDamage += action;
-    return new EventHandle(() => RequestDealDamage -= action);
+    var handler = new EventHandle<RequestDealDamageEventArgs>(action, () => RequestDealDamage -= action);
+    RequestDealDamage += handler.Invoke;
+    return handler;
 } 
     #endregion Code for event RequestDealDamage
     #region Code for event EntityKilled
-private event EntityKilledEvent EntityKilled;
+private event EventHandleDelegate<EntityKilledEventArgs> EntityKilled;
 internal virtual void OnEntityKilled(EntityKilledEventArgs args)
 {
     EntityKilled?.Invoke(this, args);
 }
 
-public EventHandle SubscribeToEntityKilled(EntityKilledEvent action)
+public EventHandle<EntityKilledEventArgs> SubscribeToEntityKilled(EventHandleDelegate<EntityKilledEventArgs> action)
 {
-    EntityKilled += action;
-    return new EventHandle(() => EntityKilled -= action);
+    var handler = new EventHandle<EntityKilledEventArgs>(action, () => EntityKilled -= action);
+    EntityKilled += handler.Invoke;
+    return handler;
 } 
     #endregion Code for event EntityKilled
     #region Code for event DamageDealt
-private event DamageDealtEvent DamageDealt;
+private event EventHandleDelegate<DamageDealtEventArgs> DamageDealt;
 internal virtual void OnDamageDealt(DamageDealtEventArgs args)
 {
     DamageDealt?.Invoke(this, args);
 }
 
-public EventHandle SubscribeToDamageDealt(DamageDealtEvent action)
+public EventHandle<DamageDealtEventArgs> SubscribeToDamageDealt(EventHandleDelegate<DamageDealtEventArgs> action)
 {
-    DamageDealt += action;
-    return new EventHandle(() => DamageDealt -= action);
+    var handler = new EventHandle<DamageDealtEventArgs>(action, () => DamageDealt -= action);
+    DamageDealt += handler.Invoke;
+    return handler;
 } 
     #endregion Code for event DamageDealt
 }
@@ -81,7 +86,7 @@ public EventHandle SubscribeToDamageDealt(DamageDealtEvent action)
 /// (object sender, CardPlayedEventArgs) args)
 /// </summary>
 public class OnCardPlayedAttribute : EventsBaseAttribute {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -103,7 +108,7 @@ public class OnCardPlayedAttribute : EventsBaseAttribute {
 
 
 }
-    public delegate void CardPlayedEvent (object sender, CardPlayedEventArgs args);
+    //public delegate void CardPlayedEvent (object sender, CardPlayedEventArgs args);
 
     public class CardPlayedEventArgs {        public  IEntity CardId { get; }
         public  IEntity Target { get; }
@@ -116,7 +121,7 @@ public class OnCardPlayedAttribute : EventsBaseAttribute {
 /// (object sender, CardDiscardedEventArgs) args)
 /// </summary>
 public class OnCardDiscardedAttribute : EventsBaseAttribute {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -138,7 +143,7 @@ public class OnCardDiscardedAttribute : EventsBaseAttribute {
 
 
 }
-    public delegate void CardDiscardedEvent (object sender, CardDiscardedEventArgs args);
+    //public delegate void CardDiscardedEvent (object sender, CardDiscardedEventArgs args);
 
     public class CardDiscardedEventArgs {        public  IEntity CardId { get; }
         public  CardDiscardedEventArgs (IEntity CardId   ){
@@ -149,7 +154,7 @@ public class OnCardDiscardedAttribute : EventsBaseAttribute {
 /// (object sender, RequestDealDamageEventArgs) args)
 /// </summary>
 public class OnRequestDealDamageAttribute : EventsBaseAttribute {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -171,7 +176,7 @@ public class OnRequestDealDamageAttribute : EventsBaseAttribute {
 
 
 }
-    public delegate void RequestDealDamageEvent (object sender, RequestDealDamageEventArgs args);
+    //public delegate void RequestDealDamageEvent (object sender, RequestDealDamageEventArgs args);
 
     public class RequestDealDamageEventArgs {        public  int Amount { get; }
         public  IEntity Source { get; }
@@ -188,7 +193,7 @@ public class OnRequestDealDamageAttribute : EventsBaseAttribute {
 /// (object sender, EntityKilledEventArgs) args)
 /// </summary>
 public class OnEntityKilledAttribute : EventsBaseAttribute {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -210,7 +215,7 @@ public class OnEntityKilledAttribute : EventsBaseAttribute {
 
 
 }
-    public delegate void EntityKilledEvent (object sender, EntityKilledEventArgs args);
+    //public delegate void EntityKilledEvent (object sender, EntityKilledEventArgs args);
 
     public class EntityKilledEventArgs {        public  IEntity Entity { get; }
         public  IEntity Source { get; }
@@ -223,7 +228,7 @@ public class OnEntityKilledAttribute : EventsBaseAttribute {
 /// (object sender, DamageDealtEventArgs) args)
 /// </summary>
 public class OnDamageDealtAttribute : EventsBaseAttribute {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -245,7 +250,7 @@ public class OnDamageDealtAttribute : EventsBaseAttribute {
 
 
 }
-    public delegate void DamageDealtEvent (object sender, DamageDealtEventArgs args);
+    //public delegate void DamageDealtEvent (object sender, DamageDealtEventArgs args);
 
     public class DamageDealtEventArgs {        public  IEntity EntityId { get; }
         public  IEntity SourceEntityId { get; }

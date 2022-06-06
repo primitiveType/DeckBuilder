@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CardsAndPiles.Components;
 using SummerJam1.Units;
 
@@ -6,6 +7,19 @@ namespace SummerJam1
 {
     public abstract class Intent : SummerJam1Component
     {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            List<Intent> intents = Entity.GetComponents<Intent>();
+            foreach (Intent intent in intents)
+            {
+                if (intent != this)
+                {
+                    Entity.RemoveComponent(intent);
+                }
+            }
+        }
+
         [OnTurnEnded]
         private void OnTurnEnded()
         {

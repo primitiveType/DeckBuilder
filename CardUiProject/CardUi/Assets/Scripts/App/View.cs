@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Api;
+using App;
 using UnityEngine;
 using IComponent = Api.IComponent;
 
@@ -27,6 +29,25 @@ namespace Common
                 
             AttachListeners();
             OnInitialized();
+            Entity.PropertyChanged += OnEntityDestroyed;
+        }
+
+        private void OnEntityDestroyed(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            if (propertyChangedEventArgs.PropertyName == nameof(IEntity.State) &&
+                Entity.State == LifecycleState.Destroyed)
+            {
+                AnimationQueue.Instance.Enqueue(Destroy);
+            }
+        }
+
+        private IEnumerator Destroy()
+        {
+            yield return null;
+            if (this != null && gameObject != null)
+            {
+                Destroy(gameObject);
+            }
         }
 
         protected virtual void OnInitialized()
@@ -77,6 +98,8 @@ namespace Common
             {
                 Model.PropertyChanged -= action;
             }
+
+            Entity.PropertyChanged -= OnEntityDestroyed;
         }
     }
 

@@ -14,7 +14,7 @@ namespace Api
             Lifetime = lifetime;
         }
 
-        public abstract EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events);
+        public abstract IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events);
 
     }
 }

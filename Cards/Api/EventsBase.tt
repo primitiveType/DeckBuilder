@@ -59,7 +59,7 @@ public abstract class <#= catalogName #> : <#= inherits #>{
         {
             string argsClassName = eventNode.Attributes["id"].Value + "EventArgs";
 #>
-    public delegate void <#= eventNode.Attributes["id"].Value #>Event (object sender, <#= argsClassName #> args);
+    //public delegate void <#= eventNode.Attributes["id"].Value #>Event (object sender, <#= argsClassName #> args);
 
     public class <#= argsClassName #> {<#
             var argnodes = eventNode.SelectNodes("arg");
@@ -135,7 +135,7 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 /// (object sender, <#= eventNode.Attributes["id"].Value #>EventArgs) args)
 /// </summary>
 public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttribute {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -163,8 +163,8 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttr
         void CreateInvocator(XmlNode eventNode)
         {
             string eventName = eventNode.Attributes["id"].Value;
-            string eventTypeName = eventNode.Attributes["id"].Value + "Event";
             string argsName = eventNode.Attributes["id"].Value + "EventArgs";
+            string eventTypeName = $"EventHandleDelegate<{argsName}>";
 #>
 private event <#= eventTypeName #> <#= eventName #>;
 internal virtual void On<#= eventName #>(<#= argsName #> args)
@@ -172,10 +172,11 @@ internal virtual void On<#= eventName #>(<#= argsName #> args)
     <#= eventName #>?.Invoke(this, args);
 }
 
-public EventHandle SubscribeTo<#= eventName #>(<#= eventTypeName #> action)
+public EventHandle<<#= argsName #>> SubscribeTo<#= eventName #>(EventHandleDelegate<<#= argsName #>> action)
 {
-    <#= eventName #> += action;
-    return new EventHandle(() => <#= eventName #> -= action);
+    var handler = new EventHandle<<#= argsName #>>(action, () => <#= eventName #> -= action);
+    <#= eventName #> += handler.Invoke;
+    return handler;
 } 
 <#
         }

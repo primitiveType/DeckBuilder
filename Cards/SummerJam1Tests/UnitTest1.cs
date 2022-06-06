@@ -11,6 +11,7 @@ namespace SummerJam1Tests
     {
         private Context Context { get; set; }
         private SummerJam1Game Game { get; set; }
+
         [SetUp]
         public void Setup()
         {
@@ -27,13 +28,68 @@ namespace SummerJam1Tests
 
             Assert.NotNull(unitSlot);
             Assert.IsTrue(unitCard.TryPlayCard(unitSlot.Entity));
-            
+
             Assert.NotNull(unitSlot.Entity.GetComponentInChildren<Unit>());
 
             var unitCard2 = MakeUnitCard();
             Assert.IsFalse(unitCard2.TryPlayCard(unitSlot.Entity));
+        }
+
+
+        [Test]
+        public void TestEventHandlerDetachmentDuringEvent()
+        {
+            var test1 = Context.CreateEntity();
+            var test2 = Context.CreateEntity();
+
+            var events1 = test1.AddComponent<TestEvents>();
+            var events2 = test2.AddComponent<TestEvents>();
+
+            bool didExecute1 = false;
+            bool didExecute2 = false;
+            events1.ToDo = () =>
+            {
+                didExecute1 = true;
+                test2.Destroy();
+            };
+            events2.ToDo = ()=>
+            {
+                didExecute2 = true;
+                // Assert.IsTrue(events2.Entity.State == LifecycleState.Destroyed);
+                // Assert.Fail("Second events executed.");
+            };
+            
+            Game.EndTurn();
+            Assert.IsTrue(didExecute1);
+            Assert.IsFalse(didExecute2);
 
         }
+
+        event TesterEvent Tester;
+
+        [Test]
+        public void TestEventDetachmentDuringEvent_Does_Not_Work()
+        {
+            Tester = null;
+            Tester += OnTester;
+            Tester += OnTester2;
+            
+            Tester.Invoke();
+            Assert.Fail();
+
+            void OnTester()
+            {
+                Tester -= OnTester2;
+            }
+            
+            void OnTester2()
+            {
+                Assert.Pass();
+            }
+        }
+
+        
+
 
         private UnitCard MakeUnitCard()
         {
@@ -44,6 +100,8 @@ namespace SummerJam1Tests
             return unitCard;
         }
     }
+
+    internal delegate void TesterEvent();
 
     public class TestUnitCard : UnitCard
     {
@@ -65,6 +123,17 @@ namespace SummerJam1Tests
         public override bool AcceptsParent(IEntity parent)
         {
             return true;
+        }
+    }
+
+    public class TestEvents : Component
+    {
+        public Action ToDo { get; set; }
+
+        [OnTurnEnded]
+        private void OnTurnEnded()
+        {
+            ToDo.Invoke();
         }
     }
 }

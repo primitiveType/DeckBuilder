@@ -12,55 +12,59 @@ using Api;
 namespace SummerJam1{
 public abstract class SummerJam1EventsBase : CardsAndPiles.CardEvents{
     #region Code for event UnitCreated
-private event UnitCreatedEvent UnitCreated;
+private event EventHandleDelegate<UnitCreatedEventArgs> UnitCreated;
 internal virtual void OnUnitCreated(UnitCreatedEventArgs args)
 {
     UnitCreated?.Invoke(this, args);
 }
 
-public EventHandle SubscribeToUnitCreated(UnitCreatedEvent action)
+public EventHandle<UnitCreatedEventArgs> SubscribeToUnitCreated(EventHandleDelegate<UnitCreatedEventArgs> action)
 {
-    UnitCreated += action;
-    return new EventHandle(() => UnitCreated -= action);
+    var handler = new EventHandle<UnitCreatedEventArgs>(action, () => UnitCreated -= action);
+    UnitCreated += handler.Invoke;
+    return handler;
 } 
     #endregion Code for event UnitCreated
     #region Code for event TurnEnded
-private event TurnEndedEvent TurnEnded;
+private event EventHandleDelegate<TurnEndedEventArgs> TurnEnded;
 internal virtual void OnTurnEnded(TurnEndedEventArgs args)
 {
     TurnEnded?.Invoke(this, args);
 }
 
-public EventHandle SubscribeToTurnEnded(TurnEndedEvent action)
+public EventHandle<TurnEndedEventArgs> SubscribeToTurnEnded(EventHandleDelegate<TurnEndedEventArgs> action)
 {
-    TurnEnded += action;
-    return new EventHandle(() => TurnEnded -= action);
+    var handler = new EventHandle<TurnEndedEventArgs>(action, () => TurnEnded -= action);
+    TurnEnded += handler.Invoke;
+    return handler;
 } 
     #endregion Code for event TurnEnded
     #region Code for event TurnBegan
-private event TurnBeganEvent TurnBegan;
+private event EventHandleDelegate<TurnBeganEventArgs> TurnBegan;
 internal virtual void OnTurnBegan(TurnBeganEventArgs args)
 {
     TurnBegan?.Invoke(this, args);
 }
 
-public EventHandle SubscribeToTurnBegan(TurnBeganEvent action)
+public EventHandle<TurnBeganEventArgs> SubscribeToTurnBegan(EventHandleDelegate<TurnBeganEventArgs> action)
 {
-    TurnBegan += action;
-    return new EventHandle(() => TurnBegan -= action);
+    var handler = new EventHandle<TurnBeganEventArgs>(action, () => TurnBegan -= action);
+    TurnBegan += handler.Invoke;
+    return handler;
 } 
     #endregion Code for event TurnBegan
     #region Code for event IntentStarted
-private event IntentStartedEvent IntentStarted;
+private event EventHandleDelegate<IntentStartedEventArgs> IntentStarted;
 internal virtual void OnIntentStarted(IntentStartedEventArgs args)
 {
     IntentStarted?.Invoke(this, args);
 }
 
-public EventHandle SubscribeToIntentStarted(IntentStartedEvent action)
+public EventHandle<IntentStartedEventArgs> SubscribeToIntentStarted(EventHandleDelegate<IntentStartedEventArgs> action)
 {
-    IntentStarted += action;
-    return new EventHandle(() => IntentStarted -= action);
+    var handler = new EventHandle<IntentStartedEventArgs>(action, () => IntentStarted -= action);
+    IntentStarted += handler.Invoke;
+    return handler;
 } 
     #endregion Code for event IntentStarted
 }
@@ -68,7 +72,7 @@ public EventHandle SubscribeToIntentStarted(IntentStartedEvent action)
 /// (object sender, UnitCreatedEventArgs) args)
 /// </summary>
 public class OnUnitCreatedAttribute : EventsBaseAttribute {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -90,7 +94,7 @@ public class OnUnitCreatedAttribute : EventsBaseAttribute {
 
 
 }
-    public delegate void UnitCreatedEvent (object sender, UnitCreatedEventArgs args);
+    //public delegate void UnitCreatedEvent (object sender, UnitCreatedEventArgs args);
 
     public class UnitCreatedEventArgs {        public  IEntity Entity { get; }
         public  UnitCreatedEventArgs (IEntity Entity   ){
@@ -101,7 +105,7 @@ public class OnUnitCreatedAttribute : EventsBaseAttribute {
 /// (object sender, TurnEndedEventArgs) args)
 /// </summary>
 public class OnTurnEndedAttribute : EventsBaseAttribute {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -123,13 +127,13 @@ public class OnTurnEndedAttribute : EventsBaseAttribute {
 
 
 }
-    public delegate void TurnEndedEvent (object sender, TurnEndedEventArgs args);
+    //public delegate void TurnEndedEvent (object sender, TurnEndedEventArgs args);
 
     public class TurnEndedEventArgs {        }/// <summary>
 /// (object sender, TurnBeganEventArgs) args)
 /// </summary>
 public class OnTurnBeganAttribute : EventsBaseAttribute {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -151,13 +155,13 @@ public class OnTurnBeganAttribute : EventsBaseAttribute {
 
 
 }
-    public delegate void TurnBeganEvent (object sender, TurnBeganEventArgs args);
+    //public delegate void TurnBeganEvent (object sender, TurnBeganEventArgs args);
 
     public class TurnBeganEventArgs {        }/// <summary>
 /// (object sender, IntentStartedEventArgs) args)
 /// </summary>
 public class OnIntentStartedAttribute : EventsBaseAttribute {
-    public override EventHandle GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -179,7 +183,7 @@ public class OnIntentStartedAttribute : EventsBaseAttribute {
 
 
 }
-    public delegate void IntentStartedEvent (object sender, IntentStartedEventArgs args);
+    //public delegate void IntentStartedEvent (object sender, IntentStartedEventArgs args);
 
     public class IntentStartedEventArgs {        public  IEntity Entity { get; }
         public  IntentStartedEventArgs (IEntity Entity   ){

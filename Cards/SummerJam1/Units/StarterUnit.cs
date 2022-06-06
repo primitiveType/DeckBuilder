@@ -11,12 +11,16 @@ namespace SummerJam1.Units
             var health = Entity.AddComponent<Health>();
             health.SetMax(10);
             health.SetHealth(10);
+            Entity.AddComponent<DamageIntent>().Amount = 6;
+
         }
 
         [OnTurnBegan]
         private void OnTurnBegan()
         {
-            Entity.AddComponent<DamageIntent>().Amount = 15;
+            Entity.AddComponent<DamageIntent>().Amount = 6;
         }
+        
+        
     }
 }

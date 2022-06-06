@@ -2,19 +2,39 @@
 
 namespace Api
 {
-    public class EventHandle : IDisposable
-    {
-        private Action OnDispose { get; set; }
+    public delegate void EventHandleDelegate<T>(object sender, T item);
 
-        public EventHandle(Action onDispose)
+    public class EventHandle<T> : IDisposable 
+    {
+        private EventHandleDelegate<T> Action { get; }
+        private Action OnDispose { get; set; }
+        
+        private bool IsDisposed { get; set; }
+
+
+        public EventHandle(EventHandleDelegate<T> action, Action onDispose)
         {
+            Action = action;
             OnDispose = onDispose;
         }
 
+        public void Invoke(object sender, T args)
+        {
+            if (!IsDisposed)
+            {
+                
+                Action.Invoke(sender, args);
+            }
+        }
+        
         public void Dispose()
         {
-            OnDispose.Invoke();
-            OnDispose = null;
+            if (!IsDisposed)
+            {
+                IsDisposed = true;
+                OnDispose.Invoke();
+                OnDispose = null;
+            }
         }
     }
 }
