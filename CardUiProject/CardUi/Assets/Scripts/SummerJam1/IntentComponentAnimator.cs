@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Api;
 using Common;
 using SummerJam1;
 using SummerJam1.Units;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace App
 {
@@ -12,7 +14,7 @@ namespace App
     {
         [SerializeField] private Animator m_Animator;
         private static readonly int Attack = Animator.StringToHash("Attack");
-        private List<EventHandle> Handles { get; } = new List<EventHandle>();
+        private List<IDisposable> Handles { get; } = new List<IDisposable>();
         
         private bool IsAttacking { get; set; }
 
@@ -49,7 +51,7 @@ namespace App
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            foreach (EventHandle eventHandle in Handles)
+            foreach (IDisposable eventHandle in Handles)
             {
                 eventHandle.Dispose();
             }
