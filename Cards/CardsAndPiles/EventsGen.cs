@@ -13,7 +13,7 @@ namespace CardsAndPiles{
 public abstract class CardEventsBase : EventsBase{
     #region Code for event CardPlayed
 private event EventHandleDelegate<CardPlayedEventArgs> CardPlayed;
-internal virtual void OnCardPlayed(CardPlayedEventArgs args)
+public virtual void OnCardPlayed(CardPlayedEventArgs args)
 {
     CardPlayed?.Invoke(this, args);
 }
@@ -27,7 +27,7 @@ public EventHandle<CardPlayedEventArgs> SubscribeToCardPlayed(EventHandleDelegat
     #endregion Code for event CardPlayed
     #region Code for event CardDiscarded
 private event EventHandleDelegate<CardDiscardedEventArgs> CardDiscarded;
-internal virtual void OnCardDiscarded(CardDiscardedEventArgs args)
+public virtual void OnCardDiscarded(CardDiscardedEventArgs args)
 {
     CardDiscarded?.Invoke(this, args);
 }
@@ -41,7 +41,7 @@ public EventHandle<CardDiscardedEventArgs> SubscribeToCardDiscarded(EventHandleD
     #endregion Code for event CardDiscarded
     #region Code for event RequestDealDamage
 private event EventHandleDelegate<RequestDealDamageEventArgs> RequestDealDamage;
-internal virtual void OnRequestDealDamage(RequestDealDamageEventArgs args)
+public virtual void OnRequestDealDamage(RequestDealDamageEventArgs args)
 {
     RequestDealDamage?.Invoke(this, args);
 }
@@ -55,7 +55,7 @@ public EventHandle<RequestDealDamageEventArgs> SubscribeToRequestDealDamage(Even
     #endregion Code for event RequestDealDamage
     #region Code for event EntityKilled
 private event EventHandleDelegate<EntityKilledEventArgs> EntityKilled;
-internal virtual void OnEntityKilled(EntityKilledEventArgs args)
+public virtual void OnEntityKilled(EntityKilledEventArgs args)
 {
     EntityKilled?.Invoke(this, args);
 }
@@ -69,7 +69,7 @@ public EventHandle<EntityKilledEventArgs> SubscribeToEntityKilled(EventHandleDel
     #endregion Code for event EntityKilled
     #region Code for event DamageDealt
 private event EventHandleDelegate<DamageDealtEventArgs> DamageDealt;
-internal virtual void OnDamageDealt(DamageDealtEventArgs args)
+public virtual void OnDamageDealt(DamageDealtEventArgs args)
 {
     DamageDealt?.Invoke(this, args);
 }
@@ -81,6 +81,34 @@ public EventHandle<DamageDealtEventArgs> SubscribeToDamageDealt(EventHandleDeleg
     return handler;
 } 
     #endregion Code for event DamageDealt
+    #region Code for event TurnEnded
+private event EventHandleDelegate<TurnEndedEventArgs> TurnEnded;
+public virtual void OnTurnEnded(TurnEndedEventArgs args)
+{
+    TurnEnded?.Invoke(this, args);
+}
+
+public EventHandle<TurnEndedEventArgs> SubscribeToTurnEnded(EventHandleDelegate<TurnEndedEventArgs> action)
+{
+    var handler = new EventHandle<TurnEndedEventArgs>(action, () => TurnEnded -= action);
+    TurnEnded += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event TurnEnded
+    #region Code for event TurnBegan
+private event EventHandleDelegate<TurnBeganEventArgs> TurnBegan;
+public virtual void OnTurnBegan(TurnBeganEventArgs args)
+{
+    TurnBegan?.Invoke(this, args);
+}
+
+public EventHandle<TurnBeganEventArgs> SubscribeToTurnBegan(EventHandleDelegate<TurnBeganEventArgs> action)
+{
+    var handler = new EventHandle<TurnBeganEventArgs>(action, () => TurnBegan -= action);
+    TurnBegan += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event TurnBegan
 }
 /// <summary>
 /// (object sender, CardPlayedEventArgs) args)
@@ -261,7 +289,63 @@ public class OnDamageDealtAttribute : EventsBaseAttribute {
               this.Amount = Amount; 
 }
 
+        }/// <summary>
+/// (object sender, TurnEndedEventArgs) args)
+/// </summary>
+public class OnTurnEndedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToTurnEnded(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
         }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(TurnEndedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, TurnEndedEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToTurnEnded(delegate(object sender, TurnEndedEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void TurnEndedEvent (object sender, TurnEndedEventArgs args);
+
+    public class TurnEndedEventArgs {        }/// <summary>
+/// (object sender, TurnBeganEventArgs) args)
+/// </summary>
+public class OnTurnBeganAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToTurnBegan(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(TurnBeganEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, TurnBeganEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToTurnBegan(delegate(object sender, TurnBeganEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void TurnBeganEvent (object sender, TurnBeganEventArgs args);
+
+    public class TurnBeganEventArgs {        }
 
 
 //TODO: generate attributes with static override functions that get the event handle from a game context.

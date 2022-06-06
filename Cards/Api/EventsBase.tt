@@ -167,7 +167,7 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttr
             string eventTypeName = $"EventHandleDelegate<{argsName}>";
 #>
 private event <#= eventTypeName #> <#= eventName #>;
-internal virtual void On<#= eventName #>(<#= argsName #> args)
+public virtual void On<#= eventName #>(<#= argsName #> args)
 {
     <#= eventName #>?.Invoke(this, args);
 }

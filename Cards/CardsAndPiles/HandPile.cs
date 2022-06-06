@@ -1,4 +1,5 @@
-﻿using Api;
+﻿using System.Linq;
+using Api;
 
 namespace CardsAndPiles
 {
@@ -29,6 +30,22 @@ namespace CardsAndPiles
             }
 
             return true;
+        }
+
+        public void DrawCard()
+        {
+            var hand = Context.Root.GetComponentInChildren<HandPile>();
+            var discard = Context.Root.GetComponentInChildren<PlayerDiscard>();
+            if (Entity.Children.Count == 0)
+            {
+                //shuffle discard into deck.
+                foreach (IEntity discarded in discard.Entity.Children.ToList())
+                {
+                    discarded.TrySetParent(Entity);
+                }
+            }
+
+            Entity.Children[0].TrySetParent(hand.Entity);
         }
     }
 }

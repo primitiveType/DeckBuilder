@@ -55,6 +55,10 @@ namespace CardsAndPiles.Components
         [OnRequestDealDamage]
         private void OnRequestDealDamage(object sender, RequestDealDamageEventArgs args)
         {
+            if (args.Target != Entity)
+            {
+                return;
+            }
             args.Clamps.Add(Amount);
         }
 

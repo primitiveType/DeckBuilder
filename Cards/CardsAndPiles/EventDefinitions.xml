@@ -23,4 +23,8 @@
         <arg name="SourceEntityId" type="IEntity"/>
         <arg name="Amount" type="int"/>
     </event>
+    <event id="TurnEnded">
+    </event>
+    <event id="TurnBegan">
+    </event>
 </catalog>

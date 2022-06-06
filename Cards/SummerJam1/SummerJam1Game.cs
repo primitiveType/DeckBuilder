@@ -10,6 +10,7 @@ namespace SummerJam1
         private int NumSlots = 3;
         public IEntity Discard { get; private set; }
         public IEntity Hand { get; private set; }
+        public DeckPile Deck { get; private set; }
 
         protected override void Initialize()
         {
@@ -27,16 +28,22 @@ namespace SummerJam1
                 slotEntity.AddComponent<EnemyUnitSlot>();
             }
 
-            IEntity deck = Context.CreateEntity(Entity, entity => entity.AddComponent<DeckPile>());
+            Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
             Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
             for (int i = 0; i < 20; i++)
             {
-                Context.CreateEntity(deck, entity => { entity.AddComponent<StarterUnitCard>(); });
+                Context.CreateEntity(Deck.Entity, entity => { entity.AddComponent<StarterUnitCard>(); });
             }
 
             Hand = Context.CreateEntity(Entity, entity => entity.AddComponent<HandPile>());
 
+            AddRules();
+        }
+
+        private void AddRules()
+        {
             Context.Root.AddComponent<DiscardHandOnTurnEnd>();
+            Context.Root.AddComponent<DrawHandOnTurnBegin>();
         }
 
         public void EndTurn()

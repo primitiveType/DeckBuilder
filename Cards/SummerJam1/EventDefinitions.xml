@@ -3,10 +3,6 @@
     <event id="UnitCreated">
         <arg name="Entity" type="IEntity"/>
     </event>
-    <event id="TurnEnded">
-    </event>
-    <event id="TurnBegan">
-    </event>
     <event id="IntentStarted">
         <arg name="Entity" type="IEntity"/>
     </event>
