@@ -3,6 +3,7 @@ using Api;
 using CardsAndPiles;
 using NUnit.Framework;
 using SummerJam1;
+using SummerJam1.Units;
 
 namespace SummerJam1Tests
 {
@@ -14,7 +15,7 @@ namespace SummerJam1Tests
         public void Setup()
         {
             Context = new Context(new SummerJam1Events());
-            var gameEntity = Context.CreateEntity();
+            var gameEntity = Context.Root;
             Game = gameEntity.AddComponent<SummerJam1Game>();
         }
 

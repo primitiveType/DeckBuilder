@@ -7,6 +7,7 @@
     XmlDocument doc = new XmlDocument();
     // Replace this file path with yours:
     doc.Load(@"./EventDefinitions.xml");
+
     Generate();
 
     void Generate()
@@ -15,7 +16,7 @@
 // ReSharper disable RedundantUsingDirective
 // ReSharper disable PossibleNullReferenceException
 // ReSharper disable InconsistentNaming
-
+// ReSharper disable RedundantCast
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -118,9 +119,10 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 #>
 }
 
-  }
 <#
             }
+#>
+        }<#
         }
 #>
 
@@ -187,7 +189,6 @@ public EventHandle SubscribeTo<#= eventName #>(<#= eventTypeName #> action)
     
 <#
     }
-
 #>
 
  

@@ -10,6 +10,6 @@ namespace CardsAndPiles
 
     public interface IDraggable : IComponent
     {
-        bool CanDrag { get; set; }
+        bool CanDrag { get; }
     }
 }

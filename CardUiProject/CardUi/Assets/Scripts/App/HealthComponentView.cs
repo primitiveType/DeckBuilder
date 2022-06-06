@@ -1,7 +1,6 @@
-﻿using System.ComponentModel;
-using Api.Components;
+﻿using System.Collections;
+using CardsAndPiles.Components;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace App
 {
@@ -11,7 +10,17 @@ namespace App
 
         protected override void ComponentOnPropertyChanged()
         {
+            int amount = Component.Amount;
+            int max = Component.Max;
+            AnimationQueue.Instance.Enqueue(() => SomeRoutine(amount, max));
+        }
+
+        private IEnumerator SomeRoutine(int health, int max)
+        {
             HealthText.UpdateBar(Component.Amount, Component.Max);
+            yield return null;
         }
     }
+    
+ 
 }

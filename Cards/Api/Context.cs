@@ -6,17 +6,16 @@ namespace Api
 {
     public class Context
     {
-        [JsonProperty] private IEntity m_Root { get; set; }
+        [JsonProperty] public IEntity Root { get; private set; }
         private int NextId { get; set; }
 
         public EventsBase Events { get; }
 
-        public IEntity Root => m_Root;
 
         public Context(EventsBase events)
         {
             Events = events;
-            m_Root = CreateEntity();
+            Root = CreateEntity();
         }
         //create entity
         //initialize it

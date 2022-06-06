@@ -1,7 +1,6 @@
 ﻿using Api;
-using CardsAndPiles;
 
-namespace SummerJam1
+namespace SummerJam1.Units
 {
     public class FriendlyUnitSlot : UnitSlot
     {
@@ -14,14 +13,6 @@ namespace SummerJam1
                 return Entity.GetComponentInChildren<Unit>() == null;
             }
 
-            return true;
-        }
-    }
-
-    public class UnitSlot : Pile
-    {
-        public override bool AcceptsChild(IEntity child)
-        {
             return true;
         }
     }

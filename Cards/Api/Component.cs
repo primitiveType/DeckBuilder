@@ -62,6 +62,7 @@ namespace Api
             //Private functions have to be handled separately due to a bug in Mono's implementation of GetMethods.
             while (type != typeof(object))
             {
+                // ReSharper disable once PossibleNullReferenceException. Above condition guarantees it will not be null.
                 foreach (MethodInfo method in type.GetMethods(BindingFlags.NonPublic |
                                                               BindingFlags.Instance | BindingFlags.Static))
                 {

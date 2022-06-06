@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Api;
 using CardsAndPiles;
 using Common;
+using SummerJam1.Units;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -20,19 +21,20 @@ namespace SummerJam1
         [SerializeField] private List<PileView> FriendlySlots;
         [SerializeField] private List<PileView> EnemySlots;
 
+        private Context Context { get; set; }
+        private SummerJam1Events Events => (SummerJam1Events)Context.Events;
+        private SummerJam1Game Game { get; set; }
+
         protected override void Awake()
         {
             base.Awake();
             var events = new SummerJam1Events();
-
-            Context context = new Context(events);
-
-            IEntity game = context.Root;
-            game.AddComponent<SummerJam1Game>();
-
+            Context = new Context(events);
+            IEntity game = Context.Root;
             events.SubscribeToUnitCreated(OnUnitCreated);
-            events.SubscribeToCardDiscarded(OnCardDiscarded);
-            events.SubscribeToCardPlayed(OnCardPlayed);
+
+            Game = game.AddComponent<SummerJam1Game>();
+            
 
 
             game.AddComponent<SummerJam1CardViewBridge>();
@@ -55,25 +57,31 @@ namespace SummerJam1
                 friendlySlot.Entity.AddComponent<PileViewBridge>().gameObject = friendlySlot.gameObject;
                 index++;
             }
+            
+            List<EnemyUnitSlot> enemySlotsModels = game.GetComponentsInChildren<EnemyUnitSlot>();
+            index = 0;
+            foreach (PileView enemySlot in EnemySlots)
+            {
+                enemySlot.SetModel(enemySlotsModels[index].Entity);
+                enemySlot.Entity.AddComponent<PileViewBridge>().gameObject = enemySlot.gameObject;
+                index++;
+            }
+
+
+            Game.StartBattle();
         }
 
-        private void OnCardPlayed(object sender, CardPlayedEventArgs args)
-        {
-            Debug.Log("Card played.");
-        }
-
-        private void OnCardDiscarded(object sender, CardDiscardedEventArgs args)
-        {
-            Debug.Log("Card discarded.");
-        }
 
         private void OnUnitCreated(object sender, UnitCreatedEventArgs args)
         {
-            Debug.Log("Unit created.");
-
             GameObject unitView = Instantiate(UnitPrefab);
-            unitView.GetComponent<IView>().SetModel(args.EntityId);
-            args.EntityId.AddComponent<SummerJam1UnitViewBridge>().gameObject = unitView;
+            unitView.GetComponent<IView>().SetModel(args.Entity);
+            args.Entity.AddComponent<SummerJam1UnitViewBridge>().gameObject = unitView;
+        }
+
+        public void EndTurn()
+        {
+            Game.EndTurn();
         }
     }
 }

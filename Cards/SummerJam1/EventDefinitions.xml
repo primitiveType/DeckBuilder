@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <catalog name="SummerJam1EventsBase" inherits="CardsAndPiles.CardEvents" namespace="SummerJam1">
     <event id="UnitCreated">
-        <arg name="EntityId" type="IEntity"/>
+        <arg name="Entity" type="IEntity"/>
+    </event>
+    <event id="TurnEnded">
+    </event>
+    <event id="TurnBegan">
+    </event>
+    <event id="IntentStarted">
+        <arg name="Entity" type="IEntity"/>
     </event>
 </catalog>

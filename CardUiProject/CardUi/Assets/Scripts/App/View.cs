@@ -71,7 +71,7 @@ namespace Common
             }
         }
 
-        protected void OnDestroy()
+        protected virtual void OnDestroy()
         {
             foreach (PropertyChangedEventHandler action in EventHandlers)
             {

@@ -16,6 +16,7 @@ namespace Api
         [JsonProperty] public IChildrenCollection<Component> Components => m_Components;
         [JsonProperty] private ChildrenCollection<Component> m_Components = new ChildrenCollection<Component>();
 
+        public event EntityDestroyedEvent EntityDestroyed;
 
         public IEntity Parent { get; private set; }
 
@@ -44,6 +45,12 @@ namespace Api
             }
 
             Initialized = true;
+        }
+
+        public void Destroy()
+        {
+            Terminate();
+            EntityDestroyed?.Invoke(this, new EntityDestroyedEventArgs());
         }
 
         private void ComponentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -252,6 +259,12 @@ namespace Api
         public event PropertyChangedEventHandler PropertyChanged;
     }
 
+    internal delegate void EntityDestroyedEvent(object sender, EntityDestroyedEventArgs args);
+
+    internal class EntityDestroyedEventArgs
+    {
+    }
+
     public interface IParentConstraint
     {
         bool AcceptsParent(IEntity parent);
@@ -273,5 +286,7 @@ namespace Api
         List<T> GetComponentsInChildren<T>();
         T AddComponent<T>() where T : Component, new();
         bool RemoveComponent(Component toRemove);
+        event EntityDestroyedEvent EntityDestroyed;
+        void Destroy();
     }
 }

@@ -1,7 +1,7 @@
 using System.Linq;
 using Api;
-using Api.Components;
 using CardsAndPiles;
+using CardsAndPiles.Components;
 using NUnit.Framework;
 
 namespace CardTestProject
