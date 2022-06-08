@@ -67,7 +67,6 @@ public class DraggableComponent : View<IDraggable>, IDragHandler, IBeginDragHand
     {
         dragging = true;
         InputStateManager.Instance.StateMachine.Fire(InputAction.Drag);
-        Debug.Log("Begin drag!");
         Vector3 cursorWorld = GetWorldPoint(eventData);
 
         offset = transform.position - cursorWorld;
@@ -78,6 +77,5 @@ public class DraggableComponent : View<IDraggable>, IDragHandler, IBeginDragHand
         dragging = false;
         InputStateManager.Instance.StateMachine.Fire(InputAction.EndDrag);
 
-        Debug.Log("End drag!");
     }
 }

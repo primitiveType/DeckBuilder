@@ -139,6 +139,7 @@ public class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBehaviour
         if (_instance == null)
         {
             _instance = thisInstance;
+            _instance.gameObject.transform.SetParent(null);
             DontDestroyOnLoad(_instance.gameObject);
 
         }

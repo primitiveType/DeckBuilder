@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Api;
+using App;
+using CardsAndPiles;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -19,7 +21,45 @@ public class HandPileOrganizer : PileOrganizer
 
     private List<CardInHand> CardsInHand { get; } = new List<CardInHand>();
 
+    protected override void Start()
+    {
+        base.Start();
+        ((CardEvents)PileView.Entity.Context.Events).SubscribeToTurnBegan(OnTurnBegan);
+        ((CardEvents)PileView.Entity.Context.Events).SubscribeToTurnEnded(OnTurnEnded);
+    }
+
+    private bool IsPlayerTurn = true;
+
+    private void OnTurnEnded(object sender, TurnEndedEventArgs item)
+    {
+        IsPlayerTurn = false;
+
+        AnimationQueue.Instance.Enqueue(() =>
+            {
+                IsPlayerTurn = false;
+                return null;
+            }
+        );
+    }
+
+    private void OnTurnBegan(object sender, TurnBeganEventArgs item)
+    {
+        AnimationQueue.Instance.Enqueue(() =>
+            {
+                IsPlayerTurn = true;
+                return null;
+            }
+        );
+    }
+
+
     private void Update()
+    {
+        PositionCards();
+    }
+
+
+    private void PositionCards()
     {
         float width = GetTotalWidth();
         float xPos = -width / 2f;
@@ -64,8 +104,8 @@ public class HandPileOrganizer : PileOrganizer
             else
             {
                 float rate = (-(lerpRate) * Time.deltaTime);
-                Vector3 lerpedTarget = VectorExtensions.Damp(pileItemPosition, target, lerpRate, Time.deltaTime);
-                card.PileItemView.SetLocalPosition(lerpedTarget, GetRotation(xPos));
+                //Vector3 lerpedTarget = VectorExtensions.Damp(pileItemPosition, target, lerpRate, Time.deltaTime);
+                card.PileItemView.SetTargetPosition(target, GetRotation(xPos), IsPlayerTurn);
             }
 
             xPos += halfSize;
@@ -78,13 +118,13 @@ public class HandPileOrganizer : PileOrganizer
         card.PileItemView.SetLocalPosition(target, new Vector3());
 
         //then clamp it to the screen and update its transform position.
-        var spriteRenderer = card.GetComponentInChildren<Renderer>();
-        Vector3 clampedPosition = spriteRenderer.ClampToViewport(Camera.main);
+        Vector3 clampedPosition = card.PileItemView.GetBounds().ClampToViewport(Camera.main);
         Vector3 clampedLocalPosition =
             transform.InverseTransformPoint(clampedPosition).WithZ(pileItemPosition.z);
-        card.PileItemView.SetLocalPosition(clampedLocalPosition, new Vector3());
+        card.PileItemView.SetTargetPosition(clampedLocalPosition, new Vector3(), IsPlayerTurn);
 
         card.PileItemView.SortHandler.SetDepth((int)Sorting.DraggedPileItem);
+        card.PileItemView.SetLocalPosition(pileItemPosition, new Vector3()); //reset its position to where it started.
     }
 
     private float GetEffectiveCardWidth(CardInHand card)
@@ -117,39 +157,31 @@ public class HandPileOrganizer : PileOrganizer
         return width;
     }
 
-    protected override void OnPileChanged(object sender, NotifyCollectionChangedEventArgs e)
+
+    protected override void OnItemRemoved(IEntity removed)
     {
-        base.OnPileChanged(sender, e);
-        if (e.Action == NotifyCollectionChangedAction.Remove)
+        base.OnItemRemoved(removed);
+        GameObject entityGO = removed.GetComponent<IGameObject>()?.gameObject;
+        if (entityGO != null)
         {
-            foreach (IEntity removed in e.OldItems)
-            {
-                GameObject entityGO = removed.GetComponent<IGameObject>()?.gameObject;
-                if (entityGO != null)
-                {
-                    CardInHand card = entityGO.GetComponent<CardInHand>();
-                    CardsInHand.Remove(card);
-                    Destroy(card);
-                }
-            }
+            CardInHand card = entityGO.GetComponent<CardInHand>();
+            CardsInHand.Remove(card);
+            Destroy(card);
+        }
+    }
+
+    protected override void OnItemAdded(IEntity added)
+    {
+        base.OnItemAdded(added);
+        GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
+        if (entityGO != null && entityGO.GetComponent<CardInHand>() != null)
+        {
+            Debug.LogError($"{entityGO.name} was already in hand!?");
         }
 
-        if (e.Action == NotifyCollectionChangedAction.Add)
+        if (entityGO != null)
         {
-            Debug.Log($"adding {e.NewItems.Count} items.");
-            foreach (IEntity added in e.NewItems)
-            {
-                GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
-                if (entityGO != null && entityGO.GetComponent<CardInHand>() != null)
-                {
-                    Debug.LogError($"{entityGO.name} was already in hand!?");
-                }
-
-                if (entityGO != null)
-                {
-                    CardsInHand.Add(entityGO.AddComponent<CardInHand>());
-                }
-            }
+            CardsInHand.Add(entityGO.AddComponent<CardInHand>());
         }
     }
 }

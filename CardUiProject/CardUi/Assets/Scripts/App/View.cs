@@ -14,6 +14,7 @@ namespace Common
     {
         public IEntity Entity { get; private set; }
         public T Model { get; private set; }
+        protected List<IDisposable> Disposables = new List<IDisposable>(2);
 
         [SerializeField] private bool m_Initialized_Tester;
 
@@ -26,7 +27,7 @@ namespace Common
             {
                 throw new NullReferenceException($"Failed to find model {typeof(T).Name} on Entity Component");
             }
-                
+
             AttachListeners();
             OnInitialized();
             Entity.PropertyChanged += OnEntityDestroyed;
@@ -58,7 +59,7 @@ namespace Common
         {
             if (Entity == null)
             {
-                IView parentView = GetComponents<IView>().Where(item => item != this).FirstOrDefault();
+                IView parentView = GetComponents<IView>().FirstOrDefault(item => item != this);
                 if (parentView?.Entity != null)
                 {
                     SetModel(parentView.Entity);
@@ -99,7 +100,10 @@ namespace Common
                 Model.PropertyChanged -= action;
             }
 
-            Entity.PropertyChanged -= OnEntityDestroyed;
+            if (Entity != null)
+            {
+                Entity.PropertyChanged -= OnEntityDestroyed;
+            }
         }
     }
 

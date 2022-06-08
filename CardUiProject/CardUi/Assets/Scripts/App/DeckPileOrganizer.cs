@@ -7,7 +7,7 @@ public class DeckPileOrganizer : PileOrganizer
     [SerializeField] private Transform parentTransform;
 
 
-    protected override void ParentViewToPile(IEntity added)
+    protected override void OnItemAdded(IEntity added)
     {
         
         IGameObject viewGO = added.GetComponent<IGameObject>();
@@ -17,6 +17,6 @@ public class DeckPileOrganizer : PileOrganizer
         }
         IPileItemView view = viewGO.gameObject.GetComponent<IPileItemView>();
         viewGO.gameObject.transform.SetParent(parentTransform);
-        view.SetLocalPosition(new Vector3(), new Vector3());
+        view.SetTargetPosition(new Vector3(), new Vector3());
     }
 }

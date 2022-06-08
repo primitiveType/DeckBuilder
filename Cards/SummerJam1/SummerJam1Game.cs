@@ -1,5 +1,6 @@
 ﻿using Api;
 using CardsAndPiles;
+using CardsAndPiles.Components;
 using SummerJam1.Rules;
 using SummerJam1.Units;
 
@@ -32,7 +33,12 @@ namespace SummerJam1
             Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
             for (int i = 0; i < 20; i++)
             {
-                Context.CreateEntity(Deck.Entity, entity => { entity.AddComponent<StarterUnitCard>(); });
+                Context.CreateEntity(Deck.Entity, entity =>
+                {
+                    entity.AddComponent<StarterUnitCard>();
+                    entity.AddComponent<NameComponent>().Value = "Pepper";
+                    
+                });
             }
 
             Hand = Context.CreateEntity(Entity, entity => entity.AddComponent<HandPile>());

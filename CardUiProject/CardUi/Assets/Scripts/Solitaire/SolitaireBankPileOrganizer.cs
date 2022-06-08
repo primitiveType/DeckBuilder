@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Solitaire
         private List<StandardDeckCardView> CardsInPile = new List<StandardDeckCardView>();
         [SerializeField] private float distanceBetweenCards = .5f;
 
-        private void Update()
+        private void UpdatePositions()
         {
             int index = 0;
             int count = CardsInPile.Count;
@@ -19,7 +20,7 @@ namespace Solitaire
             {
                 if (!view.IsDragging)
                 {
-                    view.SetLocalPosition(Vector3.down * distanceBetweenCards * index, new Vector3());
+                    view.SetTargetPosition(Vector3.down * distanceBetweenCards * index, new Vector3(), true);
                     view.SortHandler.SetDepth((int)(Sorting.PileItem + index));
                 }
 
@@ -27,9 +28,9 @@ namespace Solitaire
             }
         }
 
-        protected override void ParentViewToPile(IEntity added)
+        protected override void OnItemAdded(IEntity added)
         {
-            base.ParentViewToPile(added);
+            base.OnItemAdded(added);
             GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
 
             if (entityGO != null)
@@ -43,27 +44,28 @@ namespace Solitaire
             }
         }
 
-        protected override void OnPileChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            base.OnPileChanged(sender, e);
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Remove:
-                {
-                    foreach (IEntity removed in e.OldItems)
-                    {
-                        GameObject entityGO = removed.GetComponent<IGameObject>()?.gameObject;
-                        if (entityGO != null)
-                        {
-                            StandardDeckCardView card = entityGO.GetComponent<StandardDeckCardView>();
-                            CardsInPile.Remove(card);
-                        }
-                    }
 
-                    CardsInPile.LastOrDefault()?.gameObject.AddComponent<DraggableComponent>();
-                    break;
-                }
+        protected override void OnItemRemoved(IEntity removed)
+        {
+            GameObject entityGO = removed.GetComponent<IGameObject>()?.gameObject;
+            if (entityGO != null)
+            {
+                StandardDeckCardView card = entityGO.GetComponent<StandardDeckCardView>();
+                CardsInPile.Remove(card);
+                SetDirty();
             }
+        }
+
+        private void SetDirty()
+        {
+            IsDirty = true;
+        }
+
+        private bool IsDirty { get; set; }
+
+        private void Update()
+        {
+            CardsInPile.LastOrDefault()?.gameObject.AddComponent<DraggableComponent>();
         }
     }
 }
