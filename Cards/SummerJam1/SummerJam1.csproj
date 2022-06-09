@@ -17,6 +17,12 @@
         <Generator>TextTemplatingFileGenerator</Generator>
         <LastGenOutput>EventsGen.cs</LastGenOutput>
       </None>
+      <None Update="Prefabs\tomato.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Prefabs\noodles.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

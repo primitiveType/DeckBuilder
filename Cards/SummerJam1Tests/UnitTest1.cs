@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using Api;
 using CardsAndPiles;
+using CardsAndPiles.Components;
 using NUnit.Framework;
 using SummerJam1;
 using SummerJam1.Units;
@@ -18,6 +20,7 @@ namespace SummerJam1Tests
             Context = new Context(new SummerJam1Events());
             var gameEntity = Context.Root;
             Game = gameEntity.AddComponent<SummerJam1Game>();
+            Game.SetPrefabsDirectory("Prefabs");
         }
 
         [Test]
@@ -33,6 +36,28 @@ namespace SummerJam1Tests
 
             var unitCard2 = MakeUnitCard();
             Assert.IsFalse(unitCard2.TryPlayCard(unitSlot.Entity));
+        }
+        
+        [Test]
+        public void StartBattle()
+        {
+            Game.StartBattle();
+        }
+
+        [Test]
+        public void Serialize_Card()
+        {
+            var unitCard = MakeUnitCard();
+            unitCard.Entity.AddComponent<VisualComponent>().AssetName = SummerJam1UnitAsset.Noodles;
+            var health = unitCard.Entity.AddComponent<Health>();
+            health.SetHealth(999);
+            health.SetMax(999);
+            
+            string card = Serializer.Serialize(unitCard.Entity);
+            File.WriteAllText("testcard.json", card);
+            IEntity restored = Serializer.Deserialize<IEntity>(card);
+            
+            Assert.That(restored.GetComponent<StarterUnitCard>(), Is.Not.Null);
         }
 
 
@@ -52,17 +77,16 @@ namespace SummerJam1Tests
                 didExecute1 = true;
                 test2.Destroy();
             };
-            events2.ToDo = ()=>
+            events2.ToDo = () =>
             {
                 didExecute2 = true;
                 // Assert.IsTrue(events2.Entity.State == LifecycleState.Destroyed);
                 // Assert.Fail("Second events executed.");
             };
-            
+
             Game.EndTurn();
             Assert.IsTrue(didExecute1);
             Assert.IsFalse(didExecute2);
-
         }
 
         event TesterEvent Tester;
@@ -73,7 +97,7 @@ namespace SummerJam1Tests
             Tester = null;
             Tester += OnTester;
             Tester += OnTester2;
-            
+
             Tester.Invoke();
             Assert.Fail();
 
@@ -81,21 +105,20 @@ namespace SummerJam1Tests
             {
                 Tester -= OnTester2;
             }
-            
+
             void OnTester2()
             {
                 Assert.Pass();
             }
         }
 
-        
-
 
         private UnitCard MakeUnitCard()
         {
             var unitCardEntity = Context.CreateEntity();
             unitCardEntity.TrySetParent(Game.Entity);
-            var unitCard = unitCardEntity.AddComponent<TestUnitCard>();
+            var unitCard = unitCardEntity.AddComponent<StarterUnitCard>();
+            unitCardEntity.AddComponent<NameComponent>();
 
             return unitCard;
         }

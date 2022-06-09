@@ -25,7 +25,9 @@ namespace Common
             Model = entity.GetComponent<T>();
             if (Model == null)
             {
-                throw new NullReferenceException($"Failed to find model {typeof(T).Name} on Entity Component");
+                Debug.LogWarning($"Failed to find model {typeof(T).Name} on Entity Component.");
+                enabled = false;
+                return;
             }
 
             AttachListeners();
@@ -59,7 +61,7 @@ namespace Common
         {
             if (Entity == null)
             {
-                IView parentView = GetComponents<IView>().FirstOrDefault(item => item != this);
+                IView parentView = GetComponentsInParent<IView>().FirstOrDefault(item => item != this && item.Entity != null);
                 if (parentView?.Entity != null)
                 {
                     SetModel(parentView.Entity);
@@ -89,7 +91,14 @@ namespace Common
                 };
                 Model.PropertyChanged += action;
                 EventHandlers.Add(action);
-                method.MethodInfo.Invoke(this, new object[] { this, new PropertyChangedEventArgs(method.Filter) });
+                try
+                {
+                    method.MethodInfo.Invoke(this, new object[] { this, new PropertyChangedEventArgs(method.Filter) });
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Caught exception executing event! {e.Message}", this);
+                }
             }
         }
 

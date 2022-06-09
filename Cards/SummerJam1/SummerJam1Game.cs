@@ -1,4 +1,5 @@
-﻿using Api;
+﻿using System.IO;
+using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Rules;
@@ -12,6 +13,8 @@ namespace SummerJam1
         public IEntity Discard { get; private set; }
         public IEntity Hand { get; private set; }
         public DeckPile Deck { get; private set; }
+        
+        private string PrefabsPath { get; set; }
 
         protected override void Initialize()
         {
@@ -58,11 +61,16 @@ namespace SummerJam1
             Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 
+        public void SetPrefabsDirectory(string path)
+        {
+            PrefabsPath = path;
+        }
+        
         public void StartBattle()
         {
             foreach (EnemyUnitSlot slot in Entity.GetComponentsInChildren<EnemyUnitSlot>())
             {
-                Context.CreateEntity(slot.Entity, entity => { entity.AddComponent<StarterUnit>(); });
+                Context.CreateEntity(slot.Entity, Path.Combine(PrefabsPath, "noodles.json"));
             }
             
             Events.OnTurnBegan(new TurnBeganEventArgs());

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
@@ -34,6 +35,16 @@ namespace Api
             entity.Initialize(this, NextId++);
 
             setup?.Invoke(entity);
+            entity.TrySetParent(parent);
+            return entity;
+        }
+        
+        public IEntity CreateEntity(IEntity parent, string prefabPath)
+        {
+            string prefab = File.ReadAllText(prefabPath);
+            Entity entity = Serializer.Deserialize<Entity>(prefab);
+            entity.Initialize(this, NextId++);
+
             entity.TrySetParent(parent);
             return entity;
         }

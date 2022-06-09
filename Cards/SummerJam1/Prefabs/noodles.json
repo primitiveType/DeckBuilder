@@ -1,0 +1,23 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "m_Components": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Spaghetti"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "Noodles"
+    },
+    {
+      "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
+      "Amount": 12,
+      "Max": 12
+    }
+  ]
+}

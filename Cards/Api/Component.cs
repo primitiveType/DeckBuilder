@@ -13,7 +13,7 @@ namespace Api
         private List<IDisposable> EventHandles { get; } = new List<IDisposable>();
         [JsonIgnore] public IEntity Entity { get; private set; }
 
-        private LifecycleState State { get; set; }
+        [JsonIgnore] public LifecycleState State { get; private set; }
         private Lazy<EventsBase> LazyEvents { get; }
         protected EventsBase Events => LazyEvents.Value;
 

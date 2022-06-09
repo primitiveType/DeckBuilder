@@ -1,5 +1,5 @@
 ﻿using CardsAndPiles;
-using CardsAndPiles.Components;
+using Newtonsoft.Json;
 
 namespace SummerJam1.Units
 {
@@ -9,17 +9,33 @@ namespace SummerJam1.Units
         {
             base.Initialize();
             //This will screw with deserialization
-            var health = Entity.AddComponent<Health>();
-            health.SetMax(10);
-            health.SetHealth(10);
             Entity.AddComponent<DamageIntent>().Amount = 6;
-
+            Entity.AddComponent<TransformAfterTurns>();
         }
 
         [OnTurnBegan]
         private void OnTurnBegan()
         {
             Entity.AddComponent<DamageIntent>().Amount = 6;
+        }
+        
+        
+    }
+    
+    public class TransformAfterTurns : SummerJam1Component
+    {
+
+        [JsonProperty] public int TurnsRemaining { get; set; } = 1;
+
+        [OnTurnBegan]
+        private void OnTurnBegan()
+        {
+            TurnsRemaining--;
+
+            if (TurnsRemaining <= 0)
+            {
+                Entity.RemoveComponent(this);
+            }
         }
         
         

@@ -1,20 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Common;
 using SummerJam1;
 using UnityEngine;
 
-public class UnitRendererComponent : MonoBehaviour
+public class UnitRendererComponent : View<VisualComponent>
 {
     // Start is called before the first frame update
-    void Start()
+    [PropertyListener(nameof(VisualComponent.AssetName))]
+    private void OnAssetNameChanged(object sender, PropertyChangedEventArgs args)
     {
-        var unitRenderer = SummerJam1Helper.Instance.GetUnitRenderer();
+        GameObject unitRenderer = SummerJam1UnitFactory.Instance.GetInstance(Model.AssetName);
         unitRenderer.transform.SetParent(transform);
         unitRenderer.transform.localPosition = new Vector3();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 }

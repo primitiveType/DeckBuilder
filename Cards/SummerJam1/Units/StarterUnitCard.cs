@@ -1,8 +1,9 @@
 ﻿using Api;
+using CardsAndPiles.Components;
 
 namespace SummerJam1.Units
 {
-    public class StarterUnitCard : UnitCard
+    public class StarterUnitCard : UnitCard, IDescription
     {
         protected override Unit CreateUnit()
         {
@@ -13,5 +14,7 @@ namespace SummerJam1.Units
 
             return unitEntity.GetComponent<StarterUnit>();
         }
+
+        public string Description => "Summon a Random Unit.";
     }
 }

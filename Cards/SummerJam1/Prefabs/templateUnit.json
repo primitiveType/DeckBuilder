@@ -1,0 +1,23 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "m_Components": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": null
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": 3
+    },
+    {
+      "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
+      "Amount": 999,
+      "Max": 999
+    }
+  ]
+}

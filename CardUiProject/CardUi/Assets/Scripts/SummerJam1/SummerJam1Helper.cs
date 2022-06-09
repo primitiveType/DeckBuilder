@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using Api;
 using CardsAndPiles;
 using Common;
@@ -21,7 +22,6 @@ namespace SummerJam1
         [SerializeField] private List<PileView> FriendlySlots;
         [SerializeField] private List<PileView> EnemySlots;
 
-        [SerializeField] private List<GameObject> UnitRenderers;
 
         private Context Context { get; set; }
         private SummerJam1Events Events => (SummerJam1Events)Context.Events;
@@ -36,7 +36,7 @@ namespace SummerJam1
             events.SubscribeToUnitCreated(OnUnitCreated);
 
             Game = game.AddComponent<SummerJam1Game>();
-            
+            Game.SetPrefabsDirectory(Path.Combine("Assets", "External", "Library", "Prefabs"));
 
 
             game.AddComponent<SummerJam1CardViewBridge>();
@@ -81,19 +81,6 @@ namespace SummerJam1
             args.Entity.AddComponent<SummerJam1UnitViewBridge>().gameObject = unitView;
         }
 
-        private int tester;
-
-        public GameObject GetUnitRenderer()
-        {
-            tester++;
-
-            if (tester >= UnitRenderers.Count)
-            {
-                tester = 0;
-            }
-
-            return Instantiate(UnitRenderers[tester]);
-        }
 
         public void EndTurn()
         {

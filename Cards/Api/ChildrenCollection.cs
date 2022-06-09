@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace Api
 {
-
+    [Serializable]
     public class ChildrenCollection<T> : IChildrenCollection<T>, IList<T>
     {
-        [ItemNotNull] private List<T> m_CollectionImplementation = new List<T>();
+        [ItemNotNull] [JsonProperty] private List<T> m_CollectionImplementation { get; set; } = new List<T>();
         public event NotifyCollectionChangedEventHandler CollectionChanged;
-
 
 
         public IEnumerator<T> GetEnumerator()

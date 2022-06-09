@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -20,8 +21,10 @@ namespace Api
         public Context Context { get; private set; }
         [JsonProperty] public int Id { get; private set; } = -1;
 
-        [JsonProperty] public IChildrenCollection<Component> Components => m_Components;
-        [JsonProperty] private ChildrenCollection<Component> m_Components = new ChildrenCollection<Component>();
+        public IChildrenCollection<Component> Components => m_Components;
+
+        [JsonProperty]
+        private ChildrenCollection<Component> m_Components { get; set; } = new ChildrenCollection<Component>();
 
         public LifecycleState State { get; private set; }
 
@@ -45,7 +48,7 @@ namespace Api
             //call generated code that does reflection to get all event attributes and subscribes to proper events
             //should also iterate components? OR should it only happen in components? depends on whether this stays sealed.
 
-            foreach (var component in Components)
+            foreach (var component in Components.ToList())
             {
                 component.InternalInitialize(this);
             }
