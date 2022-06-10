@@ -39,6 +39,34 @@ public EventHandle<IntentStartedEventArgs> SubscribeToIntentStarted(EventHandleD
     return handler;
 } 
     #endregion Code for event IntentStarted
+    #region Code for event UnitTransformed
+private event EventHandleDelegate<UnitTransformedEventArgs> UnitTransformed;
+public virtual void OnUnitTransformed(UnitTransformedEventArgs args)
+{
+    UnitTransformed?.Invoke(this, args);
+}
+
+public EventHandle<UnitTransformedEventArgs> SubscribeToUnitTransformed(EventHandleDelegate<UnitTransformedEventArgs> action)
+{
+    var handler = new EventHandle<UnitTransformedEventArgs>(action, () => UnitTransformed -= action);
+    UnitTransformed += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event UnitTransformed
+    #region Code for event BattleEnded
+private event EventHandleDelegate<BattleEndedEventArgs> BattleEnded;
+public virtual void OnBattleEnded(BattleEndedEventArgs args)
+{
+    BattleEnded?.Invoke(this, args);
+}
+
+public EventHandle<BattleEndedEventArgs> SubscribeToBattleEnded(EventHandleDelegate<BattleEndedEventArgs> action)
+{
+    var handler = new EventHandle<BattleEndedEventArgs>(action, () => BattleEnded -= action);
+    BattleEnded += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event BattleEnded
 }
 /// <summary>
 /// (object sender, UnitCreatedEventArgs) args)
@@ -104,6 +132,72 @@ public class OnIntentStartedAttribute : EventsBaseAttribute {
     public class IntentStartedEventArgs {        public  IEntity Entity { get; }
         public  IntentStartedEventArgs (IEntity Entity   ){
                   this.Entity = Entity; 
+}
+
+        }/// <summary>
+/// (object sender, UnitTransformedEventArgs) args)
+/// </summary>
+public class OnUnitTransformedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToUnitTransformed(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(UnitTransformedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, UnitTransformedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToUnitTransformed(delegate(object sender, UnitTransformedEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void UnitTransformedEvent (object sender, UnitTransformedEventArgs args);
+
+    public class UnitTransformedEventArgs {        public  IEntity Entity { get; }
+        public  UnitTransformedEventArgs (IEntity Entity   ){
+                  this.Entity = Entity; 
+}
+
+        }/// <summary>
+/// (object sender, BattleEndedEventArgs) args)
+/// </summary>
+public class OnBattleEndedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToBattleEnded(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(BattleEndedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, BattleEndedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToBattleEnded(delegate(object sender, BattleEndedEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void BattleEndedEvent (object sender, BattleEndedEventArgs args);
+
+    public class BattleEndedEventArgs {        public  bool Victory { get; }
+        public  BattleEndedEventArgs (bool Victory   ){
+                  this.Victory = Victory; 
 }
 
         }

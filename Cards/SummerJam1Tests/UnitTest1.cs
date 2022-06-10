@@ -19,8 +19,9 @@ namespace SummerJam1Tests
         {
             Context = new Context(new SummerJam1Events());
             var gameEntity = Context.Root;
+            Context.SetPrefabsDirectory("Prefabs");
+
             Game = gameEntity.AddComponent<SummerJam1Game>();
-            Game.SetPrefabsDirectory("Prefabs");
         }
 
         [Test]
@@ -37,7 +38,7 @@ namespace SummerJam1Tests
             var unitCard2 = MakeUnitCard();
             Assert.IsFalse(unitCard2.TryPlayCard(unitSlot.Entity));
         }
-        
+
         [Test]
         public void StartBattle()
         {
@@ -47,19 +48,46 @@ namespace SummerJam1Tests
         [Test]
         public void Serialize_Card()
         {
-            var unitCard = MakeUnitCard();
-            unitCard.Entity.AddComponent<VisualComponent>().AssetName = SummerJam1UnitAsset.Noodles;
-            var health = unitCard.Entity.AddComponent<Health>();
-            health.SetHealth(999);
-            health.SetMax(999);
-            
-            string card = Serializer.Serialize(unitCard.Entity);
-            File.WriteAllText("testcard.json", card);
-            IEntity restored = Serializer.Deserialize<IEntity>(card);
-            
-            Assert.That(restored.GetComponent<StarterUnitCard>(), Is.Not.Null);
+            var card = Context.CreateEntity();
+            card.AddComponent<DamageUnitCard>();
+            card.AddComponent<EnemyUnitSlotConstraint>();
+            card.AddComponent<NameComponent>();
+            card.AddComponent<Draggable>().CanDrag = true;
+
+
+            string cardstr = Serializer.Serialize(card);
+            File.WriteAllText(
+                @"C:\Users\Arthu\Documents\Projects\DeckBuilder\Cards\SummerJam1\Prefabs\templateCard.json", cardstr);
+            IEntity restored = Serializer.Deserialize<IEntity>(cardstr);
+
+            Assert.That(restored.GetComponent<Card>(), Is.Not.Null);
         }
 
+        [Test]
+        public void Serialize_Unit()
+        {
+            IEntity unit = MakeUnit();
+            unit.AddComponent<VisualComponent>().AssetName = SummerJam1UnitAsset.Noodles;
+            var health = unit.AddComponent<Health>();
+            unit.AddComponent<ChangeVisualOnTransform>().UnitAsset = SummerJam1UnitAsset.HeadCheese;
+            health.SetHealth(999);
+            health.SetMax(999);
+            var strength = unit.AddComponent<Strength>();
+            unit.AddComponent<GainHealthOnTransform>().HealthToAdd = 10;
+            unit.AddComponent<DamageIntent>();
+            strength.Amount = 888;
+
+            unit.AddComponent<TransformAfterTurns>();
+
+            string template = Serializer.Serialize(unit);
+
+
+            File.WriteAllText(
+                @"C:\Users\Arthu\Documents\Projects\DeckBuilder\Cards\SummerJam1\Prefabs\templateUnit.json", template);
+            IEntity restored = Serializer.Deserialize<IEntity>(template);
+
+            Assert.That(restored.GetComponent<Unit>(), Is.Not.Null);
+        }
 
         [Test]
         public void TestEventHandlerDetachmentDuringEvent()
@@ -122,6 +150,16 @@ namespace SummerJam1Tests
 
             return unitCard;
         }
+
+        private IEntity MakeUnit()
+        {
+            var unitCardEntity = Context.CreateEntity();
+            unitCardEntity.TrySetParent(Game.Entity);
+            unitCardEntity.AddComponent<NameComponent>();
+            unitCardEntity.AddComponent<StarterUnit>();
+
+            return unitCardEntity;
+        }
     }
 
     internal delegate void TesterEvent();
@@ -139,6 +177,8 @@ namespace SummerJam1Tests
         {
             Console.WriteLine("tester.");
         }
+
+        public override string Description { get; } = "Test card";
     }
 
     public class TestUnit : Unit

@@ -18,6 +18,14 @@ namespace Api
             Events = events;
             Root = CreateEntity();
         }
+
+        private string PrefabsPath { get; set; }
+
+
+        public void SetPrefabsDirectory(string path)
+        {
+            PrefabsPath = path;
+        }
         //create entity
         //initialize it
         //set its parent
@@ -38,10 +46,10 @@ namespace Api
             entity.TrySetParent(parent);
             return entity;
         }
-        
-        public IEntity CreateEntity(IEntity parent, string prefabPath)
+
+        public IEntity CreateEntity(IEntity parent, string prefabName)
         {
-            string prefab = File.ReadAllText(prefabPath);
+            string prefab = File.ReadAllText(Path.Combine(PrefabsPath, prefabName));
             Entity entity = Serializer.Deserialize<Entity>(prefab);
             entity.Initialize(this, NextId++);
 
@@ -54,7 +62,7 @@ namespace Api
         private void OnDeserialized(StreamingContext context)
         {
             InitializeRecursively(Root);
-            
+
             void InitializeRecursively(IEntity root)
             {
                 ((Entity)root).Initialize(this, root.Id);
@@ -63,9 +71,6 @@ namespace Api
                     InitializeRecursively(child);
                 }
             }
-            
         }
-
-      
     }
 }

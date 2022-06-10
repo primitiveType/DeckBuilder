@@ -1,4 +1,3 @@
-using System;
 using SummerJam1;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,10 +14,9 @@ namespace App
 
         protected override void ComponentOnPropertyChanged()
         {
-            if (Component is IAmount amount)
+            if (Component is IAmount)
             {
                 AmountText.gameObject.SetActive(true);
-                AmountText.text = amount.Amount.ToString();
             }
             else
             {

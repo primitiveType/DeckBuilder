@@ -5,6 +5,18 @@ namespace CardsAndPiles
 {
     public class HandPile : Pile
     {
+        public bool Discard()
+        {
+            IEntity card = Entity.Children.FirstOrDefault();
+            if (card == null)
+            {
+                return false;
+            }
+
+            PlayerDiscard discard = Context.Root.GetComponentInChildren<PlayerDiscard>();
+            return card.TrySetParent(discard.Entity);
+        }
+
         public override bool AcceptsChild(IEntity item)
         {
             Card card = item.GetComponent<Card>();

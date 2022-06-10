@@ -14,11 +14,23 @@
         <member name="Multiplier" type="List&lt;float&gt;" value="new List&lt;float&gt;()"/>
         <member name="Clamps" type="List&lt;int&gt;" value="new List&lt;int&gt;()"/>
     </event>
+    <event id="RequestHeal">
+        <arg name="Amount" type="int"/>
+        <arg name="Source" type="IEntity"/>
+        <arg name="Target" type="IEntity"/>
+        <member name="Multiplier" type="List&lt;float&gt;" value="new List&lt;float&gt;()"/>
+        <member name="Clamps" type="List&lt;int&gt;" value="new List&lt;int&gt;()"/>
+    </event>
     <event id="EntityKilled">
         <arg name="Entity" type="IEntity"/>
         <arg name="Source" type="IEntity"/>
     </event>
     <event id="DamageDealt">
+        <arg name="EntityId" type="IEntity"/>
+        <arg name="SourceEntityId" type="IEntity"/>
+        <arg name="Amount" type="int"/>
+    </event>
+    <event id="HealDealt">
         <arg name="EntityId" type="IEntity"/>
         <arg name="SourceEntityId" type="IEntity"/>
         <arg name="Amount" type="int"/>

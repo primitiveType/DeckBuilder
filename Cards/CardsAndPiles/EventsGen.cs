@@ -53,6 +53,20 @@ public EventHandle<RequestDealDamageEventArgs> SubscribeToRequestDealDamage(Even
     return handler;
 } 
     #endregion Code for event RequestDealDamage
+    #region Code for event RequestHeal
+private event EventHandleDelegate<RequestHealEventArgs> RequestHeal;
+public virtual void OnRequestHeal(RequestHealEventArgs args)
+{
+    RequestHeal?.Invoke(this, args);
+}
+
+public EventHandle<RequestHealEventArgs> SubscribeToRequestHeal(EventHandleDelegate<RequestHealEventArgs> action)
+{
+    var handler = new EventHandle<RequestHealEventArgs>(action, () => RequestHeal -= action);
+    RequestHeal += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event RequestHeal
     #region Code for event EntityKilled
 private event EventHandleDelegate<EntityKilledEventArgs> EntityKilled;
 public virtual void OnEntityKilled(EntityKilledEventArgs args)
@@ -81,6 +95,20 @@ public EventHandle<DamageDealtEventArgs> SubscribeToDamageDealt(EventHandleDeleg
     return handler;
 } 
     #endregion Code for event DamageDealt
+    #region Code for event HealDealt
+private event EventHandleDelegate<HealDealtEventArgs> HealDealt;
+public virtual void OnHealDealt(HealDealtEventArgs args)
+{
+    HealDealt?.Invoke(this, args);
+}
+
+public EventHandle<HealDealtEventArgs> SubscribeToHealDealt(EventHandleDelegate<HealDealtEventArgs> action)
+{
+    var handler = new EventHandle<HealDealtEventArgs>(action, () => HealDealt -= action);
+    HealDealt += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event HealDealt
     #region Code for event TurnEnded
 private event EventHandleDelegate<TurnEndedEventArgs> TurnEnded;
 public virtual void OnTurnEnded(TurnEndedEventArgs args)
@@ -218,6 +246,45 @@ public class OnRequestDealDamageAttribute : EventsBaseAttribute {
 }
 
         }/// <summary>
+/// (object sender, RequestHealEventArgs) args)
+/// </summary>
+public class OnRequestHealAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToRequestHeal(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(RequestHealEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, RequestHealEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToRequestHeal(delegate(object sender, RequestHealEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void RequestHealEvent (object sender, RequestHealEventArgs args);
+
+    public class RequestHealEventArgs {        public  int Amount { get; }
+        public  IEntity Source { get; }
+        public  IEntity Target { get; }
+        public  List<float> Multiplier { get; set;} 
+=new List<float>();        public  List<int> Clamps { get; set;} 
+=new List<int>();        public  RequestHealEventArgs (int Amount, IEntity Source, IEntity Target   ){
+                  this.Amount = Amount; 
+              this.Source = Source; 
+              this.Target = Target; 
+}
+
+        }/// <summary>
 /// (object sender, EntityKilledEventArgs) args)
 /// </summary>
 public class OnEntityKilledAttribute : EventsBaseAttribute {
@@ -284,6 +351,43 @@ public class OnDamageDealtAttribute : EventsBaseAttribute {
         public  IEntity SourceEntityId { get; }
         public  int Amount { get; }
         public  DamageDealtEventArgs (IEntity EntityId, IEntity SourceEntityId, int Amount   ){
+                  this.EntityId = EntityId; 
+              this.SourceEntityId = SourceEntityId; 
+              this.Amount = Amount; 
+}
+
+        }/// <summary>
+/// (object sender, HealDealtEventArgs) args)
+/// </summary>
+public class OnHealDealtAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToHealDealt(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(HealDealtEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, HealDealtEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToHealDealt(delegate(object sender, HealDealtEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void HealDealtEvent (object sender, HealDealtEventArgs args);
+
+    public class HealDealtEventArgs {        public  IEntity EntityId { get; }
+        public  IEntity SourceEntityId { get; }
+        public  int Amount { get; }
+        public  HealDealtEventArgs (IEntity EntityId, IEntity SourceEntityId, int Amount   ){
                   this.EntityId = EntityId; 
               this.SourceEntityId = SourceEntityId; 
               this.Amount = Amount; 

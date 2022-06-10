@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System.Linq;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
@@ -11,24 +11,26 @@ namespace SummerJam1
     {
         private int NumSlots = 3;
         public IEntity Discard { get; private set; }
-        public IEntity Hand { get; private set; }
+        public HandPile Hand { get; private set; }
         public DeckPile Deck { get; private set; }
-        
-        private string PrefabsPath { get; set; }
+
+        private IEntity SlotsParent { get; set; }
+
 
         protected override void Initialize()
         {
             base.Initialize();
 
+            SlotsParent = Context.CreateEntity(Entity);
             for (int i = 0; i < NumSlots; i++)
             {
-                IEntity slotEntity = Context.CreateEntity(Entity);
+                IEntity slotEntity = Context.CreateEntity(SlotsParent);
                 slotEntity.AddComponent<FriendlyUnitSlot>();
             }
 
             for (int i = 0; i < NumSlots; i++)
             {
-                IEntity slotEntity = Context.CreateEntity(Entity);
+                IEntity slotEntity = Context.CreateEntity(SlotsParent);
                 slotEntity.AddComponent<EnemyUnitSlot>();
             }
 
@@ -40,11 +42,13 @@ namespace SummerJam1
                 {
                     entity.AddComponent<StarterUnitCard>();
                     entity.AddComponent<NameComponent>().Value = "Pepper";
-                    
                 });
+                Context.CreateEntity(Deck.Entity, "Dice.json");
+                Context.CreateEntity(Deck.Entity, "DrawNewHand.json");
             }
 
-            Hand = Context.CreateEntity(Entity, entity => entity.AddComponent<HandPile>());
+            Context.CreateEntity(Entity, entity =>
+                Hand = entity.AddComponent<HandPile>());
 
             AddRules();
         }
@@ -61,19 +65,33 @@ namespace SummerJam1
             Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 
-        public void SetPrefabsDirectory(string path)
-        {
-            PrefabsPath = path;
-        }
-        
+
         public void StartBattle()
         {
             foreach (EnemyUnitSlot slot in Entity.GetComponentsInChildren<EnemyUnitSlot>())
             {
-                Context.CreateEntity(slot.Entity, Path.Combine(PrefabsPath, "noodles.json"));
+                Context.CreateEntity(slot.Entity, "noodles.json");
             }
-            
+
             Events.OnTurnBegan(new TurnBeganEventArgs());
+        }
+
+        [OnEntityKilled]
+        private void CheckForEndOfBattle(object sender, EntityKilledEventArgs args)
+        {
+            bool alliesAlive = SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>()
+                .Any(slot =>
+                    slot.Entity.Children.Any(child => child != args.Entity && child.GetComponent<Unit>() != null));
+            bool enemiesAlive = SlotsParent.GetComponentsInChildren<EnemyUnitSlot>()
+                .Any(slot =>
+                    slot.Entity.Children.Any(child => child != args.Entity && child.GetComponent<Unit>() != null));
+
+            if (alliesAlive && enemiesAlive)
+            {
+                return;
+            }
+
+            Events.OnBattleEnded(new BattleEndedEventArgs(alliesAlive));
         }
     }
 }

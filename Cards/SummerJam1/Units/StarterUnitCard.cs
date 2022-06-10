@@ -1,20 +1,19 @@
 ﻿using Api;
-using CardsAndPiles.Components;
+using Newtonsoft.Json;
 
 namespace SummerJam1.Units
 {
-    public class StarterUnitCard : UnitCard, IDescription
+    public class StarterUnitCard : UnitCard
     {
+        [JsonProperty] public string PrefabName = "StarterUnit.json";
+
         protected override Unit CreateUnit()
         {
-            IEntity unitEntity = Context.CreateEntity(null, entity =>
-            {
-                entity.AddComponent<StarterUnit>();
-            });
+            IEntity unitEntity = Context.CreateEntity(null, PrefabName);
 
             return unitEntity.GetComponent<StarterUnit>();
         }
 
-        public string Description => "Summon a Random Unit.";
+        public override string Description => "Summon an IceCream that turns into HeadCheese.";
     }
 }

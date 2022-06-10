@@ -1,5 +1,4 @@
 ﻿using Api;
-using CardsAndPiles.Components;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -20,6 +19,7 @@ namespace SummerJam1
         IceCream,
         HeadCheese,
         Sandwich,
-        Noodles
+        Noodles,
+        Tofu
     }
 }

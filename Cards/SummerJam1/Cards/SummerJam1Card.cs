@@ -6,8 +6,8 @@ namespace SummerJam1.Cards
     {
         protected new SummerJam1Events Events => (SummerJam1Events)base.Events;
 
-        public bool CanDrag => Entity.Parent == Game.Hand;//can only drag while in hand.
-        private SummerJam1Game Game { get; set; }        
+        public bool CanDrag => Entity.Parent == Game.Hand.Entity;//can only drag while in hand.
+        protected SummerJam1Game Game { get; private set; }        
 
         protected override void Initialize()
         {

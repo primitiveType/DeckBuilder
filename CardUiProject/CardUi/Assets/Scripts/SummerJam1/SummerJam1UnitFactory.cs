@@ -9,6 +9,7 @@ namespace SummerJam1
         [SerializeField] private GameObject m_HeadCheese;
         [SerializeField] private GameObject m_Sandwich;
         [SerializeField] private GameObject m_Noodles;
+        [SerializeField] private GameObject m_Tofu;
 
         public GameObject GetInstance(SummerJam1UnitAsset value)
         {
@@ -22,6 +23,8 @@ namespace SummerJam1
                     return Instantiate(m_Sandwich);
                 case SummerJam1UnitAsset.Noodles:
                     return Instantiate(m_Noodles);
+                case SummerJam1UnitAsset.Tofu:
+                    return Instantiate(m_Tofu);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(value), value, "No prefab found!");
             }

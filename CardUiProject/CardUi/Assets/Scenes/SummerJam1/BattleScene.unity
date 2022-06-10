@@ -849,6 +849,7 @@ MonoBehaviour:
   m_HeadCheese: {fileID: 7284835767905735223, guid: 98e49260775df6c4da90416c6db3c9f4, type: 3}
   m_Sandwich: {fileID: 7751244870574364282, guid: df4b7a1d58d932045a8f1ac153c5b6c7, type: 3}
   m_Noodles: {fileID: 1894641250135382201, guid: fa5c102dba1c78e4c870fb4c8857cda1, type: 3}
+  m_Tofu: {fileID: 1894641250135382201, guid: d63dfd0996e64f448951f3c8172f2f25, type: 3}
 --- !u!4 &1449967842 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 157318251731720607, guid: 7f180928db050d241a0c748a80aae839, type: 3}

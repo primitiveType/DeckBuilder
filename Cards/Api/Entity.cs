@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -157,6 +156,18 @@ namespace Api
         {
             return GetComponents<T>().FirstOrDefault();
         }
+        
+        
+        public T GetOrAddComponent<T>() where T : Component, new()
+        {
+            T existing = GetComponent<T>();
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            return AddComponent<T>();
+        }
 
         public List<T> GetComponents<T>()
         {
@@ -298,5 +309,6 @@ namespace Api
         bool RemoveComponent(Component toRemove);
         LifecycleState State { get; }
         void Destroy();
+        T GetOrAddComponent<T>() where T : Component, new();
     }
 }

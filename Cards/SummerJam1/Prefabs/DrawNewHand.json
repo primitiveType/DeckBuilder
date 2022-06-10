@@ -1,0 +1,14 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "m_Components": [
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "DrawNewHand"
+    },
+    {
+      "$type": "SummerJam1.DrawNewHandCard, SummerJam1"
+    }
+  ]
+}

@@ -32,11 +32,13 @@ namespace SummerJam1
             base.Awake();
             var events = new SummerJam1Events();
             Context = new Context(events);
+            Events.SubscribeToBattleEnded(OnBattleEnded);
+            Context.SetPrefabsDirectory(Path.Combine("Assets", "External", "Library", "Prefabs"));
+
             IEntity game = Context.Root;
             events.SubscribeToUnitCreated(OnUnitCreated);
 
             Game = game.AddComponent<SummerJam1Game>();
-            Game.SetPrefabsDirectory(Path.Combine("Assets", "External", "Library", "Prefabs"));
 
 
             game.AddComponent<SummerJam1CardViewBridge>();
@@ -73,10 +75,23 @@ namespace SummerJam1
             Game.StartBattle();
         }
 
+        private void OnBattleEnded(object sender, BattleEndedEventArgs item)
+        {
+            if (item.Victory)
+            {
+                Debug.Log("VICTOLY!");
+            }
+            else
+            {
+                Debug.Log("FAILURE.");
+            }
+        }
+
 
         private void OnUnitCreated(object sender, UnitCreatedEventArgs args)
         {
             GameObject unitView = Instantiate(UnitPrefab);
+            unitView.transform.localPosition = Vector3.one * 10_000;
             unitView.GetComponent<IView>().SetModel(args.Entity);
             args.Entity.AddComponent<SummerJam1UnitViewBridge>().gameObject = unitView;
         }

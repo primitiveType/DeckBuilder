@@ -5,31 +5,35 @@
   "m_Components": [
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": null
+      "Value": "Bread"
     },
     {
       "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "Noodles"
+      "AssetName": "Tofu"
     },
     {
       "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
-      "Amount": 999,
-      "Max": 999
+      "Amount": 1,
+      "Max": 1
     },
     {
       "$type": "SummerJam1.Units.ChangeVisualOnTransform, SummerJam1",
-      "UnitAsset": "HeadCheese"
+      "UnitAsset": "Noodles"
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 888
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.Units.GainHealthOnTransform, SummerJam1",
       "HealthToAdd": 10
+    },
+    {
+      "$type": "SummerJam1.Units.GainStrengthOnTransform, SummerJam1",
+      "StrengthToAdd": 5
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"

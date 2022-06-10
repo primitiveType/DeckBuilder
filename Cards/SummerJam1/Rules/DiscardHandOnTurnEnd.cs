@@ -8,7 +8,7 @@ namespace SummerJam1.Rules
         private void OnTurnEnded()
         {
             var game = Context.Root.GetComponent<SummerJam1Game>();
-            foreach (Card componentsInChild in game.Hand.GetComponentsInChildren<Card>())
+            foreach (Card componentsInChild in game.Hand.Entity.GetComponentsInChildren<Card>())
             {
                 componentsInChild.Entity.TrySetParent(game.Discard);
             }

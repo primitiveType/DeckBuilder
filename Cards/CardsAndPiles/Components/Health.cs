@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Api;
 
 namespace CardsAndPiles.Components
 {
-    public class Health : CardsAndPilesComponent, ITakesDamageInternal
+    public class Health : CardsAndPilesComponent, ITakesDamageInternal, IHealable
     {
         public int Amount { get; private set; } = 10;
         public int Max { get; private set; } = 10;
@@ -12,15 +13,15 @@ namespace CardsAndPiles.Components
         {
             RequestDealDamageEventArgs args = new RequestDealDamageEventArgs(damage, source, Entity);
             Events.OnRequestDealDamage(args);
-            int amount = CalculateDamage(args);
+            int amount = CalculateDamage(args.Amount, args.Clamps, args.Multiplier);
             DealDamage(amount, args.Source);
             return amount;
         }
 
-        private int CalculateDamage(RequestDealDamageEventArgs args)
+        private int CalculateDamage(int amount, List<int> clamps, List<float> multipliers)
         {
             var totalMultiplier = 1f;
-            foreach (var multiplier in args.Multiplier)
+            foreach (var multiplier in multipliers)
             {
                 if (multiplier == 0f)
                 {
@@ -31,9 +32,9 @@ namespace CardsAndPiles.Components
                 totalMultiplier += multiplier;
             }
 
-            var calculated = (int)Math.Ceiling(args.Amount * totalMultiplier); //TODO: math
+            var calculated = (int)Math.Ceiling(amount * totalMultiplier); //TODO: math
 
-            foreach (var clamp in args.Clamps)
+            foreach (var clamp in clamps)
             {
                 calculated = Math.Min(calculated, clamp);
             }
@@ -51,9 +52,25 @@ namespace CardsAndPiles.Components
                 Entity.Destroy();
             }
         }
+        
+        public void Heal(int damage, IEntity source)
+        {
+            Amount += damage;
+            Events.OnHealDealt(new HealDealtEventArgs(Entity, source, damage));
+        }
 
         [OnRequestDealDamage]
         private void OnRequestDealDamage(object sender, RequestDealDamageEventArgs args)
+        {
+            if (args.Target != Entity)
+            {
+                return;
+            }
+            args.Clamps.Add(Amount);
+        }
+        
+        [OnRequestHeal]
+        private void OnRequestHeal(object sender, RequestHealEventArgs args)
         {
             if (args.Target != Entity)
             {
@@ -70,6 +87,15 @@ namespace CardsAndPiles.Components
         public void SetMax(int max)
         {
             Max = max;
+        }
+
+        public int TryHeal(int damage, IEntity source)
+        {
+            RequestHealEventArgs args = new RequestHealEventArgs(damage, source, Entity);
+            Events.OnRequestHeal(args);
+            int amount = CalculateDamage(args.Amount, args.Clamps, args.Multiplier);
+            Heal(amount, args.Source);
+            return amount;
         }
     }
 }

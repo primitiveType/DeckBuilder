@@ -11,13 +11,13 @@ namespace Api
     [Serializable]
     public class ChildrenCollection<T> : IChildrenCollection<T>, IList<T>
     {
-        [ItemNotNull] [JsonProperty] private List<T> m_CollectionImplementation { get; set; } = new List<T>();
+        [ItemNotNull] [JsonProperty] private List<T> CollectionImplementation { get; set; } = new List<T>();
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
 
         public IEnumerator<T> GetEnumerator()
         {
-            return m_CollectionImplementation.GetEnumerator();
+            return CollectionImplementation.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -27,7 +27,7 @@ namespace Api
 
         public void Add(T item, Action invokeBeforeEvent)
         {
-            m_CollectionImplementation.Add(item);
+            CollectionImplementation.Add(item);
             invokeBeforeEvent?.Invoke();
             CollectionChanged?.Invoke(this,
                 new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new List<T> { item }));
@@ -41,25 +41,25 @@ namespace Api
 
         public void Clear()
         {
-            var oldItems = m_CollectionImplementation.ToList();
-            m_CollectionImplementation.Clear();
+            var oldItems = CollectionImplementation.ToList();
+            CollectionImplementation.Clear();
             CollectionChanged?.Invoke(this,
                 new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItems));
         }
 
         public bool Contains(T item)
         {
-            return m_CollectionImplementation.Contains(item);
+            return CollectionImplementation.Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            m_CollectionImplementation.CopyTo(array, arrayIndex);
+            CollectionImplementation.CopyTo(array, arrayIndex);
         }
 
         public bool Remove(T item, Action invokeBeforeEvent)
         {
-            bool removed = m_CollectionImplementation.Remove(item);
+            bool removed = CollectionImplementation.Remove(item);
             if (removed)
             {
                 invokeBeforeEvent?.Invoke();
@@ -75,9 +75,9 @@ namespace Api
             return Remove(item, null);
         }
 
-        public int Count => m_CollectionImplementation.Count;
+        public int Count => CollectionImplementation.Count;
         public bool IsReadOnly => false;
-        public int IndexOf(T item) => m_CollectionImplementation.FindIndex((child) => Equals(child, item));
+        public int IndexOf(T item) => CollectionImplementation.FindIndex((child) => Equals(child, item));
 
         public void Insert(int index, T item)
         {
@@ -91,8 +91,8 @@ namespace Api
 
         public T this[int index]
         {
-            get => m_CollectionImplementation[index];
-            set => m_CollectionImplementation[index] = value;
+            get => CollectionImplementation[index];
+            set => CollectionImplementation[index] = value;
         }
     }
 }

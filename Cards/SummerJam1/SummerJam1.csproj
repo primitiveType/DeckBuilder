@@ -17,10 +17,10 @@
         <Generator>TextTemplatingFileGenerator</Generator>
         <LastGenOutput>EventsGen.cs</LastGenOutput>
       </None>
-      <None Update="Prefabs\tomato.json">
+      <None Update="Prefabs\*">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\noodles.json">
+      <None Update="Prefabs\DrawNewHand.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

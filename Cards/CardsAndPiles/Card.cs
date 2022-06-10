@@ -1,8 +1,9 @@
 ﻿using Api;
+using CardsAndPiles.Components;
 
 namespace CardsAndPiles
 {
-    public abstract class Card : Component, IPileItem
+    public abstract class Card : Component, IPileItem, IDescription
     {
         public bool TryPlayCard(IEntity target)
         {
@@ -27,5 +28,7 @@ namespace CardsAndPiles
         {
             return true;
         }
+
+        public abstract string Description { get; }
     }
 }

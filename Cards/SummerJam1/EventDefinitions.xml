@@ -6,4 +6,10 @@
     <event id="IntentStarted">
         <arg name="Entity" type="IEntity"/>
     </event>
+    <event id="UnitTransformed">
+        <arg name="Entity" type="IEntity"/>
+    </event>
+    <event id="BattleEnded">
+        <arg name="Victory" type="bool"/>
+    </event>
 </catalog>
