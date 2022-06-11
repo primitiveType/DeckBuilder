@@ -10,6 +10,4 @@ namespace SummerJam1.Units
             return true;
         }
     }
-    
-    public class EnemyUnitSlot : UnitSlot{}
 }

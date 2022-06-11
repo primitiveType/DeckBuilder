@@ -8,7 +8,11 @@
       "Value": "DrawNewHand"
     },
     {
-      "$type": "SummerJam1.DrawNewHandCard, SummerJam1"
+      "$type": "SummerJam1.Cards.DrawNewHandCard, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Cost": 1
     }
   ]
 }

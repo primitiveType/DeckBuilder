@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using Api;
+using Newtonsoft.Json;
 using UnityEngine;
 using Component = Api.Component;
 
@@ -7,8 +8,8 @@ namespace Common
 {
    public abstract class ViewBridge<T, TThis> : Component, IGameObject where T : IComponent where TThis : Component, new()
    {
-       public abstract GameObject Prefab { get; }
-       public GameObject gameObject { get; private set; }
+       [JsonIgnore] public abstract GameObject Prefab { get; }
+       [JsonIgnore] public GameObject gameObject { get; private set; }
    
        protected override void Initialize()
        {

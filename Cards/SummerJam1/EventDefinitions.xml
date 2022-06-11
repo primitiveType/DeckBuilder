@@ -12,4 +12,7 @@
     <event id="BattleEnded">
         <arg name="Victory" type="bool"/>
     </event>
+    <event id="BattleStarted">
+        <arg name="Battle" type="BattleContainer"/>
+    </event>
 </catalog>

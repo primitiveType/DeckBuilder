@@ -12,7 +12,8 @@
     "precompiledReferences": [
         "Api.dll",
         "CardsAndPiles.dll",
-        "Stateless.dll"
+        "Stateless.dll",
+        "Newtonsoft.Json.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

@@ -67,6 +67,20 @@ public EventHandle<BattleEndedEventArgs> SubscribeToBattleEnded(EventHandleDeleg
     return handler;
 } 
     #endregion Code for event BattleEnded
+    #region Code for event BattleStarted
+private event EventHandleDelegate<BattleStartedEventArgs> BattleStarted;
+public virtual void OnBattleStarted(BattleStartedEventArgs args)
+{
+    BattleStarted?.Invoke(this, args);
+}
+
+public EventHandle<BattleStartedEventArgs> SubscribeToBattleStarted(EventHandleDelegate<BattleStartedEventArgs> action)
+{
+    var handler = new EventHandle<BattleStartedEventArgs>(action, () => BattleStarted -= action);
+    BattleStarted += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event BattleStarted
 }
 /// <summary>
 /// (object sender, UnitCreatedEventArgs) args)
@@ -198,6 +212,39 @@ public class OnBattleEndedAttribute : EventsBaseAttribute {
     public class BattleEndedEventArgs {        public  bool Victory { get; }
         public  BattleEndedEventArgs (bool Victory   ){
                   this.Victory = Victory; 
+}
+
+        }/// <summary>
+/// (object sender, BattleStartedEventArgs) args)
+/// </summary>
+public class OnBattleStartedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToBattleStarted(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(BattleStartedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, BattleStartedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToBattleStarted(delegate(object sender, BattleStartedEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void BattleStartedEvent (object sender, BattleStartedEventArgs args);
+
+    public class BattleStartedEventArgs {        public  BattleContainer Battle { get; }
+        public  BattleStartedEventArgs (BattleContainer Battle   ){
+                  this.Battle = Battle; 
 }
 
         }

@@ -1,7 +1,8 @@
 ﻿using Api;
 using Newtonsoft.Json;
+using SummerJam1.Units;
 
-namespace SummerJam1.Units
+namespace SummerJam1.Cards
 {
     public class StarterUnitCard : UnitCard
     {

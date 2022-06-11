@@ -62,15 +62,25 @@ namespace Api
         private void OnDeserialized(StreamingContext context)
         {
             InitializeRecursively(Root);
+        }
 
-            void InitializeRecursively(IEntity root)
+        private void InitializeRecursively(IEntity root)
+        {
+            ((Entity)root).Initialize(this, root.Id);
+            foreach (IEntity child in root.Children)
             {
-                ((Entity)root).Initialize(this, root.Id);
-                foreach (IEntity child in root.Children)
-                {
-                    InitializeRecursively(child);
-                }
+                InitializeRecursively(child);
             }
+        }
+
+        public IEntity DuplicateEntity(IEntity entity)
+        {
+            string copyStr = Serializer.Serialize(entity);
+
+            Entity copy = Serializer.Deserialize<Entity>(copyStr);
+            InitializeRecursively(copy);
+
+            return copy;
         }
     }
 }

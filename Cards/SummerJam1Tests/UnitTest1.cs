@@ -5,6 +5,7 @@ using CardsAndPiles;
 using CardsAndPiles.Components;
 using NUnit.Framework;
 using SummerJam1;
+using SummerJam1.Cards;
 using SummerJam1.Units;
 
 namespace SummerJam1Tests
@@ -28,6 +29,7 @@ namespace SummerJam1Tests
         public void TestUnitCreatedInSlot()
         {
             var unitCard = MakeUnitCard();
+            Game.StartBattle();
             var unitSlot = Game.Entity.GetComponentInChildren<FriendlyUnitSlot>();
 
             Assert.NotNull(unitSlot);
@@ -53,6 +55,7 @@ namespace SummerJam1Tests
             card.AddComponent<EnemyUnitSlotConstraint>();
             card.AddComponent<NameComponent>();
             card.AddComponent<Draggable>().CanDrag = true;
+            card.AddComponent<EnergyCost>().Cost = 1;
 
 
             string cardstr = Serializer.Serialize(card);
@@ -94,7 +97,7 @@ namespace SummerJam1Tests
         {
             var test1 = Context.CreateEntity();
             var test2 = Context.CreateEntity();
-
+            Game.StartBattle();
             var events1 = test1.AddComponent<TestEvents>();
             var events2 = test2.AddComponent<TestEvents>();
 

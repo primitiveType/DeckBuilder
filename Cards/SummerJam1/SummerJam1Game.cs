@@ -1,41 +1,23 @@
-﻿using System.Linq;
-using Api;
-using CardsAndPiles;
+﻿using CardsAndPiles;
 using CardsAndPiles.Components;
+using SummerJam1.Cards;
 using SummerJam1.Rules;
-using SummerJam1.Units;
 
 namespace SummerJam1
 {
     public class SummerJam1Game : SummerJam1Component
     {
-        private int NumSlots = 3;
-        public IEntity Discard { get; private set; }
-        public HandPile Hand { get; private set; }
         public DeckPile Deck { get; private set; }
 
-        private IEntity SlotsParent { get; set; }
-
+        public BattleContainer Battle { get; private set; }
+        public Player Player { get; private set; }
 
         protected override void Initialize()
         {
             base.Initialize();
-
-            SlotsParent = Context.CreateEntity(Entity);
-            for (int i = 0; i < NumSlots; i++)
-            {
-                IEntity slotEntity = Context.CreateEntity(SlotsParent);
-                slotEntity.AddComponent<FriendlyUnitSlot>();
-            }
-
-            for (int i = 0; i < NumSlots; i++)
-            {
-                IEntity slotEntity = Context.CreateEntity(SlotsParent);
-                slotEntity.AddComponent<EnemyUnitSlot>();
-            }
-
-            Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
-            Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
+            AddRules();
+            //create an example deck.
+            Context.CreateEntity(Entity, entity =>Deck= entity.AddComponent<DeckPile>());
             for (int i = 0; i < 20; i++)
             {
                 Context.CreateEntity(Deck.Entity, entity =>
@@ -46,11 +28,6 @@ namespace SummerJam1
                 Context.CreateEntity(Deck.Entity, "Dice.json");
                 Context.CreateEntity(Deck.Entity, "DrawNewHand.json");
             }
-
-            Context.CreateEntity(Entity, entity =>
-                Hand = entity.AddComponent<HandPile>());
-
-            AddRules();
         }
 
         private void AddRules()
@@ -68,30 +45,39 @@ namespace SummerJam1
 
         public void StartBattle()
         {
-            foreach (EnemyUnitSlot slot in Entity.GetComponentsInChildren<EnemyUnitSlot>())
+            if (Battle != null)
             {
-                Context.CreateEntity(slot.Entity, "noodles.json");
+                Battle.Entity.Destroy();
             }
 
-            Events.OnTurnBegan(new TurnBeganEventArgs());
+            Context.CreateEntity(Entity, (entity) => { Battle = entity.AddComponent<BattleContainer>(); });
+            Battle.StartBattle();
+        }
+    }
+
+    public class Player : SummerJam1Component
+    {
+        public int CurrentEnergy { get; private set; }
+        public int MaxEnergy { get; private set; } = 3;
+
+        public bool TryUseEnergy(int amount)
+        {
+            if (CurrentEnergy < amount)
+            {
+                return false;
+            }
+
+            CurrentEnergy -= amount;
+            //invoke energy used.
+
+            return true;
         }
 
-        [OnEntityKilled]
-        private void CheckForEndOfBattle(object sender, EntityKilledEventArgs args)
+
+        [OnTurnBegan]
+        private void OnTurnBegan()
         {
-            bool alliesAlive = SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>()
-                .Any(slot =>
-                    slot.Entity.Children.Any(child => child != args.Entity && child.GetComponent<Unit>() != null));
-            bool enemiesAlive = SlotsParent.GetComponentsInChildren<EnemyUnitSlot>()
-                .Any(slot =>
-                    slot.Entity.Children.Any(child => child != args.Entity && child.GetComponent<Unit>() != null));
-
-            if (alliesAlive && enemiesAlive)
-            {
-                return;
-            }
-
-            Events.OnBattleEnded(new BattleEndedEventArgs(alliesAlive));
+            CurrentEnergy = MaxEnergy;
         }
     }
 }

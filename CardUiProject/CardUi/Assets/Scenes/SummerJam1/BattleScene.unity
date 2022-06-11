@@ -784,7 +784,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1239531043}
   - component: {fileID: 1239531044}
-  - component: {fileID: 1239531045}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -818,8 +817,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbff0e57b80fb474988284b1d9c8b9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PrintTrace: 0
-  m_CardPrefab: {fileID: 8432613368176806903, guid: fde407e0ce0511a41b41f4104ae399b5, type: 3}
   m_UnitPrefab: {fileID: 2256049955563789828, guid: 069c15b7f55d3f9469f8c833bbdf1517, type: 3}
   HandPile: {fileID: 155763496}
   DeckPile: {fileID: 234824877}
@@ -832,24 +829,6 @@ MonoBehaviour:
   - {fileID: 592455393}
   - {fileID: 1470939993}
   - {fileID: 1474833848}
---- !u!114 &1239531045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1239531042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4d41f33bf7d40c49934915d3c9cabf4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PrintTrace: 0
-  m_IceCream: {fileID: 5310250837015542090, guid: 74dbeeb8932c3b94dabb9ed240710940, type: 3}
-  m_HeadCheese: {fileID: 7284835767905735223, guid: 98e49260775df6c4da90416c6db3c9f4, type: 3}
-  m_Sandwich: {fileID: 7751244870574364282, guid: df4b7a1d58d932045a8f1ac153c5b6c7, type: 3}
-  m_Noodles: {fileID: 1894641250135382201, guid: fa5c102dba1c78e4c870fb4c8857cda1, type: 3}
-  m_Tofu: {fileID: 1894641250135382201, guid: d63dfd0996e64f448951f3c8172f2f25, type: 3}
 --- !u!4 &1449967842 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 157318251731720607, guid: 7f180928db050d241a0c748a80aae839, type: 3}
@@ -1367,6 +1346,55 @@ Transform:
   - {fileID: 315420759}
   m_Father: {fileID: 0}
   m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1876362623
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1876362625}
+  - component: {fileID: 1876362624}
+  m_Layer: 0
+  m_Name: Factory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1876362624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876362623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4d41f33bf7d40c49934915d3c9cabf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrintTrace: 0
+  m_IceCream: {fileID: 5310250837015542090, guid: 74dbeeb8932c3b94dabb9ed240710940, type: 3}
+  m_HeadCheese: {fileID: 7284835767905735223, guid: 98e49260775df6c4da90416c6db3c9f4, type: 3}
+  m_Sandwich: {fileID: 7751244870574364282, guid: df4b7a1d58d932045a8f1ac153c5b6c7, type: 3}
+  m_Noodles: {fileID: 1894641250135382201, guid: fa5c102dba1c78e4c870fb4c8857cda1, type: 3}
+  m_Tofu: {fileID: 1894641250135382201, guid: d63dfd0996e64f448951f3c8172f2f25, type: 3}
+--- !u!4 &1876362625
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876362623}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.006839, y: -0.023209572, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1902571795
 PrefabInstance:

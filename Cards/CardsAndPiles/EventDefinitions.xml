@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <catalog name="CardEventsBase" inherits="EventsBase" namespace="CardsAndPiles">
+    <event id="RequestPlayCard">
+        <arg name="CardId" type="IEntity"/>
+        <arg name="Target" type="IEntity"/>
+        <member name="CanPlay" type="List&lt;bool&gt;" value="new List&lt;bool&gt;()"/>
+    </event>
     <event id="CardPlayed">
         <arg name="CardId" type="IEntity"/>
         <arg name="Target" type="IEntity"/>

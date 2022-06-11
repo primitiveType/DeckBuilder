@@ -1,8 +1,8 @@
 using System;
 using Api;
-using SummerJam1.Cards;
+using SummerJam1.Units;
 
-namespace SummerJam1.Units
+namespace SummerJam1.Cards
 {
     public abstract class UnitCard : SummerJam1Card
     {

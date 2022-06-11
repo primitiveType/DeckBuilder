@@ -11,6 +11,20 @@ using Api;
 
 namespace CardsAndPiles{
 public abstract class CardEventsBase : EventsBase{
+    #region Code for event RequestPlayCard
+private event EventHandleDelegate<RequestPlayCardEventArgs> RequestPlayCard;
+public virtual void OnRequestPlayCard(RequestPlayCardEventArgs args)
+{
+    RequestPlayCard?.Invoke(this, args);
+}
+
+public EventHandle<RequestPlayCardEventArgs> SubscribeToRequestPlayCard(EventHandleDelegate<RequestPlayCardEventArgs> action)
+{
+    var handler = new EventHandle<RequestPlayCardEventArgs>(action, () => RequestPlayCard -= action);
+    RequestPlayCard += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event RequestPlayCard
     #region Code for event CardPlayed
 private event EventHandleDelegate<CardPlayedEventArgs> CardPlayed;
 public virtual void OnCardPlayed(CardPlayedEventArgs args)
@@ -139,6 +153,42 @@ public EventHandle<TurnBeganEventArgs> SubscribeToTurnBegan(EventHandleDelegate<
     #endregion Code for event TurnBegan
 }
 /// <summary>
+/// (object sender, RequestPlayCardEventArgs) args)
+/// </summary>
+public class OnRequestPlayCardAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToRequestPlayCard(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(RequestPlayCardEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, RequestPlayCardEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToRequestPlayCard(delegate(object sender, RequestPlayCardEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void RequestPlayCardEvent (object sender, RequestPlayCardEventArgs args);
+
+    public class RequestPlayCardEventArgs {        public  IEntity CardId { get; }
+        public  IEntity Target { get; }
+        public  List<bool> CanPlay { get; set;} 
+=new List<bool>();        public  RequestPlayCardEventArgs (IEntity CardId, IEntity Target   ){
+                  this.CardId = CardId; 
+              this.Target = Target; 
+}
+
+        }/// <summary>
 /// (object sender, CardPlayedEventArgs) args)
 /// </summary>
 public class OnCardPlayedAttribute : EventsBaseAttribute {

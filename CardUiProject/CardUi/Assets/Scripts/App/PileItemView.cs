@@ -12,7 +12,6 @@ public class PileItemView<T> : View<T>, IEndDragHandler, IPileItemView, IDragHan
     IBeginDragHandler where T : IPileItem
 {
     private PileView TargetPileView { get; set; }
-    private IPileView CurrentPileView { get; set; }
 
 
     public ISortHandler SortHandler { get; private set; }

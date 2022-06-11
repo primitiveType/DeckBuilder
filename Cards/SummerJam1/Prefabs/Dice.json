@@ -4,12 +4,16 @@
   "Id": 30,
   "m_Components": [
     {
-      "$type": "SummerJam1.DamageUnitCard, SummerJam1",
+      "$type": "SummerJam1.Cards.DamageUnitCard, SummerJam1",
       "DamageAmount": 10
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Dice"
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Cost": 1
     }
   ]
 }

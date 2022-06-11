@@ -29,8 +29,26 @@ namespace Api
         {
             CollectionImplementation.Add(item);
             invokeBeforeEvent?.Invoke();
-            CollectionChanged?.Invoke(this,
-                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new List<T> { item }));
+            InvokeEvent(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new List<T> { item }));
+        }
+
+        private void InvokeEvent(NotifyCollectionChangedEventArgs args)
+        {
+            if (CollectionChanged != null)
+            {
+                // ReSharper disable once PossibleInvalidCastExceptionInForeachLoop
+                foreach (NotifyCollectionChangedEventHandler handler in CollectionChanged.GetInvocationList())
+                {
+                    try
+                    {
+                        handler(this, args);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Error in the handler {0}: {1}", handler.Method.Name, e.Message);
+                    }
+                }
+            }
         }
 
         public void Add(T item)
@@ -43,8 +61,7 @@ namespace Api
         {
             var oldItems = CollectionImplementation.ToList();
             CollectionImplementation.Clear();
-            CollectionChanged?.Invoke(this,
-                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItems));
+            InvokeEvent(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItems));
         }
 
         public bool Contains(T item)
@@ -63,8 +80,8 @@ namespace Api
             if (removed)
             {
                 invokeBeforeEvent?.Invoke();
-                CollectionChanged?.Invoke(this,
-                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, new List<T> { item }));
+                InvokeEvent(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
+                    new List<T> { item }));
             }
 
             return removed;

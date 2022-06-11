@@ -7,6 +7,8 @@ namespace CardsAndPiles
     {
         public bool TryPlayCard(IEntity target)
         {
+            ((CardEvents)Context.Events).OnRequestPlayCard(new RequestPlayCardEventArgs(Entity, target));
+
             if (!PlayCard(target))
             {
                 return false;
@@ -24,6 +26,7 @@ namespace CardsAndPiles
             return parent.GetComponent<IPile>() != null;
         }
 
+        
         public virtual bool AcceptsChild(IEntity child)
         {
             return true;

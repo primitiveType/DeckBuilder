@@ -1,4 +1,5 @@
 ﻿using CardsAndPiles;
+using Newtonsoft.Json;
 
 namespace SummerJam1.Cards
 {
@@ -6,8 +7,8 @@ namespace SummerJam1.Cards
     {
         protected new SummerJam1Events Events => (SummerJam1Events)base.Events;
 
-        public bool CanDrag => Entity.Parent == Game.Hand.Entity;//can only drag while in hand.
-        protected SummerJam1Game Game { get; private set; }        
+        [JsonIgnore] public bool CanDrag => Entity.Parent == Game.Battle.Hand.Entity; //can only drag while in hand.
+        protected SummerJam1Game Game { get; private set; }
 
         protected override void Initialize()
         {
@@ -21,7 +22,7 @@ namespace SummerJam1.Cards
         {
             if (args.CardId == Entity)
             {
-                args.CardId.TrySetParent(Context.Root.GetComponent<SummerJam1Game>().Discard);
+                args.CardId.TrySetParent(Context.Root.GetComponent<SummerJam1Game>().Battle.Discard);
             }
         }
     }

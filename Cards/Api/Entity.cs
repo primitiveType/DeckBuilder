@@ -20,10 +20,10 @@ namespace Api
         public Context Context { get; private set; }
         [JsonProperty] public int Id { get; private set; } = -1;
 
-        public IChildrenCollection<Component> Components => m_Components;
+        public IChildrenCollection<Component> Components => ComponentsInternal;
 
         [JsonProperty]
-        private ChildrenCollection<Component> m_Components { get; set; } = new ChildrenCollection<Component>();
+        private ChildrenCollection<Component> ComponentsInternal { get; set; } = new ChildrenCollection<Component>();
 
         public LifecycleState State { get; private set; }
 
@@ -58,6 +58,11 @@ namespace Api
         public void Destroy()
         {
             Terminate();
+            SetParent(null);
+            foreach (var child in Children)
+            {
+                child.Destroy();
+            }
             State = LifecycleState.Destroyed;
         }
 
@@ -103,21 +108,18 @@ namespace Api
             return m_Children.Remove(entity);
         }
 
-        private void SetParent(IEntity parent)
+        private void SetParent(IEntity newParent)
         {
-            if (Parent == parent)
+            if (Parent == newParent)
             {
                 return;
             }
 
-            if (Parent != null)
-            {
-                ((Entity)Parent).RemoveChild(this);
-            }
+            ((Entity)Parent)?.RemoveChild(this);
 
-            if (parent != null)
+            if (newParent != null)
             {
-                ((Entity)parent).AddChild(this);
+                ((Entity)newParent).AddChild(this);
             }
             else
             {
@@ -242,11 +244,11 @@ namespace Api
             T component = new T();
             if (State == LifecycleState.Initialized)
             {
-                m_Components.Add(component, () => { component.InternalInitialize(this); });
+                ComponentsInternal.Add(component, () => { component.InternalInitialize(this); });
             }
             else
             {
-                m_Components.Add(component);
+                ComponentsInternal.Add(component);
             }
 
             return component;
@@ -254,7 +256,7 @@ namespace Api
 
         public bool RemoveComponent(Component toRemove)
         {
-            if (!m_Components.Remove(toRemove))
+            if (!ComponentsInternal.Remove(toRemove))
             {
                 return false;
             }

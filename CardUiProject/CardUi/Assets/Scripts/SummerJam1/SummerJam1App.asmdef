@@ -11,7 +11,8 @@
     "precompiledReferences": [
         "SummerJam1.dll",
         "Api.dll",
-        "CardsAndPiles.dll"
+        "CardsAndPiles.dll",
+        "Newtonsoft.Json.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
