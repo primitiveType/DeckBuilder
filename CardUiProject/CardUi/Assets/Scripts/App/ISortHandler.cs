@@ -1,4 +1,7 @@
-﻿public interface ISortHandler
+﻿namespace App
 {
-    void SetDepth(int depth);
+    public interface ISortHandler
+    {
+        void SetDepth(int depth);
+    }
 }

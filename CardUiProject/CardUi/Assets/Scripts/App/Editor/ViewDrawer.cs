@@ -1,27 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
-using Api;
-using CardsAndPiles;
-using Common;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
-[CustomPropertyDrawer(typeof(PileView))]
-public class PileView : PropertyDrawer 
+namespace App.Editor
 {
-    public override VisualElement CreatePropertyGUI(SerializedProperty property)
+    [CustomPropertyDrawer(typeof(PileView))]
+    public class PileView : PropertyDrawer 
     {
-        // Create property container element.
-        var container = new VisualElement();
+        public override VisualElement CreatePropertyGUI(SerializedProperty property)
+        {
+            // Create property container element.
+            var container = new VisualElement();
 
-        // Create property fields.
-        var modelField = new PropertyField(property.FindPropertyRelative(nameof(Common.PileView.Model)));
+            // Create property fields.
+            var modelField = new PropertyField(property.FindPropertyRelative(nameof(App.PileView.Model)));
 
-        // Add fields to the container.
-        container.Add(modelField);
+            // Add fields to the container.
+            container.Add(modelField);
 
-        return container;
+            return container;
+        }
     }
 }

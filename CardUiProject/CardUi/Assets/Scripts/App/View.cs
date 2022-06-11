@@ -1,26 +1,21 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Api;
-using App;
 using UnityEngine;
 using IComponent = Api.IComponent;
 
-namespace Common
+namespace App
 {
     public class View<T> : MonoBehaviour, IView<T> where T : IComponent
     {
         public IEntity Entity { get; private set; }
         public T Model { get; private set; }
-        protected List<IDisposable> Disposables = new List<IDisposable>(2);
-
-        [SerializeField] private bool m_Initialized_Tester;
+        protected List<IDisposable> Disposables { get; } = new List<IDisposable>(2);
 
         public void SetModel(IEntity entity)
         {
-            m_Initialized_Tester = true;
             Entity = entity;
             Model = entity.GetComponent<T>();
             if (Model == null)
@@ -40,13 +35,12 @@ namespace Common
             if (propertyChangedEventArgs.PropertyName == nameof(IEntity.State) &&
                 Entity.State == LifecycleState.Destroyed)
             {
-                AnimationQueue.Instance.Enqueue(Destroy);
+                Disposables.Add(AnimationQueue.Instance.Enqueue(Destroy));
             }
         }
 
-        private IEnumerator Destroy()
+        private void Destroy()
         {
-            yield return null;
             if (this != null && gameObject != null)
             {
                 Destroy(gameObject);
@@ -61,7 +55,7 @@ namespace Common
         {
             if (Entity == null)
             {
-                IView parentView = GetComponentsInParent<IView>().FirstOrDefault(item => item != this && item.Entity != null);
+                IView parentView = GetComponentsInParent<IView>().FirstOrDefault(item => !ReferenceEquals(item, this) && item.Entity != null);
                 if (parentView?.Entity != null)
                 {
                     SetModel(parentView.Entity);
@@ -112,6 +106,11 @@ namespace Common
             if (Entity != null)
             {
                 Entity.PropertyChanged -= OnEntityDestroyed;
+            }
+
+            foreach (IDisposable disposable in Disposables)
+            {
+                disposable.Dispose();
             }
         }
     }

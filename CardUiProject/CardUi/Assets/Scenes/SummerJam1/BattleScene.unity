@@ -1013,7 +1013,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1594e83a09e4114f81e46136de03ae1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Initialized_Tester: 0
   m_Collider: {fileID: 1480529287}
 --- !u!1 &1507073450
 GameObject:
@@ -1715,7 +1714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a6b31cd6ac04fa594ae109b74445308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentTransform: {fileID: 6402997778073334125}
+  m_ParentTransform: {fileID: 6402997778073334125}
 --- !u!4 &6402997776325118334
 Transform:
   m_ObjectHideFlags: 0
@@ -1778,7 +1777,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cdb30ad5d6af004aafa74108c3d62bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Initialized_Tester: 0
 --- !u!65 &6402997776667861379
 BoxCollider:
   m_ObjectHideFlags: 0

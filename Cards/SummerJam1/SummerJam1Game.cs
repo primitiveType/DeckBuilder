@@ -31,11 +31,8 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
             for (int i = 0; i < 20; i++)
             {
-                Context.CreateEntity(Deck.Entity, entity =>
-                {
-                    entity.AddComponent<StarterUnitCard>();
-                    entity.AddComponent<NameComponent>().Value = "Pepper";
-                });
+                Context.CreateEntity(Deck.Entity, "Starter.json");
+                Context.CreateEntity(Deck.Entity, "Starter.json");
                 Context.CreateEntity(Deck.Entity, "Dice.json");
                 Context.CreateEntity(Deck.Entity, "DrawNewHand.json");
             }

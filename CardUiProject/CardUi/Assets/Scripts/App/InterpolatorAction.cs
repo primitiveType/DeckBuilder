@@ -1,1 +1,4 @@
-public delegate bool InterpolatorAction(float t);
+namespace App
+{
+    public delegate bool InterpolatorAction(float t);
+}

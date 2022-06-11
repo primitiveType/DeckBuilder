@@ -1,62 +1,64 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using Api;
-using App;
 using UnityEngine;
 
-public class PileOrganizer : MonoBehaviour
+namespace App
 {
-    protected IPileView PileView { get; set; }
-
-    protected virtual void Start()
+    public class PileOrganizer : MonoBehaviour
     {
-        PileView = GetComponentInParent<IPileView>();
-        PileView.Entity.Children.CollectionChanged += OnPileChanged;
-        foreach (IEntity child in PileView.Entity.Children)
-        {
-            OnItemAdded(child);
-        }
-    }
+        protected IPileView PileView { get; set; }
+        protected List<IDisposable> Disposables { get; } = new List<IDisposable>();
 
-    private void OnPileChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action == NotifyCollectionChangedAction.Add)
+        protected virtual void Start()
         {
-            foreach (IEntity added in e.NewItems)
+            PileView = GetComponentInParent<IPileView>();
+            PileView.Entity.Children.CollectionChanged += OnPileChanged;
+            foreach (IEntity child in PileView.Entity.Children)
             {
-                AnimationQueue.Instance.Enqueue(() =>
-                {
-                    OnItemAdded(added);
-                    return null;
-                });
+                OnItemAdded(child);
             }
         }
 
-        else if (e.Action == NotifyCollectionChangedAction.Remove)
+        private void OnPileChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            foreach (IEntity removed in e.OldItems)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                AnimationQueue.Instance.Enqueue(() =>
+                foreach (IEntity added in e.NewItems)
                 {
-                    OnItemRemoved(removed);
-                    return null;
-                });
+                    Disposables.Add(AnimationQueue.Instance.Enqueue((() => { OnItemAdded(added); })));
+                }
+            }
+
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (IEntity removed in e.OldItems)
+                {
+                    Disposables.Add(AnimationQueue.Instance.Enqueue((() => { OnItemRemoved(removed); })));
+                }
             }
         }
-    }
 
-    protected virtual void OnItemRemoved(IEntity removed)
-    {
-    }
+        protected virtual void OnItemRemoved(IEntity removed)
+        {
+        }
 
-    protected virtual void OnItemAdded(IEntity added)
-    {
-        IGameObject view = added.GetComponent<IGameObject>();
-        view.gameObject.transform.SetParent(transform);
-    }
+        protected virtual void OnItemAdded(IEntity added)
+        {
+            IGameObject view = added.GetComponent<IGameObject>();
+            view.gameObject.transform.SetParent(transform);
+            view.gameObject.transform.localPosition= Vector3.zero;
+            
+        }
 
-    private void OnDestroy()
-    {
-        PileView.Entity.Children.CollectionChanged -= OnPileChanged;
+        private void OnDestroy()
+        {
+            PileView.Entity.Children.CollectionChanged -= OnPileChanged;
+            foreach (IDisposable disposable in Disposables)
+            {
+                disposable.Dispose();
+            }
+        }
     }
 }

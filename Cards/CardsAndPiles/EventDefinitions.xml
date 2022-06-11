@@ -8,6 +8,7 @@
     <event id="CardPlayed">
         <arg name="CardId" type="IEntity"/>
         <arg name="Target" type="IEntity"/>
+        <arg name="IsFree" type="bool"/>
     </event>
     <event id="CardCreated">
         <arg name="CardId" type="IEntity"/>

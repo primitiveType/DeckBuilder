@@ -1,46 +1,57 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Api;
+using App.Utility;
+using External.UnityAsync.UnityAsync.Assets.UnityAsync;
+using External.UnityAsync.UnityAsync.Assets.UnityAsync.Await;
+using External.UnityAsync.UnityAsync.Assets.UnityAsync.AwaitInstructions;
 using UnityEngine;
 
 namespace App
 {
     public class AnimationQueue : MonoBehaviourSingleton<AnimationQueue>
     {
-        private Queue<Func<IEnumerator>> Queue { get; set; } = new Queue<Func<IEnumerator>>();
-        private LinkedList<Func<IEnumerator>> NewQueue { get; } = new LinkedList<Func<IEnumerator>>();
+        private LinkedList<Func<Task>> Queue { get; } = new LinkedList<Func<Task>>();
+        private bool Running => true;
 
-        public IDisposable Enqueue(Func<IEnumerator> routine)
+        public IDisposable Enqueue(Action action)
         {
-            EventHandle<EventArgs> handle = new EventHandle<EventArgs>(null, () => { NewQueue.Remove(routine); });
-            NewQueue.AddLast(routine);
+            return Enqueue(() => { action(); return Task.CompletedTask; });
+        }
+        public IDisposable Enqueue(Func<Task> routine)
+        {
+            EventHandle<EventArgs> handle = new EventHandle<EventArgs>(null, () => { Queue.Remove(routine); });
+            Queue.AddLast(routine);
             return handle;
         }
 
-        private IEnumerator QueueRoutine(Func<IEnumerator> routine)
-        {
-            yield return null;
-            yield return StartCoroutine((routine.Invoke()));
-        }
 
         protected override void Awake()
         {
             base.Awake();
-            StartCoroutine(AnimationLoop());
+            AnimationLoop();
         }
 
-        private IEnumerator AnimationLoop()
+        private async void AnimationLoop()
         {
-            while (true)
+            while (Running)
             {
-                yield return null;
-                if (Queue.Any())
+                try
                 {
-                    Func<IEnumerator> current = Queue.Dequeue();
-                    yield return current.Invoke();
+                    while (Queue.Any())
+                    {
+                        Func<Task> current = Queue.First();
+                        Queue.RemoveFirst();
+                        await current();
+                    }
                 }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                }
+                await Await.NextUpdate();
             }
         }
     }

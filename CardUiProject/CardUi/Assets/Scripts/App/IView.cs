@@ -1,12 +1,14 @@
 ﻿using Api;
-using Common;
 
-public interface IView<out T> : IView
+namespace App
 {
-    T Model { get; }
-}
+    public interface IView<out T> : IView
+    {
+        T Model { get; }
+    }
 
-public interface ISetModel
-{
-    void SetModel(IEntity entity);
+    public interface ISetModel
+    {
+        void SetModel(IEntity entity);
+    }
 }

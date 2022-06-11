@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 
-public interface IGameObject
+namespace App
 {
-    // ReSharper disable once InconsistentNaming Use Unity naming.
-     public GameObject gameObject { get; }
+    public interface IGameObject
+    {
+        // ReSharper disable once InconsistentNaming Use Unity naming.
+        public GameObject gameObject { get; }
+    }
 }

@@ -2,7 +2,9 @@
     "name": "SummerJam1App",
     "rootNamespace": "",
     "references": [
-        "App"
+        "App",
+        "UnityAsync",
+        "SimpleHealthBar"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

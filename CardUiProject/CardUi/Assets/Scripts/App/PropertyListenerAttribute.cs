@@ -1,16 +1,16 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Common
+namespace App
 {
     [MeansImplicitUse]
     public class PropertyListenerAttribute : Attribute
     {
-        public readonly string m_NameFilter;
+        public readonly string NameFilter;
 
         public PropertyListenerAttribute(string nameFilter = null)
         {
-            m_NameFilter = nameFilter;
+            NameFilter = nameFilter;
         }
     }
 }

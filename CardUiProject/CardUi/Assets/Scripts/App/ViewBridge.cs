@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using Component = Api.Component;
 
-namespace Common
+namespace App
 {
    public abstract class ViewBridge<T, TThis> : Component, IGameObject where T : IComponent where TThis : Component, new()
    {

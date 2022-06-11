@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using App;
-using Common;
 using SummerJam1;
+using SummerJam1.Units;
 using UnityEngine;
 
 public class UnitRendererComponent : View<VisualComponent>
@@ -14,17 +12,22 @@ public class UnitRendererComponent : View<VisualComponent>
     [PropertyListener(nameof(VisualComponent.AssetName))]
     private void OnAssetNameChanged(object sender, PropertyChangedEventArgs args)
     {
-        AnimationQueue.Instance.Enqueue(() =>
+        Disposables.Add(AnimationQueue.Instance.Enqueue(() =>
         {
             if (CurrentRenderer != null)
             {
                 Destroy(CurrentRenderer);
             }
 
+            
             CurrentRenderer = SummerJam1UnitFactory.Instance.GetInstance(Model.AssetName);
             CurrentRenderer.transform.SetParent(transform);
             CurrentRenderer.transform.localPosition = new Vector3();
-            return null;
-        });
+            if (Entity.GetComponentInParent<FriendlyUnitSlot>() != null)
+            {
+                var scale = CurrentRenderer.transform.localScale;
+                CurrentRenderer.transform.localScale = new Vector3(-1 * scale.x, scale.y, scale.z);
+            }
+        }));
     }
 }

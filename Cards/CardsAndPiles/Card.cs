@@ -1,4 +1,5 @@
-﻿using Api;
+﻿using System.Linq;
+using Api;
 using CardsAndPiles.Components;
 
 namespace CardsAndPiles
@@ -13,14 +14,20 @@ namespace CardsAndPiles
 
         public bool TryPlayCard(IEntity target)
         {
-            ((CardEvents)Context.Events).OnRequestPlayCard(new RequestPlayCardEventArgs(Entity, target));
+            var args = new RequestPlayCardEventArgs(Entity, target);
+            ((CardEvents)Context.Events).OnRequestPlayCard(args);
+
+            if (args.CanPlay.Any((canPlay) => !canPlay))
+            {
+                return false;
+            }
 
             if (!PlayCard(target))
             {
                 return false;
             }
 
-            ((CardEvents)Context.Events).OnCardPlayed(new CardPlayedEventArgs(Entity, target));
+            ((CardEvents)Context.Events).OnCardPlayed(new CardPlayedEventArgs(Entity, target, false));
             return true;
 
         }

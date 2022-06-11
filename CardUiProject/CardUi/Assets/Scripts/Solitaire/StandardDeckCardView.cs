@@ -1,24 +1,25 @@
-﻿using Api;
-using Common;
-using Solitaire;
+﻿using App;
 using UnityEngine;
 
-public class StandardDeckCardView : PileItemView<StandardDeckCard>
+namespace Solitaire
 {
-    public Suit Suit => Model.Suit;
-    public int Number => Model.Number;
-
-    [SerializeField] private SpriteRenderer SpriteRenderer;
-
-
-    protected override void OnInitialized()
+    public class StandardDeckCardView : PileItemView<StandardDeckCard>
     {
-        base.OnInitialized();
-        if(SpriteRenderer)
-        {
-            SpriteRenderer.sprite = SolitaireHelper.Instance.GetCardSprite(Number, Suit);
-        }
+        public Suit Suit => Model.Suit;
+        public int Number => Model.Number;
 
-        gameObject.name = Model.GetName();
+        [SerializeField] private SpriteRenderer SpriteRenderer;
+
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            if(SpriteRenderer)
+            {
+                SpriteRenderer.sprite = SolitaireHelper.Instance.GetCardSprite(Number, Suit);
+            }
+
+            gameObject.name = Model.GetName();
+        }
     }
 }

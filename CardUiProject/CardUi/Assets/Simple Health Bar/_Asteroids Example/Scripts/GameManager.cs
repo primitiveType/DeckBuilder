@@ -1,10 +1,11 @@
 ﻿/* Written by Kaz Crowe */
 /* GameManager.cs */
-using UnityEngine;
+
 using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace SimpleHealthBar_SpaceshipExample
+namespace Simple_Health_Bar._Asteroids_Example.Scripts
 {
 	public class GameManager : MonoBehaviour
 	{

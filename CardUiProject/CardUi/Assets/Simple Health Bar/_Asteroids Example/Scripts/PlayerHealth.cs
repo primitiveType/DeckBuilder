@@ -1,9 +1,11 @@
 ﻿/* Written by Kaz Crowe */
 /* PlayerHealth.cs */
-using UnityEngine;
-using System.Collections;
 
-namespace SimpleHealthBar_SpaceshipExample
+using System.Collections;
+using Simple_Health_Bar.Scripts;
+using UnityEngine;
+
+namespace Simple_Health_Bar._Asteroids_Example.Scripts
 {
 	public class PlayerHealth : MonoBehaviour
 	{

@@ -1,0 +1,24 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 63,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.StarterUnitCard, SummerJam1",
+      "PrefabName": "StarterUnit.json",
+      "Description": "Summon an IceCream that turns into HeadCheese."
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Starter"
+    },
+    {
+      "$type": "CardsAndPiles.Draggable, CardsAndPiles",
+      "CanDrag": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Cost": 1
+    }
+  ]
+}

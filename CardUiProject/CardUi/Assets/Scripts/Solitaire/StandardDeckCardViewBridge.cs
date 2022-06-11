@@ -1,12 +1,10 @@
-﻿using System.Collections.Specialized;
-using Api;
-using Solitaire;
+﻿using App;
 using UnityEngine;
-using Component = Api.Component;
-using Common;
 
-
-public class StandardDeckCardViewBridge : ViewBridge<StandardDeckCard, StandardDeckCardViewBridge>
+namespace Solitaire
 {
-    public override GameObject Prefab => SolitaireHelper.Instance.CardPrefab;
+    public class StandardDeckCardViewBridge : ViewBridge<StandardDeckCard, StandardDeckCardViewBridge>
+    {
+        public override GameObject Prefab => SolitaireHelper.Instance.CardPrefab;
+    }
 }

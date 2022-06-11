@@ -1,9 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Api;
-using Common;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 namespace App
 {
@@ -11,6 +11,7 @@ namespace App
     {
         private IEntity Entity { get; set; }
         protected T Component { get; private set; }
+        protected readonly List<IDisposable> Disposables = new List<IDisposable>(2);
 
         protected virtual void Start()
         {
@@ -71,6 +72,10 @@ namespace App
         protected virtual void OnDestroy()
         {
             Entity.Components.CollectionChanged -= ComponentsOnCollectionChanged;
+            foreach (IDisposable disposable in Disposables)
+            {
+                disposable.Dispose();
+            }
         }
     }
 }

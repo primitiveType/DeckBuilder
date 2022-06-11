@@ -1,5 +1,8 @@
-public enum QueueType
+namespace App
 {
-    Instant,
-    Queued
+    public enum QueueType
+    {
+        Instant,
+        Queued
+    }
 }

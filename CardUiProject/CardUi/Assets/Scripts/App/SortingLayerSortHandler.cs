@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 
-public class SortingLayerSortHandler : MonoBehaviour, ISortHandler
+namespace App
 {
-    [SerializeField] private SpriteRenderer SpriteRenderer;
-
-    public void SetDepth(int depth)
+    public class SortingLayerSortHandler : MonoBehaviour, ISortHandler
     {
-        if (SpriteRenderer != null)
-        {
-            SpriteRenderer.sortingOrder = depth;
-        }
+        [SerializeField] private SpriteRenderer SpriteRenderer;
 
-        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -depth * .25f);
+        public void SetDepth(int depth)
+        {
+            if (SpriteRenderer != null)
+            {
+                SpriteRenderer.sortingOrder = depth;
+            }
+
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -depth * .25f);
+        }
     }
 }

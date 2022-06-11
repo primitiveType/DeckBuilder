@@ -1,81 +1,82 @@
-using System;
 using System.ComponentModel;
 using CardsAndPiles;
-using Common;
 using Stateless;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DraggableComponent : View<IDraggable>, IDragHandler, IBeginDragHandler, IEndDragHandler
+namespace App
 {
-    private Vector3 targetPosition { get; set; }
-
-    private Vector3 offset { get; set; }
-    private bool dragging { get; set; }
-
-    protected override void Start()
+    public class DraggableComponent : View<IDraggable>, IDragHandler, IBeginDragHandler, IEndDragHandler
     {
-        base.Start();
-        InputStateManager.Instance.StateMachine.OnTransitioned(OnInputStateChanged);
-        SetEnabledState();
-    }
+        private Vector3 TargetPosition { get; set; }
 
-    [PropertyListener(nameof(Draggable.CanDrag))]
-    private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        SetEnabledState();
-    }
+        private Vector3 Offset { get; set; }
+        private bool Dragging { get; set; }
 
-
-    private void OnInputStateChanged(StateMachine<InputState, InputAction>.Transition obj)
-    {
-        SetEnabledState();
-    }
-
-    private void SetEnabledState()
-    {
-        if (this == null || this.Model == null)
+        protected override void Start()
         {
-            return; //hack
+            base.Start();
+            InputStateManager.Instance.StateMachine.OnTransitioned(OnInputStateChanged);
+            SetEnabledState();
         }
 
-        enabled = Model.CanDrag && InputStateManager.Instance.StateMachine.CanFire(InputAction.Drag);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (dragging)
-        { //should lerp
-            transform.position = targetPosition;
+        [PropertyListener(nameof(Draggable.CanDrag))]
+        private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            SetEnabledState();
         }
-    }
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        Vector3 cursorWorld = GetWorldPoint(eventData);
-        targetPosition = new Vector3(offset.x + cursorWorld.x, offset.y + cursorWorld.y, transform.position.z);
-    }
 
-    private Vector3 GetWorldPoint(PointerEventData eventData)
-    {
-        return eventData.pressEventCamera.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y,
-            transform.position.z));
-    }
+        private void OnInputStateChanged(StateMachine<InputState, InputAction>.Transition obj)
+        {
+            SetEnabledState();
+        }
 
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        dragging = true;
-        InputStateManager.Instance.StateMachine.Fire(InputAction.Drag);
-        Vector3 cursorWorld = GetWorldPoint(eventData);
+        private void SetEnabledState()
+        {
+            if (this == null || this.Model == null)
+            {
+                return; //hack
+            }
 
-        offset = transform.position - cursorWorld;
-    }
+            enabled = Model.CanDrag && InputStateManager.Instance.StateMachine.CanFire(InputAction.Drag);
+        }
 
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        dragging = false;
-        InputStateManager.Instance.StateMachine.Fire(InputAction.EndDrag);
+        // Update is called once per frame
+        void Update()
+        {
+            if (Dragging)
+            { //should lerp
+                transform.position = TargetPosition;
+            }
+        }
 
+        public void OnDrag(PointerEventData eventData)
+        {
+            Vector3 cursorWorld = GetWorldPoint(eventData);
+            TargetPosition = new Vector3(Offset.x + cursorWorld.x, Offset.y + cursorWorld.y, transform.position.z);
+        }
+
+        private Vector3 GetWorldPoint(PointerEventData eventData)
+        {
+            return eventData.pressEventCamera.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y,
+                transform.position.z));
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            Dragging = true;
+            InputStateManager.Instance.StateMachine.Fire(InputAction.Drag);
+            Vector3 cursorWorld = GetWorldPoint(eventData);
+
+            Offset = transform.position - cursorWorld;
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            Dragging = false;
+            InputStateManager.Instance.StateMachine.Fire(InputAction.EndDrag);
+
+        }
     }
 }

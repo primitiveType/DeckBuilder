@@ -1,10 +1,9 @@
 using System.ComponentModel;
 using CardsAndPiles.Components;
-using Common;
 using TMPro;
 using UnityEngine;
 
-namespace SummerJam1
+namespace App
 {
     public class NameView : View<NameComponent>
     {

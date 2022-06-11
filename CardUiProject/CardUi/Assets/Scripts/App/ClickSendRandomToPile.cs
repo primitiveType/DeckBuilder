@@ -1,27 +1,30 @@
+using App.Utility;
 using CardsAndPiles;
-using Common;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ClickSendRandomToPile : MonoBehaviour, IPointerClickHandler
+namespace App
 {
-    private IPileView PileView { get; set; }
-
-    [SerializeField] private PileView m_PileViewToSendTo;
-
-    // Start is called before the first frame update
-    void Start()
+    public class ClickSendRandomToPile : MonoBehaviour, IPointerClickHandler
     {
-        PileView = GetComponent<PileView>();
-    }
+        private IPileView PileView { get; set; }
 
+        [SerializeField] private PileView m_PileViewToSendTo;
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (PileView.Entity.Children.Count > 0)
+        // Start is called before the first frame update
+        void Start()
         {
-            IPileItem card = PileView.Entity.Children.GetRandom().GetComponent<IPileItem>();
-            card.Entity.TrySetParent(m_PileViewToSendTo.Entity);
+            PileView = GetComponent<PileView>();
+        }
+
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (PileView.Entity.Children.Count > 0)
+            {
+                IPileItem card = PileView.Entity.Children.GetRandom().GetComponent<IPileItem>();
+                card.Entity.TrySetParent(m_PileViewToSendTo.Entity);
+            }
         }
     }
 }

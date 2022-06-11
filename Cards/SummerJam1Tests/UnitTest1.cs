@@ -52,7 +52,7 @@ namespace SummerJam1Tests
         public void Serialize_Card()
         {
             var card = Context.CreateEntity();
-            card.AddComponent<DamageUnitCard>();
+            card.AddComponent<StarterUnitCard>();
             card.AddComponent<EnemyUnitSlotConstraint>();
             card.AddComponent<NameComponent>();
             card.AddComponent<Draggable>().CanDrag = true;

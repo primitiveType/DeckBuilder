@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Common
+namespace App
 {
     public static class ReflectionService
     {
@@ -24,7 +24,7 @@ namespace Common
                 {
                     if (attribute is PropertyListenerAttribute propertyListenerAttribute)
                     {
-                        methods.Add(new PropertyListenerInfo(method, propertyListenerAttribute.m_NameFilter));
+                        methods.Add(new PropertyListenerInfo(method, propertyListenerAttribute.NameFilter));
                     }
                 }
             }

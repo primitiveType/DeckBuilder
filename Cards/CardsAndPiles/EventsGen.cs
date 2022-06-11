@@ -232,9 +232,11 @@ public class OnCardPlayedAttribute : EventsBaseAttribute {
 
     public class CardPlayedEventArgs {        public  IEntity CardId { get; }
         public  IEntity Target { get; }
-        public  CardPlayedEventArgs (IEntity CardId, IEntity Target   ){
+        public  bool IsFree { get; }
+        public  CardPlayedEventArgs (IEntity CardId, IEntity Target, bool IsFree   ){
                   this.CardId = CardId; 
               this.Target = Target; 
+              this.IsFree = IsFree; 
 }
 
         }/// <summary>

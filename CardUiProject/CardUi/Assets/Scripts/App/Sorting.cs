@@ -1,6 +1,9 @@
-﻿public enum Sorting
+﻿namespace App
 {
-    Default = 0,
-    PileItem = 10,
-    DraggedPileItem = 100
+    public enum Sorting
+    {
+        Default = 0,
+        PileItem = 10,
+        DraggedPileItem = 100
+    }
 }

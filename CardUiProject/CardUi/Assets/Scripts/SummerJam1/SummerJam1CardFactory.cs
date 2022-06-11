@@ -1,3 +1,4 @@
+using App.Utility;
 using UnityEngine;
 
 namespace SummerJam1

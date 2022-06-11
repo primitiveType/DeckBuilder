@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using Api;
 using App;
 using CardsAndPiles;
-using Common;
 using UnityEngine;
 
 public class DisableColliderUntilTurnStart : View<IComponent>
@@ -13,37 +10,32 @@ public class DisableColliderUntilTurnStart : View<IComponent>
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        ((CardEvents)Entity.Context.Events).SubscribeToTurnBegan(Enable);
-        ((CardEvents)Entity.Context.Events).SubscribeToTurnEnded(Disable);
+        Disposables.Add(((CardEvents)Entity.Context.Events).SubscribeToTurnBegan(Enable));
+        Disposables.Add(((CardEvents)Entity.Context.Events).SubscribeToTurnEnded(Disable));
     }
 
     private void Disable(object sender, TurnEndedEventArgs item)
     {
-        AnimationQueue.Instance.Enqueue(DisableCR);
+        Disposables.Add(AnimationQueue.Instance.Enqueue(DisableCR));
         m_Collider.enabled = false;
     }
 
-    private IEnumerator DisableCR()
+    private void DisableCR()
     {
         m_Collider.enabled = false;
-        yield return null;
+        
     }
 
-    private IEnumerator EnableCR()
+    private void EnableCR()
     {
         m_Collider.enabled = true;
-        yield return null;
     }
 
     private void Enable(object sender, TurnBeganEventArgs item)
     {
-        AnimationQueue.Instance.Enqueue(EnableCR);
+        Disposables.Add(AnimationQueue.Instance.Enqueue(EnableCR));
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

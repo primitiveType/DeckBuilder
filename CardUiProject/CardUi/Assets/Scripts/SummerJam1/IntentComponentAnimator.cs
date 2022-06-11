@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using Api;
-using Common;
-using SummerJam1;
+using System.Threading.Tasks;
+using App;
+using External.UnityAsync.UnityAsync.Assets.UnityAsync;
+using External.UnityAsync.UnityAsync.Assets.UnityAsync.Await;
 using SummerJam1.Units;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-namespace App
+namespace SummerJam1
 {
     public class IntentComponentAnimator : View<Unit>
     {
         [SerializeField] private Animator m_Animator;
         private static readonly int Attack = Animator.StringToHash("Attack");
         private List<IDisposable> Handles { get; } = new List<IDisposable>();
-        
+
         private bool IsAttacking { get; set; }
 
         protected override void Start()
@@ -28,18 +27,19 @@ namespace App
         {
             if (args.Entity == Entity)
             {
-                AnimationQueue.Instance.Enqueue(Routine);
+                Disposables.Add(AnimationQueue.Instance.Enqueue(Routine));
             }
         }
 
-        private IEnumerator Routine()
+
+        private async Task Routine()
         {
             IsAttacking = true;
             m_Animator.SetTrigger(Attack);
 
             while (IsAttacking)
             {
-                yield return null;
+                 await Await.NextUpdate();
             }
         }
 

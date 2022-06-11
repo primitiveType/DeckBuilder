@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Common
+namespace App
 {
     public struct PropertyListenerInfo
     {

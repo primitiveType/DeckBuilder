@@ -1,5 +1,8 @@
 ﻿using CardsAndPiles;
 
-public interface IPileView : IView<IPile>
+namespace App
 {
+    public interface IPileView : IView<IPile>
+    {
+    }
 }

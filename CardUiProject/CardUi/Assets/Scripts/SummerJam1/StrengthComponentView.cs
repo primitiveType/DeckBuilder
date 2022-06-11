@@ -1,8 +1,8 @@
-using SummerJam1;
+using App;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace App
+namespace SummerJam1
 {
     public class StrengthComponentView : ComponentView<Strength>
     {

@@ -1,8 +1,6 @@
-using Api;
 using CardsAndPiles;
-using UnityEngine;
 
-namespace Common
+namespace App
 {
     public class PileView : View<IPile>, IPileView
     {

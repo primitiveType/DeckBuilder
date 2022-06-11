@@ -1,14 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SummerJam1Menu : MonoBehaviour
+namespace App
 {
-  public void StartBattle()
+  public class SummerJam1Menu : MonoBehaviour
   {
-    SceneManager.LoadScene("Scenes/SummerJam1/BattleScene");
-  }
+    public void StartBattle()
+    {
+      SceneManager.LoadScene("Scenes/SummerJam1/BattleScene");
+    }
 
  
+  }
 }

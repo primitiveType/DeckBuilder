@@ -31,7 +31,7 @@ namespace SummerJam1
                 slotEntity.AddComponent<EnemyUnitSlot>();
             }
 
-            Context.CreateEntity(Entity, entity => BattleDeck = entity.AddComponent<DeckPile>());
+            //Context.CreateEntity(Entity, entity => BattleDeck = entity.AddComponent<DeckPile>());
             Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
 
         }

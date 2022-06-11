@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Api;
 using App;
 using CardsAndPiles;
-using Common;
 using SummerJam1.Units;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -36,8 +34,8 @@ namespace SummerJam1
             Context.SetPrefabsDirectory(Path.Combine("Assets", "External", "Library", "Prefabs"));
 
             IEntity game = Context.Root;
-            Events.SubscribeToUnitCreated(OnUnitCreated);
-            Events.SubscribeToCardCreated(OnCardCreated);
+            Disposables.Add(Events.SubscribeToUnitCreated(OnUnitCreated));
+            Disposables.Add(Events.SubscribeToCardCreated(OnCardCreated));
 
             Game.StartBattle();
         }
@@ -58,7 +56,7 @@ namespace SummerJam1
             HandPile.SetModel(Game.Battle.Entity.GetComponentInChildren<HandPile>().Entity);
             HandPile.Entity.GetOrAddComponent<PileViewBridge>().gameObject = HandPile.gameObject;
 
-            DeckPile.SetModel(Game.Battle.Entity.GetComponentInChildren<DeckPile>().Entity);
+            DeckPile.SetModel(Game.Battle.BattleDeck.Entity);
             DeckPile.Entity.GetOrAddComponent<PileViewBridge>().gameObject = DeckPile.gameObject;
 
             DiscardPile.SetModel(Game.Battle.Entity.GetComponentInChildren<PlayerDiscard>().Entity);
@@ -81,6 +79,8 @@ namespace SummerJam1
                 enemySlot.Entity.AddComponent<PileViewBridge>().gameObject = enemySlot.gameObject;
                 index++;
             }
+            
+            Debug.Log($"{Game.Entity.GetComponentsInChildren<Card>().Count} cards found in game.");
         }
 
         private void OnBattleEnded(object sender, BattleEndedEventArgs item)
@@ -94,12 +94,11 @@ namespace SummerJam1
                 Debug.Log("FAILURE.");
             }
 
-            AnimationQueue.Instance.Enqueue(ReturnToMenu);
+            Disposables.Add(AnimationQueue.Instance.Enqueue(ReturnToMenu));
         }
 
-        private IEnumerator ReturnToMenu()
+        private async void ReturnToMenu()
         {
-            yield return null;
             SceneManager.LoadScene("Scenes/SummerJam1/MenuScene");
         }
 

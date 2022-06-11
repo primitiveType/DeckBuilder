@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using Api;
-using UnityEngine;
+using App;
 
-public class SolitaireHandPileOrganizer : PileOrganizer
+namespace Solitaire
 {
+    public class SolitaireHandPileOrganizer : PileOrganizer
+    {
+    }
 }
