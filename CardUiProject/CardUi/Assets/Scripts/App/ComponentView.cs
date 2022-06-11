@@ -12,12 +12,13 @@ namespace App
         private IEntity Entity { get; set; }
         protected T Component { get; private set; }
 
-        private void Start()
+        protected virtual void Start()
         {
             IView view = GetComponentInParent<IView>();
             Entity = view.Entity;
             view.Entity.Components.CollectionChanged += ComponentsOnCollectionChanged;
             UpdateComponentReference();
+            ComponentOnPropertyChanged();
         }
 
         private void ComponentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

@@ -22,8 +22,15 @@ namespace Api
         {
             if (!IsDisposed)
             {
-                
-                Action.Invoke(sender, args);
+                try
+                {
+                    Action.Invoke(sender, args);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Caught exception invoking event handle! {e.Message}: {e.StackTrace}");
+                    throw;
+                }
             }
         }
         

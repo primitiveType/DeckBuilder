@@ -9,6 +9,9 @@
         <arg name="CardId" type="IEntity"/>
         <arg name="Target" type="IEntity"/>
     </event>
+    <event id="CardCreated">
+        <arg name="CardId" type="IEntity"/>
+    </event>
     <event id="CardDiscarded">
         <arg name="CardId" type="IEntity"/>
     </event>

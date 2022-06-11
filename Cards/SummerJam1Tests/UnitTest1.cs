@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
@@ -30,7 +31,7 @@ namespace SummerJam1Tests
         {
             var unitCard = MakeUnitCard();
             Game.StartBattle();
-            var unitSlot = Game.Entity.GetComponentInChildren<FriendlyUnitSlot>();
+            FriendlyUnitSlot unitSlot = Game.Entity.GetComponentsInChildren<FriendlyUnitSlot>().First(slot => slot.Entity.Children.Count == 0);
 
             Assert.NotNull(unitSlot);
             Assert.IsTrue(unitCard.TryPlayCard(unitSlot.Entity));

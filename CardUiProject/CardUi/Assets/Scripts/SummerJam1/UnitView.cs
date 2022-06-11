@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SummerJam1
 {
-    public class UnitView : View<Unit>, IPileItemView //seems sus
+    public class UnitView : View<Unit>, IPileItemView, ISetModel //seems sus
     {
         private Vector3 RendererSize { get; set; }
 

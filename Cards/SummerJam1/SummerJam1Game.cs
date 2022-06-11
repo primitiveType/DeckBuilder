@@ -2,6 +2,7 @@
 using CardsAndPiles.Components;
 using SummerJam1.Cards;
 using SummerJam1.Rules;
+using SummerJam1.Units;
 
 namespace SummerJam1
 {
@@ -16,8 +17,18 @@ namespace SummerJam1
         {
             base.Initialize();
             AddRules();
+            Context.CreateEntity(Entity, entity =>
+            {
+                Player = entity.AddComponent<Player>();
+                entity.AddComponent<PlayerUnit>();
+                entity.AddComponent<VisualComponent>().AssetName = SummerJam1UnitAsset.Player;
+                Health health = entity.AddComponent<Health>();
+                health.SetMax(100);
+                health.SetHealth(100);
+            });
+
             //create an example deck.
-            Context.CreateEntity(Entity, entity =>Deck= entity.AddComponent<DeckPile>());
+            Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
             for (int i = 0; i < 20; i++)
             {
                 Context.CreateEntity(Deck.Entity, entity =>
@@ -51,7 +62,17 @@ namespace SummerJam1
             }
 
             Context.CreateEntity(Entity, (entity) => { Battle = entity.AddComponent<BattleContainer>(); });
+            Player.Entity.TrySetParent(Battle.Entity.GetComponentInChildren<FriendlyUnitSlot>().Entity);
             Battle.StartBattle();
+        }
+
+        [OnBattleEnded]
+        private void OnBattleEnded(object sender, BattleEndedEventArgs args)
+        {
+            if (args.Victory)
+            {
+                Player.Entity.TrySetParent(Entity);
+            }
         }
     }
 

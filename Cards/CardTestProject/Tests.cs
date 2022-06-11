@@ -62,16 +62,13 @@ namespace CardTestProject
             entity.TrySetParent(game);
 
 
-            RequestDealDamageEventArgs
-                args = new RequestDealDamageEventArgs(3, entity, entity); //stop hitting yourself!
-            Events.OnRequestDealDamage(args);
+            health.TryDealDamage(3, entity);
 
 
             Assert.That(health.Amount, Is.EqualTo(7));
 
-            RequestDealDamageEventArgs
-                args2 = new RequestDealDamageEventArgs(30, entity, entity); //stop hitting yourself!
-            Events.OnRequestDealDamage(args2);
+            health.TryDealDamage(30, entity);
+
             Assert.That(health.Amount, Is.EqualTo(0));
         }
 

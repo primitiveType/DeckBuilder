@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Api;
 using UnityEngine;
 
 namespace App
@@ -9,9 +10,13 @@ namespace App
     public class AnimationQueue : MonoBehaviourSingleton<AnimationQueue>
     {
         private Queue<Func<IEnumerator>> Queue { get; set; } = new Queue<Func<IEnumerator>>();
-        public void Enqueue(Func<IEnumerator> routine)
+        private LinkedList<Func<IEnumerator>> NewQueue { get; } = new LinkedList<Func<IEnumerator>>();
+
+        public IDisposable Enqueue(Func<IEnumerator> routine)
         {
-            Queue.Enqueue(routine);
+            EventHandle<EventArgs> handle = new EventHandle<EventArgs>(null, () => { NewQueue.Remove(routine); });
+            NewQueue.AddLast(routine);
+            return handle;
         }
 
         private IEnumerator QueueRoutine(Func<IEnumerator> routine)
@@ -31,9 +36,9 @@ namespace App
             while (true)
             {
                 yield return null;
-                if(Queue.Any())
+                if (Queue.Any())
                 {
-                    var current = Queue.Dequeue();
+                    Func<IEnumerator> current = Queue.Dequeue();
                     yield return current.Invoke();
                 }
             }

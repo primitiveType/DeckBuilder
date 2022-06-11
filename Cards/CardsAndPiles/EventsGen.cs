@@ -39,6 +39,20 @@ public EventHandle<CardPlayedEventArgs> SubscribeToCardPlayed(EventHandleDelegat
     return handler;
 } 
     #endregion Code for event CardPlayed
+    #region Code for event CardCreated
+private event EventHandleDelegate<CardCreatedEventArgs> CardCreated;
+public virtual void OnCardCreated(CardCreatedEventArgs args)
+{
+    CardCreated?.Invoke(this, args);
+}
+
+public EventHandle<CardCreatedEventArgs> SubscribeToCardCreated(EventHandleDelegate<CardCreatedEventArgs> action)
+{
+    var handler = new EventHandle<CardCreatedEventArgs>(action, () => CardCreated -= action);
+    CardCreated += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event CardCreated
     #region Code for event CardDiscarded
 private event EventHandleDelegate<CardDiscardedEventArgs> CardDiscarded;
 public virtual void OnCardDiscarded(CardDiscardedEventArgs args)
@@ -221,6 +235,39 @@ public class OnCardPlayedAttribute : EventsBaseAttribute {
         public  CardPlayedEventArgs (IEntity CardId, IEntity Target   ){
                   this.CardId = CardId; 
               this.Target = Target; 
+}
+
+        }/// <summary>
+/// (object sender, CardCreatedEventArgs) args)
+/// </summary>
+public class OnCardCreatedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToCardCreated(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(CardCreatedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, CardCreatedEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToCardCreated(delegate(object sender, CardCreatedEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void CardCreatedEvent (object sender, CardCreatedEventArgs args);
+
+    public class CardCreatedEventArgs {        public  IEntity CardId { get; }
+        public  CardCreatedEventArgs (IEntity CardId   ){
+                  this.CardId = CardId; 
 }
 
         }/// <summary>

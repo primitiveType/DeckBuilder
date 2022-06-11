@@ -2,7 +2,7 @@
   "$type": "Api.Entity, Api",
   "m_Children": [],
   "Id": 30,
-  "m_Components": [
+  "ComponentsInternal": [
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Bread"

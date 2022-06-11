@@ -5,6 +5,12 @@ namespace CardsAndPiles
 {
     public abstract class Card : Component, IPileItem, IDescription
     {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            ((CardEvents)Context.Events).OnCardCreated(new CardCreatedEventArgs(Entity));
+        }
+
         public bool TryPlayCard(IEntity target)
         {
             ((CardEvents)Context.Events).OnRequestPlayCard(new RequestPlayCardEventArgs(Entity, target));

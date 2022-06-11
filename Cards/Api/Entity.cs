@@ -59,7 +59,7 @@ namespace Api
         {
             Terminate();
             SetParent(null);
-            foreach (var child in Children)
+            foreach (var child in Children.ToList())
             {
                 child.Destroy();
             }

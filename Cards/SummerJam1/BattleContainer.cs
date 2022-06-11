@@ -13,10 +13,10 @@ namespace SummerJam1
         public DeckPile BattleDeck { get; private set; }
         private IEntity SlotsParent { get; set; }
 
+        private SummerJam1Game Game { get; set; }
         protected override void Initialize()
         {
             base.Initialize();
-            
 
             SlotsParent = Context.CreateEntity(Entity);
             for (int i = 0; i < NumSlots; i++)
@@ -38,8 +38,8 @@ namespace SummerJam1
 
         public void StartBattle()
         {
-            SummerJam1Game game = Entity.GetComponentInParent<SummerJam1Game>();
-            BattleDeck = Context.DuplicateEntity(game.Deck.Entity).GetComponent<DeckPile>();
+            Game = Entity.GetComponentInParent<SummerJam1Game>();
+            BattleDeck = Context.DuplicateEntity(Game.Deck.Entity).GetComponent<DeckPile>();
             Context.CreateEntity(Entity, entity =>
                 Hand = entity.AddComponent<HandPile>());
 
@@ -55,9 +55,7 @@ namespace SummerJam1
         [OnEntityKilled]
         private void CheckForEndOfBattle(object sender, EntityKilledEventArgs args)
         {
-            bool alliesAlive = SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>()
-                .Any(slot =>
-                    slot.Entity.Children.Any(child => child != args.Entity && child.GetComponent<Unit>() != null));
+            bool alliesAlive = args.Entity != Game.Player.Entity;
             bool enemiesAlive = SlotsParent.GetComponentsInChildren<EnemyUnitSlot>()
                 .Any(slot =>
                     slot.Entity.Children.Any(child => child != args.Entity && child.GetComponent<Unit>() != null));
