@@ -13,4 +13,12 @@ namespace SummerJam1
         Noodles,
         Tofu
     }
+    
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum SummerJam1CardAsset
+    {
+        BlackPepper,
+        SpicyPepper,
+        PrepTalk
+    }
 }

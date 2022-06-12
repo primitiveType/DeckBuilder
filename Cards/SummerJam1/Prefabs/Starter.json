@@ -9,6 +9,10 @@
       "Description": "Summon an IceCream that turns into HeadCheese."
     },
     {
+      "$type": "SummerJam1.CardVisualComponent, SummerJam1",
+      "AssetName": "BlackPepper"
+    },
+    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Starter"
     },

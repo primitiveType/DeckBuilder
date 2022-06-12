@@ -15,9 +15,10 @@ namespace App
                 gameObject.SetActive(false);
                 return;
             }
+
             int amount = Component.CurrentEnergy;
             int max = Component.MaxEnergy;
-            Disposables.Add(AnimationQueue.Instance.Enqueue(( ()=>SomeRoutine(amount, max))));
+            Disposables.Add(AnimationQueue.Instance.Enqueue(() => SomeRoutine(amount, max)));
         }
 
         private void SomeRoutine(int health, int max)

@@ -1,3 +1,15 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: ef8d931e4d284ab18a7fdb8cf204e051
-timeCreated: 1654906840
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_CardPrefab: {fileID: 8432613368176806903, guid: fde407e0ce0511a41b41f4104ae399b5, type: 3}
+  - m_BlackPepper: {fileID: 1449543606289198506, guid: 377113d577d193642929714b2b18d80c, type: 3}
+  - m_SpicyPepper: {fileID: 93872474015220767, guid: 0167691e579fae54c996de26a2fbf04a, type: 3}
+  - m_PrepTalk: {fileID: 93872474015220767, guid: 474a0f8206fd9694ea1360e99c8d3a86, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

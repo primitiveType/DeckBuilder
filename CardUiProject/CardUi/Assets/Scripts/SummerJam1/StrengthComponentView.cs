@@ -9,6 +9,10 @@ namespace SummerJam1
         [SerializeField] private Text AmountText;
         protected override void ComponentOnPropertyChanged()
         {
+            if (this == null)
+            {
+                return;
+            }
             if (Component == null)
             {
                 enabled = false;

@@ -8,6 +8,10 @@
       "DamageAmount": 10
     },
     {
+      "$type": "SummerJam1.CardVisualComponent, SummerJam1",
+      "AssetName": "SpicyPepper"
+    },
+    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Dice"
     },

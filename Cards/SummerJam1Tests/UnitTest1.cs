@@ -55,6 +55,7 @@ namespace SummerJam1Tests
             card.AddComponent<StarterUnitCard>();
             card.AddComponent<EnemyUnitSlotConstraint>();
             card.AddComponent<NameComponent>();
+            card.AddComponent<CardVisualComponent>();
             card.AddComponent<Draggable>().CanDrag = true;
             card.AddComponent<EnergyCost>().Cost = 1;
 
@@ -71,7 +72,7 @@ namespace SummerJam1Tests
         public void Serialize_Unit()
         {
             IEntity unit = MakeUnit();
-            unit.AddComponent<VisualComponent>().AssetName = SummerJam1UnitAsset.Noodles;
+            unit.AddComponent<UnitVisualComponent>().AssetName = SummerJam1UnitAsset.Noodles;
             var health = unit.AddComponent<Health>();
             unit.AddComponent<ChangeVisualOnTransform>().UnitAsset = SummerJam1UnitAsset.HeadCheese;
             health.SetHealth(999);

@@ -4,7 +4,8 @@
     "references": [
         "App",
         "UnityAsync",
-        "SimpleHealthBar"
+        "SimpleHealthBar",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

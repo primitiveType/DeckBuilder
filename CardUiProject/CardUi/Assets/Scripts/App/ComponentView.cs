@@ -64,6 +64,10 @@ namespace App
 
         private void ComponentOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (this == null)
+            {
+                return;
+            }
             ComponentOnPropertyChanged();
         }
 
@@ -71,7 +75,11 @@ namespace App
 
         protected virtual void OnDestroy()
         {
-            Entity.Components.CollectionChanged -= ComponentsOnCollectionChanged;
+            if (Entity != null)
+            {
+                Entity.Components.CollectionChanged -= ComponentsOnCollectionChanged;
+            }
+
             foreach (IDisposable disposable in Disposables)
             {
                 disposable.Dispose();

@@ -8,6 +8,10 @@
       "Value": "DrawNewHand"
     },
     {
+      "$type": "SummerJam1.CardVisualComponent, SummerJam1",
+      "AssetName": "PrepTalk"
+    },
+    {
       "$type": "SummerJam1.Cards.DrawNewHandCard, SummerJam1"
     },
     {

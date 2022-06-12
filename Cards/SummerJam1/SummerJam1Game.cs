@@ -1,4 +1,5 @@
-﻿using CardsAndPiles;
+﻿using System;
+using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Cards;
 using SummerJam1.Rules;
@@ -13,15 +14,18 @@ namespace SummerJam1
         public BattleContainer Battle { get; private set; }
         public Player Player { get; private set; }
 
+        private UnitSlot TempPlayerSlot { get; set; }
+
         protected override void Initialize()
         {
             base.Initialize();
             AddRules();
+            Context.CreateEntity(Entity, entity => { TempPlayerSlot = entity.AddComponent<UnitSlot>(); });
             Context.CreateEntity(Entity, entity =>
             {
                 Player = entity.AddComponent<Player>();
                 entity.AddComponent<PlayerUnit>();
-                entity.AddComponent<VisualComponent>().AssetName = SummerJam1UnitAsset.Player;
+                entity.AddComponent<UnitVisualComponent>().AssetName = SummerJam1UnitAsset.Player;
                 Health health = entity.AddComponent<Health>();
                 health.SetMax(100);
                 health.SetHealth(100);
@@ -68,7 +72,7 @@ namespace SummerJam1
         {
             if (args.Victory)
             {
-                Player.Entity.TrySetParent(Entity);
+                Player.Entity.TrySetParent(TempPlayerSlot.Entity);
             }
         }
     }
@@ -93,9 +97,16 @@ namespace SummerJam1
 
 
         [OnTurnBegan]
+        [OnBattleStarted]
         private void OnTurnBegan()
         {
             CurrentEnergy = MaxEnergy;
+        }
+
+        public override void Terminate()
+        {
+            base.Terminate();
+            throw new Exception("Player terminated! NO!");
         }
     }
 }

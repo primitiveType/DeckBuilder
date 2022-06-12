@@ -11,7 +11,7 @@ namespace SummerJam1.Units
         {
             if (args.Entity == Entity)
             {
-                var visual = Entity.GetOrAddComponent<VisualComponent>();
+                var visual = Entity.GetOrAddComponent<UnitVisualComponent>();
                 visual.AssetName = UnitAsset;
             }
         }
