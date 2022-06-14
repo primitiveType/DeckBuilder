@@ -5,11 +5,11 @@
   "ComponentsInternal": [
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "DrawNewHand"
+      "Value": "Apron Pockets"
     },
     {
       "$type": "SummerJam1.CardVisualComponent, SummerJam1",
-      "AssetName": "PrepTalk"
+      "AssetName": "ApronPockets"
     },
     {
       "$type": "SummerJam1.Cards.DrawNewHandCard, SummerJam1"
@@ -17,6 +17,10 @@
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
       "Cost": 1
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "Discard your hand and draw 5 cards."
     }
   ]
 }

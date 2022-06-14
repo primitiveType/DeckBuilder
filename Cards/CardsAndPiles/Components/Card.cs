@@ -1,10 +1,13 @@
 ﻿using System.Linq;
 using Api;
-using CardsAndPiles.Components;
 
-namespace CardsAndPiles
+namespace CardsAndPiles.Components
 {
-    public abstract class Card : Component, IPileItem, IDescription
+    public class DescriptionComponent : Component, IDescription
+    {
+        public string Description { get; set; }
+    }
+    public abstract class Card : Component, IPileItem
     {
         protected override void Initialize()
         {
@@ -45,6 +48,5 @@ namespace CardsAndPiles
             return true;
         }
 
-        public abstract string Description { get; }
     }
 }

@@ -19,7 +19,7 @@ namespace Api
             Root = CreateEntity();
         }
 
-        private string PrefabsPath { get; set; }
+        public string PrefabsPath { get; private set; }
 
 
         public void SetPrefabsDirectory(string path)

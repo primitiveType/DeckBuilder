@@ -1,7 +1,10 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
-using SummerJam1.Cards;
 using SummerJam1.Rules;
 using SummerJam1.Units;
 
@@ -10,17 +13,22 @@ namespace SummerJam1
     public class SummerJam1Game : SummerJam1Component
     {
         public DeckPile Deck { get; private set; }
+        public SummerJam1PrizePile PrizePile { get; private set; }
 
         public BattleContainer Battle { get; private set; }
         public Player Player { get; private set; }
 
-        private UnitSlot TempPlayerSlot { get; set; }
+        private UnitSlot PlayerSlot { get; set; }
+
+        private Random Random { get; set; }
 
         protected override void Initialize()
         {
             base.Initialize();
             AddRules();
-            Context.CreateEntity(Entity, entity => { TempPlayerSlot = entity.AddComponent<UnitSlot>(); });
+            Random = Entity.AddComponent<Random>();
+            Context.CreateEntity(Entity, entity => PrizePile = entity.AddComponent<SummerJam1PrizePile>());
+            Context.CreateEntity(Entity, entity => { PlayerSlot = entity.AddComponent<UnitSlot>(); });
             Context.CreateEntity(Entity, entity =>
             {
                 Player = entity.AddComponent<Player>();
@@ -33,13 +41,13 @@ namespace SummerJam1
 
             //create an example deck.
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 2; i++)
             {
-                Context.CreateEntity(Deck.Entity, "Starter.json");
-                Context.CreateEntity(Deck.Entity, "Starter.json");
-                Context.CreateEntity(Deck.Entity, "Dice.json");
-                Context.CreateEntity(Deck.Entity, "DrawNewHand.json");
+                Context.CreateEntity(Deck.Entity, "Cards/Starter.json");
+                Context.CreateEntity(Deck.Entity, "Cards/Starter.json");
+                Context.CreateEntity(Deck.Entity, "Cards/Dice.json");
             }
+            
         }
 
         private void AddRules()
@@ -63,50 +71,20 @@ namespace SummerJam1
             }
 
             Context.CreateEntity(Entity, (entity) => { Battle = entity.AddComponent<BattleContainer>(); });
-            Player.Entity.TrySetParent(Battle.Entity.GetComponentInChildren<FriendlyUnitSlot>().Entity);
+            //Player.Entity.TrySetParent(Battle.GetBackMostEmptySlot());
             Battle.StartBattle();
         }
+        
 
-        [OnBattleEnded]
-        private void OnBattleEnded(object sender, BattleEndedEventArgs args)
+        public IEntity CreateRandomCard()
         {
-            if (args.Victory)
-            {
-                Player.Entity.TrySetParent(TempPlayerSlot.Entity);
-            }
+            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Cards"));
+            List<FileInfo> files = info.GetFiles().Where(file=>file.Extension == ".json").ToList();
+            int index = Random.SystemRandom.Next(files.Count - 1);
+
+            return Context.CreateEntity(null, Path.Combine("Cards", files[index].Name));
         }
-    }
-
-    public class Player : SummerJam1Component
-    {
-        public int CurrentEnergy { get; private set; }
-        public int MaxEnergy { get; private set; } = 3;
-
-        public bool TryUseEnergy(int amount)
-        {
-            if (CurrentEnergy < amount)
-            {
-                return false;
-            }
-
-            CurrentEnergy -= amount;
-            //invoke energy used.
-
-            return true;
-        }
-
-
-        [OnTurnBegan]
-        [OnBattleStarted]
-        private void OnTurnBegan()
-        {
-            CurrentEnergy = MaxEnergy;
-        }
-
-        public override void Terminate()
-        {
-            base.Terminate();
-            throw new Exception("Player terminated! NO!");
-        }
+        
+        
     }
 }

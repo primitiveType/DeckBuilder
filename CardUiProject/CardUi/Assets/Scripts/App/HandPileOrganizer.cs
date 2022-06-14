@@ -111,7 +111,8 @@ namespace App
             card.PileItemView.SetTargetPosition(clampedLocalPosition, new Vector3(), IsPlayerTurn);
 
             card.PileItemView.SortHandler.SetDepth((int)Sorting.DraggedPileItem);
-            card.PileItemView.SetLocalPosition(pileItemPosition, new Vector3()); //reset its position to where it started.
+            card.PileItemView.SetLocalPosition(pileItemPosition,
+                new Vector3()); //reset its position to where it started.
         }
 
         private float GetEffectiveCardWidth(CardInHand card)

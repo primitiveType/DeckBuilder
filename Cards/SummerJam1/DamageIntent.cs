@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Api;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
 using SummerJam1.Units;
@@ -11,19 +12,24 @@ namespace SummerJam1
 
         protected override void DoIntent()
         {
-            var isFriendly = Entity.GetComponentInParent<FriendlyUnitSlot>() != null;
+            bool isFriendly = Entity.GetComponentInParent<FriendlyUnitSlot>() != null;
 
 
-            UnitSlot targetSlot;
+            IEntity targetSlot;
             if (isFriendly)
             {
                 targetSlot = Context.Root.GetComponentsInChildren<EnemyUnitSlot>()
-                    .FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() != null);
+                    .FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() != null)?.Entity;
             }
             else
             {
                 targetSlot = Context.Root.GetComponentsInChildren<FriendlyUnitSlot>()
-                    .FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() != null);
+                    .FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() != null)?.Entity;
+
+                if (targetSlot == null)
+                {
+                    targetSlot = Context.Root.GetComponent<SummerJam1Game>().Player.Entity;
+                }
             }
 
             if (targetSlot == null)
@@ -33,7 +39,7 @@ namespace SummerJam1
 
             Events.OnIntentStarted(new IntentStartedEventArgs(Entity));
 
-            foreach (ITakesDamage componentsInChild in targetSlot.Entity.GetComponentsInChildren<ITakesDamage>())
+            foreach (ITakesDamage componentsInChild in targetSlot.GetComponentsInChildren<ITakesDamage>())
             {
                 componentsInChild.TryDealDamage(Amount, Entity);
             }

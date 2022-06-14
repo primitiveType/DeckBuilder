@@ -36,7 +36,7 @@ namespace CardTestProject
             Assert.IsFalse(testComponent2.CardDiscarded);
 
             //Simulate a card being played
-            Events.OnCardPlayed(new CardPlayedEventArgs(null, game));
+            Events.OnCardPlayed(new CardPlayedEventArgs(null, game, false));
 
             //Verify event was fired from attribute.
             Assert.IsTrue(testComponent.CardPlayed);

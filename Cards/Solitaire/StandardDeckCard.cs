@@ -1,5 +1,6 @@
 ﻿using Api;
 using CardsAndPiles;
+using CardsAndPiles.Components;
 using Component = Api.Component;
 
 namespace Solitaire

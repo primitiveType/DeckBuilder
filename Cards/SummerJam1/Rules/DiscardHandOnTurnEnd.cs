@@ -1,4 +1,5 @@
 ﻿using CardsAndPiles;
+using CardsAndPiles.Components;
 
 namespace SummerJam1.Rules
 {

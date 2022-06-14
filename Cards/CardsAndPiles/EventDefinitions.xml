@@ -16,6 +16,9 @@
     <event id="CardDiscarded">
         <arg name="CardId" type="IEntity"/>
     </event>
+    <event id="CardExhausted">
+        <arg name="CardId" type="IEntity"/>
+    </event>
     <event id="RequestDealDamage">
         <arg name="Amount" type="int"/>
         <arg name="Source" type="IEntity"/>

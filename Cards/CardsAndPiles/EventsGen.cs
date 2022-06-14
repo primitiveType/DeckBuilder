@@ -67,6 +67,20 @@ public EventHandle<CardDiscardedEventArgs> SubscribeToCardDiscarded(EventHandleD
     return handler;
 } 
     #endregion Code for event CardDiscarded
+    #region Code for event CardExhausted
+private event EventHandleDelegate<CardExhaustedEventArgs> CardExhausted;
+public virtual void OnCardExhausted(CardExhaustedEventArgs args)
+{
+    CardExhausted?.Invoke(this, args);
+}
+
+public EventHandle<CardExhaustedEventArgs> SubscribeToCardExhausted(EventHandleDelegate<CardExhaustedEventArgs> action)
+{
+    var handler = new EventHandle<CardExhaustedEventArgs>(action, () => CardExhausted -= action);
+    CardExhausted += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event CardExhausted
     #region Code for event RequestDealDamage
 private event EventHandleDelegate<RequestDealDamageEventArgs> RequestDealDamage;
 public virtual void OnRequestDealDamage(RequestDealDamageEventArgs args)
@@ -302,6 +316,39 @@ public class OnCardDiscardedAttribute : EventsBaseAttribute {
 
     public class CardDiscardedEventArgs {        public  IEntity CardId { get; }
         public  CardDiscardedEventArgs (IEntity CardId   ){
+                  this.CardId = CardId; 
+}
+
+        }/// <summary>
+/// (object sender, CardExhaustedEventArgs) args)
+/// </summary>
+public class OnCardExhaustedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToCardExhausted(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(CardExhaustedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, CardExhaustedEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToCardExhausted(delegate(object sender, CardExhaustedEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void CardExhaustedEvent (object sender, CardExhaustedEventArgs args);
+
+    public class CardExhaustedEventArgs {        public  IEntity CardId { get; }
+        public  CardExhaustedEventArgs (IEntity CardId   ){
                   this.CardId = CardId; 
 }
 

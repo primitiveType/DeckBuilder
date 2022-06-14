@@ -1,4 +1,5 @@
-﻿using Api;
+﻿using System.IO;
+using Api;
 using Newtonsoft.Json;
 using SummerJam1.Units;
 
@@ -10,11 +11,14 @@ namespace SummerJam1.Cards
 
         protected override Unit CreateUnit()
         {
-            IEntity unitEntity = Context.CreateEntity(null, PrefabName);
+            IEntity unitEntity = Context.CreateEntity(null, Path.Combine("Units", PrefabName));
 
             return unitEntity.GetComponent<StarterUnit>();
         }
 
-        public override string Description => "Summon an IceCream that turns into HeadCheese.";
     }
+    
+    public class Spicy : SummerJam1Component{}
+    public class Sweet : SummerJam1Component{}
+    public class Savory : SummerJam1Component{}
 }

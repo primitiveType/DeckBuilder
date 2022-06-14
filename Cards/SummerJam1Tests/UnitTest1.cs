@@ -183,7 +183,6 @@ namespace SummerJam1Tests
             Console.WriteLine("tester.");
         }
 
-        public override string Description { get; } = "Test card";
     }
 
     public class TestUnit : Unit

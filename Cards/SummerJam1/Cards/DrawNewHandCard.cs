@@ -4,7 +4,6 @@ namespace SummerJam1.Cards
 {
     public class DrawNewHandCard : SummerJam1Card
     {
-
         protected override bool PlayCard(IEntity target)
         {
             if (!Entity.TrySetParent(target))
@@ -16,7 +15,7 @@ namespace SummerJam1.Cards
             {
                 //do nothing.
             }
-            
+
             for (int i = 0; i < 5; i++)
             {
                 Game.Battle.BattleDeck.DrawCard();
@@ -24,7 +23,5 @@ namespace SummerJam1.Cards
 
             return true;
         }
-
-        public override string Description { get; } = "Discard your hand and draw 5 cards.";
     }
 }

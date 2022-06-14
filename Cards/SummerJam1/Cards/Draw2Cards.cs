@@ -21,6 +21,5 @@ namespace SummerJam1.Cards
             return true;
         }
 
-        public override string Description => "Draw 2 cards.";
     }
 }

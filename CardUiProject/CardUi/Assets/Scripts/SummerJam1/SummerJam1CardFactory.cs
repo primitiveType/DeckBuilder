@@ -25,7 +25,9 @@ namespace SummerJam1
                 case SummerJam1CardAsset.PrepTalk:
                     return Instantiate(m_PrepTalk);
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(value), value, null);
+                    Debug.LogWarning($"No prefab found for {value}. Using black pepper as fallback.");
+                    return Instantiate(m_BlackPepper);
+
             }
         }
     }

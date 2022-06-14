@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Api;
+using CardsAndPiles.Components;
 
 namespace CardsAndPiles
 {
@@ -29,7 +30,15 @@ namespace CardsAndPiles
             return true;
         }
     }
-    
+
+    public class PrizePile : Pile
+    {
+        public override bool AcceptsChild(IEntity child)
+        {
+            return true;
+        }
+    }
+
 
     public class DeckPile : Pile
     {
@@ -58,7 +67,10 @@ namespace CardsAndPiles
                 }
             }
 
-            Entity.Children[0].TrySetParent(hand.Entity);
+            if (Entity.Children.Count > 0)
+            {
+                Entity.Children[0].TrySetParent(hand.Entity);
+            }
         }
     }
 }

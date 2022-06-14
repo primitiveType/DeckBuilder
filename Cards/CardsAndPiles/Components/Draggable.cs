@@ -1,7 +1,7 @@
 using Component = Api.Component;
 using IComponent = Api.IComponent;
 
-namespace CardsAndPiles
+namespace CardsAndPiles.Components
 {
     public class Draggable : Component, IDraggable
     {

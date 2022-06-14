@@ -15,6 +15,9 @@
       "AssetName": "Noodles"
     },
     {
+      "$type": "SummerJam1.Food, SummerJam1"
+    },
+    {
       "$type": "SummerJam1.Strength, SummerJam1",
       "Amount": 4
     },

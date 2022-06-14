@@ -1,4 +1,5 @@
 ﻿using Api;
+using CardsAndPiles;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
 
@@ -7,6 +8,13 @@ namespace SummerJam1.Cards
     public class DamageUnitCard : SummerJam1Card
     {
         [JsonProperty] public int DamageAmount { get; private set; }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Entity.GetOrAddComponent<DescriptionComponent>().Description =
+                $"Deal {DamageAmount} damage to target Unit.";
+        }
 
 
         protected override bool PlayCard(IEntity target)
@@ -28,6 +36,5 @@ namespace SummerJam1.Cards
             return true;
         }
 
-        [JsonIgnore] public override string Description => $"Deal {DamageAmount} damage to target Unit.";
     }
 }

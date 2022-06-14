@@ -12,35 +12,19 @@
     },
     {
       "$type": "SummerJam1.UnitVisualComponent, SummerJam1",
-      "AssetName": "Tofu"
+      "AssetName": "Starter"
     },
     {
       "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
-      "Amount": 1,
-      "Max": 1
-    },
-    {
-      "$type": "SummerJam1.Units.ChangeVisualOnTransform, SummerJam1",
-      "UnitAsset": "Noodles"
+      "Amount": 4,
+      "Max": 4
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 1
-    },
-    {
-      "$type": "SummerJam1.Units.GainHealthOnTransform, SummerJam1",
-      "HealthToAdd": 10
-    },
-    {
-      "$type": "SummerJam1.Units.GainStrengthOnTransform, SummerJam1",
-      "StrengthToAdd": 5
+      "Amount": 4
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"
-    },
-    {
-      "$type": "SummerJam1.Units.TransformAfterTurns, SummerJam1",
-      "TurnsRemaining": 1
     }
   ]
 }

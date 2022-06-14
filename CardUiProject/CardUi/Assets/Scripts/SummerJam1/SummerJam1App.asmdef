@@ -5,7 +5,8 @@
         "App",
         "UnityAsync",
         "SimpleHealthBar",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "UltimateTextDamage"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

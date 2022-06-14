@@ -3,7 +3,6 @@ using CardsAndPiles;
 
 namespace SummerJam1.Units
 {
-    public class PlayerUnit : Unit{}
     public abstract class Unit : SummerJam1Component, IPileItem
     {
         protected override void Initialize()

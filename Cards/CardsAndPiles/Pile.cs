@@ -44,6 +44,24 @@ namespace CardsAndPiles
             return true;
         }
     }
+    
+    public class PlayerExhaust : NotifiedPile
+    {
+        public PlayerExhaust()
+        {
+            Console.WriteLine("Created Exhaust.");
+        }
+
+        protected override void OnCardEnteredPile(IEntity eNewItem)
+        {
+            Events.OnCardExhausted(new CardExhaustedEventArgs(eNewItem));
+        }
+
+        public override bool AcceptsChild(IEntity child)
+        {
+            return true;
+        }
+    }
 
     public abstract class NotifiedPile : Pile
     {
@@ -57,10 +75,13 @@ namespace CardsAndPiles
 
         private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            foreach (IEntity eNewItem in e.NewItems)
-            {
-                OnCardEnteredPile(eNewItem);
+            if(e.Action == NotifyCollectionChangedAction.Add){
+                foreach (IEntity eNewItem in e.NewItems)
+                {
+                    OnCardEnteredPile(eNewItem);
+                }
             }
+            
         }
 
         protected abstract void OnCardEnteredPile(IEntity eNewItem);

@@ -10,6 +10,8 @@ MonoImporter:
   - m_Noodles: {fileID: 1894641250135382201, guid: fa5c102dba1c78e4c870fb4c8857cda1, type: 3}
   - m_Tofu: {fileID: 1894641250135382201, guid: d63dfd0996e64f448951f3c8172f2f25, type: 3}
   - m_Player: {fileID: 1894641250135382201, guid: 098e09dad5b83a94baf5dad387e22f8f, type: 3}
+  - m_Starter: {fileID: 7284835767905735223, guid: 07ceab22946568a4884d000c234b15fd, type: 3}
+  - m_UnitPrefab: {fileID: 2256049955563789828, guid: 069c15b7f55d3f9469f8c833bbdf1517, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -22,7 +22,7 @@ namespace App.Utility
             encapsulated.Encapsulate(bounds);
 
             Vector3 diff = encapsulated.center - viewportBounds.center;
-            return bounds.center - (diff * 2);
+            return (bounds.center - (diff * 2));
         }
     }
 }

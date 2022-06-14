@@ -4,9 +4,8 @@
     {
         public SummerJam1UnitAsset AssetName { get; set; }
     }
-    
-    public class CardVisualComponent : SummerJam1Component
+    public class Food : SummerJam1Component
     {
-        public SummerJam1CardAsset AssetName { get; set; }
+        
     }
 }

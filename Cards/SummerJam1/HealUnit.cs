@@ -1,4 +1,5 @@
 ﻿using Api;
+using CardsAndPiles;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
 using SummerJam1.Cards;
@@ -8,6 +9,13 @@ namespace SummerJam1
     public class HealUnit : SummerJam1Card
     {
         [JsonProperty] public int HealAmount { get; private set; }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            Entity.AddComponent<DescriptionComponent>().Description = $"Heal a unit for {HealAmount} health.";
+        }
 
         protected override bool PlayCard(IEntity target)
         {
@@ -27,7 +35,5 @@ namespace SummerJam1
             unit.TryHeal(HealAmount, Entity);
             return true;
         }
-
-        public override string Description => $"Heal a unit for {HealAmount} health.";
     }
 }

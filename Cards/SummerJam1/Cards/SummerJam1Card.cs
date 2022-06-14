@@ -1,4 +1,6 @@
-﻿using CardsAndPiles;
+﻿using Api;
+using CardsAndPiles;
+using CardsAndPiles.Components;
 using Newtonsoft.Json;
 
 namespace SummerJam1.Cards
@@ -7,7 +9,7 @@ namespace SummerJam1.Cards
     {
         protected new SummerJam1Events Events => (SummerJam1Events)base.Events;
 
-        [JsonIgnore] public bool CanDrag => Entity.Parent == Game.Battle.Hand.Entity; //can only drag while in hand.
+        [JsonIgnore] public bool CanDrag => Entity.Parent == Game.Battle?.Hand.Entity; //can only drag while in hand.
         protected SummerJam1Game Game { get; private set; }
 
         protected override void Initialize()
@@ -22,8 +24,23 @@ namespace SummerJam1.Cards
         {
             if (args.CardId == Entity)
             {
-                args.CardId.TrySetParent(Context.Root.GetComponent<SummerJam1Game>().Battle.Discard);
+                args.CardId.TrySetParent(SendToAfterPlaying());
             }
         }
+
+        private IEntity SendToAfterPlaying()
+        {
+            if (Entity.GetComponent<Exhaust>() != null)
+            {
+                return Context.Root.GetComponent<SummerJam1Game>().Battle.Exhaust;
+            }
+            return Context.Root.GetComponent<SummerJam1Game>().Battle.Discard;
+        }
     }
+
+    public class Exhaust : SummerJam1Component
+    {
+        
+    }
+    
 }

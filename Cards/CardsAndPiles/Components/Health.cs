@@ -6,8 +6,8 @@ namespace CardsAndPiles.Components
 {
     public class Health : CardsAndPilesComponent, ITakesDamageInternal, IHealable
     {
-        public int Amount { get; private set; } = 10;
-        public int Max { get; private set; } = 10;
+        public int Amount { get;  set; } 
+        public int Max { get;  set; } 
 
         public int TryDealDamage(int damage, IEntity source)
         {
@@ -76,7 +76,7 @@ namespace CardsAndPiles.Components
             {
                 return;
             }
-            args.Clamps.Add(Amount);
+            args.Clamps.Add(Max - Amount);
         }
 
         public void SetHealth(int health)
