@@ -7,6 +7,10 @@ namespace SummerJam1
     public enum SummerJam1CardAsset
     {
         BlackPepper,
+        HerbsAndSpices,
+        Wasabi,
+        Potatoes,
+        Milk,
         SpicyPepper,
         PrepTalk,
         Starter,

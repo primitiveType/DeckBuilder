@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Api;
 using CardsAndPiles;
@@ -133,9 +134,16 @@ namespace SummerJam1
         
         public IEntity GetFrontMostFriendly()
         {
-            IOrderedEnumerable<FriendlyUnitSlot> enemyUnitSlots =
+            IOrderedEnumerable<FriendlyUnitSlot> friendlyUnitSlots =
                 SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order);
-            return enemyUnitSlots.Select(slot => slot.Entity.GetComponentInChildren<Unit>()?.Entity).FirstOrDefault();
+            return friendlyUnitSlots.Select(slot => slot.Entity.GetComponentInChildren<Unit>()?.Entity).FirstOrDefault();
+        }
+        
+        public List<IEntity> GetFriendlies()
+        {
+            IEnumerable<IEntity> friendlyUnitSlots =
+                SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order).Where(slot=>slot.Entity.GetComponentInChildren<Unit>() != null).Select(slot=>slot.Entity);
+            return friendlyUnitSlots.ToList();
         }
         
         public IEntity GetBackMostEmptySlot()

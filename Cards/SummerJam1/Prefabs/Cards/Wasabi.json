@@ -1,0 +1,32 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 63,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.CardVisualComponent, SummerJam1",
+      "AssetName": "Wasabi"
+    },
+    {
+      "$type": "SummerJam1.AddMultiAttackToUnit, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Wasabi"
+    },
+    {
+      "$type": "CardsAndPiles.Components.Draggable, CardsAndPiles",
+      "CanDrag": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Cost": 2
+    },
+    {
+      "$type": "SummerJam1.Cards.Spicy, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
+    }
+  ]
+}

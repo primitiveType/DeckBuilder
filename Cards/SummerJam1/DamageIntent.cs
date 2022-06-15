@@ -9,11 +9,11 @@ namespace SummerJam1
     public class DamageIntent : Intent, IAmount
     {
         [JsonIgnore] private int Amount => Entity.GetComponent<Strength>()?.Amount ?? 0;
+        [JsonIgnore] private int Attacks => 1 + (Entity.GetComponent<MultiAttack>()?.Amount ?? 0);
 
         protected override void DoIntent()
         {
             bool isFriendly = Entity.GetComponentInParent<FriendlyUnitSlot>() != null;
-
 
             IEntity targetSlot;
             if (isFriendly)
@@ -39,9 +39,12 @@ namespace SummerJam1
 
             Events.OnIntentStarted(new IntentStartedEventArgs(Entity));
 
-            foreach (ITakesDamage componentsInChild in targetSlot.GetComponentsInChildren<ITakesDamage>())
+            for (int i = 0; i < Attacks; i++)
             {
-                componentsInChild.TryDealDamage(Amount, Entity);
+                foreach (ITakesDamage componentsInChild in targetSlot.GetComponentsInChildren<ITakesDamage>())
+                {
+                    componentsInChild.TryDealDamage(Amount, Entity);
+                }
             }
         }
     }

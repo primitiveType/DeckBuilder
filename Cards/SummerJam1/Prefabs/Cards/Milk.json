@@ -1,0 +1,30 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 63,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.CardVisualComponent, SummerJam1",
+      "AssetName": "Milk"
+    },
+    {
+      "$type": "SummerJam1.ModifyStrengthOfUnit, SummerJam1",
+      "Amount" : -2 
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Milk"
+    },
+    {
+      "$type": "CardsAndPiles.Components.Draggable, CardsAndPiles",
+      "CanDrag": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Cost": 1
+    },
+    {
+      "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
+    }
+  ]
+}

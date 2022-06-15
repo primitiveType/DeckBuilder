@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
@@ -80,7 +79,8 @@ namespace SummerJam1
         {
             DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Cards"));
             List<FileInfo> files = info.GetFiles().Where(file=>file.Extension == ".json").ToList();
-            int index = Random.SystemRandom.Next(files.Count - 1);
+           
+            int index = Random.SystemRandom.Next(files.Count);
 
             return Context.CreateEntity(null, Path.Combine("Cards", files[index].Name));
         }
