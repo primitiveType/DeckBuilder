@@ -13,8 +13,13 @@ namespace SummerJam1
         [SerializeField] private GameObject m_Tofu;
         [SerializeField] private GameObject m_Player;
         [SerializeField] private GameObject m_Starter;
+        [SerializeField] private GameObject m_Meatbaby;
+        [SerializeField] private GameObject m_Donut;
+        [SerializeField] private GameObject m_Soup;
+        [SerializeField] private GameObject m_Pie;
         [SerializeField] private GameObject m_UnitPrefab;
         public GameObject UnitPrefab => m_UnitPrefab;
+
         public GameObject GetInstance(SummerJam1UnitAsset value)
         {
             switch (value)
@@ -33,6 +38,14 @@ namespace SummerJam1
                     return Instantiate(m_Player);
                 case SummerJam1UnitAsset.Starter:
                     return Instantiate(m_Starter);
+                case SummerJam1UnitAsset.Meatloaf:
+                    return Instantiate(m_Meatbaby);
+                case SummerJam1UnitAsset.Donut:
+                    return Instantiate(m_Donut);
+                case SummerJam1UnitAsset.Soup:
+                    return Instantiate(m_Soup);
+                case SummerJam1UnitAsset.Pie:
+                    return Instantiate(m_Pie);
                 default:
                     Debug.LogError($"No prefab found for {value}. Using sandwich as fallback.");
                     return Instantiate(m_Sandwich);

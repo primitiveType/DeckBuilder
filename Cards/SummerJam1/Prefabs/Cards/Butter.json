@@ -1,29 +1,36 @@
 {
   "$type": "Api.Entity, Api",
   "m_Children": [],
-  "Id": 30,
+  "Id": 63,
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Cards.DamageUnitCard, SummerJam1",
-      "DamageAmount": 10
-    },
-    {
-      "$type": "SummerJam1.CardVisualComponent, SummerJam1",
-      "AssetName": "Dice"
-    },
-    {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
+      "$type": "SummerJam1.CardVisualComponent, SummerJam1",
+      "AssetName": "Butter"
+    },
+    {
+      "$type": "SummerJam1.ModifyMaxHealthOfUnit, SummerJam1",
+      "Amount": 10
+    },
+    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Dice"
+      "Value": "Butter!"
+    },
+    {
+      "$type": "CardsAndPiles.Components.Draggable, CardsAndPiles",
+      "CanDrag": true
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
       "Cost": 1
+    },
+    {
+      "$type": "SummerJam1.Cards.Savory, SummerJam1"
     }
   ]
 }

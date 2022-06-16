@@ -15,9 +15,11 @@ namespace SummerJam1
         PrepTalk,
         Starter,
         Soup,
+        Dice,
         Cheddar,
         Tofu,
         ApronPockets,
-        Beef
+        Beef,
+        Butter
     }
 }

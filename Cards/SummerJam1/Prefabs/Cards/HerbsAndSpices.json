@@ -35,6 +35,9 @@
     },
     {
       "$type": "SummerJam1.Cards.Spicy, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Savory, SummerJam1"
     }
   ]
 }

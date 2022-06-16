@@ -13,5 +13,9 @@ namespace SummerJam1
         Noodles,
         Tofu,
         Starter,
+        Meatloaf,
+        Donut,
+        Soup,
+        Pie,
     }
 }
