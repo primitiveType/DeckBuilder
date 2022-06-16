@@ -15,6 +15,7 @@ namespace SummerJam1.Cards
 
         protected override bool PlayCard(IEntity target)
         {
+            base.PlayCard(target);
             FriendlyUnitSlot slot = target?.GetComponent<FriendlyUnitSlot>();
             if (slot != null)
             {

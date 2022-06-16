@@ -52,9 +52,7 @@ namespace SummerJam1
         public HandPile Hand { get; private set; }
         public DeckPile BattleDeck { get; private set; }
         private IEntity SlotsParent { get; set; }
-
-        private SummerJam1Game Game { get; set; }
-
+        
         protected override void Initialize()
         {
             base.Initialize();
@@ -79,7 +77,6 @@ namespace SummerJam1
 
         public void StartBattle()
         {
-            Game = Entity.GetComponentInParent<SummerJam1Game>();
             BattleDeck = Context.DuplicateEntity(Game.Deck.Entity).GetComponent<DeckPile>();
             Context.CreateEntity(Entity, entity =>
                 Hand = entity.AddComponent<HandPile>());

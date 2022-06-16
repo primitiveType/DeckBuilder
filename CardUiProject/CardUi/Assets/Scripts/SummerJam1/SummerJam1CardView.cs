@@ -1,4 +1,6 @@
 using App;
+using CardsAndPiles;
+using CardsAndPiles.Components;
 using SummerJam1.Cards;
 
 namespace SummerJam1
@@ -9,6 +11,11 @@ namespace SummerJam1
         {
             return Model.TryPlayCard(pileView.Model.Entity);
         }
-        
+
+        protected override void Start()
+        {
+            base.Start();
+            name = $"{Entity.GetComponent<Card>().GetType().Name} ({Entity.Parent.GetComponent<Pile>().GetType().Name})";
+        }
     }
 }

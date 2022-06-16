@@ -4,16 +4,22 @@
   "Id": 63,
   "ComponentsInternal": [
     {
+      "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+    },
+    {
       "$type": "SummerJam1.CardVisualComponent, SummerJam1",
       "AssetName": "HerbsAndSpices"
     },
     {
       "$type": "SummerJam1.ModifyStrengthOfUnit, SummerJam1",
-      "Amount" : 1
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.ModifyMaxHealthOfUnit, SummerJam1",
-      "Amount" : 4
+      "Amount": 5
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",

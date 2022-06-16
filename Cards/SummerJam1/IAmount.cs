@@ -2,5 +2,6 @@
 {
     public interface IAmount
     {
+        int Amount { get; }
     }
 }

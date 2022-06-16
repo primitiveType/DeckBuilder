@@ -22,8 +22,7 @@ namespace Api
 
         public IChildrenCollection<Component> Components => ComponentsInternal;
 
-        [JsonProperty]
-        private ChildrenCollection<Component> ComponentsInternal { get; set; } = new ChildrenCollection<Component>();
+        [JsonProperty] private ChildrenCollection<Component> ComponentsInternal { get; set; } = new ChildrenCollection<Component>();
 
         public LifecycleState State { get; private set; }
 
@@ -63,6 +62,7 @@ namespace Api
             {
                 child.Destroy();
             }
+
             State = LifecycleState.Destroyed;
         }
 
@@ -158,8 +158,8 @@ namespace Api
         {
             return GetComponents<T>().FirstOrDefault();
         }
-        
-        
+
+
         public T GetOrAddComponent<T>() where T : Component, new()
         {
             T existing = GetComponent<T>();
@@ -264,6 +264,12 @@ namespace Api
             return true;
         }
 
+        public bool RemoveComponent<TType>() where TType : Component
+        {
+            TType component = GetComponent<TType>();
+            return RemoveComponent(component);
+        }
+
 
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
@@ -312,5 +318,6 @@ namespace Api
         LifecycleState State { get; }
         void Destroy();
         T GetOrAddComponent<T>() where T : Component, new();
+        bool RemoveComponent<TType>() where TType : Component;
     }
 }

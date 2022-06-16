@@ -6,6 +6,8 @@ using Api;
 using App;
 using CardsAndPiles;
 using CardsAndPiles.Components;
+using External.UnityAsync.UnityAsync.Assets.UnityAsync;
+using External.UnityAsync.UnityAsync.Assets.UnityAsync.Await;
 using Guirao.UltimateTextDamage;
 using SummerJam1.Units;
 using UnityEngine;
@@ -25,6 +27,8 @@ namespace SummerJam1
         [SerializeField] private List<PileView> FriendlySlots;
         [SerializeField] private List<PileView> EnemySlots;
         [SerializeField] private GameObject PlayerView;
+        [SerializeField] private GameObject VictoryPopup;
+        
 
         private Context Context => SummerJam1Context.Instance.Context;
         private SummerJam1Events Events => SummerJam1Context.Instance.Events;
@@ -66,7 +70,11 @@ namespace SummerJam1
 
         private void QueueText(Transform target, string text, string key)
         {
-            AnimationQueue.Instance.Enqueue(() => { m_TextDamageManager.Add(text, target, key); });
+            AnimationQueue.Instance.Enqueue(async () =>
+            {
+                await new WaitForEndOfFrame();
+                m_TextDamageManager.Add(text, target, key);
+            });
         }
 
         private void OnDestroy()
@@ -133,6 +141,11 @@ namespace SummerJam1
 
         private async void ReturnToMenu()
         {
+            VictoryPopup.SetActive(true);
+            while (VictoryPopup.activeInHierarchy)
+            {
+                await Await.NextUpdate();
+            }
             SceneManager.LoadScene("Scenes/SummerJam1/MenuScene");
         }
 

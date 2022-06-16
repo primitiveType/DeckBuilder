@@ -77,6 +77,9 @@
       <None Update="Prefabs\Cards\HerbsAndSpices.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Prefabs\Units\kebab.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

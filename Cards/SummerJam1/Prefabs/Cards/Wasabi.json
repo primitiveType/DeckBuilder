@@ -4,6 +4,9 @@
   "Id": 63,
   "ComponentsInternal": [
     {
+      "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
+    },
+    {
       "$type": "SummerJam1.CardVisualComponent, SummerJam1",
       "AssetName": "Wasabi"
     },

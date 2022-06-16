@@ -2,9 +2,9 @@
 
 namespace SummerJam1.Cards
 {
-    public class DrawNewHandCard : SummerJam1Card
+    public class DrawNewHandCard : SummerJam1Component, IEffect
     {
-        protected override bool PlayCard(IEntity target)
+        public bool DoEffect(IEntity target)
         {
             if (!Entity.TrySetParent(target))
             {

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace SummerJam1.Cards
 {
-    public class DamageUnitCard : SummerJam1Card
+    public class DamageUnitCard : SummerJam1Component, IEffect
     {
         [JsonProperty] public int DamageAmount { get; private set; }
 
@@ -16,7 +16,7 @@ namespace SummerJam1.Cards
         }
 
 
-        protected override bool PlayCard(IEntity target)
+        public bool DoEffect(IEntity target)
         {
             if (!Entity.TrySetParent(target))
             {

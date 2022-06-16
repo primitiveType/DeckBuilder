@@ -8,7 +8,7 @@ using SummerJam1.Units;
 
 namespace SummerJam1
 {
-    public class AddMultiAttackToUnit : SummerJam1Card
+    public class AddMultiAttackToUnit : SummerJam1Component, IEffect
     {
         protected override void Initialize()
         {
@@ -17,7 +17,7 @@ namespace SummerJam1
             Entity.AddComponent<DescriptionComponent>().Description = $"Grant 1 multi-attack to a unit.";
         }
 
-        protected override bool PlayCard(IEntity target)
+        public bool DoEffect(IEntity target)
         {
             if (!Entity.TrySetParent(target))
             {
@@ -37,13 +37,13 @@ namespace SummerJam1
         }
     }
 
-    public abstract class ModifyComponentOfUnit<T> : SummerJam1Card where T : Component, new()
+    public abstract class ModifyComponentOfUnit<T> : SummerJam1Component, IEffect where T : Component, new()
     {
         [JsonProperty] public int Amount { get; private set; }
         protected string ReduceIncrease => Amount > 0 ? "Increase" : "Reduce";
 
 
-        protected override bool PlayCard(IEntity target)
+        public bool DoEffect(IEntity target)
         {
             if (!Entity.TrySetParent(target))
             {
@@ -92,7 +92,7 @@ namespace SummerJam1
         }
     }
 
-    public class HealUnit : SummerJam1Card
+    public class HealUnit : SummerJam1Component, IEffect
     {
         [JsonProperty] public int HealAmount { get; private set; }
 
@@ -103,7 +103,7 @@ namespace SummerJam1
             Entity.AddComponent<DescriptionComponent>().Description = $"Heal a unit for {HealAmount} health.";
         }
 
-        protected override bool PlayCard(IEntity target)
+        public bool DoEffect(IEntity target)
         {
             if (!Entity.TrySetParent(target))
             {
@@ -123,7 +123,7 @@ namespace SummerJam1
         }
     }
 
-    public class HealLowestUnit : SummerJam1Card
+    public class HealLowestUnit : SummerJam1Component, IEffect
     {
         [JsonProperty] public int HealAmount { get; private set; }
 
@@ -134,7 +134,7 @@ namespace SummerJam1
             Entity.AddComponent<DescriptionComponent>().Description = $"Heal a unit for {HealAmount} health.";
         }
 
-        protected override bool PlayCard(IEntity target)
+        public bool DoEffect(IEntity target)
         {
             if (!Entity.TrySetParent(target))
             {

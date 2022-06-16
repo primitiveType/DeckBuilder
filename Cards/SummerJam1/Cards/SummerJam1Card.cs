@@ -5,10 +5,12 @@ using Newtonsoft.Json;
 
 namespace SummerJam1.Cards
 {
-    public abstract class SummerJam1Card : Card, IDraggable
+    public interface IEffect
     {
-        protected new SummerJam1Events Events => (SummerJam1Events)base.Events;
-
+        bool DoEffect(IEntity target);
+    }
+    public class SummerJam1Card : Card, IDraggable
+    {
         [JsonIgnore] public bool CanDrag => Entity.Parent == Game.Battle?.Hand.Entity; //can only drag while in hand.
         protected SummerJam1Game Game { get; private set; }
 
@@ -18,29 +20,45 @@ namespace SummerJam1.Cards
             Game = Context.Root.GetComponent<SummerJam1Game>();
         }
 
+        protected override bool PlayCard(IEntity target)
+        {
+            bool played = false;
+            foreach (IEffect effect in Entity.GetComponents<IEffect>())
+            {
+                played |= effect.DoEffect(target);
+            }
+
+            return played;
+        }
+    }
+
+    public class Exhaust : SummerJam1Component
+    {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Entity.RemoveComponent<Discard>();
+        }
 
         [OnCardPlayed]
         private void OnCardPlayed(object sender, CardPlayedEventArgs args)
         {
             if (args.CardId == Entity)
             {
-                args.CardId.TrySetParent(SendToAfterPlaying());
+                args.CardId.TrySetParent(Context.Root.GetComponent<SummerJam1Game>().Battle.Exhaust);
             }
-        }
-
-        private IEntity SendToAfterPlaying()
-        {
-            if (Entity.GetComponent<Exhaust>() != null)
-            {
-                return Context.Root.GetComponent<SummerJam1Game>().Battle.Exhaust;
-            }
-            return Context.Root.GetComponent<SummerJam1Game>().Battle.Discard;
         }
     }
 
-    public class Exhaust : SummerJam1Component
+    public class Discard : SummerJam1Component
     {
-        
+        [OnCardPlayed]
+        private void OnCardPlayed(object sender, CardPlayedEventArgs args)
+        {
+            if (args.CardId == Entity)
+            {
+                args.CardId.TrySetParent(Context.Root.GetComponent<SummerJam1Game>().Battle.Discard);
+            }
+        }
     }
-    
 }

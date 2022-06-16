@@ -2,11 +2,11 @@
 
 namespace SummerJam1.Cards
 {
-    public class Draw2Cards : SummerJam1Card
+    public class Draw2Cards : SummerJam1Component, IEffect
     {
         private int NumToDraw { get; } = 2;
 
-        protected override bool PlayCard(IEntity target)
+        public bool DoEffect(IEntity target)
         {
             if (!Entity.TrySetParent(target))
             {

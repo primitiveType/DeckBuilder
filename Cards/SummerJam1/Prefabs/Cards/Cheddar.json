@@ -4,12 +4,18 @@
   "Id": 63,
   "ComponentsInternal": [
     {
+      "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
+    },
+    {
       "$type": "SummerJam1.CardVisualComponent, SummerJam1",
       "AssetName": "Cheddar"
     },
     {
       "$type": "SummerJam1.HealUnit, SummerJam1",
       "HealAmount" : 4 
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",

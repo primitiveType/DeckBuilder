@@ -21,7 +21,7 @@ public class UnitRendererComponent : View<UnitVisualComponent>
 
 
             CurrentRenderer = SummerJam1UnitFactory.Instance.GetInstance(Model.AssetName);
-            CurrentRenderer.transform.SetParent(transform);
+            CurrentRenderer.transform.SetParent(transform, false);
             CurrentRenderer.transform.localPosition = new Vector3();
             if (Entity.GetComponentInParent<FriendlyUnitSlot>() != null)
             {
