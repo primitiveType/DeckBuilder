@@ -15,4 +15,6 @@ namespace App
             m_Text.text = Model.Description;
         }
     }
+    
+   
 }

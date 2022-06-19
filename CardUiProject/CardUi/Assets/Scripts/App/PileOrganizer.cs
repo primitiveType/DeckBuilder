@@ -67,7 +67,11 @@ namespace App
 
         private void OnDestroy()
         {
-            PileView.Entity.Children.CollectionChanged -= OnPileChanged;
+            if (PileView?.Entity != null)
+            {
+                PileView.Entity.Children.CollectionChanged -= OnPileChanged;
+            }
+
             foreach (IDisposable disposable in Disposables)
             {
                 disposable.Dispose();

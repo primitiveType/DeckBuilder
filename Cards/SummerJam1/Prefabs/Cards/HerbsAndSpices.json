@@ -14,12 +14,12 @@
       "AssetName": "card.herbsandspices"
     },
     {
-      "$type": "SummerJam1.ModifyStrengthOfUnit, SummerJam1",
-      "Amount": 1
+      "$type": "SummerJam1.Cards.ModifyStrengthOfUnit, SummerJam1",
+      "Amount": 2
     },
     {
-      "$type": "SummerJam1.ModifyMaxHealthOfUnit, SummerJam1",
-      "Amount": 5
+      "$type": "SummerJam1.Cards.AddRegenToUnit, SummerJam1",
+      "Amount": 2
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",

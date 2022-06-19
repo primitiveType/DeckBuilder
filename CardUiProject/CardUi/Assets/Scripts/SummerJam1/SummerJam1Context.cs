@@ -5,6 +5,8 @@ using App;
 using App.Utility;
 using CardsAndPiles;
 using CardsAndPiles.Components;
+using External.UnityAsync.UnityAsync.Assets.UnityAsync;
+using External.UnityAsync.UnityAsync.Assets.UnityAsync.AwaitInstructions;
 using SummerJam1.Units;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,6 +23,11 @@ namespace SummerJam1
         {
             base.Awake();
 
+            Setup();
+        }
+
+        private async void Setup()
+        {
             var events = new SummerJam1Events();
             Context = new Context(events);
             Events.SubscribeToCardCreated(OnCardCreated);
@@ -31,13 +38,10 @@ namespace SummerJam1
 
 
             Game = game.AddComponent<SummerJam1Game>();
-        }
-
-        protected override void SingletonStarted()
-        {
-            base.SingletonStarted();
+            await new WaitForFrames(1);
             SceneManager.LoadScene("MenuScene");
         }
+
 
         private void OnRelicCreated(object sender, RelicCreatedEventArgs args)
         {
@@ -60,6 +64,14 @@ namespace SummerJam1
             entity.GetOrAddComponent<SummerJam1ModelViewBridge>().gameObject = unitView;
 
             return unitView;
+        }
+
+        public async void StartOver()
+        {
+            Context.Root.Destroy();
+            await new WaitForFrames(1);//allow a frame for views to destroye themselves
+            SceneManager.LoadScene("Main");
+            Setup();
         }
 
         public GameObject CreateGameObjectForModel(SummerJam1ModelViewBridge summerJam1ModelViewBridge)

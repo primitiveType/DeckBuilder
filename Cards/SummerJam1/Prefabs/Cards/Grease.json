@@ -7,19 +7,19 @@
       "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
     },
     {
-      "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.potatoes"
-    },
-    {
-      "$type": "SummerJam1.Cards.HealLowestUnit, SummerJam1",
-      "HealAmount" : 4
-    },
-    {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.grease"
+    },
+    {
+      "$type": "SummerJam1.Cards.AddRegenToAllFriendlyUnits, SummerJam1",
+      "Amount": 2
+    },
+    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Potatoes"
+      "Value": "Grease"
     },
     {
       "$type": "CardsAndPiles.Components.Draggable, CardsAndPiles",
@@ -27,7 +27,7 @@
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Cost": 0
+      "Cost": 1
     },
     {
       "$type": "SummerJam1.Cards.Savory, SummerJam1"

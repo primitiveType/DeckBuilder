@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Api;
 using CardsAndPiles;
+using SummerJam1.Objectives;
 using SummerJam1.Units;
 using Random = Api.Random;
 
@@ -65,7 +66,12 @@ namespace SummerJam1
             if (args.Victory)
             {
                 //Player.Entity.TrySetParent(TempPlayerSlot.Entity);
-                SetupPrizePile();
+                var game = Context.Root.GetComponentInChildren<SummerJam1Game>();
+                var objective = game.Battle.ObjectivesPile.Entity.GetComponentInChildren<Objective>();
+                if (objective.Completed && !objective.Failed)
+                {
+                    SetupPrizePile();
+                }
             }
         }
 
@@ -156,12 +162,12 @@ namespace SummerJam1
 
         public IEntity CreateRandomMonster(IEntity parent, int difficulty)
         {
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, $"Units/{difficulty}"));
+            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, $"Units", $"{difficulty}"));
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
 
             int index = Game.Random.SystemRandom.Next(files.Count);
 
-            return Context.CreateEntity(parent, Path.Combine($"Units/{difficulty}", files[index].Name));
+            return Context.CreateEntity(parent, Path.Combine($"Units", $"{difficulty}", files[index].Name));
         }
 
 
@@ -173,10 +179,11 @@ namespace SummerJam1
 
             int i = 0;
             int totalDifficulty = difficulty + 3;
-            List<int> difficulties = new List<int> { 0, 0, 0 };
+            List<int> difficulties = new List<int> { 1, 1, 1 };
             while (difficulties.Sum() < totalDifficulty)
             {
-                difficulties[i % 3] = difficulties[i % 3]++;
+                difficulties[i % 3] = ++difficulties[i % 3];
+                i++;
             }
 
             i = 0;
@@ -204,6 +211,10 @@ namespace SummerJam1
             }
 
             Events.OnBattleEnded(new BattleEndedEventArgs(alliesAlive));
+            if (!alliesAlive)
+            {
+                Events.OnGameEnded(new GameEndedEventArgs(false));
+            }
         }
 
         public IEntity GetFrontMostEnemy()
@@ -226,6 +237,14 @@ namespace SummerJam1
                 SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order)
                     .Where(slot => slot.Entity.GetComponentInChildren<Unit>() != null).Select(slot => slot.Entity);
             return friendlyUnitSlots.ToList();
+        }
+        
+        public List<IEntity> GetEnemies()
+        {
+            IEnumerable<IEntity> enemyUnitSlots =
+                SlotsParent.GetComponentsInChildren<EnemyUnitSlot>().OrderBy(slot => slot.Order)
+                    .Where(slot => slot.Entity.GetComponentInChildren<Unit>() != null).Select(slot => slot.Entity);
+            return enemyUnitSlots.ToList();
         }
 
         public IEntity GetBackMostEmptySlot()

@@ -14,8 +14,8 @@
       "AssetName": "card.butter"
     },
     {
-      "$type": "SummerJam1.ModifyMaxHealthOfUnit, SummerJam1",
-      "Amount": 10
+      "$type": "SummerJam1.Cards.AddRegenToUnit, SummerJam1",
+      "Amount": 4
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",

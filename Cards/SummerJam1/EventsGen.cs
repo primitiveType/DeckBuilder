@@ -67,6 +67,34 @@ public EventHandle<BattleEndedEventArgs> SubscribeToBattleEnded(EventHandleDeleg
     return handler;
 } 
     #endregion Code for event BattleEnded
+    #region Code for event GameEnded
+private event EventHandleDelegate<GameEndedEventArgs> GameEnded;
+public virtual void OnGameEnded(GameEndedEventArgs args)
+{
+    GameEnded?.Invoke(this, args);
+}
+
+public EventHandle<GameEndedEventArgs> SubscribeToGameEnded(EventHandleDelegate<GameEndedEventArgs> action)
+{
+    var handler = new EventHandle<GameEndedEventArgs>(action, () => GameEnded -= action);
+    GameEnded += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event GameEnded
+    #region Code for event GameStarted
+private event EventHandleDelegate<GameStartedEventArgs> GameStarted;
+public virtual void OnGameStarted(GameStartedEventArgs args)
+{
+    GameStarted?.Invoke(this, args);
+}
+
+public EventHandle<GameStartedEventArgs> SubscribeToGameStarted(EventHandleDelegate<GameStartedEventArgs> action)
+{
+    var handler = new EventHandle<GameStartedEventArgs>(action, () => GameStarted -= action);
+    GameStarted += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event GameStarted
     #region Code for event BattleStarted
 private event EventHandleDelegate<BattleStartedEventArgs> BattleStarted;
 public virtual void OnBattleStarted(BattleStartedEventArgs args)
@@ -229,6 +257,67 @@ public class OnBattleEndedAttribute : EventsBaseAttribute {
 }
 
         }/// <summary>
+/// (object sender, GameEndedEventArgs) args)
+/// </summary>
+public class OnGameEndedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToGameEnded(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(GameEndedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, GameEndedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToGameEnded(delegate(object sender, GameEndedEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void GameEndedEvent (object sender, GameEndedEventArgs args);
+
+    public class GameEndedEventArgs {        public  bool Victory { get; }
+        public  GameEndedEventArgs (bool Victory   ){
+                  this.Victory = Victory; 
+}
+
+        }/// <summary>
+/// (object sender, GameStartedEventArgs) args)
+/// </summary>
+public class OnGameStartedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToGameStarted(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(GameStartedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, GameStartedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToGameStarted(delegate(object sender, GameStartedEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void GameStartedEvent (object sender, GameStartedEventArgs args);
+
+    public class GameStartedEventArgs {        }/// <summary>
 /// (object sender, BattleStartedEventArgs) args)
 /// </summary>
 public class OnBattleStartedAttribute : EventsBaseAttribute {

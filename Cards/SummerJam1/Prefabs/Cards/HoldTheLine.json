@@ -8,25 +8,22 @@
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Prep Talk"
+      "Value": "Hold the Line"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.preptalk"
+      "AssetName": "card.recipe"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Cards.DrawNewHandCard, SummerJam1"
+      "$type": "SummerJam1.Cards.ModifyHealthOfFrontFriendlyUnit, SummerJam1",
+      "Amount": 10
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
       "Cost": 1
-    },
-    {
-      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
-      "Description": "Discard your hand and draw 5 cards."
     }
   ]
 }

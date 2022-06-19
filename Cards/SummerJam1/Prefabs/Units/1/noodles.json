@@ -19,15 +19,15 @@
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 4
+      "Amount": 3
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
-      "Amount": 12,
-      "Max": 12
+      "Amount": 8,
+      "Max": 8
     }
   ]
 }

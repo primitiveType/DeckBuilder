@@ -9,6 +9,11 @@ namespace CardsAndPiles
         public bool Discard()
         {
             IEntity card = Entity.Children.FirstOrDefault();
+            return Discard(card);
+        }
+
+        private bool Discard(IEntity card)
+        {
             if (card == null)
             {
                 return false;
@@ -16,6 +21,20 @@ namespace CardsAndPiles
 
             PlayerDiscard discard = Context.Root.GetComponentInChildren<PlayerDiscard>();
             return card.TrySetParent(discard.Entity);
+        }
+
+
+        public bool DiscardRandom()
+        {
+            if (Entity.Children.Count == 0)
+            {
+                return false;
+            }
+
+            var index = Context.Root.GetComponent<Random>().SystemRandom.Next(0, Entity.Children.Count);
+            IEntity card = Entity.Children.ElementAt(index);
+
+            return Discard(card);
         }
 
         public override bool AcceptsChild(IEntity item)
@@ -38,7 +57,7 @@ namespace CardsAndPiles
             return true;
         }
     }
-    
+
     public class ObjectivesPile : Pile
     {
         public override bool AcceptsChild(IEntity child)

@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using App;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SummerJam1
 {
@@ -8,6 +9,7 @@ namespace SummerJam1
     {
         [SerializeField] private GameObject m_ObjectiveViewPrefab;
         [SerializeField] private Transform m_ObjectiveViewParent;
+
         protected override void Start()
         {
             base.Start();
@@ -29,7 +31,11 @@ namespace SummerJam1
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            Model.PropertyChanged -= ModelOnPropertyChanged;
+            if (Model != null)
+            {
+                Model.PropertyChanged -= ModelOnPropertyChanged;
+            }
+            Debug.Log("Game view destroyed!");
         }
     }
 }

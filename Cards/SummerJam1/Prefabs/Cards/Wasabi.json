@@ -11,7 +11,7 @@
       "AssetName": "card.wasabi"
     },
     {
-      "$type": "SummerJam1.AddMultiAttackToUnit, SummerJam1"
+      "$type": "SummerJam1.Cards.AddMultiAttackToUnit, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",

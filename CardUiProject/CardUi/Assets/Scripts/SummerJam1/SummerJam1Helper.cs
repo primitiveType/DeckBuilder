@@ -129,13 +129,14 @@ namespace SummerJam1
             if (item.Victory)
             {
                 Debug.Log("VICTOLY!");
+                Disposables.Add(AnimationQueue.Instance.Enqueue(ReturnToMenu));
             }
             else
             {
                 Debug.Log("FAILURE.");
             }
 
-            Disposables.Add(AnimationQueue.Instance.Enqueue(ReturnToMenu));
+            
         }
 
         private void Update()

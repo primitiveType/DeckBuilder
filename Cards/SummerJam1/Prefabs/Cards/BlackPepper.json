@@ -11,7 +11,7 @@
       "AssetName": "card.blackpepper"
     },
     {
-      "$type": "SummerJam1.ModifyStrengthOfUnit, SummerJam1",
+      "$type": "SummerJam1.Cards.ModifyStrengthOfUnit, SummerJam1",
       "Amount" : 1
     },
     {

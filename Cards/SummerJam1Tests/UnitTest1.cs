@@ -7,6 +7,7 @@ using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SummerJam1;
 using SummerJam1.Cards;
 using SummerJam1.Objectives;
@@ -52,41 +53,65 @@ namespace SummerJam1Tests
         }
 
         [Test]
-        public void Serialize_Card()
+        public void TryLoadAllPrefabs()
         {
-            var card = Context.CreateEntity();
-            card.AddComponent<StarterUnitCard>();
-            card.AddComponent<EnemyUnitSlotConstraint>();
-            card.AddComponent<NameComponent>();
-            card.AddComponent<CardVisualComponent>();
-            card.AddComponent<Draggable>().CanDrag = true;
-            card.AddComponent<EnergyCost>().Cost = 1;
+            DirectoryInfo info = new DirectoryInfo(Context.PrefabsPath);
 
+            TestDirectory(info, "");
 
-            string cardstr = Serializer.Serialize(card);
-            File.WriteAllText(
-                @"C:\Users\Arthu\Documents\Projects\DeckBuilder\Cards\SummerJam1\Prefabs\templateCard.json", cardstr);
-            IEntity restored = Serializer.Deserialize<IEntity>(cardstr);
+            void TestDirectory(DirectoryInfo dir, string relativePath)
+            {
+                foreach (DirectoryInfo enumerateDirectory in dir.EnumerateDirectories())
+                {
+                    TestDirectory(enumerateDirectory, Path.Combine(relativePath, enumerateDirectory.Name));
+                }
 
-            Assert.That(restored.GetComponent<Card>(), Is.Not.Null);
+                foreach (FileInfo enumerateFile in dir.EnumerateFiles())
+                {
+                    var entity = Context.CreateEntity(null, Path.Combine(relativePath, enumerateFile.Name));
+                    Assert.NotNull(entity);
+                    Assert.That(entity.Components, Has.Count.GreaterThan(0));
+                }
+            }
         }
-        [Test]
-        public void Serialize_Objective()
-        {
-            var obj = Context.CreateEntity();
-            obj.AddComponent<TakeNoDamage>();
-            obj.AddComponent<DescriptionComponent>();
-            obj.AddComponent<RelicVisualComponent>();
 
+        // [Test]
+        // public void Serialize_Card()
+        // {
+        //     var card = Context.CreateEntity();
+        //     card.AddComponent<StarterUnitCard>();
+        //     card.AddComponent<EnemyUnitSlotConstraint>();
+        //     card.AddComponent<NameComponent>();
+        //     card.AddComponent<CardVisualComponent>();
+        //     card.AddComponent<Draggable>().CanDrag = true;
+        //     card.AddComponent<EnergyCost>().Cost = 1;
+        //
+        //
+        //     string cardstr = Serializer.Serialize(card);
+        //     File.WriteAllText(
+        //         @"C:\Users\Arthu\Documents\Projects\DeckBuilder\Cards\SummerJam1\Prefabs\templateCard.json", cardstr);
+        //     IEntity restored = Serializer.Deserialize<IEntity>(cardstr);
+        //
+        //     Assert.That(restored.GetComponent<Card>(), Is.Not.Null);
+        // }
 
-            string cardstr = Serializer.Serialize(obj);
-            File.WriteAllText(
-                @"C:\Users\Arthu\Documents\Projects\DeckBuilder - Copy (2)\Cards\SummerJam1\Prefabs\templateObjective.json", cardstr);
-            IEntity restored = Serializer.Deserialize<IEntity>(cardstr);
+        // [Test]
+        // public void Serialize_Objective()
+        // {
+        //     var obj = Context.CreateEntity();
+        //     obj.AddComponent<TakeNoDamage>();
+        //     obj.AddComponent<DescriptionComponent>();
+        //     obj.AddComponent<RelicVisualComponent>();
+        //
+        //
+        //     string cardstr = Serializer.Serialize(obj);
+        //     File.WriteAllText(
+        //         @"C:\Users\Arthu\Documents\Projects\DeckBuilder - Copy (2)\Cards\SummerJam1\Prefabs\templateObjective.json", cardstr);
+        //     IEntity restored = Serializer.Deserialize<IEntity>(cardstr);
+        //
+        //     Assert.That(restored.GetComponent<Objective>(), Is.Not.Null);
+        // }
 
-            Assert.That(restored.GetComponent<Objective>(), Is.Not.Null);
-        }
-        
         // [Test]
         // public void Serialize_All_Relics()
         // {
@@ -111,31 +136,31 @@ namespace SummerJam1Tests
         //     }
         // }
 
-        [Test]
-        public void Serialize_Unit()
-        {
-            IEntity unit = MakeUnit();
-            unit.AddComponent<UnitVisualComponent>().AssetName = SummerJam1UnitAsset.Noodles;
-            var health = unit.AddComponent<Health>();
-            unit.AddComponent<ChangeVisualOnTransform>().UnitAsset = SummerJam1UnitAsset.HeadCheese;
-            health.SetHealth(999);
-            health.SetMax(999);
-            var strength = unit.AddComponent<Strength>();
-            unit.AddComponent<GainHealthOnTransform>().HealthToAdd = 10;
-            unit.AddComponent<DamageIntent>();
-            strength.Amount = 888;
-
-            unit.AddComponent<TransformAfterTurns>();
-
-            string template = Serializer.Serialize(unit);
-
-
-            File.WriteAllText(
-                @"C:\Users\Arthu\Documents\Projects\DeckBuilder\Cards\SummerJam1\Prefabs\templateUnit.json", template);
-            IEntity restored = Serializer.Deserialize<IEntity>(template);
-
-            Assert.That(restored.GetComponent<Unit>(), Is.Not.Null);
-        }
+        // [Test]
+        // public void Serialize_Unit()
+        // {
+        //     IEntity unit = MakeUnit();
+        //     unit.AddComponent<UnitVisualComponent>().AssetName = SummerJam1UnitAsset.Noodles;
+        //     var health = unit.AddComponent<Health>();
+        //     unit.AddComponent<ChangeVisualOnTransform>().UnitAsset = "asset name";
+        //     health.SetHealth(999);
+        //     health.SetMax(999);
+        //     var strength = unit.AddComponent<Strength>();
+        //     unit.AddComponent<GainHealthOnTransform>().HealthToAdd = 10;
+        //     unit.AddComponent<DamageIntent>();
+        //     strength.Amount = 888;
+        //
+        //     unit.AddComponent<TransformAfterTurns>();
+        //
+        //     string template = Serializer.Serialize(unit);
+        //
+        //
+        //     File.WriteAllText(
+        //         @"C:\Users\Arthu\Documents\Projects\DeckBuilder\Cards\SummerJam1\Prefabs\templateUnit.json", template);
+        //     IEntity restored = Serializer.Deserialize<IEntity>(template);
+        //
+        //     Assert.That(restored.GetComponent<Unit>(), Is.Not.Null);
+        // }
 
         [Test]
         public void TestEventHandlerDetachmentDuringEvent()
@@ -225,7 +250,6 @@ namespace SummerJam1Tests
         {
             Console.WriteLine("tester.");
         }
-
     }
 
     public class TestUnit : Unit

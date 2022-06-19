@@ -5,7 +5,7 @@ namespace SummerJam1
 {
     public class Player : SummerJam1Component
     {
-        public int CurrentEnergy { get; private set; }
+        public int CurrentEnergy { get; set; }
         public int MaxEnergy { get; private set; } = 3;
 
         public bool TryUseEnergy(int amount)

@@ -8,18 +8,18 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.potatoes"
+      "AssetName": "card.capsaicin"
     },
     {
-      "$type": "SummerJam1.Cards.HealLowestUnit, SummerJam1",
-      "HealAmount" : 4
+      "$type": "SummerJam1.Cards.ModifyStrengthOfUnit, SummerJam1",
+      "Amount" : 10
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+      "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Potatoes"
+      "Value": "Spicy Pepper"
     },
     {
       "$type": "CardsAndPiles.Components.Draggable, CardsAndPiles",
@@ -27,10 +27,10 @@
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Cost": 0
+      "Cost": 2
     },
     {
-      "$type": "SummerJam1.Cards.Savory, SummerJam1"
+      "$type": "SummerJam1.Cards.Spicy, SummerJam1"
     }
   ]
 }

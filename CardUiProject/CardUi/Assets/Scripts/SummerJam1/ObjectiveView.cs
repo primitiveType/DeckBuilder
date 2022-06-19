@@ -22,7 +22,7 @@ namespace SummerJam1
 
         private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            UpdateVisibility();
+            AnimationQueue.Instance.Enqueue(UpdateVisibility);
         }
 
         private void UpdateVisibility()

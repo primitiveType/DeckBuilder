@@ -24,7 +24,7 @@ namespace SummerJam1
         private UnitSlot PlayerSlot { get; set; }
 
         public Random Random { get; private set; }
-        
+
         public int BattlesWon { get; set; }
         public int BattlesRequired { get; set; }
 
@@ -43,8 +43,8 @@ namespace SummerJam1
                 entity.AddComponent<PlayerUnit>();
                 entity.AddComponent<UnitVisualComponent>().AssetName = SummerJam1UnitAsset.Player;
                 Health health = entity.AddComponent<Health>();
-                health.SetMax(100);
-                health.SetHealth(100);
+                health.SetMax(10);
+                health.SetHealth(10);
             });
 
             //create an example deck.
@@ -55,12 +55,15 @@ namespace SummerJam1
                 Context.CreateEntity(Deck.Entity, "Cards/Starter.json");
                 Context.CreateEntity(Deck.Entity, "Cards/Dice.json");
             }
+
+            Events.OnGameStarted(new GameStartedEventArgs());
         }
 
         private void AddRules()
         {
             Context.Root.AddComponent<DiscardHandOnTurnEnd>();
             Context.Root.AddComponent<DrawHandOnTurnBegin>();
+            Context.Root.AddComponent<GameEndsAfter10Rooms>();
         }
 
         public void EndTurn()

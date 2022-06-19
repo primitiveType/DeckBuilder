@@ -43,7 +43,7 @@ namespace SummerJam1.Units
             args.Clamps.Add(0); //prevent all damage.
 
             Entity.GetOrAddComponent<ChangeVisualOnTransform>().UnitAsset =
-                unit.Entity.GetComponent<UnitVisualComponent>().AssetName;
+                unit.Entity.GetComponent<VisualComponent>().AssetName;
 
             Entity.GetOrAddComponent<GainStrengthOnTransform>().StrengthToAdd =
                 unit.Entity.GetComponent<Strength>().Amount;

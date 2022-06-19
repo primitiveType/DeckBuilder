@@ -12,6 +12,11 @@
     <event id="BattleEnded">
         <arg name="Victory" type="bool"/>
     </event>
+    <event id="GameEnded">
+        <arg name="Victory" type="bool"/>
+    </event>
+    <event id="GameStarted">
+    </event>
     <event id="BattleStarted">
         <arg name="Battle" type="BattleContainer"/>
     </event>

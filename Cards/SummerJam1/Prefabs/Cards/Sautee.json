@@ -7,19 +7,19 @@
       "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Cards.DamageUnitCard, SummerJam1",
-      "DamageAmount": 4
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Sautee"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.dice"
+      "AssetName": "card.sautee"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
-      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Dice"
+      "$type": "SummerJam1.Cards.AddBurnToAllUnits, SummerJam1",
+      "Amount": 2
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
