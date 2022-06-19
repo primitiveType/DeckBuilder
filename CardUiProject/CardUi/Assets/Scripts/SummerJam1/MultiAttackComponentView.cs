@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using App;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,7 @@ namespace SummerJam1
 {
     public class MultiAttackComponentView : ComponentView<MultiAttack>
     {
-        [SerializeField] private Text AmountText;
+        [SerializeField] private TMP_Text AmountText;
 
         protected override void ComponentOnPropertyChanged()
         {

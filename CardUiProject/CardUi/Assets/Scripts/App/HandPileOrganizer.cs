@@ -55,12 +55,12 @@ namespace App
             int i = 0;
             foreach (CardInHand card in CardsInHand)
             {
-                card.PileItemView.SortHandler.SetDepth((int)Sorting.PileItem + i++);
+                card.PileItemView.SortHandler?.SetDepth((int)Sorting.PileItem + i++);
                 float halfSize = GetEffectiveCardWidth(card) / 2f;
                 if (card.PileItemView.IsDragging)
                 {
                     xPos += halfSize / 2f;
-                    card.PileItemView.SortHandler.SetDepth((int)Sorting.DraggedPileItem);
+                    card.PileItemView.SortHandler?.SetDepth((int)Sorting.DraggedPileItem);
                     continue;
                 }
 
@@ -110,7 +110,7 @@ namespace App
                 transform.InverseTransformPoint(clampedPosition).WithZ(pileItemPosition.z);
             card.PileItemView.SetTargetPosition(clampedLocalPosition, new Vector3(), IsPlayerTurn);
 
-            card.PileItemView.SortHandler.SetDepth((int)Sorting.DraggedPileItem);
+            card.PileItemView.SortHandler?.SetDepth((int)Sorting.DraggedPileItem);
             card.PileItemView.SetLocalPosition(pileItemPosition,
                 new Vector3()); //reset its position to where it started.
         }
@@ -146,9 +146,9 @@ namespace App
         }
 
 
-        protected override void OnItemRemoved(IEntity removed)
+        protected override void OnItemRemovedQueued(IEntity removed)
         {
-            base.OnItemRemoved(removed);
+            base.OnItemRemovedQueued(removed);
             GameObject entityGO = removed.GetComponent<IGameObject>()?.gameObject;
             if (entityGO != null)
             {
@@ -158,9 +158,9 @@ namespace App
             }
         }
 
-        protected override void OnItemAdded(IEntity added)
+        protected override void OnItemAddedQueued(IEntity added)
         {
-            base.OnItemAdded(added);
+            base.OnItemAddedQueued(added);
             GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
             if (entityGO != null && entityGO.GetComponent<CardInHand>() != null)
             {

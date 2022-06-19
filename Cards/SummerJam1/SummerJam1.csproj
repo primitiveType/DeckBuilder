@@ -17,84 +17,19 @@
         <Generator>TextTemplatingFileGenerator</Generator>
         <LastGenOutput>EventsGen.cs</LastGenOutput>
       </None>
-      <None Update="Prefabs\*">
+      <None Update="Prefabs\**\*.*">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Soup.json">
+      <None Update="Prefabs\Units\2\headcheese.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Cheddar.json">
+      <None Update="Prefabs\Units\1\noodles.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\DrawNewHand.json">
+      <None Update="Prefabs\Units\3\sandwich.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Starter.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Cards\Dice.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Cards\Beef.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Cards\Tofu.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Cards\ApronPockets.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Units\headcheese.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Units\noodles.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Units\sandwich.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Units\SoupUnit.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Units\TofuUnit.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Units\StarterUnit.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Cards\Potatoes.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Cards\Wasabi.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Cards\BlackPepper.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Cards\Milk.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Cards\HerbsAndSpices.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Units\kebab.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Units\meatloaf.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Units\Donut.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Units\Pie.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Units\Soup.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Prefabs\Cards\Butter.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+   
     </ItemGroup>
 
     <ItemGroup>

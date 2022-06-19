@@ -11,8 +11,8 @@
       "Value": "Meat Baby"
     },
     {
-      "$type": "SummerJam1.UnitVisualComponent, SummerJam1",
-      "AssetName": "meatloaf"
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "meatbaby"
     },
     {
       "$type": "SummerJam1.Food, SummerJam1"

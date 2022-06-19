@@ -1,0 +1,18 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 11,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Objectives.PlayXCardsInOneTurn, SummerJam1",
+      "Required": 4,
+      "Amount": 0,
+      "Completed": false,
+      "Failed": false
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "Play 4 cards in one turn."
+    }
+  ]
+}

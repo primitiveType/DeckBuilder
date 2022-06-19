@@ -12,8 +12,8 @@
       "Description": "Summon a Tofu, which transforms into any food that attacks it."
     },
     {
-      "$type": "SummerJam1.CardVisualComponent, SummerJam1",
-      "AssetName": "Tofu"
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.starter.tofu"
     },
     {
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1"

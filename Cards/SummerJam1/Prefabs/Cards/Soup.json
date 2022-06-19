@@ -5,15 +5,15 @@
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Cards.StarterUnitCard, SummerJam1",
-      "PrefabName": "SoupUnit.json"
+      "PrefabName": "Soup.json"
     },
     {
       "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
       "Description": "Summon a Pot of Soup, with high max health."
     },
     {
-      "$type": "SummerJam1.CardVisualComponent, SummerJam1",
-      "AssetName": "Soup"
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.starter.soup"
     },
     {
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1"

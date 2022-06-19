@@ -87,6 +87,10 @@ namespace CardsAndPiles.Components
         public void SetMax(int max)
         {
             Max = max;
+            if (Amount > max)
+            {
+                Amount = max;
+            }
         }
 
         public int TryHeal(int damage, IEntity source)

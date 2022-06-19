@@ -12,7 +12,7 @@ namespace App
         {
             int amount = Component.Amount;
             int max = Component.Max;
-            Disposables.Add(AnimationQueue.Instance.Enqueue(( ()=>SomeRoutine(amount, max))));
+            Disposables.Add(AnimationQueue.Instance.Enqueue((() => SomeRoutine(amount, max))));
         }
 
         private void SomeRoutine(int health, int max)

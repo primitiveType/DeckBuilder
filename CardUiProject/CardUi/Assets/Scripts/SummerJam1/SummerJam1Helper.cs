@@ -17,7 +17,6 @@ namespace SummerJam1
 {
     public class SummerJam1Helper : MonoBehaviour //essentially a view<Battle>
     {
-
         [SerializeField] private UltimateTextDamageManager m_TextDamageManager;
 
         [SerializeField] private PileView HandPile;
@@ -26,9 +25,9 @@ namespace SummerJam1
         [SerializeField] private PileView DiscardPile;
         [SerializeField] private List<PileView> FriendlySlots;
         [SerializeField] private List<PileView> EnemySlots;
-        [SerializeField] private GameObject PlayerView;
+        // [SerializeField] private GameObject PlayerView;
         [SerializeField] private GameObject VictoryPopup;
-        
+
 
         private Context Context => SummerJam1Context.Instance.Context;
         private SummerJam1Events Events => SummerJam1Context.Instance.Events;
@@ -89,7 +88,7 @@ namespace SummerJam1
         {
             //TODO: try getting rid of these bridge components by just listening to new events.
             //CreateView(Game.Player.Entity, UnitPrefab);
-            PlayerView.GetComponent<ISetModel>().SetModel(Game.Player.Entity);
+            // PlayerView.GetComponent<ISetModel>().SetModel(Game.Player.Entity);
 
 
             HandPile.SetModel(Game.Battle.Entity.GetComponentInChildren<HandPile>().Entity);
@@ -139,6 +138,10 @@ namespace SummerJam1
             Disposables.Add(AnimationQueue.Instance.Enqueue(ReturnToMenu));
         }
 
+        private void Update()
+        {
+        }
+
         private async void ReturnToMenu()
         {
             VictoryPopup.SetActive(true);
@@ -146,6 +149,7 @@ namespace SummerJam1
             {
                 await Await.NextUpdate();
             }
+
             SceneManager.LoadScene("Scenes/SummerJam1/MenuScene");
         }
 
@@ -155,6 +159,7 @@ namespace SummerJam1
             var entity = args.Entity;
             SummerJam1Context.CreateView(entity, SummerJam1UnitFactory.Instance.UnitPrefab);
         }
+
 
         public void EndTurn()
         {

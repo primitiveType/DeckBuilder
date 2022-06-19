@@ -6,7 +6,7 @@ using SummerJam1.Units;
 
 namespace SummerJam1
 {
-    public class DamageIntent : Intent, IAmount
+    public class DamageIntent : Intent
     {
         [JsonIgnore] public int Amount => Entity.GetComponent<Strength>()?.Amount ?? 0;
         [JsonIgnore] private int Attacks => 1 + (Entity.GetComponent<MultiAttack>()?.Amount ?? 0);

@@ -81,6 +81,20 @@ public EventHandle<BattleStartedEventArgs> SubscribeToBattleStarted(EventHandleD
     return handler;
 } 
     #endregion Code for event BattleStarted
+    #region Code for event RelicCreated
+private event EventHandleDelegate<RelicCreatedEventArgs> RelicCreated;
+public virtual void OnRelicCreated(RelicCreatedEventArgs args)
+{
+    RelicCreated?.Invoke(this, args);
+}
+
+public EventHandle<RelicCreatedEventArgs> SubscribeToRelicCreated(EventHandleDelegate<RelicCreatedEventArgs> action)
+{
+    var handler = new EventHandle<RelicCreatedEventArgs>(action, () => RelicCreated -= action);
+    RelicCreated += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event RelicCreated
 }
 /// <summary>
 /// (object sender, UnitCreatedEventArgs) args)
@@ -245,6 +259,39 @@ public class OnBattleStartedAttribute : EventsBaseAttribute {
     public class BattleStartedEventArgs {        public  BattleContainer Battle { get; }
         public  BattleStartedEventArgs (BattleContainer Battle   ){
                   this.Battle = Battle; 
+}
+
+        }/// <summary>
+/// (object sender, RelicCreatedEventArgs) args)
+/// </summary>
+public class OnRelicCreatedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToRelicCreated(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(RelicCreatedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, RelicCreatedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToRelicCreated(delegate(object sender, RelicCreatedEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void RelicCreatedEvent (object sender, RelicCreatedEventArgs args);
+
+    public class RelicCreatedEventArgs {        public  IEntity Relic { get; }
+        public  RelicCreatedEventArgs (IEntity Relic   ){
+                  this.Relic = Relic; 
 }
 
         }

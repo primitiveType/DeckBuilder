@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using App;
 using SummerJam1.Units;
@@ -11,9 +12,6 @@ namespace SummerJam1
 
         private void Awake()
         {
-            SortHandler = GetComponent<ISortHandler>();
-            SortHandler.SetDepth((int)Sorting.PileItem);
-
             var renderers = GetComponentsInChildren<Renderer>().ToList();
             if (renderers.Count > 0)
             {

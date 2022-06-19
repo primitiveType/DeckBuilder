@@ -22,4 +22,10 @@ namespace SummerJam1
         Beef,
         Butter
     }
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum SummerJam1RelicAsset
+    {
+        
+        
+    }
 }

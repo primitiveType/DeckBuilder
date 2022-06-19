@@ -27,9 +27,9 @@ namespace Solitaire
             }
         }
 
-        protected override void OnItemAdded(IEntity added)
+        protected override void OnItemAddedQueued(IEntity added)
         {
-            base.OnItemAdded(added);
+            base.OnItemAddedQueued(added);
             GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
 
             if (entityGO != null)
@@ -44,7 +44,7 @@ namespace Solitaire
         }
 
 
-        protected override void OnItemRemoved(IEntity removed)
+        protected override void OnItemRemovedQueued(IEntity removed)
         {
             GameObject entityGO = removed.GetComponent<IGameObject>()?.gameObject;
             if (entityGO != null)

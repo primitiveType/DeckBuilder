@@ -10,8 +10,8 @@
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
-      "$type": "SummerJam1.CardVisualComponent, SummerJam1",
-      "AssetName": "HerbsAndSpices"
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.herbsandspices"
     },
     {
       "$type": "SummerJam1.ModifyStrengthOfUnit, SummerJam1",

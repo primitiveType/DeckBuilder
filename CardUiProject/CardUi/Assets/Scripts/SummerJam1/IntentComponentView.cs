@@ -1,3 +1,4 @@
+using Api;
 using App;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +7,7 @@ namespace SummerJam1
 {
     public class IntentComponentView : ComponentView<Intent>
     {
-        [SerializeField] private Text AmountText;
+        // [SerializeField] private Text AmountText;
         [SerializeField] private Image IntentImage;
 
         [SerializeField] private Sprite DamageIntentImage;
@@ -14,15 +15,6 @@ namespace SummerJam1
 
         protected override void ComponentOnPropertyChanged()
         {
-            if (Component is IAmount)
-            {
-                AmountText.gameObject.SetActive(true);
-            }
-            else
-            {
-                AmountText.gameObject.SetActive(false);
-            }
-
             UpdateIntentImage();
         }
 

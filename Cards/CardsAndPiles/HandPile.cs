@@ -38,6 +38,14 @@ namespace CardsAndPiles
             return true;
         }
     }
+    
+    public class ObjectivesPile : Pile
+    {
+        public override bool AcceptsChild(IEntity child)
+        {
+            return true;
+        }
+    }
 
 
     public class DeckPile : Pile

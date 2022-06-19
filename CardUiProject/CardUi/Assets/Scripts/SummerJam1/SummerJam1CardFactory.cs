@@ -8,6 +8,10 @@ namespace SummerJam1
     {
         [SerializeField] private GameObject m_CardPrefab;
         public GameObject CardPrefab => m_CardPrefab;
+        [SerializeField] private GameObject m_RelicPrefab;
+
+        public GameObject RelicPrefab => m_RelicPrefab;
+
         [SerializeField] private GameObject m_BlackPepper;
 
         [SerializeField] private GameObject m_SpicyPepper;

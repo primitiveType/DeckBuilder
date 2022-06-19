@@ -6,7 +6,6 @@ namespace App
 {
     public class PileView : View<IPile>, IPileView
     {
-        [SerializeField] private GameObject Renderer;
         
         
     }

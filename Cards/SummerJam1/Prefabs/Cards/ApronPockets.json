@@ -11,8 +11,8 @@
       "Value": "Apron Pockets"
     },
     {
-      "$type": "SummerJam1.CardVisualComponent, SummerJam1",
-      "AssetName": "ApronPockets"
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.apronpockets"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"

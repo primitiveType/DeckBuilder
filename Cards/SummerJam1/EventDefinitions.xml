@@ -15,4 +15,7 @@
     <event id="BattleStarted">
         <arg name="Battle" type="BattleContainer"/>
     </event>
+    <event id="RelicCreated">
+        <arg name="Relic" type="IEntity"/>
+    </event>
 </catalog>

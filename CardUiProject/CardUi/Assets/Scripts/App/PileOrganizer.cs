@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using Api;
 using UnityEngine;
 
@@ -13,11 +14,11 @@ namespace App
 
         protected virtual void Start()
         {
-            PileView = GetComponentInParent<IPileView>();
+            PileView = GetComponentsInParent<IPileView>(true).FirstOrDefault();
             PileView.Entity.Children.CollectionChanged += OnPileChanged;
             foreach (IEntity child in PileView.Entity.Children)
             {
-                OnItemAdded(child);
+                OnItemAddedQueued(child);
             }
         }
 
@@ -27,7 +28,8 @@ namespace App
             {
                 foreach (IEntity added in e.NewItems)
                 {
-                    Disposables.Add(AnimationQueue.Instance.Enqueue((() => { OnItemAdded(added); })));
+                    OnItemAddedImmediate(added);
+                    Disposables.Add(AnimationQueue.Instance.Enqueue((() => { OnItemAddedQueued(added); })));
                 }
             }
 
@@ -35,16 +37,27 @@ namespace App
             {
                 foreach (IEntity removed in e.OldItems)
                 {
-                    Disposables.Add(AnimationQueue.Instance.Enqueue((() => { OnItemRemoved(removed); })));
+                    OnItemRemovedImmediate(removed);
+                    Disposables.Add(AnimationQueue.Instance.Enqueue((() => { OnItemRemovedQueued(removed); })));
                 }
             }
         }
 
-        protected virtual void OnItemRemoved(IEntity removed)
+        protected virtual void OnItemRemovedImmediate(IEntity removed)
+        {
+            
+        }
+
+        protected virtual void OnItemAddedImmediate(IEntity added)
+        {
+            
+        }
+
+        protected virtual void OnItemRemovedQueued(IEntity removed)
         {
         }
 
-        protected virtual void OnItemAdded(IEntity added)
+        protected virtual void OnItemAddedQueued(IEntity added)
         {
             IGameObject view = added.GetComponent<IGameObject>();
             view.gameObject.transform.SetParent(transform);

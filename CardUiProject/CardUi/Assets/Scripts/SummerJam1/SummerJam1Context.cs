@@ -24,22 +24,30 @@ namespace SummerJam1
             var events = new SummerJam1Events();
             Context = new Context(events);
             Events.SubscribeToCardCreated(OnCardCreated);
+            Events.SubscribeToRelicCreated(OnRelicCreated);
 
             Context.SetPrefabsDirectory(Path.Combine("Assets", "External", "Library", "Prefabs"));
             IEntity game = Context.Root;
 
-            SceneManager.LoadScene("MenuScene");
 
             Game = game.AddComponent<SummerJam1Game>();
+        }
+
+        protected override void SingletonStarted()
+        {
+            base.SingletonStarted();
+            SceneManager.LoadScene("MenuScene");
+        }
+
+        private void OnRelicCreated(object sender, RelicCreatedEventArgs args)
+        {
+            IEntity entity = args.Relic;
+            CreateView(entity, SummerJam1CardFactory.Instance.RelicPrefab);
         }
 
 
         private void OnCardCreated(object sender, CardCreatedEventArgs args)
         {
-            if (SceneManager.GetActiveScene().name == "BattleScene")
-            {
-            }
-
             var entity = args.CardId;
             CreateView(entity, SummerJam1CardFactory.Instance.CardPrefab);
         }
@@ -65,6 +73,12 @@ namespace SummerJam1
             {
                 return CreateView(summerJam1ModelViewBridge.Entity, SummerJam1CardFactory.Instance.CardPrefab);
             }
+
+            if (summerJam1ModelViewBridge.Entity.GetComponent<RelicComponent>() != null)
+            {
+                return CreateView(summerJam1ModelViewBridge.Entity, SummerJam1CardFactory.Instance.RelicPrefab);
+            }
+
 
             return null;
         }

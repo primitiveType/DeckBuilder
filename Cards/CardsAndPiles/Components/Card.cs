@@ -12,7 +12,7 @@ namespace CardsAndPiles.Components
         protected override void Initialize()
         {
             base.Initialize();
-            ((CardEvents)Context.Events).OnCardCreated(new CardCreatedEventArgs(Entity));
+            ((CardEvents)Context.Events).OnCardCreated(new CardCreatedEventArgs(Entity));//probably bad to have this here. this event does too much.
         }
 
         public bool TryPlayCard(IEntity target)

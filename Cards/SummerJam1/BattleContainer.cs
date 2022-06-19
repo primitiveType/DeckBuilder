@@ -1,15 +1,16 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Api;
 using CardsAndPiles;
 using SummerJam1.Units;
+using Random = Api.Random;
 
 namespace SummerJam1
 {
     public class SummerJam1PrizePile : PrizePile
     {
- 
-
         [OnBattleEnded]
         private void OnBattleEnded(object sender, BattleEndedEventArgs args)
         {
@@ -31,7 +32,10 @@ namespace SummerJam1
 
         public void ChoosePrize(IEntity child)
         {
-            child.TrySetParent(Entity.GetComponentInParent<SummerJam1Game>().Deck.Entity);
+            if (child != null)
+            {
+                child.TrySetParent(Entity.GetComponentInParent<SummerJam1Game>().Deck.Entity);
+            }
 
             Clear();
         }
@@ -44,6 +48,55 @@ namespace SummerJam1
             }
         }
     }
+
+    public class RelicPile : Pile
+    {
+        public override bool AcceptsChild(IEntity child)
+        {
+            return child.GetComponent<RelicComponent>() != null;
+        }
+    }
+
+    public class SummerJam1RelicPrizePile : PrizePile
+    {
+        [OnBattleEnded]
+        private void OnBattleEnded(object sender, BattleEndedEventArgs args)
+        {
+            if (args.Victory)
+            {
+                //Player.Entity.TrySetParent(TempPlayerSlot.Entity);
+                SetupPrizePile();
+            }
+        }
+
+        public void SetupPrizePile()
+        {
+            Clear();
+            for (int i = 0; i < 1; i++)
+            {
+                Entity.GetComponentInParent<SummerJam1Game>().CreateRandomRelic().TrySetParent(Entity);
+            }
+        }
+
+        public void ChoosePrize(IEntity child)
+        {
+            if (child != null)
+            {
+                child.TrySetParent(Entity.GetComponentInParent<SummerJam1Game>().RelicPile.Entity);
+            }
+
+            Clear();
+        }
+
+        private void Clear()
+        {
+            foreach (IEntity unwantedChild in Entity.Children.ToList())
+            {
+                unwantedChild.Destroy();
+            }
+        }
+    }
+
     public class BattleContainer : SummerJam1Component
     {
         private int NumSlots = 3;
@@ -52,10 +105,14 @@ namespace SummerJam1
         public HandPile Hand { get; private set; }
         public DeckPile BattleDeck { get; private set; }
         private IEntity SlotsParent { get; set; }
-        
+
+        public ObjectivesPile ObjectivesPile { get; private set; }
+
+
         protected override void Initialize()
         {
             base.Initialize();
+            Context.CreateEntity(Entity, (entity) => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
 
             SlotsParent = Context.CreateEntity(Entity);
             for (int i = 0; i < NumSlots; i++)
@@ -73,32 +130,59 @@ namespace SummerJam1
             //Context.CreateEntity(Entity, entity => BattleDeck = entity.AddComponent<DeckPile>());
             Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
             Exhaust = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerExhaust>());
+
+            SetupObjectives();
         }
 
-        public void StartBattle()
+        private void SetupObjectives()
+        {
+            var entities = CreateRandomObjectives(2);
+            foreach (IEntity entity in entities)
+            {
+                entity.TrySetParent(ObjectivesPile.Entity);
+            }
+        }
+
+        public void ChooseObjective(IEntity obj)
+        {
+            foreach (IEntity child in ObjectivesPile.Entity.Children.ToList())
+            {
+                if (child != obj)
+                {
+                    child.Destroy();
+                }
+            }
+        }
+
+        public IEntity CreateRandomMonster(IEntity parent, int difficulty)
+        {
+            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, $"Units/{difficulty}"));
+            List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
+
+            int index = Game.Random.SystemRandom.Next(files.Count);
+
+            return Context.CreateEntity(parent, Path.Combine($"Units/{difficulty}", files[index].Name));
+        }
+
+
+        public void StartBattle(int difficulty)
         {
             BattleDeck = Context.DuplicateEntity(Game.Deck.Entity).GetComponent<DeckPile>();
             Context.CreateEntity(Entity, entity =>
                 Hand = entity.AddComponent<HandPile>());
 
             int i = 0;
+            int totalDifficulty = difficulty + 3;
+            List<int> difficulties = new List<int> { 0, 0, 0 };
+            while (difficulties.Sum() < totalDifficulty)
+            {
+                difficulties[i % 3] = difficulties[i % 3]++;
+            }
+
+            i = 0;
             foreach (EnemyUnitSlot slot in Entity.GetComponentsInChildren<EnemyUnitSlot>())
             {
-                if (i == 0)
-                {
-                    Context.CreateEntity(slot.Entity, "Units/meatloaf.json");
-                }
-
-                if (i == 1)
-                {
-                    Context.CreateEntity(slot.Entity, "Units/donut.json");
-                }
-                
-                if (i == 2)
-                {
-                    Context.CreateEntity(slot.Entity, "Units/pie.json");
-                }
-
+                CreateRandomMonster(slot.Entity, difficulties[i]);
                 i++;
             }
 
@@ -128,26 +212,63 @@ namespace SummerJam1
                 SlotsParent.GetComponentsInChildren<EnemyUnitSlot>().OrderBy(slot => slot.Order);
             return enemyUnitSlots.Select(slot => slot.Entity.GetComponentInChildren<Unit>()?.Entity).FirstOrDefault();
         }
-        
+
         public IEntity GetFrontMostFriendly()
         {
             IOrderedEnumerable<FriendlyUnitSlot> friendlyUnitSlots =
                 SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order);
             return friendlyUnitSlots.Select(slot => slot.Entity.GetComponentInChildren<Unit>()?.Entity).FirstOrDefault();
         }
-        
+
         public List<IEntity> GetFriendlies()
         {
             IEnumerable<IEntity> friendlyUnitSlots =
-                SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order).Where(slot=>slot.Entity.GetComponentInChildren<Unit>() != null).Select(slot=>slot.Entity);
+                SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order)
+                    .Where(slot => slot.Entity.GetComponentInChildren<Unit>() != null).Select(slot => slot.Entity);
             return friendlyUnitSlots.ToList();
         }
-        
+
         public IEntity GetBackMostEmptySlot()
         {
             IOrderedEnumerable<FriendlyUnitSlot> enemyUnitSlots =
                 SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderByDescending(slot => slot.Order);
             return enemyUnitSlots.FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() == null)?.Entity;
+        }
+
+        public IEntity GetFrontMostEmptySlot()
+        {
+            IOrderedEnumerable<FriendlyUnitSlot> enemyUnitSlots =
+                SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order);
+            return enemyUnitSlots.FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() == null)?.Entity;
+        }
+
+        private List<IEntity> CreateRandomObjectives(int count = 2)
+        {
+            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Objectives"));
+            List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
+            if (count > files.Count)
+            {
+                throw new ArgumentException(nameof(count));
+            }
+
+            List<int> indices = new List<int>(count);
+
+            while (indices.Count < count)
+            {
+                int index = Game.Random.SystemRandom.Next(files.Count);
+                if (!indices.Contains(index))
+                {
+                    indices.Add(index);
+                }
+            }
+
+            List<IEntity> objectives = new List<IEntity>(count);
+            foreach (int index in indices)
+            {
+                objectives.Add(Context.CreateEntity(null, Path.Combine("Objectives", files[index].Name)));
+            }
+
+            return objectives;
         }
     }
 }

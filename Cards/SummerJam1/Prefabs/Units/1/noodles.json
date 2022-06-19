@@ -11,8 +11,8 @@
       "Value": "Spaghetti"
     },
     {
-      "$type": "SummerJam1.UnitVisualComponent, SummerJam1",
-      "AssetName": "Noodles"
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "noodles"
     },
     {
       "$type": "SummerJam1.Food, SummerJam1"

@@ -8,26 +8,26 @@
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Soup"
+      "Value": "sandwich"
     },
     {
-      "$type": "SummerJam1.UnitVisualComponent, SummerJam1",
-      "AssetName": "Soup"
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "sandwich"
     },
     {
       "$type": "SummerJam1.Food, SummerJam1"
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 2
+      "Amount": 8
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
-      "Amount": 25,
-      "Max": 25
+      "Amount": 7,
+      "Max": 7
     }
   ]
 }

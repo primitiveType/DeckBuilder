@@ -11,8 +11,8 @@
       "Value": "Prep Talk"
     },
     {
-      "$type": "SummerJam1.CardVisualComponent, SummerJam1",
-      "AssetName": "PrepTalk"
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.preptalk"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"

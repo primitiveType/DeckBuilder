@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using NUnit.Framework;
 using SummerJam1;
 using SummerJam1.Cards;
+using SummerJam1.Objectives;
 using SummerJam1.Units;
 
 namespace SummerJam1Tests
@@ -67,6 +70,46 @@ namespace SummerJam1Tests
 
             Assert.That(restored.GetComponent<Card>(), Is.Not.Null);
         }
+        [Test]
+        public void Serialize_Objective()
+        {
+            var obj = Context.CreateEntity();
+            obj.AddComponent<TakeNoDamage>();
+            obj.AddComponent<DescriptionComponent>();
+            obj.AddComponent<RelicVisualComponent>();
+
+
+            string cardstr = Serializer.Serialize(obj);
+            File.WriteAllText(
+                @"C:\Users\Arthu\Documents\Projects\DeckBuilder - Copy (2)\Cards\SummerJam1\Prefabs\templateObjective.json", cardstr);
+            IEntity restored = Serializer.Deserialize<IEntity>(cardstr);
+
+            Assert.That(restored.GetComponent<Objective>(), Is.Not.Null);
+        }
+        
+        // [Test]
+        // public void Serialize_All_Relics()
+        // {
+        //     string nspace = "SummerJam1.Relics";
+        //
+        //     IEnumerable<Type> q = from t in Assembly.GetAssembly(typeof(RelicVisualComponent)).GetTypes()
+        //         where t.IsClass && t.Namespace == nspace && !t.IsGenericType
+        //         select t;
+        //
+        //     foreach (Type type in q)
+        //     {
+        //         var obj = Context.CreateEntity();
+        //         ((ChildrenCollection<Component>)obj.Components).Add((Component)Activator.CreateInstance(type));
+        //         obj.AddComponent<DescriptionComponent>();
+        //         obj.AddComponent<RelicVisualComponent>();
+        //         obj.AddComponent<RelicComponent>();
+        //         
+        //         string cardstr = Serializer.Serialize(obj);
+        //         File.WriteAllText(
+        //             $@"C:\Users\Arthu\Documents\Projects\DeckBuilder - Copy (2)\Cards\SummerJam1\Prefabs\Relics\{type.Name}.json", cardstr);
+        //
+        //     }
+        // }
 
         [Test]
         public void Serialize_Unit()
