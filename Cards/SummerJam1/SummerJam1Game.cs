@@ -25,8 +25,6 @@ namespace SummerJam1
 
         public Random Random { get; private set; }
 
-        public int BattlesWon { get; set; }
-        public int BattlesRequired { get; set; }
 
         protected override void Initialize()
         {
@@ -41,7 +39,7 @@ namespace SummerJam1
             {
                 Player = entity.AddComponent<Player>();
                 entity.AddComponent<PlayerUnit>();
-                entity.AddComponent<UnitVisualComponent>().AssetName = SummerJam1UnitAsset.Player;
+                entity.AddComponent<VisualComponent>().AssetName = "Player";
                 Health health = entity.AddComponent<Health>();
                 health.SetMax(10);
                 health.SetHealth(10);
@@ -51,8 +49,8 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
             for (int i = 0; i < 2; i++)
             {
-                Context.CreateEntity(Deck.Entity, "Cards/Starter.json");
-                Context.CreateEntity(Deck.Entity, "Cards/Starter.json");
+                Context.CreateEntity(Deck.Entity, "Cards/UnitStarter.json");
+                Context.CreateEntity(Deck.Entity, "Cards/UnitStarter.json");
                 Context.CreateEntity(Deck.Entity, "Cards/Dice.json");
             }
 
@@ -82,7 +80,7 @@ namespace SummerJam1
 
             Context.CreateEntity(Entity, (entity) => { Battle = entity.AddComponent<BattleContainer>(); });
             //Player.Entity.TrySetParent(Battle.GetBackMostEmptySlot());
-            Battle.StartBattle(BattlesWon);
+            Battle.StartBattle(Context.Root.GetComponent<GameEndsAfter10Rooms>().RoomsCleared);
         }
 
 

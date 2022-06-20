@@ -7,10 +7,7 @@ namespace SummerJam1
     {
         public string AssetName { get; set; }
     }
-    public class CardVisualComponent : SummerJam1Component
-    {
-        public SummerJam1CardAsset AssetName { get; set; }
-    }
+ 
     public class RelicVisualComponent : SummerJam1Component
     {
         public SummerJam1RelicAsset AssetName { get; set; }

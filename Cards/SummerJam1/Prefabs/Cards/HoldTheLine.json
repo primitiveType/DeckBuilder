@@ -12,7 +12,7 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.recipe"
+      "AssetName": "card.holdtheline"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"

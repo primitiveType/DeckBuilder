@@ -1,16 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using SummerJam1;
 using SummerJam1.Cards;
-using SummerJam1.Objectives;
 using SummerJam1.Units;
 
 namespace SummerJam1Tests
@@ -52,6 +48,31 @@ namespace SummerJam1Tests
             Game.StartBattle();
         }
 
+        [Test]
+        public void AllCardsHaveNameAndDescription()
+        {
+            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Cards"));
+
+            TestDirectory(info, "Cards");
+
+            void TestDirectory(DirectoryInfo dir, string relativePath)
+            {
+                foreach (DirectoryInfo enumerateDirectory in dir.EnumerateDirectories())
+                {
+                    TestDirectory(enumerateDirectory, Path.Combine(relativePath, enumerateDirectory.Name));
+                }
+
+                foreach (FileInfo enumerateFile in dir.EnumerateFiles())
+                {
+                    var entity = Context.CreateEntity(null, Path.Combine(relativePath, enumerateFile.Name));
+                    Assert.NotNull(entity);
+                    Assert.That(entity.Components, Has.Count.GreaterThan(0));
+                    Assert.NotNull(entity.GetComponent<IDescription>(), enumerateFile.Name);
+                    Assert.NotNull(entity.GetComponent<NameComponent>(), enumerateFile.Name);
+                }
+            }
+        }
+        
         [Test]
         public void TryLoadAllPrefabs()
         {

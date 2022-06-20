@@ -228,6 +228,12 @@ namespace SummerJam1.Cards
 
     public class DoubleMaxHealthOfUnit : SummerJam1Component, IEffect
     {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Double the Max Health of a Unit.";
+        }
+
         public bool DoEffect(IEntity target)
         {
             Unit unit = target.GetComponentInChildren<Unit>();
@@ -245,6 +251,12 @@ namespace SummerJam1.Cards
     
     public class DoubleBurnOfUnit : SummerJam1Component, IEffect
     {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Double the amount of Burn on a unit.";
+        }
+
         public bool DoEffect(IEntity target)
         {
             Unit unit = target.GetComponentInChildren<Unit>();

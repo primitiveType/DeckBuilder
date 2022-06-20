@@ -29,6 +29,12 @@ namespace SummerJam1.Cards
 
     public class AddBurnToUnit : SummerJam1Component, IEffect
     {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Add {Amount} burn to a unit.";
+        }
+
         [JsonProperty] public int Amount { get; set; }
 
         public bool DoEffect(IEntity target)

@@ -11,7 +11,7 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.maple"
+      "AssetName": "card.maplesyrup"
     },
     {
       "$type": "SummerJam1.Cards.ModifyMaxHealthOfUnit, SummerJam1",
@@ -19,7 +19,7 @@
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Honey"
+      "Value": "Maple"
     },
     {
       "$type": "CardsAndPiles.Components.Draggable, CardsAndPiles",

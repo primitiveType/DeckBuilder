@@ -568,6 +568,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2059855309}
     m_Modifications:
+    - target: {fileID: 157318251731720601, guid: 7f180928db050d241a0c748a80aae839, type: 3}
+      propertyPath: m_Size.x
+      value: 3.81
+      objectReference: {fileID: 0}
+    - target: {fileID: 157318251731720601, guid: 7f180928db050d241a0c748a80aae839, type: 3}
+      propertyPath: m_Size.y
+      value: 7.64
+      objectReference: {fileID: 0}
     - target: {fileID: 157318251731720602, guid: 7f180928db050d241a0c748a80aae839, type: 3}
       propertyPath: m_Name
       value: Slot
@@ -1615,6 +1623,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2059855309}
     m_Modifications:
+    - target: {fileID: 157318251731720601, guid: 7f180928db050d241a0c748a80aae839, type: 3}
+      propertyPath: m_Size.x
+      value: 3.81
+      objectReference: {fileID: 0}
+    - target: {fileID: 157318251731720601, guid: 7f180928db050d241a0c748a80aae839, type: 3}
+      propertyPath: m_Size.y
+      value: 7.64
+      objectReference: {fileID: 0}
     - target: {fileID: 157318251731720602, guid: 7f180928db050d241a0c748a80aae839, type: 3}
       propertyPath: m_Name
       value: Slot (1)
@@ -1688,6 +1704,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2059855309}
     m_Modifications:
+    - target: {fileID: 157318251731720601, guid: 7f180928db050d241a0c748a80aae839, type: 3}
+      propertyPath: m_Size.x
+      value: 3.81
+      objectReference: {fileID: 0}
+    - target: {fileID: 157318251731720601, guid: 7f180928db050d241a0c748a80aae839, type: 3}
+      propertyPath: m_Size.y
+      value: 7.64
+      objectReference: {fileID: 0}
     - target: {fileID: 157318251731720602, guid: 7f180928db050d241a0c748a80aae839, type: 3}
       propertyPath: m_Name
       value: Slot (2)
@@ -2274,6 +2298,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1842746432}
     m_Modifications:
+    - target: {fileID: 157318251731720601, guid: 7f180928db050d241a0c748a80aae839, type: 3}
+      propertyPath: m_Size.x
+      value: 3.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 157318251731720601, guid: 7f180928db050d241a0c748a80aae839, type: 3}
+      propertyPath: m_Size.y
+      value: 7.9
+      objectReference: {fileID: 0}
     - target: {fileID: 157318251731720602, guid: 7f180928db050d241a0c748a80aae839, type: 3}
       propertyPath: m_Name
       value: Slot (1)
@@ -2331,6 +2363,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1842746432}
     m_Modifications:
+    - target: {fileID: 157318251731720601, guid: 7f180928db050d241a0c748a80aae839, type: 3}
+      propertyPath: m_Size.x
+      value: 3.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 157318251731720601, guid: 7f180928db050d241a0c748a80aae839, type: 3}
+      propertyPath: m_Size.y
+      value: 7.9
+      objectReference: {fileID: 0}
     - target: {fileID: 157318251731720602, guid: 7f180928db050d241a0c748a80aae839, type: 3}
       propertyPath: m_Name
       value: Slot (2)
@@ -3106,6 +3146,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1842746432}
     m_Modifications:
+    - target: {fileID: 157318251731720601, guid: 7f180928db050d241a0c748a80aae839, type: 3}
+      propertyPath: m_Size.x
+      value: 3.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 157318251731720601, guid: 7f180928db050d241a0c748a80aae839, type: 3}
+      propertyPath: m_Size.y
+      value: 7.9
+      objectReference: {fileID: 0}
     - target: {fileID: 157318251731720602, guid: 7f180928db050d241a0c748a80aae839, type: 3}
       propertyPath: m_Name
       value: Slot

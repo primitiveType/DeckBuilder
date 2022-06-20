@@ -1,0 +1,37 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Shish kebab"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.starter.shishkebab"
+    },
+    {
+      "$type": "SummerJam1.Food, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Strength, SummerJam1",
+      "Amount": 1
+    },
+    {
+      "$type": "SummerJam1.DamageIntent, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.MultiAttack, SummerJam1",
+      "Amount": 3
+    },
+    {
+      "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
+      "Amount": 1,
+      "Max": 1
+    }
+  ]
+}

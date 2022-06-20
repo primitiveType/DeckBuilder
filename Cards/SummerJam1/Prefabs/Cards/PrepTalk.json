@@ -26,7 +26,7 @@
     },
     {
       "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
-      "Description": "Discard your hand and draw 5 cards."
+      "Description": "Draw a card for each friendly unit."
     }
   ]
 }

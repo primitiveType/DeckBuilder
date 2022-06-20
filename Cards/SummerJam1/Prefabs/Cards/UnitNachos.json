@@ -4,21 +4,23 @@
   "Id": 63,
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
+      "$type": "SummerJam1.Cards.StarterUnitCard, SummerJam1",
+      "PrefabName": "Nachos.json"
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "Summon a bowl of Nachos."
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.starter.nachos"
     },
     {
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
     },
     {
-      "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.dates"
-    },
-    {
-      "$type": "SummerJam1.Cards.DoubleMaxHealthOfUnit, SummerJam1"
-    },
-    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Butter!"
+      "Value": "Nachos"
     },
     {
       "$type": "CardsAndPiles.Components.Draggable, CardsAndPiles",
@@ -26,10 +28,7 @@
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Cost": 2
-    },
-    {
-      "$type": "SummerJam1.Cards.Sweet, SummerJam1"
+      "Cost": 1
     }
   ]
 }

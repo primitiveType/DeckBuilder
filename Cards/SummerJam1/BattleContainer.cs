@@ -60,18 +60,15 @@ namespace SummerJam1
 
     public class SummerJam1RelicPrizePile : PrizePile
     {
-        [OnBattleEnded]
-        private void OnBattleEnded(object sender, BattleEndedEventArgs args)
+        [OnLeaveBattle]
+        private void OnBattleEnded()
         {
-            if (args.Victory)
+            //Player.Entity.TrySetParent(TempPlayerSlot.Entity);
+            var game = Context.Root.GetComponentInChildren<SummerJam1Game>();
+            var objective = game.Battle.ObjectivesPile.Entity.GetComponentInChildren<Objective>();
+            if (objective.Completed && !objective.Failed)
             {
-                //Player.Entity.TrySetParent(TempPlayerSlot.Entity);
-                var game = Context.Root.GetComponentInChildren<SummerJam1Game>();
-                var objective = game.Battle.ObjectivesPile.Entity.GetComponentInChildren<Objective>();
-                if (objective.Completed && !objective.Failed)
-                {
-                    SetupPrizePile();
-                }
+                SetupPrizePile();
             }
         }
 
@@ -180,7 +177,8 @@ namespace SummerJam1
             int i = 0;
             int totalDifficulty = difficulty + 3;
             List<int> difficulties = new List<int> { 1, 1, 1 };
-            while (difficulties.Sum() < totalDifficulty)
+            int maxDifficulty = 9;
+            while (difficulties.Sum() < totalDifficulty && difficulties.Sum() < maxDifficulty)
             {
                 difficulties[i % 3] = ++difficulties[i % 3];
                 i++;
@@ -215,6 +213,10 @@ namespace SummerJam1
             {
                 Events.OnGameEnded(new GameEndedEventArgs(false));
             }
+            else
+            {
+                Events.OnLeaveBattle(new LeaveBattleEventArgs());
+            }
         }
 
         public IEntity GetFrontMostEnemy()
@@ -235,11 +237,27 @@ namespace SummerJam1
         {
             IEnumerable<IEntity> friendlyUnitSlots =
                 SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order)
+                    .Select(slot => slot.Entity.GetComponentInChildren<Unit>()?.Entity).Where(unit => unit != null);
+            return friendlyUnitSlots.ToList();
+        }
+
+        public List<IEntity> GetFullFriendlySlots()
+        {
+            IEnumerable<IEntity> friendlyUnitSlots =
+                SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order)
                     .Where(slot => slot.Entity.GetComponentInChildren<Unit>() != null).Select(slot => slot.Entity);
             return friendlyUnitSlots.ToList();
         }
-        
+
         public List<IEntity> GetEnemies()
+        {
+            IEnumerable<IEntity> enemyUnitSlots =
+                SlotsParent.GetComponentsInChildren<EnemyUnitSlot>().OrderBy(slot => slot.Order)
+                    .Select(slot => slot.Entity.GetComponentInChildren<Unit>()?.Entity).Where(unit => unit != null);
+            return enemyUnitSlots.ToList();
+        }
+
+        public List<IEntity> GetFullEnemySlots()
         {
             IEnumerable<IEntity> enemyUnitSlots =
                 SlotsParent.GetComponentsInChildren<EnemyUnitSlot>().OrderBy(slot => slot.Order)

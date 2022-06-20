@@ -109,6 +109,20 @@ public EventHandle<BattleStartedEventArgs> SubscribeToBattleStarted(EventHandleD
     return handler;
 } 
     #endregion Code for event BattleStarted
+    #region Code for event LeaveBattle
+private event EventHandleDelegate<LeaveBattleEventArgs> LeaveBattle;
+public virtual void OnLeaveBattle(LeaveBattleEventArgs args)
+{
+    LeaveBattle?.Invoke(this, args);
+}
+
+public EventHandle<LeaveBattleEventArgs> SubscribeToLeaveBattle(EventHandleDelegate<LeaveBattleEventArgs> action)
+{
+    var handler = new EventHandle<LeaveBattleEventArgs>(action, () => LeaveBattle -= action);
+    LeaveBattle += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event LeaveBattle
     #region Code for event RelicCreated
 private event EventHandleDelegate<RelicCreatedEventArgs> RelicCreated;
 public virtual void OnRelicCreated(RelicCreatedEventArgs args)
@@ -351,6 +365,34 @@ public class OnBattleStartedAttribute : EventsBaseAttribute {
 }
 
         }/// <summary>
+/// (object sender, LeaveBattleEventArgs) args)
+/// </summary>
+public class OnLeaveBattleAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToLeaveBattle(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(LeaveBattleEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, LeaveBattleEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToLeaveBattle(delegate(object sender, LeaveBattleEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void LeaveBattleEvent (object sender, LeaveBattleEventArgs args);
+
+    public class LeaveBattleEventArgs {        }/// <summary>
 /// (object sender, RelicCreatedEventArgs) args)
 /// </summary>
 public class OnRelicCreatedAttribute : EventsBaseAttribute {

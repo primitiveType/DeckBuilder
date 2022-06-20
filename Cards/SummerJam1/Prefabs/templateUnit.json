@@ -11,7 +11,7 @@
       "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
-      "$type": "SummerJam1.UnitVisualComponent, SummerJam1",
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
       "AssetName": "Noodles"
     },
     {

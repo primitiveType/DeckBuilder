@@ -8,7 +8,7 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.spicypepper"
+      "AssetName": "card.spicy"
     },
     {
       "$type": "SummerJam1.Cards.ModifyStrengthOfUnit, SummerJam1",

@@ -13,7 +13,7 @@ public class SetMaterialFromAssetName : View<VisualComponent>
     }
 
     // Start is called before the first frame update
-    [PropertyListener(nameof(CardVisualComponent.AssetName))]
+    [PropertyListener(nameof(VisualComponent.AssetName))]
     private void OnAssetNameChanged(object sender, PropertyChangedEventArgs args)
     {
         Disposables.Add(AnimationQueue.Instance.Enqueue(() =>

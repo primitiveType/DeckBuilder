@@ -8,11 +8,11 @@
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Sautee"
+      "Value": "Saute"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.sautee"
+      "AssetName": "card.saute"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"

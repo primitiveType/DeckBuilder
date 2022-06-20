@@ -5,22 +5,22 @@
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Cards.StarterUnitCard, SummerJam1",
-      "PrefabName": "Soup.json"
+      "PrefabName": "Kebab.json"
     },
     {
       "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
-      "Description": "Summon a Pot of Soup, with high max health."
+      "Description": "Summon a Kebab with multi-attack."
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.starter.soup"
+      "AssetName": "card.starter.shishkebab"
     },
     {
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Soup"
+      "Value": "Kebab"
     },
     {
       "$type": "CardsAndPiles.Components.Draggable, CardsAndPiles",

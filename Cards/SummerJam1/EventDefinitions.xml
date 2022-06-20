@@ -20,6 +20,8 @@
     <event id="BattleStarted">
         <arg name="Battle" type="BattleContainer"/>
     </event>
+    <event id="LeaveBattle">
+    </event>
     <event id="RelicCreated">
         <arg name="Relic" type="IEntity"/>
     </event>
