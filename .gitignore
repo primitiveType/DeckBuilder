@@ -32,6 +32,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 /CardUiProject/CardUi/Assets/External/
+/CardUiProject/CardUi/Assets/TextMeshPro/
 /CardUiProject/CardUi/Assets/LevelMeshes/
 /CardUiProject/CardUi/Assets/Dependencies/
 .idea
