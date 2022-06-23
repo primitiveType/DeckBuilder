@@ -24,7 +24,9 @@ namespace SummerJam1
         [SerializeField] private PileView ExhaustPile;
         [SerializeField] private PileView DiscardPile;
         [SerializeField] private List<PileView> FriendlySlots;
+
         [SerializeField] private List<PileView> EnemySlots;
+
         // [SerializeField] private GameObject PlayerView;
         [SerializeField] private GameObject VictoryPopup;
 
@@ -39,7 +41,8 @@ namespace SummerJam1
         {
             Disposables.Add(Events.SubscribeToBattleEnded(OnBattleEnded));
             Disposables.Add(Events.SubscribeToBattleStarted(OnBattleStarted));
-            Context.SetPrefabsDirectory(Path.Combine("Assets", "External", "Library", "Prefabs"));
+
+
 
             IEntity game = Context.Root;
             Disposables.Add(Events.SubscribeToUnitCreated(OnUnitCreated));
@@ -135,8 +138,6 @@ namespace SummerJam1
             {
                 Debug.Log("FAILURE.");
             }
-
-            
         }
 
         private void Update()

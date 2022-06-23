@@ -171,6 +171,7 @@ namespace SummerJam1
         public void StartBattle(int difficulty)
         {
             BattleDeck = Context.DuplicateEntity(Game.Deck.Entity).GetComponent<DeckPile>();
+            BattleDeck.Entity.TrySetParent(Entity);
             Context.CreateEntity(Entity, entity =>
                 Hand = entity.AddComponent<HandPile>());
 

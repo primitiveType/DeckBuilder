@@ -11,8 +11,11 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description =
-                $"Deal {DamageAmount} damage to target Unit.";
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description =
+                    $"Deal {DamageAmount} damage to target Unit.";
+            }
         }
 
 

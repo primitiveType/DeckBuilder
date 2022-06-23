@@ -8,11 +8,6 @@ namespace SummerJam1.Cards
 
         public bool DoEffect(IEntity target)
         {
-            if (!Entity.TrySetParent(target))
-            {
-                return false;
-            }
-
             for (int i = 0; i < NumToDraw; i++)
             {
                 Game.Battle.BattleDeck.DrawCard();

@@ -32,7 +32,10 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Add {Amount} burn to a unit.";
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Add {Amount} burn to a unit.";
+            }
         }
 
         [JsonProperty] public int Amount { get; set; }
@@ -56,7 +59,10 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Add {Math.Abs(Amount)} Burn to all enemy units.";
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Add {Math.Abs(Amount)} Burn to all enemy units.";
+            }
         }
 
         protected override void ModifyComponent(Burn component)

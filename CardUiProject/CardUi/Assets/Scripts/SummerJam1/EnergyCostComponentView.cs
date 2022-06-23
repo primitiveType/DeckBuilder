@@ -1,8 +1,9 @@
+using App;
 using SummerJam1.Cards;
 using TMPro;
 using UnityEngine;
 
-namespace App
+namespace SummerJam1
 {
     public class EnergyCostComponentView : ComponentView<EnergyCost>
     {

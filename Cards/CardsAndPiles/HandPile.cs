@@ -69,6 +69,14 @@ namespace CardsAndPiles
 
     public class DeckPile : Pile
     {
+        public Random Random1 { get; private set; }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Random1 = Context.Root.GetComponent<Random>();
+        }
+
         public override bool AcceptsChild(IEntity child)
         {
             Card card = child.GetComponent<Card>();
@@ -96,7 +104,7 @@ namespace CardsAndPiles
 
             if (Entity.Children.Count > 0)
             {
-                Entity.Children[0].TrySetParent(hand.Entity);
+                Entity.Children[Random1.SystemRandom.Next(0, Entity.Children.Count)].TrySetParent(hand.Entity);
             }
         }
     }

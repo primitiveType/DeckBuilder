@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using Api;
 using App;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class HideRendererIfNotEmptyOrganizer : PileOrganizer
 {

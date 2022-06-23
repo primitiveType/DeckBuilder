@@ -1,8 +1,8 @@
+using App;
 using Simple_Health_Bar.Scripts;
-using SummerJam1;
 using UnityEngine;
 
-namespace App
+namespace SummerJam1
 {
     public class EnergyComponentView : ComponentView<Player>
     {

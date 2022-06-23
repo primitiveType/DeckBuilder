@@ -1,8 +1,9 @@
 using Api;
+using App;
 using UnityEngine;
 using Component = UnityEngine.Component;
 
-namespace App
+namespace SummerJam1
 {
     public class PileOrganizerWithComponent<TComponentToAdd> : PileOrganizer where TComponentToAdd : Component
     {

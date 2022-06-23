@@ -6,11 +6,6 @@ namespace SummerJam1.Cards
     {
         public bool DoEffect(IEntity target)
         {
-            if (!Entity.TrySetParent(target))
-            {
-                return false;
-            }
-
             while (Game.Battle.Hand.Discard())
             {
                 //do nothing.

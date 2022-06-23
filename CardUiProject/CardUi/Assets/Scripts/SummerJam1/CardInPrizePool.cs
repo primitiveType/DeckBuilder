@@ -1,11 +1,8 @@
-using System;
-using Api;
+using App;
 using CardsAndPiles.Components;
-using SummerJam1;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace App
+namespace SummerJam1
 {
     public class CardInPrizePool : View<Card>, IPointerClickHandler
     {

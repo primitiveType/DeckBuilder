@@ -86,10 +86,16 @@ namespace CardsAndPiles.Components
 
         public void SetMax(int max)
         {
+            int diff = max - Max; 
             Max = max;
             if (Amount > max)
             {
                 Amount = max;
+            }
+
+            if (diff > 0)
+            {
+                SetHealth(Amount + diff);
             }
         }
 

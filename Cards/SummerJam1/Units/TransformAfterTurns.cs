@@ -35,12 +35,14 @@ namespace SummerJam1.Units
                 return;
             }
             Unit unit = args.Source.GetComponent<Unit>();
+            
+            args.Clamps.Add(0); //prevent all damage.
+
             if (unit == null || args.Source.GetComponent<Food>() == null)
             {
                 return;
             }
 
-            args.Clamps.Add(0); //prevent all damage.
 
             Entity.GetOrAddComponent<ChangeVisualOnTransform>().UnitAsset =
                 unit.Entity.GetComponent<VisualComponent>().AssetName;
@@ -49,7 +51,7 @@ namespace SummerJam1.Units
                 unit.Entity.GetComponent<Strength>().Amount;
             
             Entity.GetOrAddComponent<GainHealthOnTransform>().HealthToAdd =
-                unit.Entity.GetComponent<Health>().Amount - 1;
+                unit.Entity.GetComponent<Health>().Max - 1;
             
             Entity.RemoveComponent(this);
             Events.OnUnitTransformed(new UnitTransformedEventArgs(Entity));

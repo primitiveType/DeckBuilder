@@ -29,7 +29,7 @@ namespace Api
                 catch (Exception e)
                 {
                     Console.WriteLine($"Caught exception invoking event handle! {e.Message}: {e.StackTrace}");
-                    throw;
+                    //throw; // TODO: better logging
                 }
             }
         }

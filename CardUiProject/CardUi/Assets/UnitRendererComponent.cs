@@ -18,7 +18,7 @@ public class UnitRendererComponent : View<VisualComponent>
             if (Entity.GetComponentInParent<FriendlyUnitSlot>() != null)
             {
                 var scale = m_CurrentRenderer.transform.localScale;
-                m_CurrentRenderer.transform.localScale = new Vector3(-1 * scale.x, scale.y, scale.z);
+                m_CurrentRenderer.transform.localScale = new Vector3(-1 * Mathf.Abs(scale.x), scale.y, scale.z);
             }
         }));
     }

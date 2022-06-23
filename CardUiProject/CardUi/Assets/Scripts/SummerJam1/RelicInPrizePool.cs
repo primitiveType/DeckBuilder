@@ -1,7 +1,7 @@
-using SummerJam1;
+using App;
 using UnityEngine.EventSystems;
 
-namespace App
+namespace SummerJam1
 {
     public class RelicInPrizePool : View<RelicComponent>, IPointerClickHandler
     {

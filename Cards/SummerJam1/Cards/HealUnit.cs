@@ -19,11 +19,6 @@ namespace SummerJam1.Cards
 
         public bool DoEffect(IEntity target)
         {
-            if (!Entity.TrySetParent(target))
-            {
-                return false;
-            }
-
             Unit unit = target.GetComponentInChildren<Unit>();
 
             if (unit == null)
@@ -42,7 +37,10 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"{ReduceIncrease} the strength of all friendly units by {Amount}.";
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"{ReduceIncrease} the strength of all friendly units by {Amount}.";
+            }
         }
 
         protected override void ModifyComponent(Strength component)
@@ -56,7 +54,10 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Heal all friendly units for {Amount}.";
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Heal all friendly units for {Amount}.";
+            }
         }
 
         protected override void ModifyComponent(Health component)
@@ -70,7 +71,10 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"{ReduceIncrease} the max health of all friendly units by {Amount}.";
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"{ReduceIncrease} the max health of all friendly units by {Amount}.";
+            }
         }
 
         protected override void ModifyComponent(Health component)
@@ -122,8 +126,10 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Heal the front unit by {Math.Abs(Amount)}.";
-
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Heal the front unit by {Math.Abs(Amount)}.";
+            }
         }
 
         protected override void ModifyComponent(Health component)
@@ -164,11 +170,6 @@ namespace SummerJam1.Cards
 
         public bool DoEffect(IEntity target)
         {
-            if (!Entity.TrySetParent(target))
-            {
-                return false;
-            }
-
             Unit unit = target.GetComponentInChildren<Unit>();
 
             if (unit == null)
@@ -188,7 +189,10 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"{ReduceIncrease} a unit's strength by {Math.Abs(Amount)}.";
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"{ReduceIncrease} a unit's strength by {Math.Abs(Amount)}.";
+            }
         }
 
         protected override void ModifyComponent(Strength component)
@@ -202,7 +206,10 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description += $"{ReduceIncrease} a unit's max health by {Math.Abs(Amount)}.";
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"{ReduceIncrease} a unit's max health by {Math.Abs(Amount)}.";
+            }
         }
 
         protected override void ModifyComponent(Health component)
@@ -216,7 +223,10 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description += $"Increase a unit's max health by its strength.";
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Increase a unit's max health by its strength.";
+            }
         }
 
         protected override void ModifyComponent(Health component)
@@ -231,7 +241,10 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Double the Max Health of a Unit.";
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Double the Max Health of a Unit.";
+            }
         }
 
         public bool DoEffect(IEntity target)
@@ -248,13 +261,16 @@ namespace SummerJam1.Cards
             return true;
         }
     }
-    
+
     public class DoubleBurnOfUnit : SummerJam1Component, IEffect
     {
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Double the amount of Burn on a unit.";
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Double the amount of Burn on a unit.";
+            }
         }
 
         public bool DoEffect(IEntity target)
@@ -286,11 +302,6 @@ namespace SummerJam1.Cards
 
         public bool DoEffect(IEntity target)
         {
-            if (!Entity.TrySetParent(target))
-            {
-                return false;
-            }
-
             IHealable unit = target.GetComponentInChildren<IHealable>();
 
             if (unit == null)
@@ -317,11 +328,6 @@ namespace SummerJam1.Cards
 
         public bool DoEffect(IEntity target)
         {
-            if (!Entity.TrySetParent(target))
-            {
-                return false;
-            }
-
             target = Game.Battle.GetFriendlies().OrderBy(entity => entity.GetComponent<Health>().Amount)
                 .FirstOrDefault();
 

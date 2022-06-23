@@ -1,0 +1,47 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 63,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "Increase a unit's strength by 3 and grant 3 regen."
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.spicesandherbs"
+    },
+    {
+      "$type": "SummerJam1.Cards.ModifyStrengthOfUnit, SummerJam1",
+      "Amount": 3
+    },
+    {
+      "$type": "SummerJam1.Cards.AddRegenToUnit, SummerJam1",
+      "Amount": 3
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Herbs & Spices"
+    },
+    {
+      "$type": "CardsAndPiles.Components.Draggable, CardsAndPiles",
+      "CanDrag": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Cost": 1
+    },
+    {
+      "$type": "SummerJam1.Cards.Spicy, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Savory, SummerJam1"
+    }
+  ]
+}

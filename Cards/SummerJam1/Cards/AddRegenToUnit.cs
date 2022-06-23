@@ -10,10 +10,20 @@ namespace SummerJam1.Cards
     public class AddRegenToUnit : SummerJam1Component, IEffect
     {
         [JsonProperty] public int Amount { get; set; }
+        private bool initialized;
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description += $"Add {Amount} regen to a unit.";
+            if (initialized)
+            {
+                throw new Exception("WHAT");
+            }
+
+            initialized = true;
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Add {Amount} regen to a unit.";
+            }
         }
 
 
@@ -38,7 +48,10 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Add {Amount} regen to all friendly units.";
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Add {Amount} regen to all friendly units.";
+            }
         }
 
         public bool DoEffect(IEntity target)

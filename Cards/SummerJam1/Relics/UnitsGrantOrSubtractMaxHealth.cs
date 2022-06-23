@@ -11,7 +11,7 @@ namespace SummerJam1.Relics
         {
             var survivors = Game.Battle.GetFriendlies().Count;
             var playerHealth = Game.Player.Entity.GetComponent<Health>();
-            playerHealth.SetMax(playerHealth.Max + (3 * survivors));
+            playerHealth.SetMax(playerHealth.Max + (5 * survivors));
         }
 
         [OnEntityKilled]

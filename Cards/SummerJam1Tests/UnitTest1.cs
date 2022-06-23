@@ -122,7 +122,7 @@ namespace SummerJam1Tests
         //     var obj = Context.CreateEntity();
         //     obj.AddComponent<TakeNoDamage>();
         //     obj.AddComponent<DescriptionComponent>();
-        //     obj.AddComponent<RelicVisualComponent>();
+        //     obj.AddComponent<VisualComponent>();
         //
         //
         //     string cardstr = Serializer.Serialize(obj);
@@ -138,7 +138,7 @@ namespace SummerJam1Tests
         // {
         //     string nspace = "SummerJam1.Relics";
         //
-        //     IEnumerable<Type> q = from t in Assembly.GetAssembly(typeof(RelicVisualComponent)).GetTypes()
+        //     IEnumerable<Type> q = from t in Assembly.GetAssembly(typeof(VisualComponent)).GetTypes()
         //         where t.IsClass && t.Namespace == nspace && !t.IsGenericType
         //         select t;
         //
@@ -147,7 +147,7 @@ namespace SummerJam1Tests
         //         var obj = Context.CreateEntity();
         //         ((ChildrenCollection<Component>)obj.Components).Add((Component)Activator.CreateInstance(type));
         //         obj.AddComponent<DescriptionComponent>();
-        //         obj.AddComponent<RelicVisualComponent>();
+        //         obj.AddComponent<VisualComponent>();
         //         obj.AddComponent<RelicComponent>();
         //         
         //         string cardstr = Serializer.Serialize(obj);

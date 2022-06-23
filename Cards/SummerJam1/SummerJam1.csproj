@@ -17,121 +17,127 @@
         <Generator>TextTemplatingFileGenerator</Generator>
         <LastGenOutput>EventsGen.cs</LastGenOutput>
       </None>
-      <None Update="Prefabs\**\*.*">
+      <None Update="StreamingAssets\**\*.*">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Grease.json">
+      <None Update="StreamingAssets\Cards\Grease.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Chocolate.json">
+      <None Update="StreamingAssets\Cards\Chocolate.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Honey.json">
+      <None Update="StreamingAssets\Cards\Maple.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Maple.json">
+      <None Update="StreamingAssets\Cards\Sugar.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Sugar.json">
+      <None Update="StreamingAssets\Cards\Applesauce.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Applesauce.json">
+      <None Update="StreamingAssets\Cards\Ginger.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\SpicyPepper.json">
+      <None Update="StreamingAssets\Cards\Capsaicin.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Ginger.json">
+      <None Update="StreamingAssets\Cards\Parmesan.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Capsaicin.json">
+      <None Update="StreamingAssets\Cards\Recipe.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Parmesan.json">
+      <None Update="StreamingAssets\Cards\HoldTheLine.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Recipe.json">
+      <None Update="StreamingAssets\Cards\DeepFry.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\HoldTheLine.json">
+      <None Update="StreamingAssets\Cards\Sautee.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\DeepFry.json">
+      <None Update="StreamingAssets\Cards\Torch.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Sautee.json">
+      <None Update="StreamingAssets\Cards\JunkDrawer.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\Torch.json">
+      <None Update="StreamingAssets\Units\1\snail.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\JunkDrawer.json">
+      <None Update="StreamingAssets\Units\1\icecream.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\1\snail.json">
+      <None Update="StreamingAssets\Units\1\sandwich.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\1\icecream.json">
+      <None Update="StreamingAssets\Units\2\chicken.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\1\sandwich.json">
+      <None Update="StreamingAssets\Units\2\fish.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\2\chicken.json">
+      <None Update="StreamingAssets\Units\3\headcheese.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\2\fish.json">
+      <None Update="StreamingAssets\Units\3\noodles.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\3\headcheese.json">
+      <None Update="StreamingAssets\Units\2\fly.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\3\noodles.json">
+      <None Update="StreamingAssets\Units\3\ant.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\2\fly.json">
+      <None Update="StreamingAssets\Units\Donut.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\3\ant.json">
+      <None Update="StreamingAssets\Units\Kebab.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\Donut.json">
+      <None Update="StreamingAssets\Units\Meatloaf.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\Kebab.json">
+      <None Update="StreamingAssets\Units\Nachos.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\Meatloaf.json">
+      <None Update="StreamingAssets\Units\Pie.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\Nachos.json">
+      <None Update="StreamingAssets\Units\SoupUnit.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\Pie.json">
+      <None Update="StreamingAssets\Units\StarterUnit.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\SoupUnit.json">
+      <None Update="StreamingAssets\Units\TofuUnit.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\StarterUnit.json">
+      <None Update="StreamingAssets\Cards\UnitMeatloaf.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Units\TofuUnit.json">
+      <None Update="StreamingAssets\Cards\UnitDonut.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\UnitMeatloaf.json">
+      <None Update="StreamingAssets\Cards\UnitKebab.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\UnitDonut.json">
+      <None Update="StreamingAssets\Cards\UnitNachos.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\UnitKebab.json">
+      <None Update="StreamingAssets\Cards\Starting\Butter.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\UnitNachos.json">
+      <None Update="StreamingAssets\Cards\Starting\SpicyPepper.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Prefabs\Cards\UnitPie.json">
+      <None Update="StreamingAssets\Cards\Starting\Honey.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="StreamingAssets\Cards\Starting\UnitStarter.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="StreamingAssets\Cards\Starting\UnitPie.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
    

@@ -16,21 +16,7 @@ namespace SummerJam1
             bool isFriendly = Entity.GetComponentInParent<FriendlyUnitSlot>() != null;
 
             IEntity targetSlot;
-            if (isFriendly)
-            {
-                targetSlot = Context.Root.GetComponentsInChildren<EnemyUnitSlot>()
-                    .FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() != null)?.Entity;
-            }
-            else
-            {
-                targetSlot = Context.Root.GetComponentsInChildren<FriendlyUnitSlot>()
-                    .FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() != null)?.Entity;
-
-                if (targetSlot == null)
-                {
-                    targetSlot = Context.Root.GetComponent<SummerJam1Game>().Player.Entity;
-                }
-            }
+            targetSlot = GetTargetSlot();
 
             if (targetSlot == null)
             {
@@ -44,7 +30,29 @@ namespace SummerJam1
                 foreach (ITakesDamage componentsInChild in targetSlot.GetComponentsInChildren<ITakesDamage>())
                 {
                     componentsInChild.TryDealDamage(Amount, Entity);
+                    targetSlot = GetTargetSlot();
                 }
+            }
+
+            IEntity GetTargetSlot()
+            {
+                if (isFriendly)
+                {
+                    targetSlot = Context.Root.GetComponentsInChildren<EnemyUnitSlot>()
+                        .FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() != null)?.Entity;
+                }
+                else
+                {
+                    targetSlot = Context.Root.GetComponentsInChildren<FriendlyUnitSlot>()
+                        .FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() != null)?.Entity;
+
+                    if (targetSlot == null)
+                    {
+                        targetSlot = Context.Root.GetComponent<SummerJam1Game>().Player.Entity;
+                    }
+                }
+
+                return targetSlot;
             }
         }
     }

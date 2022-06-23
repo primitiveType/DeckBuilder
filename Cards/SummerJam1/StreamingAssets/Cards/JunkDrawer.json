@@ -1,0 +1,39 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Junk Drawer"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.junkdrawer"
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.DiscardRandomCard, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Retain, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.GainEnergy, SummerJam1",
+      "Amount" : 1
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Cost": 0
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "Discard a random card and gain 1 energy. Retain."
+    }
+  ]
+}

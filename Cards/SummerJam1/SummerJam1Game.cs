@@ -41,17 +41,21 @@ namespace SummerJam1
                 entity.AddComponent<PlayerUnit>();
                 entity.AddComponent<VisualComponent>().AssetName = "Player";
                 Health health = entity.AddComponent<Health>();
-                health.SetMax(10);
-                health.SetHealth(10);
+                health.SetMax(50);
+                health.SetHealth(50);
             });
 
             //create an example deck.
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
-            for (int i = 0; i < 2; i++)
+            Context.CreateEntity(Deck.Entity, "Cards/Starting/UnitPie.json");
+            Context.CreateEntity(Deck.Entity, "Cards/Starting/UnitStarter.json");
+            for (int i = 0; i < 1; i++)
             {
-                Context.CreateEntity(Deck.Entity, "Cards/UnitStarter.json");
-                Context.CreateEntity(Deck.Entity, "Cards/UnitStarter.json");
+                Context.CreateEntity(Deck.Entity, "Cards/Starting/SpicyPepper.json");
+                Context.CreateEntity(Deck.Entity, "Cards/Starting/Butter.json");
+                Context.CreateEntity(Deck.Entity, "Cards/Starting/Honey.json");
                 Context.CreateEntity(Deck.Entity, "Cards/Dice.json");
+                Context.CreateEntity(Deck.Entity, "Cards/DeepFry.json");
             }
 
             Events.OnGameStarted(new GameStartedEventArgs());

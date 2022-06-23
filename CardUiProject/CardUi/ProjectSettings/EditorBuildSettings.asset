@@ -4,7 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: 
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SummerJam1/StartScene.unity
+    guid: bffe8830331696e48b4cbcf6c66ec897
   - enabled: 1
     path: Assets/Scenes/SummerJam1/MenuScene.unity
     guid: 55f0acbce3cbb514bb21b3bc3fc974d9
