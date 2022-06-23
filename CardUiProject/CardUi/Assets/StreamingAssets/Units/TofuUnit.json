@@ -1,0 +1,45 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Tofu"
+    },
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "tofu"
+    },
+    {
+      "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
+      "Amount": 1,
+      "Max": 1
+    },
+    {
+      "$type": "SummerJam1.Units.ChangeVisualOnTransform, SummerJam1",
+      "UnitAsset": "Noodles"
+    },
+    {
+      "$type": "SummerJam1.Strength, SummerJam1",
+      "Amount": 0
+    },
+    {
+      "$type": "SummerJam1.Units.GainHealthOnTransform, SummerJam1",
+      "HealthToAdd": 0
+    },
+    {
+      "$type": "SummerJam1.Units.GainStrengthOnTransform, SummerJam1",
+      "StrengthToAdd": 0
+    },
+    {
+      "$type": "SummerJam1.DamageIntent, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Units.TransformAfterAttacked, SummerJam1"
+    }
+  ]
+}

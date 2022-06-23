@@ -1,0 +1,25 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 17,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Relics.UnitsGrantOrSubtractMaxHealth, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "The Yeastiary"
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "Every Unit that Dies in Battle Reduces your Max Health by 1. Surviving Units increase it by 5."
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "badge.yeastiary"
+    },
+    {
+      "$type": "SummerJam1.RelicComponent, SummerJam1"
+    }
+  ]
+}

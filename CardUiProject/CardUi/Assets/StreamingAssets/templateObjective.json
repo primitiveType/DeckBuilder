@@ -1,0 +1,20 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 11,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Objectives.TakeNoDamage, SummerJam1",
+      "Completed": true,
+      "Failed": false
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "Take no Player Damage."
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": 0
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 13,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Relics.SavoryCardsGrantHealthToRandomFriendlyUnit, SummerJam1",
+      "Amount": 3
+    },   
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Ladle of Civilization"
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "Playing a Savory Card Heals a Random Friendly Unit for 3 health."
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "badge.ladle"
+    },
+    {
+      "$type": "SummerJam1.RelicComponent, SummerJam1"
+    }
+  ]
+}

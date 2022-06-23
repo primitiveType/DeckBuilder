@@ -1,0 +1,26 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 16,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Relics.UnitsDyingSummonsTofu, SummerJam1",
+      "AmountRecorded": 0
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Tofu Press"
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "After 5 Friendly Units Die, Summon a Tofu."
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "badge.tofupress"
+    },
+    {
+      "$type": "SummerJam1.RelicComponent, SummerJam1"
+    }
+  ]
+}
