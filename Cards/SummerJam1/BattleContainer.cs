@@ -4,102 +4,11 @@ using System.IO;
 using System.Linq;
 using Api;
 using CardsAndPiles;
-using SummerJam1.Objectives;
 using SummerJam1.Units;
 using Random = Api.Random;
 
 namespace SummerJam1
 {
-    public class SummerJam1PrizePile : PrizePile
-    {
-        [OnBattleEnded]
-        private void OnBattleEnded(object sender, BattleEndedEventArgs args)
-        {
-            if (args.Victory)
-            {
-                //Player.Entity.TrySetParent(TempPlayerSlot.Entity);
-                SetupPrizePile();
-            }
-        }
-
-        public void SetupPrizePile()
-        {
-            Clear();
-            for (int i = 0; i < 3; i++)
-            {
-                Entity.GetComponentInParent<SummerJam1Game>().CreateRandomCard().TrySetParent(Entity);
-            }
-        }
-
-        public void ChoosePrize(IEntity child)
-        {
-            if (child != null)
-            {
-                child.TrySetParent(Entity.GetComponentInParent<SummerJam1Game>().Deck.Entity);
-            }
-
-            Clear();
-        }
-
-        private void Clear()
-        {
-            foreach (IEntity unwantedChild in Entity.Children.ToList())
-            {
-                unwantedChild.Destroy();
-            }
-        }
-    }
-
-    public class RelicPile : Pile
-    {
-        public override bool AcceptsChild(IEntity child)
-        {
-            return child.GetComponent<RelicComponent>() != null;
-        }
-    }
-
-    public class SummerJam1RelicPrizePile : PrizePile
-    {
-        [OnLeaveBattle]
-        private void OnBattleEnded()
-        {
-            //Player.Entity.TrySetParent(TempPlayerSlot.Entity);
-            var game = Context.Root.GetComponentInChildren<SummerJam1Game>();
-            var objective = game.Battle.ObjectivesPile.Entity.GetComponentInChildren<Objective>();
-            if (objective.Completed && !objective.Failed)
-            {
-                SetupPrizePile();
-            }
-        }
-
-        public void SetupPrizePile()
-        {
-            Clear();
-            for (int i = 0; i < 1; i++)
-            {
-                Entity.GetComponentInParent<SummerJam1Game>().CreateRandomRelic().TrySetParent(Entity);
-            }
-        }
-
-        public void ChoosePrize(IEntity child)
-        {
-            if (child != null)
-            {
-                child.TrySetParent(Entity.GetComponentInParent<SummerJam1Game>().RelicPile.Entity);
-            }
-
-            Clear();
-        }
-
-        private void Clear()
-        {
-            foreach (IEntity unwantedChild in Entity.Children.ToList())
-            {
-                unwantedChild.Destroy();
-            }
-        }
-    }
-
     public class BattleContainer : SummerJam1Component
     {
         private int NumSlots = 3;
