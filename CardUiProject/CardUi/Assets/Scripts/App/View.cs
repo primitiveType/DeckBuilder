@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Api;
+using JetBrains.Annotations;
 using UnityEngine;
 using IComponent = Api.IComponent;
 
@@ -10,8 +12,26 @@ namespace App
 {
     public class View<T> : MonoBehaviour, IView<T> where T : IComponent
     {
-        public IEntity Entity { get; private set; }
-        public T Model { get; private set; }
+        public IEntity Entity
+        {
+            get => _entity;
+            private set
+            {
+                _entity = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public T Model
+        {
+            get => _model;
+            private set
+            {
+                _model = value;
+                OnPropertyChanged();
+            }
+        }
+
         protected List<IDisposable> Disposables { get; } = new List<IDisposable>(2);
 
         public void SetModel(IEntity entity)
@@ -64,6 +84,8 @@ namespace App
         }
 
         private List<PropertyChangedEventHandler> EventHandlers = new List<PropertyChangedEventHandler>();
+        private IEntity _entity;
+        private T _model;
 
         private void AttachListeners()
         {
@@ -113,9 +135,17 @@ namespace App
                 disposable.Dispose();
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
-    public interface IView
+    public interface IView : INotifyPropertyChanged
     {
         IEntity Entity { get; }
     }

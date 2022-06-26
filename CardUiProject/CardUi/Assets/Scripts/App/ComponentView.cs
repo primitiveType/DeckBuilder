@@ -12,14 +12,35 @@ namespace App
         private IEntity Entity { get; set; }
         protected T Component { get; private set; }
         protected readonly List<IDisposable> Disposables = new List<IDisposable>(2);
+        private IView View { get; set; }
 
         protected virtual void Start()
         {
-            IView view = GetComponentInParent<IView>();
+            View = GetComponentInParent<IView>();
+            if (View.Entity == null)
+            {
+                View.PropertyChanged += ViewOnPropertyChanged;
+                return;
+            }
+
+            GetEntity(View);
+        }
+
+        private void GetEntity(IView view)
+        {
             Entity = view.Entity;
             view.Entity.Components.CollectionChanged += ComponentsOnCollectionChanged;
             UpdateComponentReference();
             ComponentOnPropertyChanged();
+        }
+
+        private void ViewOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(IView.Entity))
+            {
+                View.PropertyChanged -= ViewOnPropertyChanged;
+                GetEntity(View);
+            }
         }
 
         private void ComponentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -68,6 +89,7 @@ namespace App
             {
                 return;
             }
+
             ComponentOnPropertyChanged();
         }
 

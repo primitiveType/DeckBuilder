@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Threading.Tasks;
 using Api;
 using App;
 using App.Utility;
@@ -11,34 +9,79 @@ using External.UnityAsync.UnityAsync.Assets.UnityAsync.AwaitInstructions;
 using SummerJam1.Units;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Logger = App.Logger;
 
 namespace SummerJam1
 {
     public class SummerJam1Context : MonoBehaviourSingleton<SummerJam1Context>
     {
+        [SerializeField] private AudioSource HitAudio;
+        [SerializeField] private AudioSource CardAudio;
+        [SerializeField] private AudioSource ButtonAudio;
+        [SerializeField] private AudioSource MusicAudo;
         public Context Context { get; private set; }
         public SummerJam1Events Events => (SummerJam1Events)Context.Events;
         public SummerJam1Game Game { get; private set; }
 
-        [SerializeField] private AudioSource HitAudio;
-        [SerializeField] private AudioSource CardAudio;
-        [SerializeField] private AudioSource ButtonAudio;
-
         protected override void Awake()
         {
             base.Awake();
-
-            Setup();
+            Logging.Initialize(new Logger());
         }
 
-        private void Setup()
+        public void SaveGame()
         {
-            var events = new SummerJam1Events();
+            string saveDataPath = GetSaveDataPath();
+            string saveData = Serializer.Serialize(Context);
+            File.WriteAllText(saveDataPath, saveData);
+            SceneManager.LoadScene("StartScene");
+        }
+
+        private static string GetSaveDataPath()
+        {
+            string saveDataPath = Path.Combine(Application.persistentDataPath, "summerjam1Save.json");
+            return saveDataPath;
+        }
+
+        public bool HasSaveData()
+        {
+            return File.Exists(GetSaveDataPath());
+        }
+
+        public void LoadGame()
+        {
+            Context = GetGameFromDisk();
+            SubscribeToEvents();
+            Game = Context.Root.GetComponent<SummerJam1Game>();
+            // foreach (Card childCard in Game.Entity.GetComponentsInChildren<Card>())
+            // {
+            //     CreateView(childCard.Entity, SummerJam1CardFactory.Instance.CardPrefab);
+            // }
+            //
+            // foreach (RelicComponent relic in Game.Entity.GetComponentsInChildren<RelicComponent>())
+            // {
+            //     CreateView(relic.Entity, SummerJam1CardFactory.Instance.RelicPrefab);
+            // }
+            //
+            // foreach (Card childCard in Game.Entity.GetComponentsInChildren<>())
+            // {
+            //     CreateView(childCard.Entity, SummerJam1CardFactory.Instance.CardPrefab);
+            // }
+
+            LoadMenu();
+        }
+
+        private static Context GetGameFromDisk()
+        {
+            string data = File.ReadAllText(GetSaveDataPath());
+            return Serializer.Deserialize<Context>(data);
+        }
+
+        private void CreateNewGame()
+        {
+            SummerJam1Events events = new SummerJam1Events();
             Context = new Context(events);
-            Events.SubscribeToCardCreated(OnCardCreated);
-            Events.SubscribeToRelicCreated(OnRelicCreated);
-            Events.SubscribeToDamageDealt(OnDamageDealt);
-            Events.SubscribeToCardPlayed(OnCardPlayed);
+            SubscribeToEvents();
 
 #if UNITY_EDITOR
             Debug.Log("We are in editor.");
@@ -54,9 +97,17 @@ namespace SummerJam1
             LoadMenu();
         }
 
+        private void SubscribeToEvents()
+        {
+            Events.SubscribeToCardCreated(OnCardCreated);
+            Events.SubscribeToRelicCreated(OnRelicCreated);
+            Events.SubscribeToDamageDealt(OnDamageDealt);
+            Events.SubscribeToCardPlayed(OnCardPlayed);
+        }
+
         private async void LoadMenu()
         {
-            await new WaitForFrames(1);
+            await new WaitForFrames(2);
             SceneManager.LoadScene("MenuScene");
         }
 
@@ -84,7 +135,7 @@ namespace SummerJam1
 
         private void OnCardCreated(object sender, CardCreatedEventArgs args)
         {
-            var entity = args.CardId;
+            IEntity entity = args.CardId;
             CreateView(entity, SummerJam1CardFactory.Instance.CardPrefab);
         }
 
@@ -103,7 +154,7 @@ namespace SummerJam1
             Context.Root.Destroy();
             await new WaitForFrames(1); //allow a frame for views to destroy themselves
             SceneManager.LoadScene("Main");
-            Setup();
+            CreateNewGame();
         }
 
         public GameObject CreateGameObjectForModel(SummerJam1ModelViewBridge summerJam1ModelViewBridge)
@@ -125,6 +176,13 @@ namespace SummerJam1
 
 
             return null;
+        }
+
+        public void StartGame()
+        {
+            CreateNewGame();
+            SceneManager.LoadScene("Main");
+            MusicAudo.Play();
         }
     }
 }

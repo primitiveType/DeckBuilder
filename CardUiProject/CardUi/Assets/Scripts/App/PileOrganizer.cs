@@ -14,7 +14,7 @@ namespace App
 
         protected virtual void Start()
         {
-            PileView = GetComponentsInParent<IPileView>(true).FirstOrDefault();
+            PileView = GetComponentsInParent<IPileView>(true).First();
             PileView.Entity.Children.CollectionChanged += OnPileChanged;
             foreach (IEntity child in PileView.Entity.Children)
             {

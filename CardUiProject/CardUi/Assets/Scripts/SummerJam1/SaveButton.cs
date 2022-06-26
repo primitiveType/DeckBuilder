@@ -1,10 +1,9 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace SummerJam1
 {
-    public class StartOverButton : MonoBehaviour
+    public class SaveButton : MonoBehaviour
     {
         [SerializeField] private Button m_Button;
         private void Start()
@@ -14,7 +13,7 @@ namespace SummerJam1
 
         private void OnClick()
         {
-            SummerJam1Context.Instance.StartOver();
+            SummerJam1Context.Instance.SaveGame();
         }
     }
 }

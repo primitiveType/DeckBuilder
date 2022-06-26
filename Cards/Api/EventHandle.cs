@@ -28,8 +28,7 @@ namespace Api
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Caught exception invoking event handle! {e.Message}: {e.StackTrace}");
-                    //throw; // TODO: better logging
+                    Logging.LogError($"Caught exception invoking event handle! {e.Message}: {e.StackTrace}");
                 }
             }
         }

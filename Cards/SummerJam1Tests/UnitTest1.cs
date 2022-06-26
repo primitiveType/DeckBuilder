@@ -5,6 +5,7 @@ using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SummerJam1;
 using SummerJam1.Cards;
 using SummerJam1.Units;
@@ -20,16 +21,26 @@ namespace SummerJam1Tests
         public void Setup()
         {
             Context = new Context(new SummerJam1Events());
-            var gameEntity = Context.Root;
-            Context.SetPrefabsDirectory("Prefabs");
+            IEntity gameEntity = Context.Root;
+            Context.SetPrefabsDirectory("StreamingAssets");
 
             Game = gameEntity.AddComponent<SummerJam1Game>();
         }
 
         [Test]
+        public void TestSaveLoad()
+        {
+            string contextStr = Serializer.Serialize(Context);
+            Context copy = Serializer.Deserialize<Context>(contextStr);
+            
+            Assert.AreEqual(copy.PrefabsPath, Context.PrefabsPath);
+            Assert.That(copy.Root.GetComponent<SummerJam1Game>(), Is.Not.Null);
+        }
+
+        [Test]
         public void TestUnitCreatedInSlot()
         {
-            var unitCard = MakeUnitCard();
+            UnitCard unitCard = MakeUnitCard();
             Game.StartBattle();
             FriendlyUnitSlot unitSlot = Game.Entity.GetComponentsInChildren<FriendlyUnitSlot>().First(slot => slot.Entity.Children.Count == 0);
 
@@ -38,7 +49,7 @@ namespace SummerJam1Tests
 
             Assert.NotNull(unitSlot.Entity.GetComponentInChildren<Unit>());
 
-            var unitCard2 = MakeUnitCard();
+            UnitCard unitCard2 = MakeUnitCard();
             Assert.IsFalse(unitCard2.TryPlayCard(unitSlot.Entity));
         }
 
@@ -64,7 +75,7 @@ namespace SummerJam1Tests
 
                 foreach (FileInfo enumerateFile in dir.EnumerateFiles())
                 {
-                    var entity = Context.CreateEntity(null, Path.Combine(relativePath, enumerateFile.Name));
+                    IEntity entity = Context.CreateEntity(null, Path.Combine(relativePath, enumerateFile.Name));
                     Assert.NotNull(entity);
                     Assert.That(entity.Components, Has.Count.GreaterThan(0));
                     Assert.NotNull(entity.GetComponent<IDescription>(), enumerateFile.Name);
@@ -72,7 +83,7 @@ namespace SummerJam1Tests
                 }
             }
         }
-        
+
         [Test]
         public void TryLoadAllPrefabs()
         {
@@ -89,7 +100,7 @@ namespace SummerJam1Tests
 
                 foreach (FileInfo enumerateFile in dir.EnumerateFiles())
                 {
-                    var entity = Context.CreateEntity(null, Path.Combine(relativePath, enumerateFile.Name));
+                    IEntity entity = Context.CreateEntity(null, Path.Combine(relativePath, enumerateFile.Name));
                     Assert.NotNull(entity);
                     Assert.That(entity.Components, Has.Count.GreaterThan(0));
                 }
@@ -186,11 +197,11 @@ namespace SummerJam1Tests
         [Test]
         public void TestEventHandlerDetachmentDuringEvent()
         {
-            var test1 = Context.CreateEntity();
-            var test2 = Context.CreateEntity();
+            IEntity test1 = Context.CreateEntity();
+            IEntity test2 = Context.CreateEntity();
             Game.StartBattle();
-            var events1 = test1.AddComponent<TestEvents>();
-            var events2 = test2.AddComponent<TestEvents>();
+            TestEvents events1 = test1.AddComponent<TestEvents>();
+            TestEvents events2 = test2.AddComponent<TestEvents>();
 
             bool didExecute1 = false;
             bool didExecute2 = false;
@@ -211,7 +222,7 @@ namespace SummerJam1Tests
             Assert.IsFalse(didExecute2);
         }
 
-        event TesterEvent Tester;
+        private event TesterEvent Tester;
 
         [Test]
         public void TestEventDetachmentDuringEvent_Does_Not_Work()
@@ -237,9 +248,9 @@ namespace SummerJam1Tests
 
         private UnitCard MakeUnitCard()
         {
-            var unitCardEntity = Context.CreateEntity();
+            IEntity unitCardEntity = Context.CreateEntity();
             unitCardEntity.TrySetParent(Game.Entity);
-            var unitCard = unitCardEntity.AddComponent<StarterUnitCard>();
+            StarterUnitCard unitCard = unitCardEntity.AddComponent<StarterUnitCard>();
             unitCardEntity.AddComponent<NameComponent>();
 
             return unitCard;
@@ -247,7 +258,7 @@ namespace SummerJam1Tests
 
         private IEntity MakeUnit()
         {
-            var unitCardEntity = Context.CreateEntity();
+            IEntity unitCardEntity = Context.CreateEntity();
             unitCardEntity.TrySetParent(Game.Entity);
             unitCardEntity.AddComponent<NameComponent>();
             unitCardEntity.AddComponent<StarterUnit>();
@@ -269,7 +280,7 @@ namespace SummerJam1Tests
         [OnCardPlayed]
         private void OnCardPlayed()
         {
-            Console.WriteLine("tester.");
+            Logging.Log("tester.");
         }
     }
 

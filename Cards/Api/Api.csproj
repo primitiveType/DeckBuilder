@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="JsonNet.ContractResolvers" Version="2.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta1" />
       <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
       <PackageReference Include="RandN" Version="0.3.0" />

@@ -6,13 +6,6 @@ namespace SummerJam1.Cards
 {
     public abstract class UnitCard : SummerJam1Card
     {
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Console.WriteLine("Initialized card.");
-        }
-
-
         protected override bool PlayCard(IEntity target)
         {
             base.PlayCard(target);

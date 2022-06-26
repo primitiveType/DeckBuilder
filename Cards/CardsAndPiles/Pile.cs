@@ -29,11 +29,6 @@ namespace CardsAndPiles
 
     public class PlayerDiscard : NotifiedPile
     {
-        public PlayerDiscard()
-        {
-            Console.WriteLine("Created discard.");
-        }
-
         protected override void OnCardEnteredPile(IEntity eNewItem)
         {
             Events.OnCardDiscarded(new CardDiscardedEventArgs(eNewItem));
@@ -44,14 +39,9 @@ namespace CardsAndPiles
             return true;
         }
     }
-    
+
     public class PlayerExhaust : NotifiedPile
     {
-        public PlayerExhaust()
-        {
-            Console.WriteLine("Created Exhaust.");
-        }
-
         protected override void OnCardEnteredPile(IEntity eNewItem)
         {
             Events.OnCardExhausted(new CardExhaustedEventArgs(eNewItem));
@@ -75,13 +65,13 @@ namespace CardsAndPiles
 
         private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if(e.Action == NotifyCollectionChangedAction.Add){
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
                 foreach (IEntity eNewItem in e.NewItems)
                 {
                     OnCardEnteredPile(eNewItem);
                 }
             }
-            
         }
 
         protected abstract void OnCardEnteredPile(IEntity eNewItem);

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using JsonNet.ContractResolvers;
+using Newtonsoft.Json;
 
 namespace Api
 {
@@ -6,7 +7,8 @@ namespace Api
     {
         public static JsonSerializerSettings Settings = new JsonSerializerSettings
         {
-            TypeNameHandling = TypeNameHandling.Objects
+            TypeNameHandling = TypeNameHandling.Objects,
+            ContractResolver = new PrivateSetterContractResolver()
         };
 
         public static string Serialize(object o)

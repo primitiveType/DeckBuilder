@@ -8,9 +8,9 @@ namespace Api
     public class Context
     {
         [JsonProperty] public IEntity Root { get; private set; }
-        private int NextId { get; set; }
+        [JsonProperty] private int NextId { get; set; }
 
-        public EventsBase Events { get; }
+        [JsonProperty] public EventsBase Events { get; private set; }
 
 
         public Context(EventsBase events)
