@@ -22,6 +22,7 @@ namespace App
             }
         }
 
+
         private void OnPileChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
@@ -45,12 +46,10 @@ namespace App
 
         protected virtual void OnItemRemovedImmediate(IEntity removed)
         {
-            
         }
 
         protected virtual void OnItemAddedImmediate(IEntity added)
         {
-            
         }
 
         protected virtual void OnItemRemovedQueued(IEntity removed)
@@ -61,8 +60,7 @@ namespace App
         {
             IGameObject view = added.GetComponent<IGameObject>();
             view.gameObject.transform.SetParent(transform);
-            view.gameObject.transform.localPosition= Vector3.zero;
-            
+            view.gameObject.transform.localPosition = Vector3.zero;
         }
 
         private void OnDestroy()

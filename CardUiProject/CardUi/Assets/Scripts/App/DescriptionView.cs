@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using CardsAndPiles.Components;
 using TMPro;
@@ -15,6 +16,4 @@ namespace App
             m_Text.text = Model.Description;
         }
     }
-    
-   
 }

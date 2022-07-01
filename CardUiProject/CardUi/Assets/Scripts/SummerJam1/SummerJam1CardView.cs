@@ -18,4 +18,5 @@ namespace SummerJam1
             name = $"{Entity.GetComponent<Card>().GetType().Name} ({Entity.Parent.GetComponent<Pile>().GetType().Name})";
         }
     }
+    
 }

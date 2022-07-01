@@ -9,7 +9,7 @@ namespace CardsAndPiles.Components
 
     public interface IDescription : IComponent
     {
-        string Description { get; }
+        string Description { get; set; }
     }
     
    

@@ -7,17 +7,16 @@ namespace Api
 {
     public class Context
     {
-        [JsonProperty] public IEntity Root { get; private set; }
-        [JsonProperty] private int NextId { get; set; }
-
-        [JsonProperty] public EventsBase Events { get; private set; }
-
-
         public Context(EventsBase events)
         {
             Events = events;
             Root = CreateEntity();
         }
+
+        [JsonProperty] public IEntity Root { get; private set; }
+        [JsonProperty] private int NextId { get; set; }
+
+        [JsonProperty] public EventsBase Events { get; private set; }
 
         public string PrefabsPath { get; private set; }
 
@@ -29,7 +28,7 @@ namespace Api
 
         public IEntity CreateEntity(IEntity parent = null, Action<IEntity> setup = null)
         {
-            var entity = new Entity();
+            Entity entity = new Entity();
             entity.Initialize(this, NextId++);
 
             setup?.Invoke(entity);

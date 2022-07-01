@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using App.Utility;
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class ClampToViewport : MonoBehaviour
 {
     [SerializeField] private Collider m_Collider;

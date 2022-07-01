@@ -14,9 +14,9 @@ namespace App
         private Vector3 Offset { get; set; }
         private bool Dragging { get; set; }
 
-        protected override void Start()
+        protected override void OnInitialized()
         {
-            base.Start();
+            base.OnInitialized();
             InputStateManager.Instance.StateMachine.OnTransitioned(OnInputStateChanged);
             SetEnabledState();
         }

@@ -75,17 +75,36 @@ namespace App
         {
             if (Entity == null)
             {
-                IView parentView = GetComponentsInParent<IView>().FirstOrDefault(item => !ReferenceEquals(item, this) && item.Entity != null);
-                if (parentView?.Entity != null)
+                ParentView = GetComponentsInParent<IView>().FirstOrDefault(item => !ReferenceEquals(item, this) && item.Entity != null);
+                if (ParentView == null)
                 {
-                    SetModel(parentView.Entity);
+                    return;
                 }
+
+                if (ParentView?.Entity != null)
+                {
+                    SetModel(ParentView.Entity);
+                }
+                else
+                {
+                    ParentView.PropertyChanged += ParentViewOnPropertyChanged;
+                }
+            }
+        }
+
+        private void ParentViewOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(IView.Entity))
+            {
+                ParentView.PropertyChanged -= ParentViewOnPropertyChanged;
+                SetModel(ParentView.Entity);
             }
         }
 
         private List<PropertyChangedEventHandler> EventHandlers = new List<PropertyChangedEventHandler>();
         private IEntity _entity;
         private T _model;
+        private IView ParentView { get; set; }
 
         private void AttachListeners()
         {

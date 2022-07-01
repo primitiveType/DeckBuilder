@@ -45,7 +45,7 @@ namespace App
 
         private void ComponentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (UpdateComponentReference())
+            if (!UpdateComponentReference())
             {
                 return;
             }
@@ -53,12 +53,16 @@ namespace App
             gameObject.SetActive(Component != null);
         }
 
+        /// <summary>
+        /// Returns true if the reference changes.
+        /// </summary>
+        /// <returns></returns>
         private bool UpdateComponentReference()
         {
             var component = Entity.GetComponent<T>();
             if (Equals(component, Component))
             {
-                return true;
+                return false;
             }
 
             if (Component != null && component != null)
@@ -80,7 +84,7 @@ namespace App
 
             //Let component update values because reference changed.
             ComponentOnPropertyChanged();
-            return false;
+            return true;
         }
 
         private void ComponentOnPropertyChanged(object sender, PropertyChangedEventArgs e)

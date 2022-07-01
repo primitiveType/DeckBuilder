@@ -29,5 +29,15 @@ namespace App.Utility
         {
             return Vector3.Lerp(a, b, 1 - Mathf.Exp(-lambda * dt));
         }
+
+        public static System.Numerics.Vector3 ToSystemVector3(this Vector3 v)
+        {
+            return new System.Numerics.Vector3(v.x, v.y, v.z);
+        }
+
+        public static Vector3 ToUnityVector3(this System.Numerics.Vector3 v)
+        {
+            return new Vector3(v.X, v.Y, v.Z);
+        }
     }
 }

@@ -7,12 +7,21 @@ namespace CardsAndPiles.Components
     {
         public string Description { get; set; }
     }
+
+    public class DoNothingCard : Card
+    {
+        protected override bool PlayCard(IEntity target)
+        {
+            return true;
+        }
+    }
+
     public abstract class Card : Component, IPileItem
     {
         protected override void Initialize()
         {
             base.Initialize();
-            ((CardEvents)Context.Events).OnCardCreated(new CardCreatedEventArgs(Entity));//probably bad to have this here. this event does too much.
+            ((CardEvents)Context.Events).OnCardCreated(new CardCreatedEventArgs(Entity)); //probably bad to have this here. this event does too much.
         }
 
         public bool TryPlayCard(IEntity target)
@@ -32,7 +41,6 @@ namespace CardsAndPiles.Components
 
             ((CardEvents)Context.Events).OnCardPlayed(new CardPlayedEventArgs(Entity, target, false));
             return true;
-
         }
 
         protected abstract bool PlayCard(IEntity target);
@@ -42,11 +50,10 @@ namespace CardsAndPiles.Components
             return parent.GetComponent<IPile>() != null;
         }
 
-        
+
         public virtual bool AcceptsChild(IEntity child)
         {
             return true;
         }
-
     }
 }
