@@ -17,4 +17,9 @@ namespace CardsAndPiles.Components
     {
         void DealDamage(int damage, IEntity source);
     }
+
+    public interface ITooltip
+    {
+        string Tooltip { get; }
+    }
 }

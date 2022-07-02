@@ -26,6 +26,12 @@
       "Amount": 3
     },
     {
+      "$type": "SummerJam1.Cards.StrengthTooltip, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.RegenTooltip, SummerJam1"
+    },
+    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Herbs & Spices"
     },

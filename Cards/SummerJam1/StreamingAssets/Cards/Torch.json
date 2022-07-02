@@ -21,6 +21,9 @@
       "$type": "SummerJam1.Cards.DoubleBurnOfUnit, SummerJam1"
     },
     {
+      "$type": "SummerJam1.Cards.BurnTooltip, SummerJam1"
+    },
+    {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
       "Cost": 1
     },

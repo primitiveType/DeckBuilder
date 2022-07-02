@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Shift: 0.5913153
+    - _Shift: 0.6556879
     m_Colors: []
   m_BuildTextureStacks: []
 --- !u!114 &7549056490268099329

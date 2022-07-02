@@ -1,6 +1,9 @@
-﻿namespace SummerJam1.Cards
+﻿using CardsAndPiles.Components;
+
+namespace SummerJam1.Cards
 {
-    public class Sweet : SummerJam1Component
+    public class Sweet : SummerJam1Component, ITooltip
     {
+        public string Tooltip => "Sweet";
     }
 }

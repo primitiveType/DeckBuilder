@@ -15,6 +15,9 @@
       "Amount" : 10
     },
     {
+      "$type": "SummerJam1.Cards.StrengthTooltip, SummerJam1"
+    },
+    {
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
     },
     {

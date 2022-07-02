@@ -15,6 +15,9 @@
       "Amount" : -5
     },
     {
+      "$type": "SummerJam1.Cards.StrengthTooltip, SummerJam1"
+    },
+    {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
