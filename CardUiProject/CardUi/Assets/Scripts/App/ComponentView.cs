@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace App
 {
-    public abstract class ComponentView<T> : MonoBehaviour where T : INotifyPropertyChanged
+    public abstract class ComponentView<T> : MonoBehaviour
     {
         private IEntity Entity { get; set; }
         protected T Component { get; private set; }
@@ -72,14 +72,14 @@ namespace App
 
             if (Component != null)
             {
-                Component.PropertyChanged -= ComponentOnPropertyChanged;
+                ((INotifyPropertyChanged)Component).PropertyChanged -= ComponentOnPropertyChanged;
             }
 
             Component = component;
 
             if (Component != null)
             {
-                Component.PropertyChanged += ComponentOnPropertyChanged;
+                ((INotifyPropertyChanged)Component).PropertyChanged += ComponentOnPropertyChanged;
             }
 
             //Let component update values because reference changed.

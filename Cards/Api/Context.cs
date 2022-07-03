@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Api
 {
@@ -12,6 +14,8 @@ namespace Api
             Events = events;
             Root = CreateEntity();
         }
+
+        public Dictionary<int, IEntity> EntityDatabase { get; } = new Dictionary<int, IEntity>();
 
         [JsonProperty] public IEntity Root { get; private set; }
         [JsonProperty] private int NextId { get; set; }
@@ -26,6 +30,11 @@ namespace Api
             PrefabsPath = path;
         }
 
+        //create
+        //initialize
+        //setup
+        //parent
+
         public IEntity CreateEntity(IEntity parent = null, Action<IEntity> setup = null)
         {
             Entity entity = new Entity();
@@ -33,6 +42,7 @@ namespace Api
 
             setup?.Invoke(entity);
             entity.TrySetParent(parent);
+            EntityDatabase.Add(entity.Id, entity);
             return entity;
         }
 
@@ -43,6 +53,8 @@ namespace Api
             entity.Initialize(this, NextId++);
 
             entity.TrySetParent(parent);
+            EntityDatabase.Add(entity.Id, entity);
+
             return entity;
         }
 
@@ -53,9 +65,16 @@ namespace Api
             InitializeRecursively(Root);
         }
 
+        //order is different while deserializing.
+        //create
+        //parent
+        //initialize
+        //-setup-
         private void InitializeRecursively(IEntity root)
         {
-            ((Entity)root).Initialize(this, root.Id);
+            ((Entity)root).Initialize(this, NextId++);
+            EntityDatabase.Add(root.Id, root);
+
             foreach (IEntity child in root.Children)
             {
                 InitializeRecursively(child);

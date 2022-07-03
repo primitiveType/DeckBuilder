@@ -10,7 +10,7 @@ using IComponent = Api.IComponent;
 
 namespace App
 {
-    public class View<T> : MonoBehaviour, IView<T> where T : IComponent
+    public class View<T> : MonoBehaviour, IView<T>
     {
         public IEntity Entity
         {
@@ -124,7 +124,7 @@ namespace App
                         Debug.LogError($"Caught exception executing event! {e.Message}", this);
                     }
                 };
-                Model.PropertyChanged += action;
+                ((INotifyPropertyChanged)Model).PropertyChanged += action;
                 EventHandlers.Add(action);
                 try
                 {
@@ -141,7 +141,7 @@ namespace App
         {
             foreach (PropertyChangedEventHandler action in EventHandlers)
             {
-                Model.PropertyChanged -= action;
+                ((INotifyPropertyChanged)Model).PropertyChanged -= action;
             }
 
             if (Entity != null)
