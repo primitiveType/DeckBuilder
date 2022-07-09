@@ -21,7 +21,7 @@ namespace SummerJam1
             Clear();
             for (int i = 0; i < 3; i++)
             {
-                Entity.GetComponentInParent<SummerJam1Game>().CreateRandomCard().TrySetParent(Entity);
+                Entity.GetComponentInParent<Game>().CreateRandomCard().TrySetParent(Entity);
             }
         }
 
@@ -29,7 +29,7 @@ namespace SummerJam1
         {
             if (child != null)
             {
-                child.TrySetParent(Entity.GetComponentInParent<SummerJam1Game>().Deck.Entity);
+                child.TrySetParent(Entity.GetComponentInParent<Game>().Deck.Entity);
             }
 
             Clear();

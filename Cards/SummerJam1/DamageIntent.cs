@@ -48,7 +48,7 @@ namespace SummerJam1
 
                     if (targetSlot == null)
                     {
-                        targetSlot = Context.Root.GetComponent<SummerJam1Game>().Player.Entity;
+                        targetSlot = Context.Root.GetComponent<Game>().Player.Entity;
                     }
                 }
 

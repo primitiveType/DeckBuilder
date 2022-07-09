@@ -18,7 +18,7 @@ namespace SummerJam1
 
         private void GameOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(SummerJam1Game.Battle))
+            if (e.PropertyName == nameof(Game.Battle))
             {
                 Setup();
             }

@@ -16,7 +16,7 @@ namespace SummerJam1.Cards
         {
             if (args.CardId == Entity)
             {
-                args.CardId.TrySetParent(Context.Root.GetComponent<SummerJam1Game>().Battle.Exhaust);
+                args.CardId.TrySetParent(Context.Root.GetComponent<Game>().Battle.Exhaust);
             }
         }
 

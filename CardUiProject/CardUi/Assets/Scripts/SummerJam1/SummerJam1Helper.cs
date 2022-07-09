@@ -33,7 +33,7 @@ namespace SummerJam1
 
         private Context Context => SummerJam1Context.Instance.Context;
         private SummerJam1Events Events => SummerJam1Context.Instance.Events;
-        private SummerJam1Game Game => SummerJam1Context.Instance.Game;
+        private Game Game => SummerJam1Context.Instance.Game;
 
         private List<IDisposable> Disposables { get; } = new List<IDisposable>();
 

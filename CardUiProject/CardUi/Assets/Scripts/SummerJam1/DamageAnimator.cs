@@ -11,7 +11,7 @@ namespace SummerJam1
     {
         [SerializeField] private GameObject Prefab;
         private SummerJam1Events Events => SummerJam1Context.Instance.Events;
-        private SummerJam1Game Game => SummerJam1Context.Instance.Game;
+        private Game Game => SummerJam1Context.Instance.Game;
         private List<IDisposable> Disposables { get; } = new List<IDisposable>();
 
         private void Awake()

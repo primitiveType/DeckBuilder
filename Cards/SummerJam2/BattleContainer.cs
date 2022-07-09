@@ -1,13 +1,13 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Api;
 using CardsAndPiles;
+using SummerJam1;
 using SummerJam1.Units;
-using Random = Api.Random;
 
-namespace SummerJam1
+namespace SummerJam2
 {
     public class BattleContainer : SummerJam1Component
     {
@@ -39,16 +39,6 @@ namespace SummerJam1
             Exhaust = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerExhaust>());
         }
 
-
-        public IEntity CreateRandomMonster(IEntity parent, int difficulty)
-        {
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, $"Units", $"{difficulty}"));
-            List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
-
-            int index = Game.Random.SystemRandom.Next(files.Count);
-
-            return Context.CreateEntity(parent, Path.Combine($"Units", $"{difficulty}", files[index].Name));
-        }
 
         public void StartBattle()
         {

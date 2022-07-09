@@ -9,7 +9,7 @@ namespace SummerJam1.Rules
         [OnTurnEnded]
         private void OnTurnEnded()
         {
-            var game = Context.Root.GetComponent<SummerJam1Game>();
+            var game = Context.Root.GetComponent<Game>();
             foreach (Card componentsInChild in game.Battle.Hand.Entity.GetComponentsInChildren<Card>())
             {
                 if (componentsInChild.Entity.GetComponent<Retain>() == null)

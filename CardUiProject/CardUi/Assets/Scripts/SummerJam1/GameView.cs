@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace SummerJam1
 {
-    public class GameView : View<SummerJam1Game>
+    public class GameView : View<Game>
     {
         [SerializeField] private GameObject m_ObjectiveViewPrefab;
         [SerializeField] private Transform m_ObjectiveViewParent;
@@ -19,7 +19,7 @@ namespace SummerJam1
 
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(SummerJam1Game.Battle))
+            if (e.PropertyName == nameof(Game.Battle))
             {
                 if (Model.Battle != null)
                 {

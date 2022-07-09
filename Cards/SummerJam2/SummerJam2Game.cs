@@ -1,17 +1,16 @@
-﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
+using SummerJam1;
 using SummerJam1.Rules;
 using SummerJam1.Units;
-using Random = Api.Random;
 
 namespace SummerJam1
 {
-    public class SummerJam1Game : SummerJam1Component
+    public class Game : SummerJam1Component111
     {
         public DeckPile Deck { get; private set; }
         public SummerJam1PrizePile PrizePile { get; private set; }
@@ -65,7 +64,6 @@ namespace SummerJam1
         {
             Context.Root.AddComponent<DiscardHandOnTurnEnd>();
             Context.Root.AddComponent<DrawHandOnTurnBegin>();
-            Context.Root.AddComponent<GameEndsAfter10Rooms>();
         }
 
         public void EndTurn()
@@ -84,7 +82,7 @@ namespace SummerJam1
 
             Context.CreateEntity(Entity, (entity) => { Battle = entity.AddComponent<BattleContainer>(); });
             //Player.Entity.TrySetParent(Battle.GetBackMostEmptySlot());
-            Battle.StartBattle(Context.Root.GetComponent<GameEndsAfter10Rooms>().RoomsCleared);
+            Battle.StartBattle();
         }
 
 
@@ -114,3 +112,4 @@ namespace SummerJam1
         }
     }
 }
+

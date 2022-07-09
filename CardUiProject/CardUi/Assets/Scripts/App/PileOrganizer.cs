@@ -18,6 +18,7 @@ namespace App
             PileView.Entity.Children.CollectionChanged += OnPileChanged;
             foreach (IEntity child in PileView.Entity.Children)
             {
+                OnItemAddedImmediate(child);
                 OnItemAddedQueued(child);
             }
         }

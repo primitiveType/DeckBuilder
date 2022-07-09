@@ -7,7 +7,7 @@ namespace SummerJam1
         protected override void Start()
         {
             base.Start();
-            SetModel(SummerJam1Context.Instance.Context.Root.GetComponent<SummerJam1Game>().Player.Entity);
+            SetModel(SummerJam1Context.Instance.Context.Root.GetComponent<Game>().Player.Entity);
         }
     }
 }

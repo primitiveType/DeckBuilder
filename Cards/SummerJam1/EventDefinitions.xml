@@ -18,7 +18,6 @@
     <event id="GameStarted">
     </event>
     <event id="BattleStarted">
-        <arg name="Battle" type="BattleContainer"/>
     </event>
     <event id="LeaveBattle">
     </event>

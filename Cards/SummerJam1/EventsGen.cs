@@ -359,12 +359,7 @@ public class OnBattleStartedAttribute : EventsBaseAttribute {
 }
     //public delegate void BattleStartedEvent (object sender, BattleStartedEventArgs args);
 
-    public class BattleStartedEventArgs {        public  BattleContainer Battle { get; }
-        public  BattleStartedEventArgs (BattleContainer Battle   ){
-                  this.Battle = Battle; 
-}
-
-        }/// <summary>
+    public class BattleStartedEventArgs {        }/// <summary>
 /// (object sender, LeaveBattleEventArgs) args)
 /// </summary>
 public class OnLeaveBattleAttribute : EventsBaseAttribute {

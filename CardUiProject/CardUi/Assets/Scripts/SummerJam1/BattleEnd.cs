@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SummerJam1
 {
-    public class BattleEnd : View<SummerJam1Game>
+    public class BattleEnd : View<Game>
     {
         [SerializeField] private TMP_Text Text;
 

@@ -9,7 +9,7 @@ namespace SummerJam1.Rules
         [OnTurnBegan]
         private void OnTurnBegan()
         {
-            var game = Context.Root.GetComponent<SummerJam1Game>();
+            var game = Context.Root.GetComponent<Game>();
 
             for (int i = 0; i < CardDraw; i++)
             {

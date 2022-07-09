@@ -21,7 +21,7 @@ namespace SummerJam1
         [SerializeField] private AudioSource MusicAudo;
         public Context Context { get; private set; }
         public SummerJam1Events Events => (SummerJam1Events)Context.Events;
-        public SummerJam1Game Game { get; private set; }
+        public Game Game { get; private set; }
 
         protected override void Awake()
         {
@@ -52,21 +52,17 @@ namespace SummerJam1
         {
             Context = GetGameFromDisk();
             SubscribeToEvents();
-            Game = Context.Root.GetComponent<SummerJam1Game>();
-            // foreach (Card childCard in Game.Entity.GetComponentsInChildren<Card>())
-            // {
-            //     CreateView(childCard.Entity, SummerJam1CardFactory.Instance.CardPrefab);
-            // }
-            //
-            // foreach (RelicComponent relic in Game.Entity.GetComponentsInChildren<RelicComponent>())
-            // {
-            //     CreateView(relic.Entity, SummerJam1CardFactory.Instance.RelicPrefab);
-            // }
-            //
-            // foreach (Card childCard in Game.Entity.GetComponentsInChildren<>())
-            // {
-            //     CreateView(childCard.Entity, SummerJam1CardFactory.Instance.CardPrefab);
-            // }
+            Game = Context.Root.GetComponent<Game>();
+            foreach (Card childCard in Game.Entity.GetComponentsInChildren<Card>())
+            {
+                CreateView(childCard.Entity, SummerJam1CardFactory.Instance.CardPrefab);
+            }
+
+            foreach (RelicComponent relic in Game.Entity.GetComponentsInChildren<RelicComponent>())
+            {
+                CreateView(relic.Entity, SummerJam1CardFactory.Instance.RelicPrefab);
+            }
+
 
             LoadMenu();
         }
@@ -93,7 +89,7 @@ namespace SummerJam1
             IEntity game = Context.Root;
 
 
-            Game = game.AddComponent<SummerJam1Game>();
+            Game = game.AddComponent<Game>();
             LoadMenu();
         }
 
@@ -153,7 +149,6 @@ namespace SummerJam1
         {
             Context.Root.Destroy();
             await new WaitForFrames(1); //allow a frame for views to destroy themselves
-            SceneManager.LoadScene("Main");
             CreateNewGame();
         }
 
@@ -181,7 +176,6 @@ namespace SummerJam1
         public void StartGame()
         {
             CreateNewGame();
-            SceneManager.LoadScene("Main");
             MusicAudo.Play();
         }
     }

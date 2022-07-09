@@ -15,7 +15,7 @@ namespace SummerJam1Tests
     public class Tests
     {
         private Context Context { get; set; }
-        private SummerJam1Game Game { get; set; }
+        private Game Game { get; set; }
 
         [SetUp]
         public void Setup()
@@ -24,7 +24,7 @@ namespace SummerJam1Tests
             IEntity gameEntity = Context.Root;
             Context.SetPrefabsDirectory("StreamingAssets");
 
-            Game = gameEntity.AddComponent<SummerJam1Game>();
+            Game = gameEntity.AddComponent<Game>();
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace SummerJam1Tests
             Context copy = Serializer.Deserialize<Context>(contextStr);
             
             Assert.AreEqual(copy.PrefabsPath, Context.PrefabsPath);
-            Assert.That(copy.Root.GetComponent<SummerJam1Game>(), Is.Not.Null);
+            Assert.That(copy.Root.GetComponent<Game>(), Is.Not.Null);
         }
 
         [Test]

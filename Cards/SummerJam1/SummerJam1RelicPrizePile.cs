@@ -11,7 +11,7 @@ namespace SummerJam1
         private void OnBattleEnded()
         {
             //Player.Entity.TrySetParent(TempPlayerSlot.Entity);
-            var game = Context.Root.GetComponentInChildren<SummerJam1Game>();
+            var game = Context.Root.GetComponentInChildren<Game>();
             var objective = game.Battle.ObjectivesPile.Entity.GetComponentInChildren<Objective>();
             if (objective.Completed && !objective.Failed)
             {
@@ -24,7 +24,7 @@ namespace SummerJam1
             Clear();
             for (int i = 0; i < 1; i++)
             {
-                Entity.GetComponentInParent<SummerJam1Game>().CreateRandomRelic().TrySetParent(Entity);
+                Entity.GetComponentInParent<Game>().CreateRandomRelic().TrySetParent(Entity);
             }
         }
 
@@ -32,7 +32,7 @@ namespace SummerJam1
         {
             if (child != null)
             {
-                child.TrySetParent(Entity.GetComponentInParent<SummerJam1Game>().RelicPile.Entity);
+                child.TrySetParent(Entity.GetComponentInParent<Game>().RelicPile.Entity);
             }
 
             Clear();
