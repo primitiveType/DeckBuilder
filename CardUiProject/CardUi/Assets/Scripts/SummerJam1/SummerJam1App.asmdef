@@ -16,7 +16,9 @@
         "SummerJam1.dll",
         "Api.dll",
         "CardsAndPiles.dll",
-        "Newtonsoft.Json.dll"
+        "Newtonsoft.Json.dll",
+        "RogueMaps.dll",
+        "RogueSharp.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

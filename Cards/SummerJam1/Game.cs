@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
+using RogueMaps;
 using SummerJam1.Rules;
 using SummerJam1.Units;
 using Random = Api.Random;
@@ -24,6 +26,7 @@ namespace SummerJam1
 
         public Random Random { get; private set; }
 
+        public MapComponent CurrentMap { get; private set; }
 
         protected override void Initialize()
         {
@@ -40,9 +43,11 @@ namespace SummerJam1
                 entity.AddComponent<PlayerUnit>();
                 entity.AddComponent<VisualComponent>().AssetName = "Player";
                 Health health = entity.AddComponent<Health>();
+                entity.AddComponent<Position>();
                 health.SetMax(50);
                 health.SetHealth(50);
             });
+            CreateNewMap();
 
             //create an example deck.
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
@@ -52,6 +57,23 @@ namespace SummerJam1
             }
 
             Events.OnGameStarted(new GameStartedEventArgs());
+        }
+
+        private void CreateNewMap()
+        {
+            if (CurrentMap != null)
+            {
+                CurrentMap.Entity.Destroy();
+            }
+
+            Context.CreateEntity(Entity, entity => { CurrentMap = entity.AddComponent<MapComponent>(); });
+            foreach (CustomCell customCell in CurrentMap.Map.GetAllCells())
+            {
+                if (customCell.IsWalkable)
+                {
+                    Player.Entity.GetComponent<Position>().Position1 = new Vector3(customCell.X, 0, customCell.Y);
+                }
+            }
         }
 
         private void AddRules()

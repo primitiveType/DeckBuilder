@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace App
 {
-    public class PositionComponentView : ComponentView<Position>, IBeginDragHandler, IEndDragHandler
+    public class CardPositionComponentView : ComponentView<Position>, IBeginDragHandler, IEndDragHandler
     {
         private bool IsDragging { get; set; }
 

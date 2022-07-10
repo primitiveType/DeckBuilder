@@ -20,6 +20,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexMapLibrary", "HexMapLibr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexesTests", "HexesTests\HexesTests.csproj", "{4E8DBC34-F9DE-4DA4-8422-BB4A6B1FF8E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogueMaps", "RogueMaps\RogueMaps.csproj", "{835273A3-8915-427B-9DC0-88FD62CE0485}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RogueMapsTests", "RogueMapsTests\RogueMapsTests.csproj", "{26128EB7-E29C-4B92-98BB-9B2920536446}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,5 +80,13 @@ Global
 		{4E8DBC34-F9DE-4DA4-8422-BB4A6B1FF8E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E8DBC34-F9DE-4DA4-8422-BB4A6B1FF8E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E8DBC34-F9DE-4DA4-8422-BB4A6B1FF8E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{835273A3-8915-427B-9DC0-88FD62CE0485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{835273A3-8915-427B-9DC0-88FD62CE0485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{835273A3-8915-427B-9DC0-88FD62CE0485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{835273A3-8915-427B-9DC0-88FD62CE0485}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26128EB7-E29C-4B92-98BB-9B2920536446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26128EB7-E29C-4B92-98BB-9B2920536446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26128EB7-E29C-4B92-98BB-9B2920536446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26128EB7-E29C-4B92-98BB-9B2920536446}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

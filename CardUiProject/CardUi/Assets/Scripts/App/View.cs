@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 using Api;
 using JetBrains.Annotations;
 using UnityEngine;
-using IComponent = Api.IComponent;
 
 namespace App
 {

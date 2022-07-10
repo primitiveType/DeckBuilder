@@ -4,9 +4,8 @@ namespace SummerJam1
 {
     public class PlayerView : View<Player>, ISetModel
     {
-        protected override void Start()
+        protected void Awake()
         {
-            base.Start();
             SetModel(SummerJam1Context.Instance.Context.Root.GetComponent<Game>().Player.Entity);
         }
     }

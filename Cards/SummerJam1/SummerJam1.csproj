@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CardsAndPiles\CardsAndPiles.csproj" />
+      <ProjectReference Include="..\RogueMaps\RogueMaps.csproj" />
     </ItemGroup>
 
     <ItemGroup>
