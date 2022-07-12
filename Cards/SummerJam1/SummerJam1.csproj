@@ -156,6 +156,9 @@
       <None Update="StreamingAssets\Cards\EnergyField.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="StreamingAssets\Cards\Fidget.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
    
     </ItemGroup>
 

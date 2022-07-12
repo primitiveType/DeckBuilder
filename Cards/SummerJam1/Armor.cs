@@ -1,7 +1,6 @@
 using System;
 using Api;
 using CardsAndPiles;
-using CardsAndPiles.Components;
 
 namespace SummerJam1
 {
@@ -22,19 +21,6 @@ namespace SummerJam1
         private void OnBattleEnded()
         {
             Amount = 0;
-        }
-    }
-
-    public class HealOnBattleEnd : SummerJam1Component
-    {
-        [OnBattleEnded]
-        private void OnBattlEnded(object sender, BattleEndedEventArgs args)
-        {
-            if (args.Victory)
-            {
-                var health = Entity.GetComponent<Health>();
-                health.TryHeal(health.Max, Entity);
-            }
         }
     }
 }

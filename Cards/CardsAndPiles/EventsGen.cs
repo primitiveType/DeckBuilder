@@ -137,6 +137,20 @@ public EventHandle<RequestHealEventArgs> SubscribeToRequestHeal(EventHandleDeleg
     return handler;
 } 
     #endregion Code for event RequestHeal
+    #region Code for event ChooseCardsToDiscard
+private event EventHandleDelegate<ChooseCardsToDiscardEventArgs> ChooseCardsToDiscard;
+public virtual void OnChooseCardsToDiscard(ChooseCardsToDiscardEventArgs args)
+{
+    ChooseCardsToDiscard?.Invoke(this, args);
+}
+
+public EventHandle<ChooseCardsToDiscardEventArgs> SubscribeToChooseCardsToDiscard(EventHandleDelegate<ChooseCardsToDiscardEventArgs> action)
+{
+    var handler = new EventHandle<ChooseCardsToDiscardEventArgs>(action, () => ChooseCardsToDiscard -= action);
+    ChooseCardsToDiscard += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event ChooseCardsToDiscard
     #region Code for event EntityKilled
 private event EventHandleDelegate<EntityKilledEventArgs> EntityKilled;
 public virtual void OnEntityKilled(EntityKilledEventArgs args)
@@ -526,6 +540,41 @@ public class OnRequestHealAttribute : EventsBaseAttribute {
                   this.Amount = Amount; 
               this.Source = Source; 
               this.Target = Target; 
+}
+
+        }/// <summary>
+/// (object sender, ChooseCardsToDiscardEventArgs) args)
+/// </summary>
+public class OnChooseCardsToDiscardAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToChooseCardsToDiscard(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(ChooseCardsToDiscardEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, ChooseCardsToDiscardEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToChooseCardsToDiscard(delegate(object sender, ChooseCardsToDiscardEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void ChooseCardsToDiscardEvent (object sender, ChooseCardsToDiscardEventArgs args);
+
+    public class ChooseCardsToDiscardEventArgs {        public  int Amount { get; }
+        public  IEntity Source { get; }
+        public  ChooseCardsToDiscardEventArgs (int Amount, IEntity Source   ){
+                  this.Amount = Amount; 
+              this.Source = Source; 
 }
 
         }/// <summary>

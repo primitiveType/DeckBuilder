@@ -4,7 +4,9 @@ namespace App
     {
         Idle,
         Dragging,
-        Hovering
+        Hovering,
+        ChoosingDiscard,
+        EnemyTurn
     }
 
     public enum InputAction
@@ -13,5 +15,9 @@ namespace App
         EndDrag,
         Hover,
         EndHover,
+        ChooseDiscard,
+        EndChooseDiscard,
+        EndTurn,
+        BeginTurn
     }
 }

@@ -1,3 +1,4 @@
+using System.Security.Permissions;
 using App.Utility;
 using Stateless;
 using UnityEngine;
@@ -18,15 +19,31 @@ namespace App
             StateMachine.Configure(InputState.Idle)
                 .Permit(InputAction.Drag, InputState.Dragging)
                 .Permit(InputAction.Hover, InputState.Hovering)
+                .Permit(InputAction.ChooseDiscard, InputState.ChoosingDiscard)
+                .Permit(InputAction.EndTurn, InputState.EnemyTurn)
                 .Ignore(InputAction.EndHover)
-                .Ignore(InputAction.EndDrag);
+                .Ignore(InputAction.EndDrag)
+                ;
             StateMachine.Configure(InputState.Dragging)
                 .Permit(InputAction.EndDrag, InputState.Idle)
-                .PermitReentry(InputAction.Drag);
+                .Permit(InputAction.ChooseDiscard, InputState.ChoosingDiscard)
+                .PermitReentry(InputAction.Drag)
+                ;
             StateMachine.Configure(InputState.Hovering)
+                .Permit(InputAction.ChooseDiscard, InputState.ChoosingDiscard)
                 .Permit(InputAction.Drag, InputState.Dragging)
                 .Permit(InputAction.EndHover, InputState.Idle)
-                .PermitReentry(InputAction.Hover);
+                .PermitReentry(InputAction.Hover)
+                ;
+            StateMachine.Configure(InputState.ChoosingDiscard)
+                .Permit(InputAction.EndChooseDiscard, InputState.Idle)
+                .Ignore(InputAction.Hover)//Allow hover but don't change states.
+                .Ignore(InputAction.EndHover)//Allow hover but don't change states.
+            ;
+
+            StateMachine.Configure(InputState.EnemyTurn)
+                .Permit(InputAction.BeginTurn, InputState.Idle);
+            
         }
 
         private void Update()

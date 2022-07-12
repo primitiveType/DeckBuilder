@@ -1,14 +1,14 @@
 ﻿using Api;
 
-namespace SummerJam1.Cards
+namespace SummerJam1.Cards.Effects
 {
-    public class Draw2Cards : SummerJam1Component, IEffect
+    public class DrawCards : SummerJam1Component, IEffect, IAmount
     {
-        private int NumToDraw { get; } = 2;
+        public int Amount { get; set; } = 2;
 
         public bool DoEffect(IEntity target)
         {
-            for (int i = 0; i < NumToDraw; i++)
+            for (int i = 0; i < Amount; i++)
             {
                 Game.Battle.BattleDeck.DrawCard();
             }

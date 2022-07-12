@@ -168,7 +168,14 @@ namespace SummerJam1
 
         public void EndTurn()
         {
+            if (!InputStateManager.Instance.StateMachine.CanFire(InputAction.EndTurn))
+            {
+                return;
+            }
+
+            InputStateManager.Instance.StateMachine.Fire(InputAction.EndTurn);
             Game.EndTurn();
+            AnimationQueue.Instance.Enqueue(() => { InputStateManager.Instance.StateMachine.Fire(InputAction.BeginTurn); });
         }
     }
 }

@@ -34,6 +34,7 @@ namespace SummerJam1
         public int CurrentLevel { get; private set; }
 
         public Pile PrefabDebugPile { get; private set; }
+        public Pile DiscardStagingPile { get; private set; }
 
         protected override void Initialize()
         {
@@ -44,6 +45,7 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity => PrizePile = entity.AddComponent<SummerJam1PrizePile>());
             Context.CreateEntity(Entity, entity => RelicPrizePile = entity.AddComponent<SummerJam1RelicPrizePile>());
             Context.CreateEntity(Entity, entity => RelicPile = entity.AddComponent<RelicPile>());
+            Context.CreateEntity(Entity, entity => DiscardStagingPile = entity.AddComponent<DiscardStagingPile>());
             Context.CreateEntity(Entity, entity => { PlayerSlot = entity.AddComponent<UnitSlot>(); });
             Context.CreateEntity(Entity, entity =>
             {
@@ -58,19 +60,21 @@ namespace SummerJam1
             });
             CreateNewMap();
 
+            CreatePrefabPile();
+
             //create an example deck.
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
             for (int i = 0; i < 2; i++)
             {
                 Context.CreateEntity(Deck.Entity, "Cards/ProtoField.json");
                 Context.CreateEntity(Deck.Entity, "Cards/EnergyField.json");
+                Context.CreateEntity(Deck.Entity, "Cards/Fidget.json");
                 Context.CreateEntity(Deck.Entity, "Cards/ProtoPulse.json");
                 Context.CreateEntity(Deck.Entity, "Cards/Pulse.json");
             }
 
             Events.OnGameStarted(new GameStartedEventArgs());
 
-            CreatePrefabPile();
         }
 
         private void CreatePrefabPile()

@@ -18,7 +18,8 @@
         "CardsAndPiles.dll",
         "Newtonsoft.Json.dll",
         "RogueMaps.dll",
-        "RogueSharp.dll"
+        "RogueSharp.dll",
+        "Stateless.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
