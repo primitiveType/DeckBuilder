@@ -1,0 +1,38 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 63,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.applesauce"
+    },
+    {
+      "$type": "SummerJam1.Cards.ModifyMaxHealthOfUnitByStrength, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.StrengthTooltip, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Applesauce"
+    },
+    {
+      "$type": "CardsAndPiles.Components.Draggable, CardsAndPiles",
+      "CanDrag": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Cost": 1
+    },
+    {
+      "$type": "SummerJam1.Cards.Sweet, SummerJam1"
+    }
+  ]
+}
