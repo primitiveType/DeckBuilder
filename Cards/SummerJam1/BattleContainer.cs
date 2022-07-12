@@ -11,7 +11,7 @@ namespace SummerJam1
 {
     public class BattleContainer : SummerJam1Component
     {
-        private int NumSlots = 3;
+        private int NumSlots = 1;
         public IEntity Discard { get; private set; }
         public IEntity Exhaust { get; private set; }
         public HandPile Hand { get; private set; }
@@ -50,13 +50,14 @@ namespace SummerJam1
             return Context.CreateEntity(parent, Path.Combine($"Units", $"{difficulty}", files[index].Name));
         }
 
-        public void StartBattle()
+        public void StartBattle(string prefab)
         {
             BattleDeck = Context.DuplicateEntity(Game.Deck.Entity).GetComponent<DeckPile>();
             BattleDeck.Entity.TrySetParent(Entity);
             Context.CreateEntity(Entity, entity =>
                 Hand = entity.AddComponent<HandPile>());
 
+            Context.CreateEntity(SlotsParent.GetComponentInChildren<EnemyUnitSlot>().Entity, prefab);
 
             Events.OnBattleStarted(new BattleStartedEventArgs());
             Events.OnTurnBegan(new TurnBeganEventArgs());

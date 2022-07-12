@@ -8,8 +8,8 @@ namespace SummerJam1.Units
     {
         [JsonProperty] public int TurnsRemaining { get; set; } = 1;
 
-        [OnRequestDealDamage]
-        private void OnRequestDealDamage(object sender, RequestDealDamageEventArgs args)
+        [OnRequestDamageMultipliers]
+        private void OnRequestDealDamage(object sender, RequestDamageMultipliersEventArgs args)
         {
             if (args.Target != Entity)
             {
@@ -17,7 +17,7 @@ namespace SummerJam1.Units
             }
             Unit unit = args.Source.GetComponent<Unit>();
             
-            args.Clamps.Add(0); //prevent all damage.
+            args.Multiplier.Add(0); //prevent all damage.
 
             if (unit == null || args.Source.GetComponent<Food>() == null)
             {

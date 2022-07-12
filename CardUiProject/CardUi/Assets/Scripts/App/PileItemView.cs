@@ -47,7 +47,7 @@ namespace App
         public void OnEndDrag(PointerEventData eventData)
         {
             IsDragging = false;
-            if (TargetPileView == null)
+            if (TargetPileView == null || TargetPileView == GetComponentInParent<PileView>())
             {
                 return;
             }

@@ -556,7 +556,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -1323,7 +1323,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 00bb5ebf38b01a845808b63122df2cc0, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.439
   m_Pitch: 1
@@ -1469,8 +1469,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: CRITTERS
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d498738660bc27f48bedfa84a491d521, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: d498738660bc27f48bedfa84a491d521, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2ef190b77111ab84ba152f9da434fbae, type: 2}
+  m_sharedMaterial: {fileID: -6112306360411951812, guid: 2ef190b77111ab84ba152f9da434fbae, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1494,8 +1494,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 238.22
+  m_fontSizeBase: 238.22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1551,7 +1551,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1555466213}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7033e6f7e100d2d488ba3d27f6f5acea, type: 3}
   m_Name: 

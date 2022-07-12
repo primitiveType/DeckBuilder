@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using CardsAndPiles;
+using Newtonsoft.Json;
 
 namespace SummerJam1
 {
     public abstract class Intent : SummerJam1Component
     {
+        [JsonIgnore] public bool Enabled { get; set; } = true;
+
         protected override void Initialize()
         {
             base.Initialize();

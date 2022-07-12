@@ -268,7 +268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af152c3cd9b24de98472281083e9e974, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Initialized_Tester: 0
 --- !u!223 &8163466487095116258
 Canvas:
   m_ObjectHideFlags: 0
@@ -312,7 +311,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1000
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &3539690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,7 +324,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b62ed85b14194a6b9b2cdeb40eac10e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Initialized_Tester: 0
   m_Animator: {fileID: 3539689}
 --- !u!95 &3539689
 Animator:
@@ -358,7 +356,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 091386d0106740669267f2eb4a01f2cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Initialized_Tester: 0
 --- !u!1 &3772668335421422698
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,7 +509,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3506de418374688af4acb35b11231e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AmountText: {fileID: 6229435090479333065}
   IntentImage: {fileID: 4812961522056803549}
   DamageIntentImage: {fileID: 21300000, guid: 5cee480e01c13ee4e8c05f89f1ba8bd7, type: 3}
 --- !u!114 &1411173302479044197

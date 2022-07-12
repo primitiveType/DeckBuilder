@@ -15,11 +15,14 @@
       "Amount" : 10
     },
     {
+      "$type": "SummerJam1.Cards.StrengthTooltip, SummerJam1"
+    },
+    {
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Spicy Pepper"
+      "Value": "Capsaicin"
     },
     {
       "$type": "CardsAndPiles.Components.Draggable, CardsAndPiles",

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Api;
 
 namespace CardsAndPiles.Components
@@ -29,13 +30,15 @@ namespace CardsAndPiles.Components
             var args = new RequestPlayCardEventArgs(Entity, target);
             ((CardEvents)Context.Events).OnRequestPlayCard(args);
 
-            if (args.CanPlay.Any((canPlay) => !canPlay))
+            if (args.Blockers.Any())
             {
+                ((CardEvents)Context.Events).OnCardPlayFailed(new CardPlayFailedEventArgs(args.Blockers));
                 return false;
             }
 
             if (!PlayCard(target))
             {
+                ((CardEvents)Context.Events).OnCardPlayFailed(new CardPlayFailedEventArgs(new List<string> {"I Can't Play that right now."}));
                 return false;
             }
 

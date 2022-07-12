@@ -1,3 +1,4 @@
+using System.Data;
 using Api;
 using App;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace SummerJam1
     {
         // [SerializeField] private Text AmountText;
         [SerializeField] private Image IntentImage;
+        [SerializeField] private Sprite SleepingImage;
 
         [SerializeField] private Sprite DamageIntentImage;
 
@@ -21,6 +23,11 @@ namespace SummerJam1
         private void UpdateIntentImage()
         {
             IntentImage.gameObject.SetActive(true);
+            if (!Component.Enabled)
+            {
+                IntentImage.sprite = SleepingImage;
+                return;
+            }
 
             switch (Component)
             {

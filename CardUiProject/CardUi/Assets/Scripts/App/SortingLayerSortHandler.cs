@@ -13,7 +13,7 @@ namespace App
                 SpriteRenderer.sortingOrder = depth;
             }
 
-            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -depth * .25f);
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -depth);
         }
     }
 }

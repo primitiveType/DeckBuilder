@@ -13,7 +13,7 @@ namespace SummerJam1.Units
 
         public virtual bool AcceptsParent(IEntity parent)
         {
-            return parent.GetComponent<UnitSlot>() != null;
+            return true;
         }
 
         public virtual bool AcceptsChild(IEntity child)

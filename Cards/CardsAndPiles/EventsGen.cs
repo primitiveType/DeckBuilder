@@ -81,20 +81,48 @@ public EventHandle<CardExhaustedEventArgs> SubscribeToCardExhausted(EventHandleD
     return handler;
 } 
     #endregion Code for event CardExhausted
-    #region Code for event RequestDealDamage
-private event EventHandleDelegate<RequestDealDamageEventArgs> RequestDealDamage;
-public virtual void OnRequestDealDamage(RequestDealDamageEventArgs args)
+    #region Code for event RequestDamageMultipliers
+private event EventHandleDelegate<RequestDamageMultipliersEventArgs> RequestDamageMultipliers;
+public virtual void OnRequestDamageMultipliers(RequestDamageMultipliersEventArgs args)
 {
-    RequestDealDamage?.Invoke(this, args);
+    RequestDamageMultipliers?.Invoke(this, args);
 }
 
-public EventHandle<RequestDealDamageEventArgs> SubscribeToRequestDealDamage(EventHandleDelegate<RequestDealDamageEventArgs> action)
+public EventHandle<RequestDamageMultipliersEventArgs> SubscribeToRequestDamageMultipliers(EventHandleDelegate<RequestDamageMultipliersEventArgs> action)
 {
-    var handler = new EventHandle<RequestDealDamageEventArgs>(action, () => RequestDealDamage -= action);
-    RequestDealDamage += handler.Invoke;
+    var handler = new EventHandle<RequestDamageMultipliersEventArgs>(action, () => RequestDamageMultipliers -= action);
+    RequestDamageMultipliers += handler.Invoke;
     return handler;
 } 
-    #endregion Code for event RequestDealDamage
+    #endregion Code for event RequestDamageMultipliers
+    #region Code for event RequestDamageReduction
+private event EventHandleDelegate<RequestDamageReductionEventArgs> RequestDamageReduction;
+public virtual void OnRequestDamageReduction(RequestDamageReductionEventArgs args)
+{
+    RequestDamageReduction?.Invoke(this, args);
+}
+
+public EventHandle<RequestDamageReductionEventArgs> SubscribeToRequestDamageReduction(EventHandleDelegate<RequestDamageReductionEventArgs> action)
+{
+    var handler = new EventHandle<RequestDamageReductionEventArgs>(action, () => RequestDamageReduction -= action);
+    RequestDamageReduction += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event RequestDamageReduction
+    #region Code for event CardPlayFailed
+private event EventHandleDelegate<CardPlayFailedEventArgs> CardPlayFailed;
+public virtual void OnCardPlayFailed(CardPlayFailedEventArgs args)
+{
+    CardPlayFailed?.Invoke(this, args);
+}
+
+public EventHandle<CardPlayFailedEventArgs> SubscribeToCardPlayFailed(EventHandleDelegate<CardPlayFailedEventArgs> action)
+{
+    var handler = new EventHandle<CardPlayFailedEventArgs>(action, () => CardPlayFailed -= action);
+    CardPlayFailed += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event CardPlayFailed
     #region Code for event RequestHeal
 private event EventHandleDelegate<RequestHealEventArgs> RequestHeal;
 public virtual void OnRequestHeal(RequestHealEventArgs args)
@@ -210,8 +238,8 @@ public class OnRequestPlayCardAttribute : EventsBaseAttribute {
 
     public class RequestPlayCardEventArgs {        public  IEntity CardId { get; }
         public  IEntity Target { get; }
-        public  List<bool> CanPlay { get; set;} 
-=new List<bool>();        public  RequestPlayCardEventArgs (IEntity CardId, IEntity Target   ){
+        public  List<string> Blockers { get; set;} 
+=new List<string>();        public  RequestPlayCardEventArgs (IEntity CardId, IEntity Target   ){
                   this.CardId = CardId; 
               this.Target = Target; 
 }
@@ -353,24 +381,24 @@ public class OnCardExhaustedAttribute : EventsBaseAttribute {
 }
 
         }/// <summary>
-/// (object sender, RequestDealDamageEventArgs) args)
+/// (object sender, RequestDamageMultipliersEventArgs) args)
 /// </summary>
-public class OnRequestDealDamageAttribute : EventsBaseAttribute {
+public class OnRequestDamageMultipliersAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
-            return ((CardEventsBase)events).SubscribeToRequestDealDamage(delegate
+            return ((CardEventsBase)events).SubscribeToRequestDamageMultipliers(delegate
             {
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
-        parameters[1].ParameterType != typeof(RequestDealDamageEventArgs)){
-            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, RequestDealDamageEventArgs) args)");
+        parameters[1].ParameterType != typeof(RequestDamageMultipliersEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, RequestDamageMultipliersEventArgs) args)");
         }
-        return ((CardEventsBase)events).SubscribeToRequestDealDamage(delegate(object sender, RequestDealDamageEventArgs args)
+        return ((CardEventsBase)events).SubscribeToRequestDamageMultipliers(delegate(object sender, RequestDamageMultipliersEventArgs args)
         {
             attached.Invoke(instance, new[] { sender, args });
         });
@@ -378,17 +406,87 @@ public class OnRequestDealDamageAttribute : EventsBaseAttribute {
 
 
 }
-    //public delegate void RequestDealDamageEvent (object sender, RequestDealDamageEventArgs args);
+    //public delegate void RequestDamageMultipliersEvent (object sender, RequestDamageMultipliersEventArgs args);
 
-    public class RequestDealDamageEventArgs {        public  int Amount { get; }
+    public class RequestDamageMultipliersEventArgs {        public  int Amount { get; }
         public  IEntity Source { get; }
         public  IEntity Target { get; }
         public  List<float> Multiplier { get; set;} 
-=new List<float>();        public  List<int> Clamps { get; set;} 
-=new List<int>();        public  RequestDealDamageEventArgs (int Amount, IEntity Source, IEntity Target   ){
+=new List<float>();        public  RequestDamageMultipliersEventArgs (int Amount, IEntity Source, IEntity Target   ){
                   this.Amount = Amount; 
               this.Source = Source; 
               this.Target = Target; 
+}
+
+        }/// <summary>
+/// (object sender, RequestDamageReductionEventArgs) args)
+/// </summary>
+public class OnRequestDamageReductionAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToRequestDamageReduction(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(RequestDamageReductionEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, RequestDamageReductionEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToRequestDamageReduction(delegate(object sender, RequestDamageReductionEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void RequestDamageReductionEvent (object sender, RequestDamageReductionEventArgs args);
+
+    public class RequestDamageReductionEventArgs {        public  int Amount { get; }
+        public  IEntity Source { get; }
+        public  IEntity Target { get; }
+        public  List<int> Reduction { get; set;} 
+=new List<int>();        public  RequestDamageReductionEventArgs (int Amount, IEntity Source, IEntity Target   ){
+                  this.Amount = Amount; 
+              this.Source = Source; 
+              this.Target = Target; 
+}
+
+        }/// <summary>
+/// (object sender, CardPlayFailedEventArgs) args)
+/// </summary>
+public class OnCardPlayFailedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToCardPlayFailed(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(CardPlayFailedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, CardPlayFailedEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToCardPlayFailed(delegate(object sender, CardPlayFailedEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void CardPlayFailedEvent (object sender, CardPlayFailedEventArgs args);
+
+    public class CardPlayFailedEventArgs {        public  List<string> Reasons { get; }
+        public  CardPlayFailedEventArgs (List<string> Reasons   ){
+                  this.Reasons = Reasons; 
 }
 
         }/// <summary>

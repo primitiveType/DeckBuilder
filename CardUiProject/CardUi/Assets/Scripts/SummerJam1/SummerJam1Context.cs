@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using Api;
 using App;
@@ -23,10 +25,17 @@ namespace SummerJam1
         public SummerJam1Events Events => (SummerJam1Events)Context.Events;
         public Game Game { get; private set; }
 
+        private List<IDisposable> Disposables = new List<IDisposable>();
+
         protected override void Awake()
         {
             base.Awake();
             Logging.Initialize(new Logger());
+        }
+
+        private void OnBattleStarted(object sender, BattleStartedEventArgs item)
+        {
+            SceneManager.LoadScene("Scenes/SummerJam1/BattleScene");
         }
 
         public void SaveGame()
@@ -95,10 +104,20 @@ namespace SummerJam1
 
         private void SubscribeToEvents()
         {
-            Events.SubscribeToCardCreated(OnCardCreated);
-            Events.SubscribeToRelicCreated(OnRelicCreated);
-            Events.SubscribeToDamageDealt(OnDamageDealt);
-            Events.SubscribeToCardPlayed(OnCardPlayed);
+            Disposables.Add(Events.SubscribeToCardCreated(OnCardCreated));
+            Disposables.Add(Events.SubscribeToRelicCreated(OnRelicCreated));
+            Disposables.Add(Events.SubscribeToDamageDealt(OnDamageDealt));
+            Disposables.Add(Events.SubscribeToCardPlayed(OnCardPlayed));
+            Disposables.Add(Events.SubscribeToBattleStarted(OnBattleStarted));
+            Disposables.Add(Events.SubscribeToCardPlayFailed(OnCardPlayFailed));
+        }
+
+        private void OnCardPlayFailed(object sender, CardPlayFailedEventArgs item)
+        {
+            foreach (string itemReason in item.Reasons)
+            {
+                Debug.LogWarning(itemReason);
+            }
         }
 
         private async void LoadMenu()

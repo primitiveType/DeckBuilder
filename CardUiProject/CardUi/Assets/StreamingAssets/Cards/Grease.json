@@ -18,6 +18,9 @@
       "Amount": 2
     },
     {
+      "$type": "SummerJam1.Cards.RegenTooltip, SummerJam1"
+    },
+    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Grease"
     },

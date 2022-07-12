@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Api;
 using App;
@@ -40,16 +39,20 @@ namespace SummerJam1
         protected void Awake()
         {
             Disposables.Add(Events.SubscribeToBattleEnded(OnBattleEnded));
-            Disposables.Add(Events.SubscribeToBattleStarted(OnBattleStarted));
-
 
 
             IEntity game = Context.Root;
+            foreach (Unit unit in Game.Battle.Entity.GetComponentsInChildren<Unit>())
+            {
+                SummerJam1Context.CreateView(unit.Entity, SummerJam1UnitFactory.Instance.UnitPrefab);
+            }
+
             Disposables.Add(Events.SubscribeToUnitCreated(OnUnitCreated));
             Disposables.Add(Events.SubscribeToDamageDealt(OnDamageDealt));
             Disposables.Add(Events.SubscribeToHealDealt(OnHealDealt));
 
-            Game.StartBattle();
+            //This scene even being loaded means battle has started.
+            OnBattleStarted();
         }
 
         private void OnHealDealt(object sender, HealDealtEventArgs item)
@@ -87,7 +90,7 @@ namespace SummerJam1
             }
         }
 
-        private void OnBattleStarted(object sender, BattleStartedEventArgs item)
+        private void OnBattleStarted()
         {
             //TODO: try getting rid of these bridge components by just listening to new events.
             //CreateView(Game.Player.Entity, UnitPrefab);

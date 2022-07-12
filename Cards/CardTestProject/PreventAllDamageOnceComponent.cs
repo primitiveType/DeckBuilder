@@ -5,8 +5,8 @@ namespace CardTestProject
 {
     public class PreventAllDamageOnceComponent : Component
     {
-        [OnRequestDealDamage]
-        private void OnTryDealDamage(object sender, RequestDealDamageEventArgs args)
+        [OnRequestDamageMultipliers]
+        private void OnTryDealDamage(object sender, RequestDamageMultipliersEventArgs args)
         {
             args.Multiplier.Add(0);
             Entity.RemoveComponent(this);

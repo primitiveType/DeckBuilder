@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using Api;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
@@ -11,8 +12,38 @@ namespace SummerJam1
         [JsonIgnore] public int Amount => Entity.GetComponent<Strength>()?.Amount ?? 0;
         [JsonIgnore] private int Attacks => 1 + (Entity.GetComponent<MultiAttack>()?.Amount ?? 0);
 
+        public bool IgnoreStealth { get; set; }
+
+        private Player Player { get; set; }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Player = Context.Root.GetComponent<Game>().Player;
+            Player.PropertyChanged += PlayerOnPropertyChanged;
+        }
+
+        public override void Terminate()
+        {
+            base.Terminate();
+            Player.PropertyChanged -= PlayerOnPropertyChanged;
+        }
+
+        private void PlayerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!IgnoreStealth)
+            {
+                Enabled = Player.CurrentStealth <= 0;
+            }
+        }
+
         protected override void DoIntent()
         {
+            if (!Enabled)
+            {
+                return;
+            }
+
             bool isFriendly = Entity.GetComponentInParent<FriendlyUnitSlot>() != null;
 
             IEntity targetSlot;
@@ -48,7 +79,11 @@ namespace SummerJam1
 
                     if (targetSlot == null)
                     {
-                        targetSlot = Context.Root.GetComponent<Game>().Player.Entity;
+                        var player = Context.Root.GetComponent<Game>().Player;
+                        if (IgnoreStealth || player.CurrentStealth <= 0)
+                        {
+                            targetSlot = player.Entity;
+                        }
                     }
                 }
 

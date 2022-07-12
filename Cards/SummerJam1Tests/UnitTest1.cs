@@ -6,6 +6,7 @@ using CardsAndPiles;
 using CardsAndPiles.Components;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using RogueMaps;
 using SummerJam1;
 using SummerJam1.Cards;
 using SummerJam1.Units;
@@ -41,7 +42,7 @@ namespace SummerJam1Tests
         public void TestUnitCreatedInSlot()
         {
             UnitCard unitCard = MakeUnitCard();
-            Game.StartBattle();
+            Game.StartBattle("Units/Donut.json");
             FriendlyUnitSlot unitSlot = Game.Entity.GetComponentsInChildren<FriendlyUnitSlot>().First(slot => slot.Entity.Children.Count == 0);
 
             Assert.NotNull(unitSlot);
@@ -56,7 +57,7 @@ namespace SummerJam1Tests
         [Test]
         public void StartBattle()
         {
-            Game.StartBattle();
+            Game.StartBattle("Units/Donut.json");
         }
 
         [Test]
@@ -199,7 +200,7 @@ namespace SummerJam1Tests
         {
             IEntity test1 = Context.CreateEntity();
             IEntity test2 = Context.CreateEntity();
-            Game.StartBattle();
+            Game.StartBattle("Units/Donut.json");
             TestEvents events1 = test1.AddComponent<TestEvents>();
             TestEvents events2 = test2.AddComponent<TestEvents>();
 
@@ -244,6 +245,55 @@ namespace SummerJam1Tests
                 Assert.Pass();
             }
         }
+        
+        [Test]
+        public void BattleStartedByEnteringCell()
+        {
+            MapCreatorComponent mapCreatorCreator = Context.Root.AddComponent<MapCreatorComponent>();
+
+            bool battleStarted = false;
+            ((SummerJam1Events)Context.Events).SubscribeToBattleStarted(Action);
+            CustomMap map = Context.Root.GetComponent<CustomMap>();
+            Assert.NotNull(map);
+
+            Assert.LessOrEqual(map.Height * map.Width, map.Entity.Children.Count);
+
+            CustomCell walkableCell = map.GetAllCells().First(cell => cell.IsWalkable);
+            var encounterEntity = Context.CreateEntity(walkableCell.Entity, (entity) => { entity.AddComponent<Position>();});
+            encounterEntity.AddComponent<BattleEncounter>().Prefab = "DefaultEncounter.json";
+
+            var player = Context.CreateEntity(walkableCell.Entity, entity =>
+            {
+                entity.AddComponent<Position>();
+                entity.AddComponent<Player>();
+            });
+
+            Assert.That(player.Parent, Is.EqualTo(walkableCell.Entity));
+            Assert.That(player.GetComponent<Position>().Position1.X, Is.EqualTo(walkableCell.X));
+            Assert.That(player.GetComponent<Position>().Position1.Z, Is.EqualTo(walkableCell.Y)); 
+            Assert.IsTrue(battleStarted);
+            void Action(object sender, BattleStartedEventArgs item)
+            {
+                battleStarted = true;
+            }
+        }
+        
+        [Test]
+        public void CellsContainBlockedCells()
+        {
+            MapCreatorComponent mapCreatorCreator = Context.Root.AddComponent<MapCreatorComponent>();
+
+            bool battleStarted = false;
+            CustomMap map = Context.Root.GetComponent<CustomMap>();
+            Assert.NotNull(map);
+
+            Assert.LessOrEqual(map.Height * map.Width, map.Entity.Children.Count);
+
+            CustomCell blockedCell = map.GetAllCells().First(cell => !cell.IsWalkable);
+           
+        }
+
+        
 
 
         private UnitCard MakeUnitCard()

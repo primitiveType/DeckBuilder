@@ -9,7 +9,7 @@ namespace App
 {
     public abstract class ComponentView<T> : MonoBehaviour
     {
-        private IEntity Entity { get; set; }
+        protected IEntity Entity { get; private set; }
         protected T Component { get; private set; }
         protected readonly List<IDisposable> Disposables = new List<IDisposable>(2);
         private IView View { get; set; }

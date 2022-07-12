@@ -17,6 +17,9 @@
       "$type": "SummerJam1.Cards.ModifyMaxHealthOfUnitByStrength, SummerJam1"
     },
     {
+      "$type": "SummerJam1.Cards.StrengthTooltip, SummerJam1"
+    },
+    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Applesauce"
     },

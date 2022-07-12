@@ -60,5 +60,6 @@ namespace Tests
             
             Assert.Greater(Game.Entity.Children.Count, 100);
         }
+        
     }
 }

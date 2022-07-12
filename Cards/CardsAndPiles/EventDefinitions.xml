@@ -3,7 +3,7 @@
     <event id="RequestPlayCard">
         <arg name="CardId" type="IEntity"/>
         <arg name="Target" type="IEntity"/>
-        <member name="CanPlay" type="List&lt;bool&gt;" value="new List&lt;bool&gt;()"/>
+        <member name="Blockers" type="List&lt;string&gt;" value="new List&lt;string&gt;()"/>
     </event>
     <event id="CardPlayed">
         <arg name="CardId" type="IEntity"/>
@@ -19,12 +19,20 @@
     <event id="CardExhausted">
         <arg name="CardId" type="IEntity"/>
     </event>
-    <event id="RequestDealDamage">
+    <event id="RequestDamageMultipliers">
         <arg name="Amount" type="int"/>
         <arg name="Source" type="IEntity"/>
         <arg name="Target" type="IEntity"/>
         <member name="Multiplier" type="List&lt;float&gt;" value="new List&lt;float&gt;()"/>
-        <member name="Clamps" type="List&lt;int&gt;" value="new List&lt;int&gt;()"/>
+    </event>
+    <event id="RequestDamageReduction">
+        <arg name="Amount" type="int"/>
+        <arg name="Source" type="IEntity"/>
+        <arg name="Target" type="IEntity"/>
+        <member name="Reduction" type="List&lt;int&gt;" value="new List&lt;int&gt;()"/>
+    </event>
+    <event id="CardPlayFailed">
+        <arg name="Reasons" type="List&lt;string&gt;" value="new List&lt;string&gt;()"/>
     </event>
     <event id="RequestHeal">
         <arg name="Amount" type="int"/>

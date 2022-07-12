@@ -6,19 +6,28 @@ namespace CardsAndPiles.Components
 {
     public class Health : CardsAndPilesComponent, ITakesDamageInternal, IHealable
     {
-        public int Amount { get;  set; } 
-        public int Max { get;  set; } 
+        public int Amount { get; set; }
+        public int Max { get; set; }
 
         public int TryDealDamage(int damage, IEntity source)
         {
-            RequestDealDamageEventArgs args = new RequestDealDamageEventArgs(damage, source, Entity);
-            Events.OnRequestDealDamage(args);
-            int amount = CalculateDamage(args.Amount, args.Clamps, args.Multiplier);
-            DealDamage(amount, args.Source);
+            RequestDamageMultipliersEventArgs multipliersEventArgs = new RequestDamageMultipliersEventArgs(damage, source, Entity);
+            Events.OnRequestDamageMultipliers(multipliersEventArgs);
+            var multipliers = multipliersEventArgs.Multiplier;
+
+            RequestDamageReductionEventArgs reductionEventArgs = new RequestDamageReductionEventArgs(damage, source, Entity);
+            Events.OnRequestDamageReduction(reductionEventArgs);
+
+            var reductions = reductionEventArgs.Reduction;
+            // Events.OnRequestDealDamage(args); multipliers
+            // Events.OnRequestDealDamage(args); clamps
+            // Events.OnRequestDealDamage(args); reduction
+            int amount = CalculateDamage(multipliersEventArgs.Amount, multipliers, reductions);
+            DealDamage(amount, multipliersEventArgs.Source);
             return amount;
         }
 
-        private int CalculateDamage(int amount, List<int> clamps, List<float> multipliers)
+        private int CalculateDamage(int amount, List<float> multipliers, List<int> reductions)
         {
             var totalMultiplier = 1f;
             foreach (var multiplier in multipliers)
@@ -34,9 +43,10 @@ namespace CardsAndPiles.Components
 
             var calculated = (int)Math.Ceiling(amount * totalMultiplier); //TODO: math
 
-            foreach (var clamp in clamps)
+
+            foreach (int reduction in reductions)
             {
-                calculated = Math.Min(calculated, clamp);
+                calculated -= reduction;
             }
 
             return calculated;
@@ -52,23 +62,24 @@ namespace CardsAndPiles.Components
                 Entity.Destroy();
             }
         }
-        
+
         public void Heal(int damage, IEntity source)
         {
             Amount += damage;
             Events.OnHealDealt(new HealDealtEventArgs(Entity, source, damage));
         }
 
-        [OnRequestDealDamage]
-        private void OnRequestDealDamage(object sender, RequestDealDamageEventArgs args)
-        {
-            if (args.Target != Entity)
-            {
-                return;
-            }
-            args.Clamps.Add(Amount);
-        }
-        
+        // [OnRequestDealDamage]
+        // private void OnRequestDealDamage(object sender, RequestDealDamageEventArgs args)
+        // {
+        //     if (args.Target != Entity)
+        //     {
+        //         return;
+        //     }
+        //
+        //     args.Clamps.Add(Amount);
+        // }
+
         [OnRequestHeal]
         private void OnRequestHeal(object sender, RequestHealEventArgs args)
         {
@@ -76,6 +87,7 @@ namespace CardsAndPiles.Components
             {
                 return;
             }
+
             args.Clamps.Add(Max - Amount);
         }
 
@@ -86,7 +98,7 @@ namespace CardsAndPiles.Components
 
         public void SetMax(int max)
         {
-            int diff = max - Max; 
+            int diff = max - Max;
             Max = max;
             if (Amount > max)
             {
@@ -103,7 +115,7 @@ namespace CardsAndPiles.Components
         {
             RequestHealEventArgs args = new RequestHealEventArgs(damage, source, Entity);
             Events.OnRequestHeal(args);
-            int amount = CalculateDamage(args.Amount, args.Clamps, args.Multiplier);
+            int amount = CalculateDamage(args.Amount, args.Multiplier, new List<int>());
             Heal(amount, args.Source);
             return amount;
         }

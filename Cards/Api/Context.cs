@@ -41,7 +41,10 @@ namespace Api
             entity.Initialize(this, NextId++);
 
             setup?.Invoke(entity);
-            entity.TrySetParent(parent);
+            if (!entity.TrySetParent(parent))
+            {
+                throw new Exception("Unable to create entity under target!");
+            }
             EntityDatabase.Add(entity.Id, entity);
             return entity;
         }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Net.Security;
 using System.Numerics;
 using Api;
 using CardsAndPiles;
@@ -8,7 +10,6 @@ using CardsAndPiles.Components;
 using RogueMaps;
 using SummerJam1.Rules;
 using SummerJam1.Units;
-using Random = Api.Random;
 
 namespace SummerJam1
 {
@@ -26,7 +27,9 @@ namespace SummerJam1
 
         public Random Random { get; private set; }
 
-        public MapComponent CurrentMap { get; private set; }
+        public CustomMap CurrentMap { get; private set; }
+
+        public int CurrentLevel { get; private set; }
 
         protected override void Initialize()
         {
@@ -40,40 +43,97 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity =>
             {
                 Player = entity.AddComponent<Player>();
+                entity.AddComponent<HealOnBattleEnd>();
                 entity.AddComponent<PlayerUnit>();
                 entity.AddComponent<VisualComponent>().AssetName = "Player";
                 Health health = entity.AddComponent<Health>();
                 entity.AddComponent<Position>();
-                health.SetMax(50);
-                health.SetHealth(50);
+                health.SetMax(20);
+                health.SetHealth(20);
             });
             CreateNewMap();
 
             //create an example deck.
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 2; i++)
             {
-                Context.CreateEntity(Deck.Entity, "Cards/Starting/Honey.json");
+                Context.CreateEntity(Deck.Entity, "Cards/ProtoField.json");
+                Context.CreateEntity(Deck.Entity, "Cards/EnergyField.json");
+                Context.CreateEntity(Deck.Entity, "Cards/ProtoPulse.json");
+                Context.CreateEntity(Deck.Entity, "Cards/Pulse.json");
             }
 
             Events.OnGameStarted(new GameStartedEventArgs());
         }
 
+        public void GoToNextLevel()
+        {
+            CurrentLevel++;
+            CreateNewMap();
+        }
+
         private void CreateNewMap()
         {
+            Player.Entity.TrySetParent(Context.Root);
             if (CurrentMap != null)
             {
                 CurrentMap.Entity.Destroy();
             }
 
-            Context.CreateEntity(Entity, entity => { CurrentMap = entity.AddComponent<MapComponent>(); });
-            foreach (CustomCell customCell in CurrentMap.Map.GetAllCells())
+            Context.CreateEntity(Entity, entity =>
+            {
+                entity.AddComponent<MapCreatorComponent>();
+                CurrentMap = entity.GetComponent<CustomMap>();
+            });
+            foreach (CustomCell customCell in CurrentMap.GetAllCells())
             {
                 if (customCell.IsWalkable)
                 {
-                    Player.Entity.GetComponent<Position>().Position1 = new Vector3(customCell.X, 0, customCell.Y);
+                    Player.Entity.GetComponent<Position>().Position1 = new Vector3(customCell.X, customCell.Y, 0);
+                    break;
                 }
             }
+
+            foreach (CustomCell customCell in CurrentMap.GetAllCells().Reverse())
+            {
+                if (customCell.IsWalkable)
+                {
+                    CreateHatchInCell(customCell.Entity);
+                    break;
+                }
+            }
+
+            int enemies = 0;
+            foreach (CustomCell customCell in CurrentMap.GetAllCells().Reverse())
+            {
+                if (!customCell.Entity.Children.Any())
+                {
+                    var neighbors = CurrentMap.GetAdjacentCells(customCell.X, customCell.Y).Where(n => !n.Entity.Children.Any()).ToList();
+                    if (neighbors.Count == 2 && neighbors.All(n => n.X == customCell.X) || neighbors.All(n=>n.Y == customCell.Y))
+                    {
+                        CreateEnemyInCell(customCell.Entity);
+                        enemies++;
+                        if (enemies > 4)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void CreateHatchInCell(IEntity customCellEntity)
+        {
+            IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
+            enemyEntity.AddComponent<HatchEncounter>();
+        }
+
+        private void CreateEnemyInCell(IEntity customCellEntity)
+        {
+            IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
+
+            enemyEntity.AddComponent<BattleEncounter>().Prefab = "DefaultEncounter.json";
+            enemyEntity.AddComponent<VisualComponent>().AssetName = "DefaultEncounter";
         }
 
         private void AddRules()
@@ -89,15 +149,15 @@ namespace SummerJam1
         }
 
 
-        public void StartBattle()
+        public void StartBattle(string prefab)
         {
             if (Battle != null)
             {
                 Battle.Entity.Destroy();
             }
 
-            Context.CreateEntity(Entity, (entity) => { Battle = entity.AddComponent<BattleContainer>(); });
-            Battle.StartBattle();
+            Context.CreateEntity(Entity, entity => { Battle = entity.AddComponent<BattleContainer>(); });
+            Battle.StartBattle(prefab);
         }
 
 
@@ -119,6 +179,57 @@ namespace SummerJam1
             int index = Random.SystemRandom.Next(files.Count);
 
             return Context.CreateEntity(null, Path.Combine("Relics", files[index].Name));
+        }
+    }
+
+    public class HatchEncounter : Encounter
+    {
+        protected override void PlayerEnteredCell()
+        {
+            Game.GoToNextLevel();
+        }
+    }
+
+    public class BattleEncounter : Encounter
+    {
+        public string Prefab { get; set; }
+
+        protected override void PlayerEnteredCell()
+        {
+            Game.StartBattle(Prefab);
+            Entity.Destroy();
+        }
+    }
+
+    public abstract class Encounter : SummerJam1Component
+    {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Entity.Parent.Children.CollectionChanged += ChildrenOnCollectionChanged;
+        }
+
+        private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (IEntity item in e.NewItems)
+                {
+                    if (item.GetComponent<Player>() != null)
+                    {
+                        PlayerEnteredCell();
+                    }
+                }
+            }
+        }
+
+        protected abstract void PlayerEnteredCell();
+
+
+        public override void Terminate()
+        {
+            base.Terminate();
+            Entity.Parent.Children.CollectionChanged -= ChildrenOnCollectionChanged;
         }
     }
 }

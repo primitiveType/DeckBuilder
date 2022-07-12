@@ -5,8 +5,17 @@ namespace SummerJam1
 {
     public class Player : SummerJam1Component
     {
+        private int _currentStealth;
         public int CurrentEnergy { get; set; }
         public int MaxEnergy { get; private set; } = 3;
+
+        public int CurrentStealth
+        {
+            get => _currentStealth;
+            set => _currentStealth = Math.Max(value, 0);
+        }
+
+        public int MaxStealth { get; private set; } = 10;
 
         public bool TryUseEnergy(int amount)
         {
@@ -20,14 +29,34 @@ namespace SummerJam1
 
             return true;
         }
+        
+        public bool TryUseStealth(int amount)
+        {
+            if (CurrentStealth < amount)
+            {
+                return false;
+            }
+
+            CurrentStealth -= amount;
+            //invoke energy used.
+
+            return true;
+        }
 
 
         [OnTurnBegan]
-        [OnBattleStarted]
         private void OnTurnBegan()
         {
             CurrentEnergy = MaxEnergy;
+            CurrentStealth -= 1;
         }
+
+        [OnBattleStarted]
+        private void OnBattleStarted()
+        {
+            CurrentStealth = MaxStealth;
+        }
+        
 
         public override void Terminate()
         {

@@ -9,12 +9,15 @@ using Component = Api.Component;
 
 namespace App
 {
-    public class TooltipView : View<Component>, IPointerEnterHandler, IPointerExitHandler
+    public class TooltipView : View<Component>, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IEndDragHandler
     {
         [SerializeField] private GameObject TooltipPrefab;
         [SerializeField] private Transform TooltipParent;
         [SerializeField] private Collider TooltipBounds;
         [SerializeField] private float m_Delay = 1f;
+        private bool Dragging { get; set; }
+
+
         private Coroutine ShowCoroutine { get; set; }
 
         private void Update()
@@ -57,11 +60,26 @@ namespace App
                 StopCoroutine(ShowCoroutine);
                 ShowCoroutine = null;
             }
+
             TooltipParent.gameObject.SetActive(false);
             foreach (Transform child in TooltipParent)
             {
                 Destroy(child.gameObject);
             }
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            Dragging = true;
+            if (ShowCoroutine != null)
+            {
+                StopCoroutine(ShowCoroutine);
+            }
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            Dragging = false;
         }
     }
 }

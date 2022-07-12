@@ -93,9 +93,9 @@ namespace CardTestProject
             Assert.NotNull(healthCopy);
             Assert.AreEqual(healthCopy.Amount, health.Amount);
 
-            RequestDealDamageEventArgs
-                args2 = new RequestDealDamageEventArgs(30, entity, entity); //stop hitting yourself!
-            Events.OnRequestDealDamage(args2);
+            RequestDamageMultipliersEventArgs
+                args2 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
+            Events.OnRequestDamageMultipliers(args2);
 
 
             Assert.NotNull(healthCopy);
@@ -118,15 +118,15 @@ namespace CardTestProject
             Assert.That(health.Amount, Is.EqualTo(10));
 
 
-            RequestDealDamageEventArgs
-                args2 = new RequestDealDamageEventArgs(30, entity, entity); //stop hitting yourself!
-            Events.OnRequestDealDamage(args2);
+            RequestDamageMultipliersEventArgs
+                args2 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
+            Events.OnRequestDamageMultipliers(args2);
             //damage should have been prevented.
             Assert.That(health.Amount, Is.EqualTo(10));
 
-            RequestDealDamageEventArgs
-                args3 = new RequestDealDamageEventArgs(30, entity, entity); //stop hitting yourself!
-            Events.OnRequestDealDamage(args3);
+            RequestDamageMultipliersEventArgs
+                args3 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
+            Events.OnRequestDamageMultipliers(args3);
             //damage should not have been prevented.
             Assert.That(health.Amount, Is.EqualTo(0));
         }

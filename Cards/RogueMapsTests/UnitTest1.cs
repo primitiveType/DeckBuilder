@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using Api;
 using CardsAndPiles;
+using CardsAndPiles.Components;
 using NUnit.Framework;
 using RogueMaps;
 
@@ -9,6 +11,7 @@ namespace Tests
     public class Tests
     {
         private Context Context;
+
         [SetUp]
         public void Setup()
         {
@@ -16,11 +19,22 @@ namespace Tests
         }
 
         [Test]
-        public void Test1()
+        public void CellComponentsCreated()
         {
-            var map = Context.Root.AddComponent<MapComponent>();
-            
-            Console.WriteLine(map.Map.ToString());
+            MapCreatorComponent mapCreatorCreator = Context.Root.AddComponent<MapCreatorComponent>();
+
+            CustomMap map = Context.Root.GetComponent<CustomMap>();
+            Assert.NotNull(map);
+
+            Assert.AreEqual(map.Entity.Children.Count, map.Height * map.Width);
+
+            CustomCell walkableCell = map.GetAllCells().First(cell => cell.IsWalkable);
+
+            var player = Context.CreateEntity(walkableCell.Entity, entity => { entity.AddComponent<Position>(); });
+
+            Assert.That(player.Parent, Is.EqualTo(walkableCell.Entity));
+            Assert.That(player.GetComponent<Position>().Position1.X, Is.EqualTo(walkableCell.X));
+            Assert.That(player.GetComponent<Position>().Position1.Z, Is.EqualTo(walkableCell.Y));
         }
     }
 }

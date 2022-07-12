@@ -141,6 +141,21 @@
       <None Update="StreamingAssets\Cards\Starting\UnitPie.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="StreamingAssets\DefaultEncounter.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="StreamingAssets\Cards\ProtoPulse.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="StreamingAssets\Cards\Pulse.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="StreamingAssets\Cards\ProtoField.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="StreamingAssets\Cards\EnergyField.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
    
     </ItemGroup>
 

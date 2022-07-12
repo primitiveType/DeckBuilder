@@ -15,14 +15,14 @@ namespace App
             if (viewGO == null)
             {
                 Debug.LogError(
-                    $"Failed to find game object component for entity {added.Id}:{added.GetComponents<IComponent>().FirstOrDefault()?.GetType().Name}.");
+                    $"Failed to find game object component for entity {added.Id}:{added.GetComponents<IComponent>().FirstOrDefault()?.GetType().Name}.", gameObject);
                 return;
             }
 
             if (viewGO.gameObject == null)
             {
                 Debug.LogError(
-                    $"Failed to find game object for entity {added.Id}:{added.GetComponents<IComponent>().FirstOrDefault()?.GetType().Name}.");
+                    $"Failed to find game object for entity {added.Id}:{added.GetComponents<IComponent>().FirstOrDefault()?.GetType().Name}.", gameObject);
                 return;
             }
 
@@ -38,14 +38,14 @@ namespace App
             if (viewGO == null)
             {
                 Debug.LogError(
-                    $"Failed to find game object component for entity {added.Id}:{added.GetComponents<IComponent>().FirstOrDefault()?.GetType().Name}.");
+                    $"Failed to find game object component for entity {added.Id}:{added.GetComponents<IComponent>().FirstOrDefault()?.GetType().Name}.", gameObject);
                 return;
             }
 
             if (viewGO.gameObject == null)
             {
                 Debug.LogError(
-                    $"Failed to find game object for entity {added.Id}:{added.GetComponents<IComponent>().FirstOrDefault()?.GetType().Name}.");
+                    $"Failed to find game object for entity {added.Id}:{added.GetComponents<IComponent>().FirstOrDefault()?.GetType().Name}.", gameObject);
                 return;
             }
 

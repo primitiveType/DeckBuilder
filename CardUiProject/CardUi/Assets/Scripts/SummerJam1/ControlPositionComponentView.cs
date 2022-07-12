@@ -3,6 +3,7 @@ using App.Utility;
 using CardsAndPiles.Components;
 using SummerJam1;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ControlPositionComponentView : ComponentView<Position>
 {
@@ -10,16 +11,19 @@ public class ControlPositionComponentView : ComponentView<Position>
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            TryMoveTo(Component.Position1.ToUnityVector3() + new Vector3(0, 0, 1));
+            TryMoveTo(Component.Position1.ToUnityVector3() + new Vector3(0, 1, 0));
         }
+
         if (Input.GetKeyDown(KeyCode.A))
         {
             TryMoveTo(Component.Position1.ToUnityVector3() + new Vector3(-1, 0, 0));
         }
+
         if (Input.GetKeyDown(KeyCode.S))
         {
-            TryMoveTo(Component.Position1.ToUnityVector3() + new Vector3(0, 0, -1));
+            TryMoveTo(Component.Position1.ToUnityVector3() + new Vector3(0, -1, 0 ));
         }
+
         if (Input.GetKeyDown(KeyCode.D))
         {
             TryMoveTo(Component.Position1.ToUnityVector3() + new Vector3(1, 0, 0));
@@ -28,15 +32,24 @@ public class ControlPositionComponentView : ComponentView<Position>
 
     private void TryMoveTo(Vector3 newPosition)
     {
-        var newCell = SummerJam1Context.Instance.Game.CurrentMap.Map[(int)newPosition.x, (int)newPosition.z];
-        if (newCell.IsWalkable)
+        var x = (int)newPosition.x;
+        var y = (int)newPosition.y;
+
+        if (x < 0 || x >= SummerJam1Context.Instance.Game.CurrentMap.Width)
         {
-            Component.Position1 = newPosition.ToSystemVector3();
+            return;
         }
+
+        if (y < 0 || y >= SummerJam1Context.Instance.Game.CurrentMap.Height)
+        {
+            return;
+        }
+
+        var newCell = SummerJam1Context.Instance.Game.CurrentMap[x, y];
+        Entity.TrySetParent(newCell.Entity);
     }
 
     protected override void ComponentOnPropertyChanged()
     {
-            
     }
 }

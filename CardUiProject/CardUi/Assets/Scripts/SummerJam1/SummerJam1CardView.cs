@@ -9,7 +9,12 @@ namespace SummerJam1
     {
         public override bool TrySendToPile(IPileView pileView)
         {
-            return Model.TryPlayCard(pileView.Model.Entity);
+            if (pileView == null || !Model.TryPlayCard(pileView.Model.Entity))
+            {
+                return Model.TryPlayCard(SummerJam1Context.Instance.Game.Player.Entity);//assume the card is meant for the player.
+            }
+
+            return false;
         }
 
         protected override void Start()

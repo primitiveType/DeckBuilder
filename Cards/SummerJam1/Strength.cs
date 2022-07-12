@@ -7,4 +7,6 @@ namespace SummerJam1
     {
         [JsonProperty] public int Amount { get; set; }
     }
+    
+    
 }
