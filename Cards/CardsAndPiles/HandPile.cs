@@ -49,6 +49,14 @@ namespace CardsAndPiles
             return true;
         }
     }
+    
+    public class CardPrefabPile : Pile
+    {
+        public override bool AcceptsChild(IEntity child)
+        {
+            return true;
+        }
+    }
 
     public class PrizePile : Pile
     {

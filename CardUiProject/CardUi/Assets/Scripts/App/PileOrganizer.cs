@@ -16,6 +16,7 @@ namespace App
         {
             PileView = GetComponentsInParent<IPileView>(true).First();
             PileView.Entity.Children.CollectionChanged += OnPileChanged;
+            Debug.Log($"Creating {PileView.Entity.Children} children for {gameObject.name}.");
             foreach (IEntity child in PileView.Entity.Children)
             {
                 OnItemAddedImmediate(child);

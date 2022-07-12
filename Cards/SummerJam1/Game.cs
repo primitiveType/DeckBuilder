@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ using CardsAndPiles.Components;
 using RogueMaps;
 using SummerJam1.Rules;
 using SummerJam1.Units;
+using Random = Api.Random;
 
 namespace SummerJam1
 {
@@ -31,9 +33,12 @@ namespace SummerJam1
 
         public int CurrentLevel { get; private set; }
 
+        public Pile PrefabDebugPile { get; private set; }
+
         protected override void Initialize()
         {
             base.Initialize();
+            Logging.Log("Game Initialized.");
             AddRules();
             Random = Entity.AddComponent<Random>();
             Context.CreateEntity(Entity, entity => PrizePile = entity.AddComponent<SummerJam1PrizePile>());
@@ -64,6 +69,28 @@ namespace SummerJam1
             }
 
             Events.OnGameStarted(new GameStartedEventArgs());
+
+            CreatePrefabPile();
+        }
+
+        private void CreatePrefabPile()
+        {
+            Context.CreateEntity(Context.Root, entity => PrefabDebugPile = entity.AddComponent<CardPrefabPile>());
+
+            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Cards"));
+            List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
+            foreach (FileInfo fileInfo in files)
+            {
+                try
+                {
+                    Context.CreateEntity(PrefabDebugPile.Entity, Path.Combine("Cards", fileInfo.Name));
+                }
+                catch (Exception e)
+                {
+                    Logging.LogError($"Failed to deserialize card {fileInfo.Name}. {e.Message}");
+                }
+                    
+            }
         }
 
         public void GoToNextLevel()
@@ -109,7 +136,7 @@ namespace SummerJam1
                 if (!customCell.Entity.Children.Any())
                 {
                     var neighbors = CurrentMap.GetAdjacentCells(customCell.X, customCell.Y).Where(n => !n.Entity.Children.Any()).ToList();
-                    if (neighbors.Count == 2 && neighbors.All(n => n.X == customCell.X) || neighbors.All(n=>n.Y == customCell.Y))
+                    if (neighbors.Count == 2 && neighbors.All(n => n.X == customCell.X) || neighbors.All(n => n.Y == customCell.Y))
                     {
                         CreateEnemyInCell(customCell.Entity);
                         enemies++;

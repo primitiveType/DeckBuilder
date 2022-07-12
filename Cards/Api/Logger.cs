@@ -23,7 +23,7 @@ namespace Api
         public static void Initialize(ILogger logger)
         {
             s_Logger = logger;
-            s_logger.Log("Initialized Logger instance.");
+            s_Logger.Log("Initialized Logger instance.");
         }
 
         public static void Log(string message)

@@ -11,7 +11,7 @@
       "AssetName": "card.cheddar"
     },
     {
-      "$type": "SummerJam1.Cards.HealUnit, SummerJam1",
+      "$type": "SummerJam1.Cards.Effects.HealUnit, SummerJam1",
       "HealAmount" : 8 
     },
     {
