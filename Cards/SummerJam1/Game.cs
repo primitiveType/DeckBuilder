@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Net.Security;
 using System.Numerics;
 using Api;
 using CardsAndPiles;
@@ -54,7 +53,7 @@ namespace SummerJam1
                 entity.AddComponent<PlayerUnit>();
                 entity.AddComponent<VisualComponent>().AssetName = "Player";
                 Health health = entity.AddComponent<Health>();
-                health.DontDie = true;//DEBUG
+                health.DontDie = true; //DEBUG
                 entity.AddComponent<Position>();
                 health.SetMax(20);
                 health.SetHealth(20);
@@ -128,14 +127,21 @@ namespace SummerJam1
             }
 
             int enemies = 0;
-            foreach (var prefab in GetEnemyInfos())
+            foreach (string prefab in GetEnemyInfos())
             {
-                var cellsWithNoNeighbors = CurrentMap.GetAllCells()
+                IEnumerable<CustomCell> cellsWithNoNeighbors = CurrentMap.GetAllCells()
                     .Where(c => !c.Entity.Children.Any() &&
                                 CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0));
 
                 CreateEnemyInCell(cellsWithNoNeighbors.First().Entity, prefab);
             }
+
+
+            CustomCell shrineCell = CurrentMap.GetAllCells()
+                .Where(c => !c.Entity.Children.Any() &&
+                            CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0)).First();
+
+            CreateShrineInCell(shrineCell.Entity);
         }
 
         public void GoToNextLevel()
@@ -177,20 +183,34 @@ namespace SummerJam1
             }
 
             int enemies = 0;
+            int shrines = 0;
             foreach (CustomCell customCell in CurrentMap.GetAllCells().Reverse())
             {
-                if (!customCell.Entity.Children.Any())
+                if (customCell.Entity.Children.Any())
                 {
-                    var neighbors = CurrentMap.GetAdjacentCells(customCell.X, customCell.Y).Where(n => !n.Entity.Children.Any()).ToList();
-                    if (neighbors.Count == 2 && neighbors.All(n => n.X == customCell.X) || neighbors.All(n => n.Y == customCell.Y))
+                    continue;
+                }
+
+                List<CustomCell> emptyNeighbors =
+                    CurrentMap.GetAdjacentCells(customCell.X, customCell.Y).Where(n => !n.Entity.Children.Any()).ToList();
+                if (emptyNeighbors.Count == 2 && (emptyNeighbors.All(n => n.X == customCell.X) || emptyNeighbors.All(n => n.Y == customCell.Y)))
+                {
+                    if (enemies < 5)
                     {
                         CreateRandomEnemyInCell(customCell.Entity);
                         enemies++;
-                        if (enemies > 4)
-                        {
-                            break;
-                        }
                     }
+                }
+
+                if (emptyNeighbors.Count == 4 && shrines < 5)
+                {
+                    CreateShrineInCell(customCell.Entity);
+                    shrines++;
+                }
+
+                if (enemies > 4 && shrines > 4)
+                {
+                    break;
                 }
             }
         }
@@ -199,6 +219,7 @@ namespace SummerJam1
         {
             IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
             enemyEntity.AddComponent<HatchEncounter>();
+            enemyEntity.AddComponent<VisualComponent>().AssetName = "hatch";
         }
 
         private void CreateRandomEnemyInCell(IEntity customCellEntity)
@@ -220,8 +241,16 @@ namespace SummerJam1
         {
             IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
 
-            enemyEntity.AddComponent<BattleEncounter>().Prefab = prefab; //make random
-            enemyEntity.AddComponent<VisualComponent>().AssetName = "DefaultEncounter";
+            enemyEntity.AddComponent<BattleEncounter>().Prefab = prefab;
+            enemyEntity.AddComponent<VisualComponent>().AssetName = "ghostenemy";
+        }
+
+        private void CreateShrineInCell(IEntity customCellEntity)
+        {
+            IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
+
+            enemyEntity.AddComponent<ShrineEncounter>();
+            enemyEntity.AddComponent<VisualComponent>().AssetName = "bloodAltar";
         }
 
         private void AddRules()
@@ -285,6 +314,15 @@ namespace SummerJam1
         protected override void PlayerEnteredCell()
         {
             Game.StartBattle(Prefab);
+            Entity.Destroy();
+        }
+    }
+
+    public class ShrineEncounter : Encounter
+    {
+        protected override void PlayerEnteredCell()
+        {
+            Events.OnRequestRemoveCard(new RequestRemoveCardEventArgs());
             Entity.Destroy();
         }
     }

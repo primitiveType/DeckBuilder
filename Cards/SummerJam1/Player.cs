@@ -43,8 +43,8 @@ namespace SummerJam1
         }
 
 
-        [OnTurnBegan]
-        private void OnTurnBegan()
+        [OnTurnEnded]
+        private void OnTurnEnded()
         {
             CurrentEnergy = MaxEnergy;
             CurrentStealth -= 1;

@@ -12,9 +12,8 @@ namespace SummerJam1
 
         protected override void ComponentOnPropertyChanged()
         {
-            var amount = Component?.Amount.ToString();
+            string amount = Component?.Amount.ToString();
             AnimationQueue.Instance.Enqueue(() => UpdateText(amount));
-           
         }
 
         private async Task UpdateText(string text)

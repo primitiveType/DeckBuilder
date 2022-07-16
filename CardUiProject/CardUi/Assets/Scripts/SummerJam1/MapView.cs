@@ -44,18 +44,13 @@ public class MapView : View<CustomMap>
             Instantiate(prefab, transform);
             prefab.transform.localPosition = new Vector3(cell.X, cell.Y);
 
-            foreach (HatchEncounter encounter in cell.Entity.GetComponentsInChildren<HatchEncounter>())
-            {
-                var go = Instantiate(HatchEncounterPrefab, transform);
-                go.GetComponent<ISetModel>().SetModel(encounter.Entity);
-                go.name = $"Encounter {encounter.Entity.GetComponent<Position>().Position1.ToString()}";
-            }
-            foreach (BattleEncounter encounter in cell.Entity.GetComponentsInChildren<BattleEncounter>())
+            foreach (Encounter encounter in cell.Entity.GetComponentsInChildren<Encounter>())
             {
                 var go = Instantiate(BattleEncounterPrefab, transform);
                 go.GetComponent<ISetModel>().SetModel(encounter.Entity);
                 go.name = $"Encounter {encounter.Entity.GetComponent<Position>().Position1.ToString()}";
             }
+ 
         }
     }
 }

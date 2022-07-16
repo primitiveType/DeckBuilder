@@ -15,6 +15,7 @@ public class ScrollPileOrganizer : PileOrganizer
     {
         base.OnItemAddedImmediate(added);
         CardUiContainer container = Instantiate(m_ContainerPrefab, m_ContainerParent);
+        container.SetModel(added);
         GameObject card = Instantiate(SummerJam1CardFactory.Instance.CardPrefab);
         card.GetComponentInChildren<ISetModel>().SetModel(added);
         var pos = container.transform.localPosition;

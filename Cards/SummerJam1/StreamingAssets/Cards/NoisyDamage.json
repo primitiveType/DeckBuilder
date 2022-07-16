@@ -31,6 +31,10 @@
     {
       "$type": "SummerJam1.Cards.Noisy, SummerJam1",
       "Cost": 1
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "Deal Damage equal to your missing Stealth."
     }
   ]
 }

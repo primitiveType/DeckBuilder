@@ -8,7 +8,7 @@ namespace SummerJam1
     {
         public void OnPointerClick(PointerEventData eventData)
         {
-            SummerJam1Context.Instance.Game.PrizePile.ChoosePrize(Entity);
+            // SummerJam1Context.Instance.Game.PrizePile.ChoosePrize(Entity);
         }
 
     }

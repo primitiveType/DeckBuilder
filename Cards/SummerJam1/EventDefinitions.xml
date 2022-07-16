@@ -23,6 +23,8 @@
     </event>
     <event id="LeaveBattle">
     </event>
+    <event id="RequestRemoveCard">
+    </event>
     <event id="RelicCreated">
         <arg name="Relic" type="IEntity"/>
     </event>

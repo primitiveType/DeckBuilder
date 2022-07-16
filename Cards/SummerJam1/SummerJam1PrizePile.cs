@@ -12,17 +12,32 @@ namespace SummerJam1
             if (args.Victory)
             {
                 //Player.Entity.TrySetParent(TempPlayerSlot.Entity);
-                SetupPrizePile();
+                // SetupPrizePile();
             }
         }
 
-        public void SetupPrizePile()
+        public void SetupRandomPrizePile()
         {
             Clear();
             for (int i = 0; i < 3; i++)
             {
                 Entity.GetComponentInParent<Game>().CreateRandomCard().TrySetParent(Entity);
             }
+        }
+
+        public void AddPrefab(string prefab)
+        {
+            Context.CreateEntity(Entity, prefab);
+        }
+
+        public void ChooseAllPrizes()
+        {
+            foreach (IEntity child in Entity.Children.ToList())
+            {
+                child.TrySetParent(Entity.GetComponentInParent<Game>().Deck.Entity);
+            }
+
+            Clear();
         }
 
         public void ChoosePrize(IEntity child)
@@ -35,7 +50,7 @@ namespace SummerJam1
             Clear();
         }
 
-        private void Clear()
+        public void Clear()
         {
             foreach (IEntity unwantedChild in Entity.Children.ToList())
             {

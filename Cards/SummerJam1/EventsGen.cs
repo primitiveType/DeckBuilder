@@ -137,6 +137,20 @@ public EventHandle<LeaveBattleEventArgs> SubscribeToLeaveBattle(EventHandleDeleg
     return handler;
 } 
     #endregion Code for event LeaveBattle
+    #region Code for event RequestRemoveCard
+private event EventHandleDelegate<RequestRemoveCardEventArgs> RequestRemoveCard;
+public virtual void OnRequestRemoveCard(RequestRemoveCardEventArgs args)
+{
+    RequestRemoveCard?.Invoke(this, args);
+}
+
+public EventHandle<RequestRemoveCardEventArgs> SubscribeToRequestRemoveCard(EventHandleDelegate<RequestRemoveCardEventArgs> action)
+{
+    var handler = new EventHandle<RequestRemoveCardEventArgs>(action, () => RequestRemoveCard -= action);
+    RequestRemoveCard += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event RequestRemoveCard
     #region Code for event RelicCreated
 private event EventHandleDelegate<RelicCreatedEventArgs> RelicCreated;
 public virtual void OnRelicCreated(RelicCreatedEventArgs args)
@@ -430,6 +444,34 @@ public class OnLeaveBattleAttribute : EventsBaseAttribute {
     //public delegate void LeaveBattleEvent (object sender, LeaveBattleEventArgs args);
 
     public class LeaveBattleEventArgs {        }/// <summary>
+/// (object sender, RequestRemoveCardEventArgs) args)
+/// </summary>
+public class OnRequestRemoveCardAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToRequestRemoveCard(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(RequestRemoveCardEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, RequestRemoveCardEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToRequestRemoveCard(delegate(object sender, RequestRemoveCardEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void RequestRemoveCardEvent (object sender, RequestRemoveCardEventArgs args);
+
+    public class RequestRemoveCardEventArgs {        }/// <summary>
 /// (object sender, RelicCreatedEventArgs) args)
 /// </summary>
 public class OnRelicCreatedAttribute : EventsBaseAttribute {
