@@ -8,6 +8,8 @@ namespace CardsAndPiles.Components
     {
         public int Amount { get; set; }
         public int Max { get; set; }
+        
+        public bool DontDie { get; set; }
 
         public int TryDealDamage(int damage, IEntity source)
         {
@@ -56,7 +58,7 @@ namespace CardsAndPiles.Components
         {
             Amount -= damage;
             Events.OnDamageDealt(new DamageDealtEventArgs(Entity, source, damage));
-            if (Amount <= 0)
+            if (Amount <= 0 && !DontDie)
             {
                 Events.OnEntityKilled(new EntityKilledEventArgs(Entity, source));
                 Entity.Destroy();
@@ -65,6 +67,7 @@ namespace CardsAndPiles.Components
 
         public void Heal(int damage, IEntity source)
         {
+            damage = Math.Min(damage, Max - Amount);
             Amount += damage;
             Events.OnHealDealt(new HealDealtEventArgs(Entity, source, damage));
         }

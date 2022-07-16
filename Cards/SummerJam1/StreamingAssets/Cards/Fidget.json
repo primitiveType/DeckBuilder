@@ -32,6 +32,10 @@
     {
       "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
       "Cost": 0
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "Draw a card, then Discard a card."
     }
   ]
 }

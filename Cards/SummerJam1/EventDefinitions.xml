@@ -19,6 +19,8 @@
     </event>
     <event id="BattleStarted">
     </event>
+    <event id="SomeTwitterEvent">
+    </event>
     <event id="LeaveBattle">
     </event>
     <event id="RelicCreated">

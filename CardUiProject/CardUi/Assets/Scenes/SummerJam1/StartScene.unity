@@ -505,7 +505,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PrintTrace: 0
-  m_UnitPrefab: {fileID: 2256049955563789828, guid: 069c15b7f55d3f9469f8c833bbdf1517, type: 3}
+  m_UnitPrefab: {fileID: 542872562184996713, guid: 77380e78ea24629439c1226716b29a34, type: 3}
 --- !u!114 &542236033
 MonoBehaviour:
   m_ObjectHideFlags: 0

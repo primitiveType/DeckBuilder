@@ -18,6 +18,7 @@ namespace App
         ChooseDiscard,
         EndChooseDiscard,
         EndTurn,
-        BeginTurn
+        BeginTurn,
+        PlayCard
     }
 }

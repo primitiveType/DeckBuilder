@@ -37,6 +37,11 @@ public class DiscardChoiceHandler : PileView, IPileView
 
     private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
+        UpdateSubmitButton();
+    }
+
+    private void UpdateSubmitButton()
+    {
         m_SubmitButton.interactable = Entity.Children.Count == AmountExpected;
     }
 
@@ -47,7 +52,7 @@ public class DiscardChoiceHandler : PileView, IPileView
         gameObject.SetActive(true);
         string s = item.Amount > 1 ? "s" : "";
         _HeaderText.text = $"Discard {item.Amount} card{s}";
-
+        UpdateSubmitButton();
         foreach (IEntity child in SummerJam1Context.Instance.Game.Battle.Hand.Entity.Children)
         {
             GameObject go = child.GetComponent<IGameObject>().gameObject;

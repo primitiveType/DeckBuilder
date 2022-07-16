@@ -11,12 +11,14 @@ namespace App
 {
     public class View<T> : MonoBehaviour, IView<T>
     {
+        [SerializeField] private int DEBUG_entity; 
         public IEntity Entity
         {
             get => _entity;
             private set
             {
                 _entity = value;
+                DEBUG_entity = _entity.Id;
                 OnPropertyChanged();
             }
         }
@@ -77,6 +79,8 @@ namespace App
                 ParentView = GetComponentsInParent<IView>().FirstOrDefault(item => !ReferenceEquals(item, this) && item.Entity != null);
                 if (ParentView == null)
                 {
+                    Debug.LogWarning($"Failed to find Parent View for component.", gameObject);
+                    enabled = false;
                     return;
                 }
 
@@ -127,7 +131,7 @@ namespace App
                 EventHandlers.Add(action);
                 try
                 {
-                    method.MethodInfo.Invoke(this, new object[] { this, new PropertyChangedEventArgs(method.Filter) });
+                    action.Invoke(this,  new PropertyChangedEventArgs(method.Filter) );
                 }
                 catch (Exception e)
                 {

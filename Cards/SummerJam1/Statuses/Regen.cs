@@ -19,4 +19,17 @@ namespace SummerJam1.Statuses
             }
         }
     }
+
+    public class ReducePlayerStealthAtStartOfCombat : SummerJam1Component, IStatusEffect, ITooltip
+    {
+        public int Amount { get; set; }
+
+        [OnBattleStarted]
+        public void OnBattleStarted(object sender, BattleStartedEventArgs args)
+        {
+            Game.Player.TryUseStealth(Amount);
+        }
+
+        public string Tooltip => $"At start of battle, reduces the player's stealth by {Amount}";
+    }
 }

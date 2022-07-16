@@ -51,7 +51,7 @@ namespace SummerJam1.Cards
             {
                 if(Game.Player.Entity.GetComponent<Health>().Amount <= Cost)
                 {
-                    args.Blockers.Add(CardBlockers.NOT_ENOUGH_HEALTH);
+                    //args.Blockers.Add(CardBlockers.NOT_ENOUGH_HEALTH);//DEBUG
                 }
             }
         }

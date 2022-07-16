@@ -1,19 +1,10 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using App;
 using SummerJam1;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class SetSpriteFromAssetName : View<VisualComponent>
+public abstract class SetSpriteFromAssetName : View<VisualComponent>
 {
-    private Image CurrentRenderer { get; set; }
-
-    private void Awake()
-    {
-        CurrentRenderer = GetComponent<Image>();
-    }
-
-    // Start is called before the first frame update
     [PropertyListener(nameof(VisualComponent.AssetName))]
     private void OnAssetNameChanged(object sender, PropertyChangedEventArgs args)
     {
@@ -27,7 +18,9 @@ public class SetSpriteFromAssetName : View<VisualComponent>
                 Debug.LogWarning($"No texture found for : {Model.AssetName}!");
             }
 
-            CurrentRenderer.sprite = tex;
+            SetSprite(tex);
         }));
     }
+
+    protected abstract void SetSprite(Sprite tex);
 }

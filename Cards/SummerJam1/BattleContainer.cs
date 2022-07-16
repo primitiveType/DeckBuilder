@@ -71,12 +71,17 @@ namespace SummerJam1
                 .Any(slot =>
                     slot.Entity.Children.Any(child => child != args.Entity && child.GetComponent<Unit>() != null));
 
+            if (enemiesAlive)//DEBUG CODE
+            {
+                return;
+            }
+
             if (alliesAlive && enemiesAlive)
             {
                 return;
             }
 
-            Events.OnBattleEnded(new BattleEndedEventArgs(alliesAlive));
+            Events.OnBattleEnded(new BattleEndedEventArgs(!enemiesAlive));
             if (!alliesAlive)
             {
                 Events.OnGameEnded(new GameEndedEventArgs(false));

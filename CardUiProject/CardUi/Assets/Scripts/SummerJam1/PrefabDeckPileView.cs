@@ -6,7 +6,7 @@ namespace SummerJam1
     {
         protected virtual void Awake()
         {
-            SetModel(SummerJam1Context.Instance.Game.PrefabDebugPile.Entity);
+            SetModel(SummerJam1Context.Instance.Game.PrefabDebugPileTester.Entity);
         }
     }
 }

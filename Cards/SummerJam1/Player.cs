@@ -12,7 +12,7 @@ namespace SummerJam1
         public int CurrentStealth
         {
             get => _currentStealth;
-            set => _currentStealth = Math.Max(value, 0);
+            set => _currentStealth = Math.Min(Math.Max(value, 0), MaxStealth);
         }
 
         public int MaxStealth { get; private set; } = 10;
@@ -38,7 +38,6 @@ namespace SummerJam1
             }
 
             CurrentStealth -= amount;
-            //invoke energy used.
 
             return true;
         }

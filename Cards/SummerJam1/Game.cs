@@ -33,7 +33,7 @@ namespace SummerJam1
 
         public int CurrentLevel { get; private set; }
 
-        public Pile PrefabDebugPile { get; private set; }
+        public Pile PrefabDebugPileTester { get; private set; }
         public Pile DiscardStagingPile { get; private set; }
 
         protected override void Initialize()
@@ -50,10 +50,11 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity =>
             {
                 Player = entity.AddComponent<Player>();
-                entity.AddComponent<HealOnBattleEnd>();
+                entity.AddComponent<HealOnBattleStart>();
                 entity.AddComponent<PlayerUnit>();
                 entity.AddComponent<VisualComponent>().AssetName = "Player";
                 Health health = entity.AddComponent<Health>();
+                health.DontDie = true;//DEBUG
                 entity.AddComponent<Position>();
                 health.SetMax(20);
                 health.SetHealth(20);
@@ -74,12 +75,11 @@ namespace SummerJam1
             }
 
             Events.OnGameStarted(new GameStartedEventArgs());
-
         }
 
         private void CreatePrefabPile()
         {
-            Context.CreateEntity(Context.Root, entity => PrefabDebugPile = entity.AddComponent<CardPrefabPile>());
+            Context.CreateEntity(Context.Root, entity => PrefabDebugPileTester = entity.AddComponent<CardPrefabPile>());
 
             DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Cards"));
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
@@ -87,13 +87,54 @@ namespace SummerJam1
             {
                 try
                 {
-                    Context.CreateEntity(PrefabDebugPile.Entity, Path.Combine("Cards", fileInfo.Name));
+                    Context.CreateEntity(PrefabDebugPileTester.Entity, Path.Combine("Cards", fileInfo.Name));
                 }
                 catch (Exception e)
                 {
                     Logging.LogError($"Failed to deserialize card {fileInfo.Name}. {e.Message}");
                 }
-                    
+            }
+        }
+
+        public void CreateDebugMap()
+        {
+            Player.Entity.TrySetParent(Context.Root);
+            if (CurrentMap != null)
+            {
+                CurrentMap.Entity.Destroy();
+            }
+
+            Context.CreateEntity(Entity, entity =>
+            {
+                entity.AddComponent<DebugMapComponent>();
+                CurrentMap = entity.GetComponent<CustomMap>();
+            });
+            foreach (CustomCell customCell in CurrentMap.GetAllCells())
+            {
+                if (customCell.IsWalkable)
+                {
+                    Player.Entity.GetComponent<Position>().Position1 = new Vector3(customCell.X, customCell.Y, 0);
+                    break;
+                }
+            }
+
+            foreach (CustomCell customCell in CurrentMap.GetAllCells().Reverse())
+            {
+                if (customCell.IsWalkable)
+                {
+                    CreateHatchInCell(customCell.Entity);
+                    break;
+                }
+            }
+
+            int enemies = 0;
+            foreach (var prefab in GetEnemyInfos())
+            {
+                var cellsWithNoNeighbors = CurrentMap.GetAllCells()
+                    .Where(c => !c.Entity.Children.Any() &&
+                                CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0));
+
+                CreateEnemyInCell(cellsWithNoNeighbors.First().Entity, prefab);
             }
         }
 
@@ -102,6 +143,7 @@ namespace SummerJam1
             CurrentLevel++;
             CreateNewMap();
         }
+
 
         private void CreateNewMap()
         {
@@ -142,7 +184,7 @@ namespace SummerJam1
                     var neighbors = CurrentMap.GetAdjacentCells(customCell.X, customCell.Y).Where(n => !n.Entity.Children.Any()).ToList();
                     if (neighbors.Count == 2 && neighbors.All(n => n.X == customCell.X) || neighbors.All(n => n.Y == customCell.Y))
                     {
-                        CreateEnemyInCell(customCell.Entity);
+                        CreateRandomEnemyInCell(customCell.Entity);
                         enemies++;
                         if (enemies > 4)
                         {
@@ -159,11 +201,26 @@ namespace SummerJam1
             enemyEntity.AddComponent<HatchEncounter>();
         }
 
-        private void CreateEnemyInCell(IEntity customCellEntity)
+        private void CreateRandomEnemyInCell(IEntity customCellEntity)
+        {
+            List<string> prefabs = GetEnemyInfos();
+            int index = Random.SystemRandom.Next(prefabs.Count);
+            string prefab = prefabs[index];
+            CreateEnemyInCell(customCellEntity, prefab);
+        }
+
+        private List<string> GetEnemyInfos()
+        {
+            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Units"));
+            List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Units/{file.Name}").ToList();
+            return files;
+        }
+
+        private void CreateEnemyInCell(IEntity customCellEntity, string prefab)
         {
             IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
 
-            enemyEntity.AddComponent<BattleEncounter>().Prefab = "DefaultEncounter.json";
+            enemyEntity.AddComponent<BattleEncounter>().Prefab = prefab; //make random
             enemyEntity.AddComponent<VisualComponent>().AssetName = "DefaultEncounter";
         }
 

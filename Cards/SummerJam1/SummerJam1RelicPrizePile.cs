@@ -11,12 +11,9 @@ namespace SummerJam1
         private void OnBattleEnded()
         {
             //Player.Entity.TrySetParent(TempPlayerSlot.Entity);
-            var game = Context.Root.GetComponentInChildren<Game>();
-            var objective = game.Battle.ObjectivesPile.Entity.GetComponentInChildren<Objective>();
-            if (objective.Completed && !objective.Failed)
-            {
-                SetupPrizePile();
-            }
+            // var game = Context.Root.GetComponentInChildren<Game>();
+            //
+            // SetupPrizePile();
         }
 
         public void SetupPrizePile()

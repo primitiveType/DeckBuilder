@@ -47,6 +47,12 @@ namespace App
         public void OnEndDrag(PointerEventData eventData)
         {
             IsDragging = false;
+
+            if (!InputStateManager.Instance.StateMachine.CanFire(InputAction.PlayCard))
+            {
+                return;
+            }
+
             if (TargetPileView == null || TargetPileView == GetComponentInParent<PileView>())
             {
                 return;
@@ -93,7 +99,7 @@ namespace App
                 Interpolate(TargetPosition, TargetRotation);
             }
         }
-        
+
         private void Interpolate(Vector3 transformPosition, Vector3 transformRotation)
         {
             Vector3 lerpedTarget =

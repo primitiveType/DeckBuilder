@@ -5,6 +5,14 @@ using SummerJam1.Units;
 
 namespace SummerJam1.Cards.Effects
 {
+    public class AddStealth : SummerJam1Component, IEffect, IAmount
+    {
+        public int Amount { get; set; }
+        public bool DoEffect(IEntity target)
+        {
+            return Game.Player.TryUseStealth(-Amount);
+        }
+    }
     public class HealUnit : SummerJam1Component, IEffect
     {
         [JsonProperty] public int HealAmount { get; private set; }

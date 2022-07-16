@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using App.Utility;
 using JetBrains.Annotations;
+using SummerJam1;
 using UnityEngine;
 
 public class DebugMode : MonoBehaviourSingleton<DebugMode>, INotifyPropertyChanged
@@ -28,6 +29,11 @@ public class DebugMode : MonoBehaviourSingleton<DebugMode>, INotifyPropertyChang
         if (Input.GetKeyDown(KeyCode.P))
         {
             IsDebug = !IsDebug;
+        }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            SummerJam1Context.Instance.Game.CreateDebugMap();
         }
     }
 

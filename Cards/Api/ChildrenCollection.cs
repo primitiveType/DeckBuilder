@@ -45,7 +45,7 @@ namespace Api
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("Error in the handler {0}: {1}", handler.Method.Name, e.Message);
+                        Logging.LogError($"Error in the handler {handler.Method.Name}: {e.Message}" );
                     }
                 }
             }

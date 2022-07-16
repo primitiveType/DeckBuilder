@@ -1,0 +1,34 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Birthday Boy!"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "birthdayBoy"
+    },
+    {
+      "$type": "SummerJam1.Strength, SummerJam1",
+      "Amount": 3
+    },
+    {
+      "$type": "SummerJam1.DamageIntent, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
+      "Amount": 30,
+      "Max": 30
+    },
+    {
+      "$type": "SummerJam1.Statuses.ReducePlayerStealthAtStartOfCombat, SummerJam1",
+      "Amount" : 5
+    }
+  ]
+}

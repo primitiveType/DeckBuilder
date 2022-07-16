@@ -1,8 +1,8 @@
 ﻿using Api;
 
-namespace SummerJam1.Cards
+namespace SummerJam1.Cards.Effects
 {
-    public class GainEnergy : SummerJam1Component, IEffect
+    public class GainEnergy : SummerJam1Component, IEffect, IAmount
     {
         public int Amount { get; set; }
 

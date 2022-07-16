@@ -17,6 +17,7 @@ namespace App
             base.Awake();
             StateMachine = new StateMachine<InputState, InputAction>(InputState.Idle);
             StateMachine.Configure(InputState.Idle)
+                .Ignore(InputAction.PlayCard)
                 .Permit(InputAction.Drag, InputState.Dragging)
                 .Permit(InputAction.Hover, InputState.Hovering)
                 .Permit(InputAction.ChooseDiscard, InputState.ChoosingDiscard)
@@ -25,11 +26,13 @@ namespace App
                 .Ignore(InputAction.EndDrag)
                 ;
             StateMachine.Configure(InputState.Dragging)
+                .Ignore(InputAction.PlayCard)
                 .Permit(InputAction.EndDrag, InputState.Idle)
                 .Permit(InputAction.ChooseDiscard, InputState.ChoosingDiscard)
                 .PermitReentry(InputAction.Drag)
                 ;
             StateMachine.Configure(InputState.Hovering)
+                .Ignore(InputAction.PlayCard)
                 .Permit(InputAction.ChooseDiscard, InputState.ChoosingDiscard)
                 .Permit(InputAction.Drag, InputState.Dragging)
                 .Permit(InputAction.EndHover, InputState.Idle)

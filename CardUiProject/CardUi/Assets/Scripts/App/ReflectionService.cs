@@ -17,16 +17,22 @@ namespace App
             }
 
             List<PropertyListenerInfo> methods = new List<PropertyListenerInfo>();
-            foreach (var method in
-                type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+
+            while (type != typeof(object))
             {
-                foreach (var attribute in method.GetCustomAttributes(true))
+                foreach (var method in
+                    type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
                 {
-                    if (attribute is PropertyListenerAttribute propertyListenerAttribute)
+                    foreach (var attribute in method.GetCustomAttributes(true))
                     {
-                        methods.Add(new PropertyListenerInfo(method, propertyListenerAttribute.NameFilter));
+                        if (attribute is PropertyListenerAttribute propertyListenerAttribute)
+                        {
+                            methods.Add(new PropertyListenerInfo(method, propertyListenerAttribute.NameFilter));
+                        }
                     }
                 }
+
+                type = type.BaseType;
             }
 
             PropertyListeners[type] = methods;

@@ -1,0 +1,30 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Hair Ghost"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "hairGhost"
+    },
+    {
+      "$type": "SummerJam1.Strength, SummerJam1",
+      "Amount": 3
+    },
+    {
+      "$type": "SummerJam1.DamageIntent, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
+      "Amount": 30,
+      "Max": 30
+    }
+  ]
+}
