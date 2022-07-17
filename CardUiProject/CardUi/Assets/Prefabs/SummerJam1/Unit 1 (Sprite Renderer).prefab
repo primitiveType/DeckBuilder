@@ -217,7 +217,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7271791017807956831, guid: 069c15b7f55d3f9469f8c833bbdf1517, type: 3}
       propertyPath: m_PresetInfoIsWorld
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8475695199005860717, guid: 069c15b7f55d3f9469f8c833bbdf1517, type: 3}
       propertyPath: m_AnchorMax.y
@@ -259,3 +259,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b6680ec7a704558a783223fe802daff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEBUG_entity: 0

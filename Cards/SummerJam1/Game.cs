@@ -31,7 +31,7 @@ namespace SummerJam1
         public CustomMap CurrentMap { get; private set; }
 
         public int CurrentLevel { get; private set; }
-        public int MaxLevel { get; } = 0;
+        public int MaxLevel { get; } = 3;
 
         public Pile PrefabDebugPileTester { get; private set; }
         public Pile DiscardStagingPile { get; private set; }
@@ -59,6 +59,7 @@ namespace SummerJam1
                 health.SetMax(20);
                 health.SetHealth(20);
             });
+            CurrentLevel = 1;
             CreateNewMap();
 
             CreatePrefabPile();
@@ -128,7 +129,23 @@ namespace SummerJam1
             }
 
             int enemies = 0;
-            foreach (string prefab in GetEnemyInfos())
+            foreach (string prefab in GetEnemyInfos(1))
+            {
+                IEnumerable<CustomCell> cellsWithNoNeighbors = CurrentMap.GetAllCells()
+                    .Where(c => !c.Entity.Children.Any() &&
+                                CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0));
+
+                CreateEnemyInCell(cellsWithNoNeighbors.First().Entity, prefab);
+            }
+            foreach (string prefab in GetEnemyInfos(2))
+            {
+                IEnumerable<CustomCell> cellsWithNoNeighbors = CurrentMap.GetAllCells()
+                    .Where(c => !c.Entity.Children.Any() &&
+                                CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0));
+
+                CreateEnemyInCell(cellsWithNoNeighbors.First().Entity, prefab);
+            }
+            foreach (string prefab in GetEnemyInfos(3))
             {
                 IEnumerable<CustomCell> cellsWithNoNeighbors = CurrentMap.GetAllCells()
                     .Where(c => !c.Entity.Children.Any() &&
@@ -148,7 +165,7 @@ namespace SummerJam1
                 .Where(c => !c.Entity.Children.Any() &&
                             CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0)).First();
 
-            CreateRelicInCell(relicCell.Entity);
+            CreateRandomRelicInCell(relicCell.Entity);
         }
 
         public void GoToNextLevel()
@@ -214,14 +231,14 @@ namespace SummerJam1
                 {
                     if (enemies < 5)
                     {
-                        CreateRandomEnemyInCell(customCell.Entity);
+                        CreateRandomEnemyInCell(customCell.Entity, CurrentLevel);
                         enemies++;
                     }
                 }
 
                 if (relics == 0)
                 {
-                    CreateRelicInCell(customCell.Entity);
+                    CreateRandomRelicInCell(customCell.Entity);
                     relics++;
                 }
                 else
@@ -247,18 +264,32 @@ namespace SummerJam1
             enemyEntity.AddComponent<VisualComponent>().AssetName = "hatch";
         }
 
-        private void CreateRandomEnemyInCell(IEntity customCellEntity)
+        private void CreateRandomEnemyInCell(IEntity customCellEntity, int difficulty)
         {
-            List<string> prefabs = GetEnemyInfos();
+            List<string> prefabs = GetEnemyInfos(difficulty);
             int index = Random.SystemRandom.Next(prefabs.Count);
             string prefab = prefabs[index];
             CreateEnemyInCell(customCellEntity, prefab);
         }
 
-        private List<string> GetEnemyInfos()
+        private void CreateRandomRelicInCell(IEntity customCell)
         {
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Units", "Standard"));
-            List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Units/Standard/{file.Name}").ToList();
+            List<string> prefabs = GetRelicInfos();
+            int index = Random.SystemRandom.Next(prefabs.Count);
+            string prefab = prefabs[index];
+            CreateRelicInCell(customCell, prefab);
+        }
+
+        private List<string> GetEnemyInfos(int difficulty)
+        {
+            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Units", "Standard", difficulty.ToString()));
+            List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Units/Standard/{difficulty}/{file.Name}").ToList();
+            return files;
+        }
+        private List<string> GetRelicInfos()
+        {
+            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Relics"));
+            List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Relics/{file.Name}").ToList();
             return files;
         }
 
@@ -277,11 +308,11 @@ namespace SummerJam1
             enemyEntity.AddComponent<ShrineEncounter>();
             enemyEntity.AddComponent<VisualComponent>().AssetName = "bloodAltar";
         }
-        private void CreateRelicInCell(IEntity customCellEntity)
+        private void CreateRelicInCell(IEntity customCellEntity, string prefab)
         {
             IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
 
-            enemyEntity.AddComponent<RelicEncounter>().Prefab = "Relics/ConsumedCardsHaveChanceToReturnToDeck.json";
+            enemyEntity.AddComponent<RelicEncounter>().Prefab = prefab;
             enemyEntity.AddComponent<VisualComponent>().AssetName = "relic";
         }
 

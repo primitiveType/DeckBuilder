@@ -1,0 +1,21 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 12,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Relics.NoiseDealsDamageToEnemy, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Noise damages enemies."
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "badge.nanasspoon"
+    },
+    {
+      "$type": "SummerJam1.RelicComponent, SummerJam1"
+    }
+  ]
+}

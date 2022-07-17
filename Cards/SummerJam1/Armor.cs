@@ -11,6 +11,10 @@ namespace SummerJam1
         [OnRequestDamageReduction]
         private void OnRequestDealDamage(object sender, RequestDamageReductionEventArgs args)
         {
+            if (args.Target != Entity)
+            {
+                return;
+            }
             var blocked = Math.Min(args.Amount, Amount);
             Amount -= blocked;
             args.Reduction.Add(blocked);

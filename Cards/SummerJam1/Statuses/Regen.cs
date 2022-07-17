@@ -20,6 +20,20 @@ namespace SummerJam1.Statuses
         }
     }
 
+    public class GainArmorEveryTurn : SummerJam1Component, IStatusEffect, ITooltip, IAmount
+    {
+        [PropertyChanged.DependsOn(nameof(Amount))]
+        public string Tooltip => $"Gains {Amount} Armor every turn.";
+        public int Amount { get; set; }
+
+        [OnTurnBegan]
+        private void OnTurnBegan()
+        {
+            Entity.GetOrAddComponent<Armor>().Amount += Amount;
+        }
+    }
+
+
     public class ReducePlayerStealthAtStartOfCombat : SummerJam1Component, IStatusEffect, ITooltip
     {
         public int Amount { get; set; }

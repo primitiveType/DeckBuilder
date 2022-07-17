@@ -4,15 +4,12 @@
   "Id": 12,
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Relics.ConsumedCardsHaveChanceToReturnToDeck, SummerJam1"
+      "$type": "SummerJam1.Relics.RaiseMaxHp, SummerJam1",
+      "Amount": 5
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Nana's Spoon"
-    },
-    {
-      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
-      "Description": "Consumed Cards have a 50% chance to return to your deck instead."
+      "Value": "RAise hp"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",

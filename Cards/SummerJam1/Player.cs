@@ -15,7 +15,7 @@ namespace SummerJam1
             set => _currentStealth = Math.Min(Math.Max(value, 0), MaxStealth);
         }
 
-        public int MaxStealth { get; private set; } = 10;
+        public int MaxStealth { get; set; } = 10;
 
         public bool TryUseEnergy(int amount)
         {
