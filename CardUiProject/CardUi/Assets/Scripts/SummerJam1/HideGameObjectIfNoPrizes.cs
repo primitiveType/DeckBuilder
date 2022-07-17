@@ -19,9 +19,7 @@ public class HideGameObjectIfNoPrizes : MonoBehaviour
 
     private void UpdateVisibility()
     {
-        gameObject.SetActive(SummerJam1Context.Instance.Game.PrizePile.Entity.Children.Count > 0 ||
-                             SummerJam1Context.Instance.Game.RelicPrizePile.Entity.Children.Count > 0
-        );
+        gameObject.SetActive(SummerJam1Context.Instance.Game.PrizePile.Entity.Children.Count > 0);
     }
 
     private void OnDestroy()

@@ -12,7 +12,7 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.protoPulse"
+      "AssetName": "protoPulse"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
@@ -31,7 +31,7 @@
     },
     {
       "$type": "SummerJam1.Cards.Noisy, SummerJam1",
-      "Cost": 1
+      "Amount": 1
     }
   ]
 }

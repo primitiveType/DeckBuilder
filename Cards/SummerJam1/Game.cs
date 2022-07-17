@@ -31,6 +31,7 @@ namespace SummerJam1
         public CustomMap CurrentMap { get; private set; }
 
         public int CurrentLevel { get; private set; }
+        public int MaxLevel { get; } = 0;
 
         public Pile PrefabDebugPileTester { get; private set; }
         public Pile DiscardStagingPile { get; private set; }
@@ -142,6 +143,12 @@ namespace SummerJam1
                             CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0)).First();
 
             CreateShrineInCell(shrineCell.Entity);
+            
+            CustomCell relicCell = CurrentMap.GetAllCells()
+                .Where(c => !c.Entity.Children.Any() &&
+                            CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0)).First();
+
+            CreateRelicInCell(relicCell.Entity);
         }
 
         public void GoToNextLevel()
@@ -177,13 +184,23 @@ namespace SummerJam1
             {
                 if (customCell.IsWalkable)
                 {
-                    CreateHatchInCell(customCell.Entity);
+                    if (CurrentLevel < MaxLevel)
+                    {
+
+                        CreateHatchInCell(customCell.Entity);
+                    }
+                    else
+                    {
+                        CreateEnemyInCell(customCell.Entity,"Units/boss.json");
+                    }
+
                     break;
                 }
             }
 
             int enemies = 0;
             int shrines = 0;
+            int relics = 0;
             foreach (CustomCell customCell in CurrentMap.GetAllCells().Reverse())
             {
                 if (customCell.Entity.Children.Any())
@@ -202,10 +219,18 @@ namespace SummerJam1
                     }
                 }
 
-                if (emptyNeighbors.Count == 4 && shrines < 5)
+                if (relics == 0)
                 {
-                    CreateShrineInCell(customCell.Entity);
-                    shrines++;
+                    CreateRelicInCell(customCell.Entity);
+                    relics++;
+                }
+                else
+                {
+                    if (emptyNeighbors.Count == 4 && shrines < 5)
+                    {
+                        CreateShrineInCell(customCell.Entity);
+                        shrines++;
+                    }
                 }
 
                 if (enemies > 4 && shrines > 4)
@@ -232,8 +257,8 @@ namespace SummerJam1
 
         private List<string> GetEnemyInfos()
         {
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Units"));
-            List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Units/{file.Name}").ToList();
+            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Units", "Standard"));
+            List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Units/Standard/{file.Name}").ToList();
             return files;
         }
 
@@ -251,6 +276,13 @@ namespace SummerJam1
 
             enemyEntity.AddComponent<ShrineEncounter>();
             enemyEntity.AddComponent<VisualComponent>().AssetName = "bloodAltar";
+        }
+        private void CreateRelicInCell(IEntity customCellEntity)
+        {
+            IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
+
+            enemyEntity.AddComponent<RelicEncounter>().Prefab = "Relics/ConsumedCardsHaveChanceToReturnToDeck.json";
+            enemyEntity.AddComponent<VisualComponent>().AssetName = "relic";
         }
 
         private void AddRules()
@@ -326,6 +358,17 @@ namespace SummerJam1
             Entity.Destroy();
         }
     }
+    
+    public class RelicEncounter : Encounter
+    {
+        public string Prefab { get; set; }
+        protected override void PlayerEnteredCell()
+        {
+            Context.CreateEntity(Game.RelicPrizePile.Entity, Prefab);
+            Entity.Destroy();
+        }
+    }
+
 
     public abstract class Encounter : SummerJam1Component
     {

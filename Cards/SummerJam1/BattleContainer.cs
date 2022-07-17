@@ -42,7 +42,7 @@ namespace SummerJam1
 
         public IEntity CreateRandomMonster(IEntity parent, int difficulty)
         {
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, $"Units", $"{difficulty}"));
+            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, $"Units", "Standard", $"{difficulty}"));
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
 
             int index = Game.Random.SystemRandom.Next(files.Count);
@@ -71,7 +71,7 @@ namespace SummerJam1
                 .Any(slot =>
                     slot.Entity.Children.Any(child => child != args.Entity && child.GetComponent<Unit>() != null));
 
-            if (enemiesAlive)//DEBUG CODE
+            if (enemiesAlive) //DEBUG CODE
             {
                 return;
             }

@@ -221,6 +221,20 @@ public EventHandle<TurnBeganEventArgs> SubscribeToTurnBegan(EventHandleDelegate<
     return handler;
 } 
     #endregion Code for event TurnBegan
+    #region Code for event CardDrawn
+private event EventHandleDelegate<CardDrawnEventArgs> CardDrawn;
+public virtual void OnCardDrawn(CardDrawnEventArgs args)
+{
+    CardDrawn?.Invoke(this, args);
+}
+
+public EventHandle<CardDrawnEventArgs> SubscribeToCardDrawn(EventHandleDelegate<CardDrawnEventArgs> action)
+{
+    var handler = new EventHandle<CardDrawnEventArgs>(action, () => CardDrawn -= action);
+    CardDrawn += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event CardDrawn
 }
 /// <summary>
 /// (object sender, RequestPlayCardEventArgs) args)
@@ -742,7 +756,40 @@ public class OnTurnBeganAttribute : EventsBaseAttribute {
 }
     //public delegate void TurnBeganEvent (object sender, TurnBeganEventArgs args);
 
-    public class TurnBeganEventArgs {        }
+    public class TurnBeganEventArgs {        }/// <summary>
+/// (object sender, CardDrawnEventArgs) args)
+/// </summary>
+public class OnCardDrawnAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToCardDrawn(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(CardDrawnEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, CardDrawnEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToCardDrawn(delegate(object sender, CardDrawnEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void CardDrawnEvent (object sender, CardDrawnEventArgs args);
+
+    public class CardDrawnEventArgs {        public  bool IsHandDraw { get; }
+        public  CardDrawnEventArgs (bool IsHandDraw   ){
+                  this.IsHandDraw = IsHandDraw; 
+}
+
+        }
 
 
 //TODO: generate attributes with static override functions that get the event handle from a game context.

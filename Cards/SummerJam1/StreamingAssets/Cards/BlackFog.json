@@ -12,7 +12,7 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.blackFog"
+      "AssetName": "blackFog"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
@@ -28,10 +28,6 @@
     {
       "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
       "Cost": 1
-    },
-    {
-      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
-      "Description": "Gain 1 Stealth."
     }
   ]
 }

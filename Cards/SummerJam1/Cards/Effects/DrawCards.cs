@@ -1,8 +1,9 @@
 ﻿using Api;
+using CardsAndPiles.Components;
 
 namespace SummerJam1.Cards.Effects
 {
-    public class DrawCards : SummerJam1Component, IEffect, IAmount
+    public class DrawCards : SummerJam1Component, IEffect, IAmount, IDescription
     {
         public int Amount { get; set; } = 2;
 
@@ -16,5 +17,6 @@ namespace SummerJam1.Cards.Effects
             return true;
         }
 
+        public string Description => $"Draw {Amount} Cards.";
     }
 }

@@ -1,0 +1,37 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "irreverance"
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Irreverence"
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
+      "Amount": 6
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.StealthRequirement, SummerJam1",
+      "MaxStealth": 0
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Cost": 2
+    },
+    {
+      "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
+      "Cost": 3
+    }
+  ]
+}

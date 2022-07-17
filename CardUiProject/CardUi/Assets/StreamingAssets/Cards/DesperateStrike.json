@@ -1,0 +1,33 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.desperateStrike"
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Desperate Strike"
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
+      "Amount": 8
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Cost": 3
+    },
+    {
+      "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
+      "Cost": 3
+    }
+  ]
+}

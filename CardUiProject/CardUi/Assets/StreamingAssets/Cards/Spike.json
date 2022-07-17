@@ -1,0 +1,33 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
+      "DamageAmount": 2
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.spike"
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Spike"
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Cost": 0
+    },
+    {
+      "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
+      "Cost": 1
+    }
+  ]
+}

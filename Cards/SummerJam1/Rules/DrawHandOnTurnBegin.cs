@@ -13,7 +13,7 @@ namespace SummerJam1.Rules
 
             for (int i = 0; i < CardDraw; i++)
             {
-                game.Battle.BattleDeck.DrawCard();
+                game.Battle.BattleDeck.DrawCard(true);
             }
         }
     }

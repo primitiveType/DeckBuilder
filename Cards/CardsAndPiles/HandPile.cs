@@ -97,7 +97,7 @@ namespace CardsAndPiles
             return true;
         }
 
-        public void DrawCard()
+        public void DrawCard(bool isHandDraw = false)
         {
             var hand = Context.Root.GetComponentInChildren<HandPile>();
             var discard = Context.Root.GetComponentInChildren<PlayerDiscard>();
@@ -113,6 +113,7 @@ namespace CardsAndPiles
             if (Entity.Children.Count > 0)
             {
                 Entity.Children[Random1.SystemRandom.Next(0, Entity.Children.Count)].TrySetParent(hand.Entity);
+                ((CardsAndPiles.CardEvents)(Context.Events)).OnCardDrawn(new CardDrawnEventArgs(isHandDraw));
             }
         }
     }

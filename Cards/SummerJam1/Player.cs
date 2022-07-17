@@ -29,7 +29,7 @@ namespace SummerJam1
 
             return true;
         }
-        
+
         public bool TryUseStealth(int amount)
         {
             if (CurrentStealth < amount)
@@ -46,8 +46,13 @@ namespace SummerJam1
         [OnTurnEnded]
         private void OnTurnEnded()
         {
-            CurrentEnergy = MaxEnergy;
             CurrentStealth -= 1;
+        }
+
+        [OnTurnBegan]
+        private void OnTurnBegan()
+        {
+            CurrentEnergy = MaxEnergy;
         }
 
         [OnBattleStarted]
@@ -55,12 +60,12 @@ namespace SummerJam1
         {
             CurrentStealth = MaxStealth;
         }
-        
+
 
         public override void Terminate()
         {
             base.Terminate();
-            throw new Exception("Player terminated! NO!");
+            // throw new Exception("Player terminated! NO!");
         }
     }
 }

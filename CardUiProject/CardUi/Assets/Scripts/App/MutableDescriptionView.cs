@@ -16,7 +16,7 @@ namespace App
 
         private void OnInputChanged(string arg0)
         {
-            Model.Description = arg0;
+            // Model.Description = arg0;
         }
 
         [PropertyListener(nameof(IDescription.Description))]

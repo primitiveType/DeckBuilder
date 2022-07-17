@@ -1,0 +1,44 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.DamageUnitEqualToStealth, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.DrawCards, SummerJam1",
+      "Amount": 1
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "card.stealthDamage"
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Stealth Damage"
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Cost": 1
+    },
+    {
+      "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
+      "Cost": 2
+    },
+    {
+      "$type": "SummerJam1.Cards.Noisy, SummerJam1",
+      "Amount" : 1
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "Deal Damage equal to your current Stealth."
+    }
+  ]
+}

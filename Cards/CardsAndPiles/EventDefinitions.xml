@@ -63,4 +63,7 @@
     </event>
     <event id="TurnBegan">
     </event>
+    <event id="CardDrawn">
+        <arg name="IsHandDraw" type="bool"/>
+    </event>
 </catalog>

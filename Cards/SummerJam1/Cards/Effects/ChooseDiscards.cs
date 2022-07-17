@@ -1,9 +1,11 @@
 using Api;
+using Api.Extensions;
 using CardsAndPiles;
+using CardsAndPiles.Components;
 
 namespace SummerJam1.Cards.Effects
 {
-    public class ChooseDiscards : SummerJam1Component, IAmount, IEffect
+    public class ChooseDiscards : SummerJam1Component, IAmount, IEffect, IDescription
     {
         public int Amount { get; set; }
 
@@ -23,5 +25,8 @@ namespace SummerJam1.Cards.Effects
 
             return true;
         }
+
+
+        public string Description => $"Choose {Amount} Card{Amount.ToPluralitySuffix()} to discard.";
     }
 }
