@@ -1,0 +1,22 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 12,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Relics.RaiseMaxStealth, SummerJam1",
+      "Amount": 1
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Mist Familiar"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "mistFamiliar"
+    },
+    {
+      "$type": "SummerJam1.RelicComponent, SummerJam1"
+    }
+  ]
+}

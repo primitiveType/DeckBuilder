@@ -1,0 +1,23 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 12,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Relics.DealDamageEveryTurn, SummerJam1",
+      "PlayerDamage": 0,
+      "EnemyDamage" : 2
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Imp Familiar"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "impFamiliar"
+    },
+    {
+      "$type": "SummerJam1.RelicComponent, SummerJam1"
+    }
+  ]
+}

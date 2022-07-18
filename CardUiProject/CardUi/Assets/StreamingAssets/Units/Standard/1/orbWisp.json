@@ -1,0 +1,42 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Orb Wisp"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "orbWisp"
+    },
+    {
+      "$type": "SummerJam1.Strength, SummerJam1",
+      "Amount": 3
+    },
+    {
+      "$type": "SummerJam1.DamageIntent, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
+      "Amount": 25,
+      "Max": 25
+    },
+    {
+      "$type": "SummerJam1.Statuses.GainArmorEveryTurn, SummerJam1",
+      "Amount" : 2
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/Twiddle.json"
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/Resonance.json"
+    }
+  ]
+}
