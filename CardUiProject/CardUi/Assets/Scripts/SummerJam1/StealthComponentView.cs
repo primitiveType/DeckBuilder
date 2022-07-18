@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SummerJam1
 {
-    public class StealthComponentView : ComponentView<Player>
+    public class StealthComponentView : ComponentView<Stealth>
     {
         [SerializeField] private SimpleHealthBar StealthText;
 

@@ -8,11 +8,11 @@
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Noise damages enemies."
+      "Value": "Cursed Drum"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "badge.nanasspoon"
+      "AssetName": "cursedDrum"
     },
     {
       "$type": "SummerJam1.RelicComponent, SummerJam1"

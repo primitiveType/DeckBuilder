@@ -1,21 +1,13 @@
-﻿using System;
-using CardsAndPiles;
+﻿using CardsAndPiles;
+using CardsAndPiles.Components;
 
 namespace SummerJam1
 {
-    public class Player : SummerJam1Component
+    public class Player : SummerJam1Component, ITooltip
     {
-        private int _currentStealth;
         public int CurrentEnergy { get; set; }
         public int MaxEnergy { get; private set; } = 3;
 
-        public int CurrentStealth
-        {
-            get => _currentStealth;
-            set => _currentStealth = Math.Min(Math.Max(value, 0), MaxStealth);
-        }
-
-        public int MaxStealth { get; set; } = 10;
 
         public bool TryUseEnergy(int amount)
         {
@@ -30,24 +22,6 @@ namespace SummerJam1
             return true;
         }
 
-        public bool TryUseStealth(int amount)
-        {
-            if (CurrentStealth < amount)
-            {
-                return false;
-            }
-
-            CurrentStealth -= amount;
-
-            return true;
-        }
-
-
-        [OnTurnEnded]
-        private void OnTurnEnded()
-        {
-            CurrentStealth -= 1;
-        }
 
         [OnTurnBegan]
         private void OnTurnBegan()
@@ -55,17 +29,6 @@ namespace SummerJam1
             CurrentEnergy = MaxEnergy;
         }
 
-        [OnBattleStarted]
-        private void OnBattleStarted()
-        {
-            CurrentStealth = MaxStealth;
-        }
-
-
-        public override void Terminate()
-        {
-            base.Terminate();
-            // throw new Exception("Player terminated! NO!");
-        }
+        public string Tooltip => "Energy - Cards require energy to be played.";
     }
 }

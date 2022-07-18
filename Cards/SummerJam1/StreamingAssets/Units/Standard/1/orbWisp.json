@@ -23,12 +23,20 @@
     },
     {
       "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
-      "Amount": 30,
-      "Max": 30
+      "Amount": 25,
+      "Max": 25
     },
     {
       "$type": "SummerJam1.Statuses.GainArmorEveryTurn, SummerJam1",
       "Amount" : 2
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/Twiddle.json"
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/Resonance.json"
     }
   ]
 }

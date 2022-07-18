@@ -12,7 +12,7 @@ namespace SummerJam1.Cards.Effects
 
         public bool DoEffect(IEntity target)
         {
-            return Game.Player.TryUseStealth(-Amount);
+            return Game.Player.Entity.GetComponent<Stealth>().TryUseStealth(-Amount);
         }
 
         public string Description => $"Gain {Amount} Stealth.";
@@ -86,27 +86,19 @@ namespace SummerJam1.Cards.Effects
         }
     }
 
-    public class GrantArmorToUnit : SummerJam1Component, IEffect, IDescription
+    public class GrantArmorToPlayer : SummerJam1Component, IEffect, IDescription, ITooltip
     {
         [JsonProperty] public int BlockAmount { get; private set; }
 
 
         public bool DoEffect(IEntity target)
         {
-            Unit unit = target.GetComponentInChildren<Unit>();
-
-            if (unit == null)
-            {
-                return false;
-            }
-
-            Armor armor = unit.Entity.GetOrAddComponent<Armor>();
-
-
+            Armor armor = Game.Player.Entity.GetOrAddComponent<Armor>();
             armor.Amount += BlockAmount;
             return true;
         }
 
         public string Description => $"Gain {BlockAmount} block.";
+        public string Tooltip => Tooltips.ARMOR_TOOLTIP;
     }
 }

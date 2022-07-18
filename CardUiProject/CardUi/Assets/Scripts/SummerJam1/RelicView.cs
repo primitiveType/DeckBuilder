@@ -8,6 +8,8 @@ namespace SummerJam1
     {
         public void SetTargetPosition(Vector3 transformPosition, Vector3 transformRotation, bool immediate = false)
         {
+            transform.localPosition = new Vector3();
+
         }
 
         public Vector3 GetLocalPosition()
@@ -25,6 +27,7 @@ namespace SummerJam1
 
         public void SetLocalPosition(Vector3 transformPosition, Vector3 transformRotation)
         {
+            transform.localPosition = new Vector3();
         }
     }
 }

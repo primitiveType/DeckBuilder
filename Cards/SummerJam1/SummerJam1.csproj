@@ -252,6 +252,24 @@
       <None Update="StreamingAssets\Units\Standard\2\headCheese.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="StreamingAssets\Relics\RaiseHpMore.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="StreamingAssets\Relics\SpectralClub.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="StreamingAssets\Relics\CrystalPendant.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="StreamingAssets\Relics\CrookedHalo.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="StreamingAssets\Relics\CharredBone.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="StreamingAssets\Relics\ImpFamiliar.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
    
     </ItemGroup>
 

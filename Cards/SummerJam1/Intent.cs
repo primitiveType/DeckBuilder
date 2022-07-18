@@ -21,8 +21,8 @@ namespace SummerJam1
             }
         }
 
-        [OnTurnEnded]
-        private void OnTurnEnded()
+        [OnAttackPhaseStarted]
+        private void OnAttackPhaseStarted()
         {
             DoIntent();
         }

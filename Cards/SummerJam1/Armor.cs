@@ -1,10 +1,12 @@
 using System;
 using Api;
 using CardsAndPiles;
+using CardsAndPiles.Components;
+using SummerJam1.Cards;
 
 namespace SummerJam1
 {
-    public class Armor : SummerJam1Component, IAmount
+    public class Armor : SummerJam1Component, IAmount, ITooltip
     {
         public int Amount { get; set; }
 
@@ -21,10 +23,12 @@ namespace SummerJam1
         }
 
         [OnBattleEnded]
-        [OnTurnBegan]
+        [OnAttackPhaseEnded]
         private void OnBattleEnded()
         {
             Amount = 0;
         }
+
+        public string Tooltip => Tooltips.ARMOR_TOOLTIP;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Api;
+using Api.Extensions;
 using CardsAndPiles.Components;
 
 namespace SummerJam1.Cards.Effects
@@ -17,6 +18,6 @@ namespace SummerJam1.Cards.Effects
             return true;
         }
 
-        public string Description => $"Draw {Amount} Cards.";
+        public string Description => $"Draw {Amount} Card{Amount.ToPluralitySuffix()}.";
     }
 }

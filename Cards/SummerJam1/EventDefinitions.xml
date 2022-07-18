@@ -25,6 +25,10 @@
     </event>
     <event id="RequestRemoveCard">
     </event>
+    <event id="AttackPhaseStarted">
+    </event>
+    <event id="AttackPhaseEnded">
+    </event>
     <event id="RelicCreated">
         <arg name="Relic" type="IEntity"/>
     </event>

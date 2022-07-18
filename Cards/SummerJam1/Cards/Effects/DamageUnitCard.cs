@@ -19,12 +19,12 @@ namespace SummerJam1.Cards.Effects
             }
 
 
-            unit.TryDealDamage(Game.Player.CurrentStealth, Entity);
+            unit.TryDealDamage(Game.Player.Entity.GetComponent<Stealth>().CurrentStealth, Entity);
             return true;
         }
     }
 
-    public class StealthRequirement : SummerJam1Component
+    public class StealthRequirement : SummerJam1Component, IDescription
     {
         public int MaxStealth { get; set; } = 999;
         public int MinStealth { get; set; } = 0;
@@ -37,14 +37,37 @@ namespace SummerJam1.Cards.Effects
                 return;
             }
 
-            if (Game.Player.CurrentStealth < MinStealth)
+            if (Game.Player.Entity.GetComponent<Stealth>().CurrentStealth < MinStealth)
             {
                 args.Blockers.Add($"Stealth Must be Greater than {MinStealth}!");
             }
 
-            if (Game.Player.CurrentStealth > MaxStealth)
+            if (Game.Player.Entity.GetComponent<Stealth>().CurrentStealth > MaxStealth)
             {
                 args.Blockers.Add($"Stealth Must be Less than {MaxStealth}!");
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                if (MaxStealth < 999 && MinStealth > 0)
+                {
+                    return $"Can't be played if Stealth is greater than {MinStealth} or less then {MaxStealth}";
+                }
+
+                if (MaxStealth < 99)
+                {
+                    return $"Can't be played if Stealth is greater than {MaxStealth}";
+                }
+
+                if (MinStealth > 0)
+                {
+                    return $"Can't be played if Stealth is lesz than {MinStealth}";
+                }
+
+                return $"Can't be played if Stealth is greater than {MinStealth} or less then {MaxStealth}";
             }
         }
     }
@@ -79,7 +102,7 @@ namespace SummerJam1.Cards.Effects
             }
 
 
-            unit.TryDealDamage(Game.Player.MaxStealth - Game.Player.CurrentStealth, Entity);
+            unit.TryDealDamage(Game.Player.Entity.GetComponent<Stealth>().MaxStealth - Game.Player.Entity.GetComponent<Stealth>().CurrentStealth, Entity);
             return true;
         }
     }
@@ -131,6 +154,7 @@ namespace SummerJam1.Cards.Effects
         }
 
         private int Difference => Math.Max(0, PlayerStartHealth - CurrentHealth);
+
         [PropertyChanged.DependsOn(nameof(CurrentHealth))]
         public string Description => $"Deal {Multiplier} damage for each health lost this turn. ({Difference * Multiplier})";
     }
@@ -174,19 +198,9 @@ namespace SummerJam1.Cards.Effects
         public string Description => $"Deal {Multiplier} damage for each card drawn this turn. ({Amount * Multiplier})";
     }
 
-    public class DamageUnitCard : SummerJam1Component, IEffect
+    public class DamageUnitCard : SummerJam1Component, IEffect, IDescription
     {
         [JsonProperty] public int DamageAmount { get; private set; }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-            if (Entity.GetComponent<DescriptionComponent>() == null)
-            {
-                Entity.GetOrAddComponent<DescriptionComponent>().Description =
-                    $"Deal {DamageAmount} damage to target Unit.";
-            }
-        }
 
 
         public bool DoEffect(IEntity target)
@@ -207,5 +221,7 @@ namespace SummerJam1.Cards.Effects
             unit.TryDealDamage(DamageAmount, Entity);
             return true;
         }
+
+        public string Description => $"Deal {DamageAmount} damage.";
     }
 }

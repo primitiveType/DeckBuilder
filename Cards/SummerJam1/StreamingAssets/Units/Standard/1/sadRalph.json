@@ -16,15 +16,23 @@
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 3
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
-      "Amount": 30,
-      "Max": 30
+      "Amount": 45,
+      "Max": 45
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/SoothingLull.json"
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/CallSpirits.json"
     }
   ]
 }

@@ -12,10 +12,10 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.spike"
+      "AssetName": "spike"
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+      "$type": "SummerJam1.Cards.Consume, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",

@@ -20,7 +20,7 @@ namespace SummerJam1
         [SerializeField] private AudioSource HitAudio;
         [SerializeField] private AudioSource CardAudio;
         [SerializeField] private AudioSource ButtonAudio;
-        [SerializeField] private AudioSource MusicAudo;
+        // [SerializeField] private AudioSource MusicAudo;
         public Context Context { get; private set; }
         public SummerJam1Events Events => (SummerJam1Events)Context.Events;
         public Game Game { get; private set; }
@@ -195,7 +195,7 @@ namespace SummerJam1
         public void StartGame()
         {
             CreateNewGame();
-            MusicAudo.Play();
+            // MusicAudo.Play();
         }
     }
 }

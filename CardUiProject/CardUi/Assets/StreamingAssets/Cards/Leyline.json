@@ -11,12 +11,8 @@
       "HealAmount": 3
     },
     {
-      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 3
-    },
-    {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.leyline"
+      "AssetName": "leyline"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"

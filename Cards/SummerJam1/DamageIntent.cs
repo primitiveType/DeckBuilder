@@ -33,7 +33,7 @@ namespace SummerJam1
         {
             if (!IgnoreStealth)
             {
-                Enabled = Player.CurrentStealth <= 0;
+                Enabled = Player.Entity.GetComponent<Stealth>().CurrentStealth <= 0;
             }
         }
 
@@ -80,7 +80,7 @@ namespace SummerJam1
                     if (targetSlot == null)
                     {
                         var player = Context.Root.GetComponent<Game>().Player;
-                        if (IgnoreStealth || player.CurrentStealth <= 0)
+                        if (IgnoreStealth || player.Entity.GetComponent<Stealth>().CurrentStealth <= 0)
                         {
                             targetSlot = player.Entity;
                         }

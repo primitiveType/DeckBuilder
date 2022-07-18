@@ -151,6 +151,34 @@ public EventHandle<RequestRemoveCardEventArgs> SubscribeToRequestRemoveCard(Even
     return handler;
 } 
     #endregion Code for event RequestRemoveCard
+    #region Code for event AttackPhaseStarted
+private event EventHandleDelegate<AttackPhaseStartedEventArgs> AttackPhaseStarted;
+public virtual void OnAttackPhaseStarted(AttackPhaseStartedEventArgs args)
+{
+    AttackPhaseStarted?.Invoke(this, args);
+}
+
+public EventHandle<AttackPhaseStartedEventArgs> SubscribeToAttackPhaseStarted(EventHandleDelegate<AttackPhaseStartedEventArgs> action)
+{
+    var handler = new EventHandle<AttackPhaseStartedEventArgs>(action, () => AttackPhaseStarted -= action);
+    AttackPhaseStarted += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event AttackPhaseStarted
+    #region Code for event AttackPhaseEnded
+private event EventHandleDelegate<AttackPhaseEndedEventArgs> AttackPhaseEnded;
+public virtual void OnAttackPhaseEnded(AttackPhaseEndedEventArgs args)
+{
+    AttackPhaseEnded?.Invoke(this, args);
+}
+
+public EventHandle<AttackPhaseEndedEventArgs> SubscribeToAttackPhaseEnded(EventHandleDelegate<AttackPhaseEndedEventArgs> action)
+{
+    var handler = new EventHandle<AttackPhaseEndedEventArgs>(action, () => AttackPhaseEnded -= action);
+    AttackPhaseEnded += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event AttackPhaseEnded
     #region Code for event RelicCreated
 private event EventHandleDelegate<RelicCreatedEventArgs> RelicCreated;
 public virtual void OnRelicCreated(RelicCreatedEventArgs args)
@@ -472,6 +500,62 @@ public class OnRequestRemoveCardAttribute : EventsBaseAttribute {
     //public delegate void RequestRemoveCardEvent (object sender, RequestRemoveCardEventArgs args);
 
     public class RequestRemoveCardEventArgs {        }/// <summary>
+/// (object sender, AttackPhaseStartedEventArgs) args)
+/// </summary>
+public class OnAttackPhaseStartedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToAttackPhaseStarted(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(AttackPhaseStartedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, AttackPhaseStartedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToAttackPhaseStarted(delegate(object sender, AttackPhaseStartedEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void AttackPhaseStartedEvent (object sender, AttackPhaseStartedEventArgs args);
+
+    public class AttackPhaseStartedEventArgs {        }/// <summary>
+/// (object sender, AttackPhaseEndedEventArgs) args)
+/// </summary>
+public class OnAttackPhaseEndedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToAttackPhaseEnded(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(AttackPhaseEndedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, AttackPhaseEndedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToAttackPhaseEnded(delegate(object sender, AttackPhaseEndedEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void AttackPhaseEndedEvent (object sender, AttackPhaseEndedEventArgs args);
+
+    public class AttackPhaseEndedEventArgs {        }/// <summary>
 /// (object sender, RelicCreatedEventArgs) args)
 /// </summary>
 public class OnRelicCreatedAttribute : EventsBaseAttribute {

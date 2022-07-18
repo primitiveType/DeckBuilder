@@ -5,6 +5,7 @@ using Api.Extensions;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Cards;
+using SummerJam1.Units;
 
 namespace SummerJam1.Relics
 {
@@ -105,6 +106,71 @@ namespace SummerJam1.Relics
         public string Description => $"On pickup, raise your max HP by {Amount}";
     }
 
+    public class NoiseCardsAddPrefabToHand : SummerJam1Component, ITooltip, IDescription
+    {
+        public string Prefab { get; set; }
+        public string PrefabPrettyName { get; set; }
+        public string Tooltip => $"Whenever you play a noise card, add a {PrefabPrettyName} card to your hand.";
+
+        [OnCardPlayed]
+        private void OnCardPlayed(object sender, CardPlayedEventArgs args)
+        {
+            if (args.CardId.GetComponent<Noisy>() != null)
+            {
+                Context.CreateEntity(Game.Battle.Hand.Entity, Prefab);
+            }
+        }
+
+        public string Description => Tooltip;
+    }
+
+    public class ReachingXHealthHealsForY : SummerJam1Component, ITooltip, IDescription
+    {
+        public int TargetHealth { get; set; }
+        public int HealAmount { get; set; }
+        public string Tooltip => $"When your health reaches exactly {TargetHealth}, heal for {HealAmount}.";
+        public string Description => Tooltip;
+
+    }
+
+    public class DealDamageEveryTurn : SummerJam1Component, ITooltip, IDescription
+    {
+        public int PlayerDamage { get; set; }
+        public int EnemyDamage { get; set; }
+        public string Description => Tooltip;
+
+        public string Tooltip
+        {
+            get
+            {
+                if (PlayerDamage > 0)
+                {
+                    return $"At the end of every turn, take {PlayerDamage} damage and deal {EnemyDamage}.";
+                }
+
+                return $"At the end of every turn, deal {EnemyDamage} damage.";
+            }
+        }
+    }
+
+    public class DealDamageMakeNoiseAtStartOfCombat : SummerJam1Component, ITooltip, IDescription
+    {
+        public string Description => Tooltip;
+
+        public int StealthAmount { get; set; }
+        public int DamageAmount { get; set; }
+
+        [OnBattleStarted]
+        public void OnBattleStarted(object sender, BattleStartedEventArgs args)
+        {
+            Game.Player.Entity.GetComponent<Stealth>().TryUseStealth(StealthAmount);
+            IEntity enemy = Game.Battle.GetEnemies().FirstOrDefault();
+            enemy?.GetComponent<Health>().TryDealDamage(DamageAmount, Entity);
+        }
+
+        public string Tooltip => $"At start of battle, reduces the player's stealth by {StealthAmount} and deal {DamageAmount} damage.";
+    }
+
     public class RaiseMaxStealth : SummerJam1Component, IDescription
     {
         public int Amount { get; set; }
@@ -121,7 +187,7 @@ namespace SummerJam1.Relics
             {
                 if (Entity.Parent == Game.RelicPile.Entity)
                 {
-                    Game.Player.MaxStealth += Amount;
+                    Game.Player.Entity.GetComponent<Stealth>().MaxStealth += Amount;
                 }
             }
         }
@@ -131,8 +197,7 @@ namespace SummerJam1.Relics
             base.Terminate();
             Entity.PropertyChanged -= EntityOnPropertyChanged;
         }
-        
-        public string Description => $"On pickup, raise your max stealth by {Amount}";
 
+        public string Description => $"On pickup, raise your max stealth by {Amount}";
     }
 }

@@ -24,14 +24,17 @@ namespace App
         {
             if (TooltipParent.gameObject.activeInHierarchy)
             {
-                TooltipParent.transform.localPosition = Vector3.zero;
+                if (TooltipBounds != null)
+                {
+                    TooltipParent.transform.localPosition = Vector3.zero;
 
-                Vector3 position = TooltipParent.transform.position;
-                Bounds tester = new Bounds(position, TooltipBounds.bounds.size);
+                    Vector3 position = TooltipParent.transform.position;
+                    Bounds tester = new Bounds(position, TooltipBounds.bounds.size);
 
-                Vector3 newCenter = tester.ClampToViewport(Camera.main);
-                position = newCenter.WithZ(position.z);
-                TooltipParent.transform.position = position;
+                    Vector3 newCenter = tester.ClampToViewport(Camera.main);
+                    position = newCenter.WithZ(position.z);
+                    TooltipParent.transform.position = position;
+                }
             }
         }
 

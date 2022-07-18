@@ -13,7 +13,7 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.shivers"
+      "AssetName": "shivers"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"

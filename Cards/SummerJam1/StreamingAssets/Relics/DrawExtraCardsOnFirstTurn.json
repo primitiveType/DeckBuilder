@@ -9,11 +9,11 @@
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Draw cards"
+      "Value": "Sticky Glove"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "badge.nanasspoon"
+      "AssetName": "stickyGlove"
     },
     {
       "$type": "SummerJam1.RelicComponent, SummerJam1"

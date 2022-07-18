@@ -11,7 +11,7 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.noisyDamage"
+      "AssetName": "noisyDamage"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"

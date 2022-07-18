@@ -15,4 +15,5 @@ namespace SummerJam1
             SummerJam1Context.Instance.Events.OnRequestRemoveCard(new RequestRemoveCardEventArgs());
         }
     }
+    
 }

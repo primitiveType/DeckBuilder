@@ -16,7 +16,7 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.lightningPulse"
+      "AssetName": "lightningPulse"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"

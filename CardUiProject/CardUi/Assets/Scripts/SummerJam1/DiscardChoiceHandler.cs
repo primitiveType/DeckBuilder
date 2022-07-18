@@ -23,7 +23,7 @@ public class DiscardChoiceHandler : PileView, IPileView
     {
         base.Start();
         SetModel(SummerJam1Context.Instance.Game.DiscardStagingPile.Entity);
-        SummerJam1Context.Instance.Events.SubscribeToChooseCardsToDiscard(OnChooseCardsToDiscard);
+        Disposables.Add(SummerJam1Context.Instance.Events.SubscribeToChooseCardsToDiscard(OnChooseCardsToDiscard));
         gameObject.SetActive(false);
         Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
         m_SubmitButton.onClick.AddListener(Submit);

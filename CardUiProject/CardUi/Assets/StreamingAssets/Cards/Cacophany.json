@@ -12,14 +12,14 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.cacophany"
+      "AssetName": "cacophony"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Cacophany"
+      "Value": "Cacophony"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",

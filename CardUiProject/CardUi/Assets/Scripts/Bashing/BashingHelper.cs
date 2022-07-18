@@ -106,6 +106,7 @@ public class BashingHelper : MonoBehaviourSingleton<BashingHelper>
         {
             return CreateView(summerJam1ModelViewBridge.Entity, SummerJam1CardFactory.Instance.CardPrefab);
         }
+        
 
         return null;
     }

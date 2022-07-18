@@ -16,7 +16,7 @@ namespace SummerJam1.Cards
         {
             if (args.CardId == Entity)
             {
-                if (!Game.Player.TryUseStealth(Amount))
+                if (!Game.Player.Entity.GetComponent<Stealth>().TryUseStealth(Amount))
                 { //its ok to play a noisy card when not stealthed.
                 }
             }

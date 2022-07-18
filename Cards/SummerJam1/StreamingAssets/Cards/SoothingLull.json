@@ -8,7 +8,7 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.HealEnemy, SummerJam1",
-      "HealAmount": 25
+      "HealAmount": 12
     },
     {
       "$type": "SummerJam1.Cards.Effects.AddStealth, SummerJam1",
@@ -16,14 +16,14 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "smother"
+      "AssetName": "soothingLull"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Smother"
+      "Value": "Soothing Lull"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",

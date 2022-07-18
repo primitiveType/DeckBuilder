@@ -28,7 +28,15 @@
     },
     {
       "$type": "SummerJam1.Statuses.ReducePlayerStealthAtStartOfCombat, SummerJam1",
-      "Amount" : 5
+      "Amount": 5
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/Rattle.json"
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/Leyline.json"
     }
   ]
 }

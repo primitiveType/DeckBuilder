@@ -16,7 +16,7 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.twiddle"
+      "AssetName": "twiddle"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
@@ -32,10 +32,6 @@
     {
       "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
       "Cost": 2
-    },
-    {
-      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
-      "Description": "Draw a card, then Discard a card."
     }
   ]
 }

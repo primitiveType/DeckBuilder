@@ -51,13 +51,14 @@ namespace SummerJam1
             {
                 Player = entity.AddComponent<Player>();
                 entity.AddComponent<HealOnBattleStart>();
+                entity.AddComponent<Stealth>();
                 entity.AddComponent<PlayerUnit>();
                 entity.AddComponent<VisualComponent>().AssetName = "Player";
                 Health health = entity.AddComponent<Health>();
                 health.DontDie = true; //DEBUG
                 entity.AddComponent<Position>();
-                health.SetMax(20);
-                health.SetHealth(20);
+                health.SetMax(30);
+                health.SetHealth(30);
             });
             CurrentLevel = 1;
             CreateNewMap();
@@ -137,6 +138,7 @@ namespace SummerJam1
 
                 CreateEnemyInCell(cellsWithNoNeighbors.First().Entity, prefab);
             }
+
             foreach (string prefab in GetEnemyInfos(2))
             {
                 IEnumerable<CustomCell> cellsWithNoNeighbors = CurrentMap.GetAllCells()
@@ -145,6 +147,7 @@ namespace SummerJam1
 
                 CreateEnemyInCell(cellsWithNoNeighbors.First().Entity, prefab);
             }
+
             foreach (string prefab in GetEnemyInfos(3))
             {
                 IEnumerable<CustomCell> cellsWithNoNeighbors = CurrentMap.GetAllCells()
@@ -160,12 +163,15 @@ namespace SummerJam1
                             CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0)).First();
 
             CreateShrineInCell(shrineCell.Entity);
-            
-            CustomCell relicCell = CurrentMap.GetAllCells()
-                .Where(c => !c.Entity.Children.Any() &&
-                            CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0)).First();
 
-            CreateRandomRelicInCell(relicCell.Entity);
+            foreach (string relicInfo in GetRelicInfos())
+            {
+                CustomCell relicCell = CurrentMap.GetAllCells()
+                    .Where(c => !c.Entity.Children.Any() &&
+                                CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0)).First();
+
+                CreateRelicInCell(relicCell.Entity, relicInfo);
+            }
         }
 
         public void GoToNextLevel()
@@ -203,12 +209,11 @@ namespace SummerJam1
                 {
                     if (CurrentLevel < MaxLevel)
                     {
-
                         CreateHatchInCell(customCell.Entity);
                     }
                     else
                     {
-                        CreateEnemyInCell(customCell.Entity,"Units/boss.json");
+                        CreateEnemyInCell(customCell.Entity, "Units/boss.json");
                     }
 
                     break;
@@ -283,9 +288,11 @@ namespace SummerJam1
         private List<string> GetEnemyInfos(int difficulty)
         {
             DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Units", "Standard", difficulty.ToString()));
-            List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Units/Standard/{difficulty}/{file.Name}").ToList();
+            List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Units/Standard/{difficulty}/{file.Name}")
+                .ToList();
             return files;
         }
+
         private List<string> GetRelicInfos()
         {
             DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Relics"));
@@ -308,6 +315,7 @@ namespace SummerJam1
             enemyEntity.AddComponent<ShrineEncounter>();
             enemyEntity.AddComponent<VisualComponent>().AssetName = "bloodAltar";
         }
+
         private void CreateRelicInCell(IEntity customCellEntity, string prefab)
         {
             IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
@@ -325,6 +333,8 @@ namespace SummerJam1
         public void EndTurn()
         {
             Events.OnTurnEnded(new TurnEndedEventArgs());
+            Events.OnAttackPhaseStarted(new AttackPhaseStartedEventArgs());
+            Events.OnAttackPhaseEnded(new AttackPhaseEndedEventArgs());
             Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 
@@ -389,10 +399,11 @@ namespace SummerJam1
             Entity.Destroy();
         }
     }
-    
+
     public class RelicEncounter : Encounter
     {
         public string Prefab { get; set; }
+
         protected override void PlayerEnteredCell()
         {
             Context.CreateEntity(Game.RelicPrizePile.Entity, Prefab);

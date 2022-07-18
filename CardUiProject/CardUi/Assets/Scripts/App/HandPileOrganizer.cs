@@ -3,6 +3,7 @@ using System.Linq;
 using Api;
 using App.Utility;
 using CardsAndPiles;
+using CardsAndPiles.Components;
 using UnityEngine;
 
 namespace App
@@ -12,11 +13,13 @@ namespace App
         [SerializeField] private float lerpRate = .01f;
         [SerializeField] private float radius = 1f;
         [SerializeField] private float maxWidth = 1f;
-        [SerializeField] private float overlapRatio = .9f;
+        [SerializeField] private float overlapRatio = 1f;
         [SerializeField] private bool rotate = true;
         [SerializeField] private float offset = 0f;
         [SerializeField] private float hoveredOverlapRotation = 1f;
+        [SerializeField] private float overlapReductionPerCard = .05f;
 
+        private float CurrentOverlapRatio => overlapRatio - (overlapReductionPerCard * CardsInHand.Count);
 
         private List<CardInHand> CardsInHand { get; } = new List<CardInHand>();
 
@@ -118,7 +121,7 @@ namespace App
         private float GetEffectiveCardWidth(CardInHand card)
         {
             return 2 * card.PileItemView.GetBounds().extents.x *
-                   (card.DisplayWholeCard ? hoveredOverlapRotation : overlapRatio);
+                   (card.DisplayWholeCard ? hoveredOverlapRotation : CurrentOverlapRatio);
         }
 
         //theta = arclength/radius

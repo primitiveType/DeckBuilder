@@ -7,7 +7,7 @@
       "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Cards.Effects.GrantArmorToUnit, SummerJam1",
+      "$type": "SummerJam1.Cards.Effects.GrantArmorToPlayer, SummerJam1",
       "BlockAmount": 3
     },
     {

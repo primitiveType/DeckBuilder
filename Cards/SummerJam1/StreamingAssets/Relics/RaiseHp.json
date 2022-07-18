@@ -9,11 +9,11 @@
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "RAise hp"
+      "Value": "Bone Familiar"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "badge.nanasspoon"
+      "AssetName": "boneFamiliar"
     },
     {
       "$type": "SummerJam1.RelicComponent, SummerJam1"

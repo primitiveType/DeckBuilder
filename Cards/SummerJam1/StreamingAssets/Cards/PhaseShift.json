@@ -23,7 +23,7 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "Amount": 5
+      "DamageAmount": 5
     },
     {
       "$type": "SummerJam1.Cards.Effects.StealthRequirement, SummerJam1",

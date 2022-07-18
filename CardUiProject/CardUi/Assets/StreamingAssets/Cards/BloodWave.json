@@ -7,11 +7,11 @@
       "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Cards.Effects.DealDamageForEachHealthLostThisTurn, SummerJam1",
+      "$type": "SummerJam1.Cards.Effects.DealDamageForEachHealthLostThisTurn, SummerJam1"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "card.bloodWave"
+      "AssetName": "bloodWave"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
