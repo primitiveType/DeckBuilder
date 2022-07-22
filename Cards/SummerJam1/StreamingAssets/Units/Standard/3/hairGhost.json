@@ -16,19 +16,23 @@
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 3
+      "Amount": 5
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
-      "Amount": 30,
-      "Max": 30
+      "Amount": 15,
+      "Max": 15
     },
+  
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",
       "Prefab": "Cards/Shivers.json"
+    },
+    {
+      "$type": "SummerJam1.Statuses.OnlyPlayerSelfDamageDamagesMe, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",

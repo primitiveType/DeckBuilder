@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SummerJam1
 {
-    public class HealthCostComponentView : ComponentView<EnergyCost>
+    public class HealthCostComponentView : ComponentView<HealthCost>
     {
         [SerializeField] private TMP_Text HealthText;
 

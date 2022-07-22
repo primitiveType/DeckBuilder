@@ -19,7 +19,7 @@ namespace SummerJam1.Cards.Effects
             }
 
 
-            unit.TryDealDamage(Game.Player.Entity.GetComponent<Stealth>().CurrentStealth, Entity);
+            unit.TryDealDamage(Game.Player.Entity.GetComponent<Stealth>().Amount, Entity);
             return true;
         }
     }
@@ -37,12 +37,12 @@ namespace SummerJam1.Cards.Effects
                 return;
             }
 
-            if (Game.Player.Entity.GetComponent<Stealth>().CurrentStealth < MinStealth)
+            if (Game.Player.Entity.GetComponent<Stealth>().Amount < MinStealth)
             {
                 args.Blockers.Add($"Stealth Must be Greater than {MinStealth}!");
             }
 
-            if (Game.Player.Entity.GetComponent<Stealth>().CurrentStealth > MaxStealth)
+            if (Game.Player.Entity.GetComponent<Stealth>().Amount > MaxStealth)
             {
                 args.Blockers.Add($"Stealth Must be Less than {MaxStealth}!");
             }
@@ -102,7 +102,7 @@ namespace SummerJam1.Cards.Effects
             }
 
 
-            unit.TryDealDamage(Game.Player.Entity.GetComponent<Stealth>().MaxStealth - Game.Player.Entity.GetComponent<Stealth>().CurrentStealth, Entity);
+            unit.TryDealDamage(Game.Player.Entity.GetComponent<Stealth>().MaxStealth - Game.Player.Entity.GetComponent<Stealth>().Amount, Entity);
             return true;
         }
     }
@@ -149,11 +149,11 @@ namespace SummerJam1.Cards.Effects
             }
 
 
-            unit.TryDealDamage(Difference, Entity);
+            unit.TryDealDamage(Difference * Multiplier, Entity);
             return true;
         }
 
-        private int Difference => Math.Max(0, PlayerStartHealth - CurrentHealth);
+        private int Difference => Math.Max(0, PlayerStartHealth - CurrentHealth) + Entity.GetComponent<HealthCost>()?.Cost ?? 0;
 
         [PropertyChanged.DependsOn(nameof(CurrentHealth))]
         public string Description => $"Deal {Multiplier} damage for each health lost this turn. ({Difference * Multiplier})";

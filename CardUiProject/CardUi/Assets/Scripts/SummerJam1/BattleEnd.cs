@@ -8,6 +8,8 @@ namespace SummerJam1
     public class BattleEnd : View<Game>
     {
         [SerializeField] private TMP_Text Text;
+        [SerializeField] private GameObject Defeat;
+        [SerializeField] private GameObject Victory;
 
         protected override void Start()
         {
@@ -31,10 +33,14 @@ namespace SummerJam1
                 if (item.Victory)
                 {
                     Text.text = "You Win! Play again?";
+                    Victory.SetActive(true);
+                    Defeat.SetActive(false);
                 }
                 else
                 {
                     Text.text = "Game over... Try again?";
+                    Victory.SetActive(false);
+                    Defeat.SetActive(true);
                 }
             });
         }

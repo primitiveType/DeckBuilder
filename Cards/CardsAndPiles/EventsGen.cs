@@ -221,6 +221,20 @@ public EventHandle<TurnBeganEventArgs> SubscribeToTurnBegan(EventHandleDelegate<
     return handler;
 } 
     #endregion Code for event TurnBegan
+    #region Code for event DrawPhaseBegan
+private event EventHandleDelegate<DrawPhaseBeganEventArgs> DrawPhaseBegan;
+public virtual void OnDrawPhaseBegan(DrawPhaseBeganEventArgs args)
+{
+    DrawPhaseBegan?.Invoke(this, args);
+}
+
+public EventHandle<DrawPhaseBeganEventArgs> SubscribeToDrawPhaseBegan(EventHandleDelegate<DrawPhaseBeganEventArgs> action)
+{
+    var handler = new EventHandle<DrawPhaseBeganEventArgs>(action, () => DrawPhaseBegan -= action);
+    DrawPhaseBegan += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event DrawPhaseBegan
     #region Code for event CardDrawn
 private event EventHandleDelegate<CardDrawnEventArgs> CardDrawn;
 public virtual void OnCardDrawn(CardDrawnEventArgs args)
@@ -757,6 +771,34 @@ public class OnTurnBeganAttribute : EventsBaseAttribute {
     //public delegate void TurnBeganEvent (object sender, TurnBeganEventArgs args);
 
     public class TurnBeganEventArgs {        }/// <summary>
+/// (object sender, DrawPhaseBeganEventArgs) args)
+/// </summary>
+public class OnDrawPhaseBeganAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToDrawPhaseBegan(delegate
+            {
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(DrawPhaseBeganEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, DrawPhaseBeganEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToDrawPhaseBegan(delegate(object sender, DrawPhaseBeganEventArgs args)
+        {
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void DrawPhaseBeganEvent (object sender, DrawPhaseBeganEventArgs args);
+
+    public class DrawPhaseBeganEventArgs {        }/// <summary>
 /// (object sender, CardDrawnEventArgs) args)
 /// </summary>
 public class OnCardDrawnAttribute : EventsBaseAttribute {

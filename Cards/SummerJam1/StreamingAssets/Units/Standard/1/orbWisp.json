@@ -32,11 +32,11 @@
     },
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/Twiddle.json"
+      "Prefab": "Cards/NewBlockCard.json"
     },
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/Resonance.json"
+      "Prefab": "Cards/DrawPower.json"
     }
   ]
 }

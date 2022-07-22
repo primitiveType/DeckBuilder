@@ -15,7 +15,7 @@
       "AssetName": "smother"
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+      "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
@@ -23,7 +23,7 @@
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Cost": 1
+      "Cost": 2
     },
     {
       "$type": "SummerJam1.Cards.HealthCost, SummerJam1",

@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
@@ -9,6 +11,7 @@ using NUnit.Framework.Internal;
 using RogueMaps;
 using SummerJam1;
 using SummerJam1.Cards;
+using SummerJam1.Statuses;
 using SummerJam1.Units;
 using ILogger = Api.ILogger;
 
@@ -298,6 +301,41 @@ namespace SummerJam1Tests
                 battleStarted = true;
             }
         }
+
+        [Test]
+        public void ChildrenChangesAreWrapped()
+        {
+            bool isWrapped = false;
+
+            var entity = Context.CreateEntity();
+            var child = Context.CreateEntity();
+            
+            entity.Children.CollectionChanged += ChildrenOnCollectionChanged1;
+            entity.Children.CollectionChanged += ChildrenOnCollectionChanged2;
+
+
+            child.TrySetParent(entity);
+            
+            Assert.IsTrue(isWrapped);
+            void ChildrenOnCollectionChanged1(object sender, NotifyCollectionChangedEventArgs e)
+            {
+                throw new Exception();
+            }
+            void ChildrenOnCollectionChanged2(object sender, NotifyCollectionChangedEventArgs e)
+            {
+                isWrapped = true;
+            }
+            
+        }
+        
+        [Test]
+        public void CreateHeadCheese()
+        {
+            var cheese = Context.CreateEntity(Context.Root, "Units/Standard/2/headCheese.json");
+            Assert.That(cheese.GetComponent<GainMultiAttackBelowThreshold>(), Is.Not.Null);
+        }
+
+     
 
         [Test]
         public void CellsContainBlockedCells()

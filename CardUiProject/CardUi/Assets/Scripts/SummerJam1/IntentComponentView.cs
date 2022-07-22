@@ -13,7 +13,7 @@ namespace SummerJam1
         [SerializeField] private Sprite SleepingImage;
 
         [SerializeField] private Sprite DamageIntentImage;
-        [SerializeField] private GameObject HideIfSleeping;
+        // [SerializeField] private GameObject HideIfSleeping;
         [SerializeField] private GameObject ShowIfSleeping;
 
 
@@ -25,7 +25,7 @@ namespace SummerJam1
         private void UpdateIntentImage()
         {
             IntentImage.gameObject.SetActive(true);
-            HideIfSleeping.SetActive(Component.Enabled);
+            // HideIfSleeping.SetActive(Component.Enabled);
             ShowIfSleeping.SetActive(!Component.Enabled);
 
             switch (Component)

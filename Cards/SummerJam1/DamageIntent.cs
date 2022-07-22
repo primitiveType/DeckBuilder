@@ -20,20 +20,20 @@ namespace SummerJam1
         {
             base.Initialize();
             Player = Context.Root.GetComponent<Game>().Player;
-            Player.PropertyChanged += PlayerOnPropertyChanged;
+            Player.Entity.GetComponent<Stealth>().PropertyChanged += PlayerOnPropertyChanged;
         }
 
         public override void Terminate()
         {
             base.Terminate();
-            Player.PropertyChanged -= PlayerOnPropertyChanged;
+            Player.Entity.GetComponent<Stealth>().PropertyChanged -= PlayerOnPropertyChanged;
         }
 
         private void PlayerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (!IgnoreStealth)
             {
-                Enabled = Player.Entity.GetComponent<Stealth>().CurrentStealth <= 0;
+                Enabled = Player.Entity.GetComponent<Stealth>().Amount <= 0;
             }
         }
 
@@ -80,7 +80,7 @@ namespace SummerJam1
                     if (targetSlot == null)
                     {
                         var player = Context.Root.GetComponent<Game>().Player;
-                        if (IgnoreStealth || player.Entity.GetComponent<Stealth>().CurrentStealth <= 0)
+                        if (IgnoreStealth || player.Entity.GetComponent<Stealth>().Amount <= 0)
                         {
                             targetSlot = player.Entity;
                         }

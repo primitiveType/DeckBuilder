@@ -60,6 +60,7 @@ namespace SummerJam1
             Context.CreateEntity(SlotsParent.GetComponentInChildren<EnemyUnitSlot>().Entity, prefab);
 
             Events.OnBattleStarted(new BattleStartedEventArgs());
+            Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
             Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 
@@ -71,10 +72,6 @@ namespace SummerJam1
                 .Any(slot =>
                     slot.Entity.Children.Any(child => child != args.Entity && child.GetComponent<Unit>() != null));
 
-            if (enemiesAlive) //DEBUG CODE
-            {
-                return;
-            }
 
             if (alliesAlive && enemiesAlive)
             {

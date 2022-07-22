@@ -5,7 +5,7 @@
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Relics.RaiseMaxHp, SummerJam1",
-      "Amount": 5
+      "Amount": 8
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",

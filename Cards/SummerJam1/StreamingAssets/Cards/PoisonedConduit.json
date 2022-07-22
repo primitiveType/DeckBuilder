@@ -8,7 +8,7 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 8
+      "DamageAmount": 7
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
@@ -27,7 +27,7 @@
     },
     {
       "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
-      "Cost": 5
+      "Cost": 2
     },
     {
       "$type": "SummerJam1.Cards.Noisy, SummerJam1",

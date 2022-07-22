@@ -10,16 +10,16 @@ public abstract class SetSpriteFromAssetName : View<VisualComponent>
     {
         Debug.Log($"Getting texture for : {Model.AssetName}!");
 
-        Disposables.Add(AnimationQueue.Instance.Enqueue(() =>
+        // Disposables.Add(AnimationQueue.Instance.Enqueue(() =>
+        // {
+        Sprite tex = Resources.Load<Sprite>(Model.AssetName);
+        if (tex == null)
         {
-            Sprite tex = Resources.Load<Sprite>(Model.AssetName);
-            if (tex == null)
-            {
-                Debug.LogWarning($"No texture found for : {Model.AssetName}!");
-            }
+            Debug.LogWarning($"No texture found for : {Model.AssetName}!");
+        }
 
-            SetSprite(tex);
-        }));
+        SetSprite(tex);
+        // }));
     }
 
     protected abstract void SetSprite(Sprite tex);

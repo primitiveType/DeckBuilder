@@ -8,14 +8,14 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.HealPlayer, SummerJam1",
-      "HealAmount": 6
+      "HealAmount": 7
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
       "AssetName": "callSpirits"
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+      "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
@@ -27,7 +27,7 @@
     },
     {
       "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
-      "Cost": 2
+      "Cost": 0
     },
     {
       "$type": "SummerJam1.Cards.Noisy, SummerJam1",

@@ -55,7 +55,6 @@ namespace SummerJam1
                 entity.AddComponent<PlayerUnit>();
                 entity.AddComponent<VisualComponent>().AssetName = "Player";
                 Health health = entity.AddComponent<Health>();
-                health.DontDie = true; //DEBUG
                 entity.AddComponent<Position>();
                 health.SetMax(30);
                 health.SetHealth(30);
@@ -67,11 +66,13 @@ namespace SummerJam1
 
             //create an example deck.
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
+            Context.CreateEntity(Deck.Entity, "Cards/Fidget.json");
+            Context.CreateEntity(Deck.Entity, "Cards/ProtoPulse.json");
+            Context.CreateEntity(Deck.Entity, "Cards/Pulse.json");
             for (int i = 0; i < 2; i++)
             {
                 Context.CreateEntity(Deck.Entity, "Cards/ProtoField.json");
                 Context.CreateEntity(Deck.Entity, "Cards/EnergyField.json");
-                Context.CreateEntity(Deck.Entity, "Cards/Fidget.json");
                 Context.CreateEntity(Deck.Entity, "Cards/ProtoPulse.json");
                 Context.CreateEntity(Deck.Entity, "Cards/Pulse.json");
             }
@@ -335,6 +336,7 @@ namespace SummerJam1
             Events.OnTurnEnded(new TurnEndedEventArgs());
             Events.OnAttackPhaseStarted(new AttackPhaseStartedEventArgs());
             Events.OnAttackPhaseEnded(new AttackPhaseEndedEventArgs());
+            Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
             Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 

@@ -138,12 +138,6 @@
       <None Update="StreamingAssets\Cards\DrawStrength.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="StreamingAssets\Cards\StealthDamage.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="StreamingAssets\Cards\NoisyDamage.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="StreamingAssets\Cards\Kill.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -268,6 +262,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="StreamingAssets\Relics\ImpFamiliar.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="StreamingAssets\Cards\NewBlockCard.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
    

@@ -16,7 +16,7 @@ namespace SummerJam1
                 return;
             }
 
-            int amount = Component.CurrentStealth;
+            int amount = Component.Amount;
             int max = Component.MaxStealth;
             Disposables.Add(AnimationQueue.Instance.Enqueue(() => SomeRoutine(amount, max)));
         }

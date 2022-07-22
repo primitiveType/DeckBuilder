@@ -6,8 +6,8 @@ namespace SummerJam1.Rules
     {
         private int CardDraw => 5;
 
-        [OnTurnBegan]
-        private void OnTurnBegan()
+        [OnDrawPhaseBegan]
+        private void OnDrawPhaseBegan()
         {
             var game = Context.Root.GetComponent<Game>();
 

@@ -19,7 +19,7 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.AddStealth, SummerJam1",
-      "Amount": 5
+      "Amount": 4
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",

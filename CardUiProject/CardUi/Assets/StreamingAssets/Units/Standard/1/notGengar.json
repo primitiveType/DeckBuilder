@@ -23,11 +23,15 @@
     },
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab" : "Cards/BloodDraw.json"
+      "Prefab": "Cards/BloodDraw.json"
     },
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab" : "Cards/Irreverence.json"
+      "Prefab": "Cards/Irreverence.json"
+    },
+    {
+      "$type": "SummerJam1.Statuses.DiscardCardInHandAtStartOfTurn, SummerJam1",
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.Health, CardsAndPiles",

@@ -5,6 +5,7 @@ using Api.Extensions;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Cards;
+using SummerJam1.Cards.Effects;
 using SummerJam1.Units;
 
 namespace SummerJam1.Relics
@@ -149,6 +150,20 @@ namespace SummerJam1.Relics
                 }
 
                 return $"At the end of every turn, deal {EnemyDamage} damage.";
+            }
+        }
+
+        [OnTurnEnded]
+        private void OnTurnEnded()
+        {
+            if (PlayerDamage > 0)
+            {
+                Game.Player.Entity.GetComponent<Health>().TryDealDamage(PlayerDamage, Entity);
+            }
+
+            if (EnemyDamage > 0)
+            {
+                Game.Battle.GetEnemies().FirstOrDefault()?.GetComponent<Health>().TryDealDamage(EnemyDamage, Entity);
             }
         }
     }

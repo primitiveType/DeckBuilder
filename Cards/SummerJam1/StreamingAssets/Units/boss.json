@@ -16,15 +16,35 @@
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 3
+      "Amount": 5
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
-      "Amount": 30,
-      "Max": 30
+      "Amount": 40,
+      "Max": 40
+    },
+    {
+      "$type": "SummerJam1.Statuses.PlayerHealingHealsMe, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Statuses.ExhaustCardInHandAtStartOfTurn, SummerJam1",
+      "Amount" : 1
+    },
+    {
+      "$type": "SummerJam1.Statuses.ReducePlayerStealthAtStartOfCombat, SummerJam1",
+      "Amount": 5
+    },
+    {
+      "$type": "SummerJam1.Statuses.GainArmorEveryTurn, SummerJam1",
+      "Amount" : 1
+    },
+    {
+      "$type": "SummerJam1.Statuses.GainMultiAttackBelowThreshold, SummerJam1",
+      "Amount" : 1,
+      "Threshold" : 6
     },
     {
       "$type": "SummerJam1.Units.GameEndsWhenDefeated, SummerJam1"

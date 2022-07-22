@@ -63,6 +63,8 @@
     </event>
     <event id="TurnBegan">
     </event>
+    <event id="DrawPhaseBegan">
+    </event>
     <event id="CardDrawn">
         <arg name="IsHandDraw" type="bool"/>
     </event>

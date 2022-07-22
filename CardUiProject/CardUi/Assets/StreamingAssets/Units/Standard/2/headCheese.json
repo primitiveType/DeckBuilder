@@ -23,12 +23,21 @@
     },
     {
       "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
-      "Amount": 30,
-      "Max": 30
+      "Amount": 25,
+      "Max": 25
+    },
+    {
+      "$type": "SummerJam1.Statuses.GainMultiAttackBelowThreshold, SummerJam1",
+      "Amount" : 3,
+      "Threshold" : 5
+    },
+    {
+      "$type": "SummerJam1.Statuses.GainStrengthWhenPlayerHeals, SummerJam1",
+      "Amount" : 2
     },
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/DesperateStrike.json"
+      "Prefab": "Cards/BloodWave.json"
     },
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",

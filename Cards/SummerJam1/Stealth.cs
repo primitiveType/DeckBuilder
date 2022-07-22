@@ -1,44 +1,46 @@
 using System;
+using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 
 namespace SummerJam1
 {
-    public class Stealth : SummerJam1Component, ITooltip
+    public class Stealth : SummerJam1Component, ITooltip, IAmount
     {
-        private int _currentStealth;
+        private int _amount;
 
-        public int CurrentStealth
+        public int Amount
         {
-            get => _currentStealth;
-            set => _currentStealth = Math.Min(Math.Max(value, 0), MaxStealth);
+            get => _amount;
+            set => _amount = Math.Max(0, value);
         }
 
         public int MaxStealth { get; set; } = 5;
 
         public bool TryUseStealth(int amount)
         {
-            if (CurrentStealth < amount)
+            if (Amount < amount)
             {
+                Amount = 0;
                 return false;
             }
 
-            CurrentStealth -= amount;
+            Amount -= amount;
 
             return true;
         }
 
 
-        [OnTurnEnded]
-        private void OnTurnEnded()
+        [OnAttackPhaseEnded]
+        private void OnAttackPhaseEnded()
         {
-            CurrentStealth -= 1;
+            Amount -= 1;
         }
 
         [OnBattleStarted]
         private void OnBattleStarted()
         {
-            CurrentStealth = MaxStealth;
+            Amount = MaxStealth;
         }
 
         public string Tooltip => "Stealth - While above zero, enemies will not attack.";

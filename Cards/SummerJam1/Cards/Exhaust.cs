@@ -3,7 +3,7 @@ using CardsAndPiles.Components;
 
 namespace SummerJam1.Cards
 {
-    public class Exhaust : SummerJam1Component, ITooltip
+    public class Exhaust : SummerJam1Component, ITooltip, IDescription
     {
         protected override void Initialize()
         {
@@ -21,5 +21,6 @@ namespace SummerJam1.Cards
         }
 
         public string Tooltip => "Consume- This card can only be played once per battle.";
+        public string Description => "Consume.";
     }
 }

@@ -23,24 +23,20 @@
     },
     {
       "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
-      "Amount": 50,
-      "Max": 50
+      "Amount": 45,
+      "Max": 45
     },
     {
       "$type": "SummerJam1.Statuses.GainArmorEveryTurn, SummerJam1",
-      "Amount" : 7
+      "Amount" : 5
     },
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/BloodWave.json"
+      "Prefab": "Cards/Twiddle.json"
     },
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/DesperateStrike.json"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/PoisonedConduit.json"
+      "Prefab": "Cards/Resonance.json"
     }
   ]
 }

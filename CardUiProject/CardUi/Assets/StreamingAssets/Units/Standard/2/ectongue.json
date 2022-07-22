@@ -22,9 +22,13 @@
       "$type": "SummerJam1.DamageIntent, SummerJam1"
     },
     {
+      "$type": "SummerJam1.Statuses.DiscardCardInHandAtStartOfTurn, SummerJam1",
+      "Amount" : 2
+    },
+    {
       "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
-      "Amount": 30,
-      "Max": 30
+      "Amount": 35,
+      "Max": 35
     },
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",
@@ -32,7 +36,7 @@
     },
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/Irreverence.json"
+      "Prefab": "Cards/BlackFog.json"
     }
   ]
 }

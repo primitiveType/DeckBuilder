@@ -19,7 +19,7 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.AddStealth, SummerJam1",
-      "Amount": 2
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
@@ -27,11 +27,11 @@
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Cost": 3
+      "Cost": 2
     },
     {
       "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
-      "Cost": 3
+      "Cost": 2
     }
   ]
 }

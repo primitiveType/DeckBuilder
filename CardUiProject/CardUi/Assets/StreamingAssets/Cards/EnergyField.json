@@ -27,11 +27,8 @@
     },
     {
       "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
-      "Cost": 1
-    },
-    {
-      "$type": "SummerJam1.Cards.Noisy, SummerJam1",
-      "Amount" : 1
+      "Cost": 0
     }
+
   ]
 }
