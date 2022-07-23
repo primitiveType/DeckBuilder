@@ -6,7 +6,7 @@ namespace SummerJam1
     {
         protected void Awake()
         {
-            SetModel(SummerJam1Context.Instance.Game.RelicPile.Entity);
+            SetModel(GameContext.Instance.Game.RelicPile.Entity);
         }
     }
 }

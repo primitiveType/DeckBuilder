@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Api;
-using Wunderwunsch.HexMapLibrary;
-using Wunderwunsch.HexMapLibrary.Generic;
-using Component = Api.Component;
-
-namespace Hexes
+﻿namespace Hexes
 {
     // public class GameBoard : Api.Component
     // {

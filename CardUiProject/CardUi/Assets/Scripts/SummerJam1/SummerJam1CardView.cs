@@ -11,7 +11,7 @@ namespace SummerJam1
         {
             if (pileView == null || !Model.TryPlayCard(pileView.Model.Entity))
             {
-                return Model.TryPlayCard(SummerJam1Context.Instance.Game.Player.Entity);//assume the card is meant for the player.
+                return Model.TryPlayCard(GameContext.Instance.Game.Player.Entity);//assume the card is meant for the player.
             }
 
             return false;

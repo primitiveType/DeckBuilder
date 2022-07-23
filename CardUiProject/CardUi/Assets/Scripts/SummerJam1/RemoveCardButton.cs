@@ -12,7 +12,7 @@ namespace SummerJam1
 
         private void RemoveCard()
         {
-            SummerJam1Context.Instance.Events.OnRequestRemoveCard(new RequestRemoveCardEventArgs());
+            GameContext.Instance.Events.OnRequestRemoveCard(new RequestRemoveCardEventArgs());
         }
     }
     

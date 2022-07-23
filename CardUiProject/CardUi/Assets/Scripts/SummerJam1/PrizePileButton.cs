@@ -7,7 +7,7 @@ namespace SummerJam1
     {
         private void Start()
         {
-            GetComponent<Button>().onClick.AddListener(()=> {SummerJam1Context.Instance.Game.PrizePile.SetupRandomPrizePile();});
+            GetComponent<Button>().onClick.AddListener(()=> {GameContext.Instance.Game.PrizePile.SetupRandomPrizePile();});
         }
     }
 }

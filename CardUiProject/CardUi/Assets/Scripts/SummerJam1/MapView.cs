@@ -15,22 +15,22 @@ public class MapView : View<CustomMap>
 
     private void Awake()
     {
-        SetModel(SummerJam1Context.Instance.Game.CurrentMap.Entity);
+        SetModel(GameContext.Instance.Game.CurrentMap.Entity);
         CreateMap();
-        SummerJam1Context.Instance.Game.PropertyChanged += GameOnPropertyChanged;
+        GameContext.Instance.Game.PropertyChanged += GameOnPropertyChanged;
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        SummerJam1Context.Instance.Game.PropertyChanged -= GameOnPropertyChanged;
+        GameContext.Instance.Game.PropertyChanged -= GameOnPropertyChanged;
     }
 
     private void GameOnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(SummerJam1Context.Instance.Game.CurrentMap))
+        if (e.PropertyName == nameof(GameContext.Instance.Game.CurrentMap))
         {
-            SceneManager.LoadScene("Scenes/SummerJam1/MenuScene");
+            SceneManager.LoadScene("Scenes/SummerJam1/MapScene");
         }
     }
 

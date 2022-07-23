@@ -30,9 +30,9 @@ namespace SummerJam1
         [SerializeField] private GameObject VictoryPopup;
 
 
-        private Context Context => SummerJam1Context.Instance.Context;
-        private SummerJam1Events Events => SummerJam1Context.Instance.Events;
-        private Game Game => SummerJam1Context.Instance.Game;
+        private Context Context => GameContext.Instance.Context;
+        private SummerJam1Events Events => GameContext.Instance.Events;
+        private Game Game => GameContext.Instance.Game;
 
         private List<IDisposable> Disposables { get; } = new List<IDisposable>();
 
@@ -44,7 +44,7 @@ namespace SummerJam1
             IEntity game = Context.Root;
             foreach (Unit unit in Game.Battle.Entity.GetComponentsInChildren<Unit>())
             {
-                SummerJam1Context.CreateView(unit.Entity, SummerJam1UnitFactory.Instance.UnitPrefab);
+                ViewFactory.CreateView(unit.Entity, SummerJam1UnitFactory.Instance.UnitPrefab);
             }
 
             Disposables.Add(Events.SubscribeToUnitCreated(OnUnitCreated));
@@ -155,14 +155,14 @@ namespace SummerJam1
                 await Await.NextUpdate();
             }
 
-            SceneManager.LoadScene("Scenes/SummerJam1/MenuScene");
+            SceneManager.LoadScene("Scenes/SummerJam1/MapScene");
         }
 
 
         private void OnUnitCreated(object sender, UnitCreatedEventArgs args)
         {
             var entity = args.Entity;
-            SummerJam1Context.CreateView(entity, SummerJam1UnitFactory.Instance.UnitPrefab);
+            ViewFactory.CreateView(entity, SummerJam1UnitFactory.Instance.UnitPrefab);
         }
 
 

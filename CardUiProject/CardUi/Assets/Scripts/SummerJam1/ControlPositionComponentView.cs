@@ -35,17 +35,17 @@ public class ControlPositionComponentView : ComponentView<Position>
         var x = (int)newPosition.x;
         var y = (int)newPosition.y;
 
-        if (x < 0 || x >= SummerJam1Context.Instance.Game.CurrentMap.Width)
+        if (x < 0 || x >= GameContext.Instance.Game.CurrentMap.Width)
         {
             return;
         }
 
-        if (y < 0 || y >= SummerJam1Context.Instance.Game.CurrentMap.Height)
+        if (y < 0 || y >= GameContext.Instance.Game.CurrentMap.Height)
         {
             return;
         }
 
-        var newCell = SummerJam1Context.Instance.Game.CurrentMap[x, y];
+        var newCell = GameContext.Instance.Game.CurrentMap[x, y];
         Entity.TrySetParent(newCell.Entity);
     }
 

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Api;
 using CardsAndPiles;
-using SummerJam1.Objectives;
 
 namespace SummerJam1
 {

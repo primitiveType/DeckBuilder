@@ -14,9 +14,9 @@ namespace SummerJam1
         protected override void Start()
         {
             base.Start();
-            SetModel(SummerJam1Context.Instance.Game.Entity);
-            Disposables.Add(SummerJam1Context.Instance.Events.SubscribeToGameEnded(OnGameEnd));
-            Disposables.Add(SummerJam1Context.Instance.Events.SubscribeToGameStarted(OnGameStart));
+            SetModel(GameContext.Instance.Game.Entity);
+            Disposables.Add(GameContext.Instance.Events.SubscribeToGameEnded(OnGameEnd));
+            Disposables.Add(GameContext.Instance.Events.SubscribeToGameStarted(OnGameStart));
             gameObject.SetActive(false);
         }
 

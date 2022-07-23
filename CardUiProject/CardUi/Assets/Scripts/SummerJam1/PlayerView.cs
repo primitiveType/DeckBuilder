@@ -6,7 +6,7 @@ namespace SummerJam1
     {
         protected void Awake()
         {
-            SetModel(SummerJam1Context.Instance.Context.Root.GetComponent<Game>().Player.Entity);
+            SetModel(GameContext.Instance.Context.Root.GetComponent<Game>().Player.Entity);
         }
     }
 }

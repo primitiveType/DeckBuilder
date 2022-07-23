@@ -22,8 +22,8 @@ public class DiscardChoiceHandler : PileView, IPileView
     protected void Awake()
     {
         base.Start();
-        SetModel(SummerJam1Context.Instance.Game.DiscardStagingPile.Entity);
-        Disposables.Add(SummerJam1Context.Instance.Events.SubscribeToChooseCardsToDiscard(OnChooseCardsToDiscard));
+        SetModel(GameContext.Instance.Game.DiscardStagingPile.Entity);
+        Disposables.Add(GameContext.Instance.Events.SubscribeToChooseCardsToDiscard(OnChooseCardsToDiscard));
         gameObject.SetActive(false);
         Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
         m_SubmitButton.onClick.AddListener(Submit);
@@ -53,7 +53,7 @@ public class DiscardChoiceHandler : PileView, IPileView
         string s = item.Amount > 1 ? "s" : "";
         _HeaderText.text = $"Discard {item.Amount} card{s}";
         UpdateSubmitButton();
-        foreach (IEntity child in SummerJam1Context.Instance.Game.Battle.Hand.Entity.Children)
+        foreach (IEntity child in GameContext.Instance.Game.Battle.Hand.Entity.Children)
         {
             GameObject go = child.GetComponent<IGameObject>().gameObject;
             ModifiedCards.Add(go);
@@ -75,7 +75,7 @@ public class DiscardChoiceHandler : PileView, IPileView
     {
         foreach (IEntity child in Entity.Children.ToList())
         {
-            child.TrySetParent(SummerJam1Context.Instance.Game.Battle.Discard);
+            child.TrySetParent(GameContext.Instance.Game.Battle.Discard);
         }
 
         gameObject.SetActive(false);

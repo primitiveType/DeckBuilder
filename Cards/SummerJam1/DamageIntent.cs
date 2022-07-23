@@ -1,9 +1,5 @@
 ﻿using System.ComponentModel;
-using System.Linq;
-using Api;
-using CardsAndPiles.Components;
 using Newtonsoft.Json;
-using SummerJam1.Units;
 
 namespace SummerJam1
 {
@@ -44,51 +40,10 @@ namespace SummerJam1
                 return;
             }
 
-            bool isFriendly = Entity.GetComponentInParent<FriendlyUnitSlot>() != null;
+            //TODO: make intents work.
 
-            IEntity targetSlot;
-            targetSlot = GetTargetSlot();
-
-            if (targetSlot == null)
-            {
-                return;
-            }
-
-            Events.OnIntentStarted(new IntentStartedEventArgs(Entity));
-
-            for (int i = 0; i < Attacks; i++)
-            {
-                foreach (ITakesDamage componentsInChild in targetSlot.GetComponentsInChildren<ITakesDamage>())
-                {
-                    componentsInChild.TryDealDamage(Amount, Entity);
-                    targetSlot = GetTargetSlot();
-                }
-            }
-
-            IEntity GetTargetSlot()
-            {
-                if (isFriendly)
-                {
-                    targetSlot = Context.Root.GetComponentsInChildren<EnemyUnitSlot>()
-                        .FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() != null)?.Entity;
-                }
-                else
-                {
-                    targetSlot = Context.Root.GetComponentsInChildren<FriendlyUnitSlot>()
-                        .FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() != null)?.Entity;
-
-                    if (targetSlot == null)
-                    {
-                        var player = Context.Root.GetComponent<Game>().Player;
-                        if (IgnoreStealth || player.Entity.GetComponent<Stealth>().Amount <= 0)
-                        {
-                            targetSlot = player.Entity;
-                        }
-                    }
-                }
-
-                return targetSlot;
-            }
+            // return targetSlot;
         }
     }
 }
+

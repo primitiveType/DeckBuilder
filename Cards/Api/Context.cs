@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Api
 {
@@ -46,6 +45,7 @@ namespace Api
                 throw new Exception("Unable to create entity under target!");
             }
             EntityDatabase.Add(entity.Id, entity);
+            Events.OnEntityCreated(new EntityCreatedEventArgs(entity));
             return entity;
         }
 
@@ -57,7 +57,7 @@ namespace Api
 
             entity.TrySetParent(parent);
             EntityDatabase.Add(entity.Id, entity);
-
+            Events.OnEntityCreated(new EntityCreatedEventArgs(entity));
             return entity;
         }
 

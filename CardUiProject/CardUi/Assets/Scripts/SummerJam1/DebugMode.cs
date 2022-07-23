@@ -33,7 +33,7 @@ public class DebugMode : MonoBehaviourSingleton<DebugMode>, INotifyPropertyChang
 
         if (Input.GetKeyDown(KeyCode.O))
         {
-            SummerJam1Context.Instance.Game.CreateDebugMap();
+            GameContext.Instance.Game.CreateDebugMap();
         }
     }
 

@@ -10,8 +10,8 @@ namespace SummerJam1
     public class DamageAnimator : MonoBehaviour
     {
         [SerializeField] private GameObject Prefab;
-        private SummerJam1Events Events => SummerJam1Context.Instance.Events;
-        private Game Game => SummerJam1Context.Instance.Game;
+        private SummerJam1Events Events => GameContext.Instance.Events;
+        private Game Game => GameContext.Instance.Game;
         private List<IDisposable> Disposables { get; } = new List<IDisposable>();
 
         private void Awake()

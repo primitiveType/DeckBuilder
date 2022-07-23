@@ -7,7 +7,7 @@ namespace SummerJam1
     {
         protected virtual void Awake()
         {
-            SetModel(SummerJam1Context.Instance.Game.RelicPrizePile.Entity);
+            SetModel(GameContext.Instance.Game.RelicPrizePile.Entity);
             Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
             UpdateVisibility();
         }

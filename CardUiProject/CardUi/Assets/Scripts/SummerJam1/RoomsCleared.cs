@@ -10,7 +10,7 @@ namespace SummerJam1
     {
         private void Awake()
         {
-            SetModel(SummerJam1Context.Instance.Context.Root.GetComponentInChildren<GameEndsAfter10Rooms>().Entity);
+            SetModel(GameContext.Instance.Context.Root.GetComponentInChildren<GameEndsAfter10Rooms>().Entity);
         }
 
         [SerializeField] private TMP_Text m_Text;

@@ -7,7 +7,7 @@ namespace SummerJam1
     {
         private void Start()
         {
-            GetComponent<Button>().onClick.AddListener(SummerJam1Context.Instance.ButtonClicked);
+            GetComponent<Button>().onClick.AddListener(AudioHandler.Instance.ButtonClicked);
         }
     }
 }

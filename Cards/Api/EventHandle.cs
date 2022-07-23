@@ -28,7 +28,7 @@ namespace Api
                 }
                 catch (Exception e)
                 {
-                    Logging.LogError($"Caught exception invoking event handle! {e.Message}: {e.StackTrace}");
+                    Logging.LogError($"Caught exception invoking event handle! {e}");
                 }
             }
         }

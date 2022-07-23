@@ -13,7 +13,7 @@ namespace SummerJam1
         protected override void Start()
         {
             base.Start();
-            SetModel(SummerJam1Context.Instance.Context.Root);
+            SetModel(GameContext.Instance.Context.Root);
             Model.PropertyChanged += ModelOnPropertyChanged;
         }
 

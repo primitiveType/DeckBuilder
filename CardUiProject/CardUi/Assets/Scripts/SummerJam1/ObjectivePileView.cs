@@ -13,7 +13,7 @@ namespace SummerJam1
         {
             base.Start();
             Setup();
-            SummerJam1Context.Instance.Game.PropertyChanged += GameOnPropertyChanged;
+            GameContext.Instance.Game.PropertyChanged += GameOnPropertyChanged;
         }
 
         private void GameOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -26,9 +26,9 @@ namespace SummerJam1
 
         private void Setup()
         {
-            if (SummerJam1Context.Instance.Game.Battle?.ObjectivesPile?.Entity != null)
+            if (GameContext.Instance.Game.Battle?.ObjectivesPile?.Entity != null)
             {
-                SetModel(SummerJam1Context.Instance.Game.Battle.ObjectivesPile.Entity);
+                SetModel(GameContext.Instance.Game.Battle.ObjectivesPile.Entity);
                 foreach (IEntity entityChild in Model.Entity.Children)
                 {
                     var go = Instantiate(m_Prefab, m_Parent);
@@ -40,7 +40,7 @@ namespace SummerJam1
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            SummerJam1Context.Instance.Game.PropertyChanged -= GameOnPropertyChanged;
+            GameContext.Instance.Game.PropertyChanged -= GameOnPropertyChanged;
         }
     }
 }

@@ -1,5 +1,3 @@
-using SummerJam1.Cards.Effects;
-
 namespace SummerJam1.Cards
 {
     public class CardBlockers

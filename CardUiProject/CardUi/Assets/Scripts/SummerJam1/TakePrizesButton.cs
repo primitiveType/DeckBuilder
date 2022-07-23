@@ -13,7 +13,7 @@ namespace SummerJam1
 
         private void TakePrizes()
         {
-            SummerJam1Context.Instance.Game.PrizePile.ChooseAllPrizes();
+            GameContext.Instance.Game.PrizePile.ChooseAllPrizes();
         }
     }
 }

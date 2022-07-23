@@ -7,8 +7,8 @@ public class HideGameObjectIfNoPrizes : MonoBehaviour
 {
     private void Awake()
     {
-        SummerJam1Context.Instance.Game.PrizePile.Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
-        SummerJam1Context.Instance.Game.RelicPrizePile.Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
+        GameContext.Instance.Game.PrizePile.Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
+        GameContext.Instance.Game.RelicPrizePile.Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
         UpdateVisibility();
     }
 
@@ -19,12 +19,12 @@ public class HideGameObjectIfNoPrizes : MonoBehaviour
 
     private void UpdateVisibility()
     {
-        gameObject.SetActive(SummerJam1Context.Instance.Game.PrizePile.Entity.Children.Count > 0);
+        gameObject.SetActive(GameContext.Instance.Game.PrizePile.Entity.Children.Count > 0);
     }
 
     private void OnDestroy()
     {
-        SummerJam1Context.Instance.Game.PrizePile.Entity.Children.CollectionChanged -= ChildrenOnCollectionChanged;
-        SummerJam1Context.Instance.Game.RelicPrizePile.Entity.Children.CollectionChanged -= ChildrenOnCollectionChanged;
+        GameContext.Instance.Game.PrizePile.Entity.Children.CollectionChanged -= ChildrenOnCollectionChanged;
+        GameContext.Instance.Game.RelicPrizePile.Entity.Children.CollectionChanged -= ChildrenOnCollectionChanged;
     }
 }

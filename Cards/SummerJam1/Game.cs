@@ -24,8 +24,6 @@ namespace SummerJam1
         public BattleContainer Battle { get; private set; }
         public Player Player { get; private set; }
 
-        private UnitSlot PlayerSlot { get; set; }
-
         public Random Random { get; private set; }
 
         public CustomMap CurrentMap { get; private set; }
@@ -46,7 +44,6 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity => RelicPrizePile = entity.AddComponent<SummerJam1RelicPrizePile>());
             Context.CreateEntity(Entity, entity => RelicPile = entity.AddComponent<RelicPile>());
             Context.CreateEntity(Entity, entity => DiscardStagingPile = entity.AddComponent<DiscardStagingPile>());
-            Context.CreateEntity(Entity, entity => { PlayerSlot = entity.AddComponent<UnitSlot>(); });
             Context.CreateEntity(Entity, entity =>
             {
                 Player = entity.AddComponent<Player>();
@@ -94,7 +91,7 @@ namespace SummerJam1
                 }
                 catch (Exception e)
                 {
-                    Logging.LogError($"Failed to deserialize card {fileInfo.Name}. {e.Message}");
+                    Logging.LogError($"Failed to deserialize card {fileInfo.Name}. {e}");
                 }
             }
         }

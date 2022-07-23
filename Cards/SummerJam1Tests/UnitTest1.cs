@@ -2,15 +2,12 @@ using System;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using RogueMaps;
 using SummerJam1;
-using SummerJam1.Cards;
 using SummerJam1.Statuses;
 using SummerJam1.Units;
 using ILogger = Api.ILogger;
@@ -61,21 +58,7 @@ namespace SummerJam1Tests
             Assert.That(copy.Root.GetComponent<Game>(), Is.Not.Null);
         }
 
-        [Test]
-        public void TestUnitCreatedInSlot()
-        {
-            UnitCard unitCard = MakeUnitCard();
-            Game.StartBattle("Units/Donut.json");
-            FriendlyUnitSlot unitSlot = Game.Entity.GetComponentsInChildren<FriendlyUnitSlot>().First(slot => slot.Entity.Children.Count == 0);
-
-            Assert.NotNull(unitSlot);
-            Assert.IsTrue(unitCard.TryPlayCard(unitSlot.Entity));
-
-            Assert.NotNull(unitSlot.Entity.GetComponentInChildren<Unit>());
-
-            UnitCard unitCard2 = MakeUnitCard();
-            Assert.IsFalse(unitCard2.TryPlayCard(unitSlot.Entity));
-        }
+       
 
         [Test]
         public void StartBattle()
@@ -351,16 +334,7 @@ namespace SummerJam1Tests
             CustomCell blockedCell = map.GetAllCells().First(cell => !cell.IsWalkable);
         }
 
-
-        private UnitCard MakeUnitCard()
-        {
-            IEntity unitCardEntity = Context.CreateEntity();
-            unitCardEntity.TrySetParent(Game.Entity);
-            StarterUnitCard unitCard = unitCardEntity.AddComponent<StarterUnitCard>();
-            unitCardEntity.AddComponent<NameComponent>();
-
-            return unitCard;
-        }
+        
 
         private IEntity MakeUnit()
         {
@@ -374,21 +348,6 @@ namespace SummerJam1Tests
     }
 
     internal delegate void TesterEvent();
-
-    public class TestUnitCard : UnitCard
-    {
-        protected override Unit CreateUnit()
-        {
-            IEntity unit = Context.CreateEntity();
-            return unit.AddComponent<TestUnit>();
-        }
-
-        [OnCardPlayed]
-        private void OnCardPlayed()
-        {
-            Logging.Log("tester.");
-        }
-    }
 
     public class TestUnit : Unit
     {

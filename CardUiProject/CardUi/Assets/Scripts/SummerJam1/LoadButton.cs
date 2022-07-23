@@ -9,12 +9,12 @@ namespace SummerJam1
         private void Start()
         {
             m_Button.onClick.AddListener(OnClick);
-            gameObject.SetActive(SummerJam1Context.Instance.HasSaveData());
+            gameObject.SetActive(GameContext.Instance.HasSaveData());
         }
 
         private void OnClick()
         {
-            SummerJam1Context.Instance.LoadGame();
+            GameContext.Instance.LoadGame();
         }
     }
 }

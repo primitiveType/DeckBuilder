@@ -13,7 +13,7 @@ namespace SummerJam1
 
         private void OnClick()
         {
-            SummerJam1Context.Instance.SaveGame();
+            GameContext.Instance.SaveGame();
         }
     }
 }

@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using Api;
+﻿using Api;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
-using SummerJam1.Units;
 
 namespace SummerJam1.Cards.Effects
 {
@@ -35,27 +33,6 @@ namespace SummerJam1.Cards.Effects
         public bool DoEffect(IEntity target)
         {
             Game.Player.Entity.GetComponent<Health>().TryHeal(HealAmount, Entity);
-            return true;
-        }
-    }
-
-    public class HealEnemy : SummerJam1Component, IEffect
-    {
-        [JsonProperty] public int HealAmount { get; private set; }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-
-            if (Entity.GetComponent<DescriptionComponent>() == null)
-            {
-                Entity.AddComponent<DescriptionComponent>().Description = $"Heal the Enemy for {HealAmount}.";
-            }
-        }
-
-        public bool DoEffect(IEntity target)
-        {
-            Game.Battle.GetEnemies().First().GetComponent<Health>().TryHeal(HealAmount, Entity);
             return true;
         }
     }

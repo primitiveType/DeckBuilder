@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using Api;
 using CardsAndPiles;
-using SummerJam1.Units;
-using Random = Api.Random;
 
 namespace SummerJam1
 {
@@ -27,12 +25,6 @@ namespace SummerJam1
             Context.CreateEntity(Entity, (entity) => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
 
             SlotsParent = Context.CreateEntity(Entity);
-
-            for (int i = 0; i < NumSlots; i++)
-            {
-                IEntity slotEntity = Context.CreateEntity(SlotsParent);
-                slotEntity.AddComponent<EnemyUnitSlot>().Order = i;
-            }
 
             //Context.CreateEntity(Entity, entity => BattleDeck = entity.AddComponent<DeckPile>());
             Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
@@ -57,97 +49,12 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity =>
                 Hand = entity.AddComponent<HandPile>());
 
-            Context.CreateEntity(SlotsParent.GetComponentInChildren<EnemyUnitSlot>().Entity, prefab);
 
             Events.OnBattleStarted(new BattleStartedEventArgs());
             Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
             Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 
-        [OnEntityKilled]
-        private void CheckForEndOfBattle(object sender, EntityKilledEventArgs args)
-        {
-            bool alliesAlive = args.Entity != Game.Player.Entity;
-            bool enemiesAlive = SlotsParent.GetComponentsInChildren<EnemyUnitSlot>()
-                .Any(slot =>
-                    slot.Entity.Children.Any(child => child != args.Entity && child.GetComponent<Unit>() != null));
-
-
-            if (alliesAlive && enemiesAlive)
-            {
-                return;
-            }
-
-            Events.OnBattleEnded(new BattleEndedEventArgs(!enemiesAlive));
-            if (!alliesAlive)
-            {
-                Events.OnGameEnded(new GameEndedEventArgs(false));
-            }
-            else
-            {
-                Events.OnLeaveBattle(new LeaveBattleEventArgs());
-            }
-        }
-
-        public IEntity GetFrontMostEnemy()
-        {
-            IOrderedEnumerable<EnemyUnitSlot> enemyUnitSlots =
-                SlotsParent.GetComponentsInChildren<EnemyUnitSlot>().OrderBy(slot => slot.Order);
-            return enemyUnitSlots.Select(slot => slot.Entity.GetComponentInChildren<Unit>()?.Entity).FirstOrDefault();
-        }
-
-        public IEntity GetFrontMostFriendly()
-        {
-            IOrderedEnumerable<FriendlyUnitSlot> friendlyUnitSlots =
-                SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order);
-            return friendlyUnitSlots.Select(slot => slot.Entity.GetComponentInChildren<Unit>()?.Entity).FirstOrDefault();
-        }
-
-        public List<IEntity> GetFriendlies()
-        {
-            IEnumerable<IEntity> friendlyUnitSlots =
-                SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order)
-                    .Select(slot => slot.Entity.GetComponentInChildren<Unit>()?.Entity).Where(unit => unit != null);
-            return friendlyUnitSlots.ToList();
-        }
-
-        public List<IEntity> GetFullFriendlySlots()
-        {
-            IEnumerable<IEntity> friendlyUnitSlots =
-                SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order)
-                    .Where(slot => slot.Entity.GetComponentInChildren<Unit>() != null).Select(slot => slot.Entity);
-            return friendlyUnitSlots.ToList();
-        }
-
-        public List<IEntity> GetEnemies()
-        {
-            IEnumerable<IEntity> enemyUnitSlots =
-                SlotsParent.GetComponentsInChildren<EnemyUnitSlot>().OrderBy(slot => slot.Order)
-                    .Select(slot => slot.Entity.GetComponentInChildren<Unit>()?.Entity).Where(unit => unit != null);
-            return enemyUnitSlots.ToList();
-        }
-
-        public List<IEntity> GetFullEnemySlots()
-        {
-            IEnumerable<IEntity> enemyUnitSlots =
-                SlotsParent.GetComponentsInChildren<EnemyUnitSlot>().OrderBy(slot => slot.Order)
-                    .Where(slot => slot.Entity.GetComponentInChildren<Unit>() != null).Select(slot => slot.Entity);
-            return enemyUnitSlots.ToList();
-        }
-
-        public IEntity GetBackMostEmptySlot()
-        {
-            IOrderedEnumerable<FriendlyUnitSlot> enemyUnitSlots =
-                SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderByDescending(slot => slot.Order);
-            return enemyUnitSlots.FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() == null)?.Entity;
-        }
-
-        public IEntity GetFrontMostEmptySlot()
-        {
-            IOrderedEnumerable<FriendlyUnitSlot> enemyUnitSlots =
-                SlotsParent.GetComponentsInChildren<FriendlyUnitSlot>().OrderBy(slot => slot.Order);
-            return enemyUnitSlots.FirstOrDefault(slot => slot.Entity.GetComponentInChildren<Unit>() == null)?.Entity;
-        }
 
         private List<IEntity> CreateRandomObjectives(int count = 2)
         {
