@@ -3,7 +3,7 @@ using CardsAndPiles;
 
 namespace SummerJam1
 {
-    public class RelicComponent : SummerJam1Component, IPileItem
+    public class RelicComponent : SummerJam1Component, IPileItem, IVisual
     {
         protected override void Initialize()
         {

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Api;
 using App;
 using UnityEngine;
@@ -12,9 +13,9 @@ public class HideRendererIfNotEmptyOrganizer : PileOrganizer
         SetActive();
     }
 
-    protected override void OnItemAddedQueued(IEntity added)
+    protected override async Task OnItemAddedQueued(IEntity added)
     {
-        base.OnItemAddedQueued(added);
+        await base.OnItemAddedQueued(added);
         SetActive();
     }
 

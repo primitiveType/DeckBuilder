@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Api;
 using App;
 using UnityEngine;
@@ -27,9 +28,9 @@ namespace Solitaire
             }
         }
 
-        protected override void OnItemAddedQueued(IEntity added)
+        protected override async Task OnItemAddedQueued(IEntity added)
         {
-            base.OnItemAddedQueued(added);
+            await base.OnItemAddedQueued(added);
             GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
 
             if (entityGO != null)

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Api;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace App
             }
         }
 
-        protected override void OnItemAddedQueued(IEntity added)
+        protected override async Task OnItemAddedQueued(IEntity added)
         {
             IGameObject view = added.GetComponent<IGameObject>();
             view.gameObject.transform.SetParent(transform);

@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using Api;
 using JetBrains.Annotations;
 using UnityEngine;
+using IComponent = Api.IComponent;
 
 namespace App
 {
@@ -41,7 +42,7 @@ namespace App
             Model = entity.GetComponent<T>();
             if (Model == null)
             {
-                Debug.LogWarning($"Failed to find model {typeof(T).Name} on Entity Component.");
+                Debug.LogWarning($"Failed to find model {typeof(T).Name} on Entity Component.", gameObject);
                 enabled = false;
                 return;
             }
@@ -49,6 +50,11 @@ namespace App
             AttachListeners();
             OnInitialized();
             Entity.PropertyChanged += OnEntityDestroyed;
+        }
+
+        public void SetModel(IComponent component)
+        {
+            SetModel(component.Entity);
         }
 
         private void OnEntityDestroyed(object sender, PropertyChangedEventArgs propertyChangedEventArgs)

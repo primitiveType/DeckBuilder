@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Api;
 using App;
 using SummerJam1;
@@ -16,7 +17,7 @@ public class ScrollPileOrganizer : PileOrganizer
         base.OnItemAddedImmediate(added);
         CardUiContainer container = Instantiate(m_ContainerPrefab, m_ContainerParent);
         container.SetModel(added);
-        GameObject card = Instantiate(SummerJam1CardFactory.Instance.CardPrefab);
+        GameObject card = Instantiate(ViewFactory.Instance.CardPrefab);
         card.GetComponentInChildren<ISetModel>().SetModel(added);
         var pos = container.transform.localPosition;
         container.transform.localPosition = new Vector3(pos.x, pos.y, -1);
@@ -36,7 +37,7 @@ public class ScrollPileOrganizer : PileOrganizer
         }
     }
 
-    protected override void OnItemAddedQueued(IEntity added)
+    protected override async Task OnItemAddedQueued(IEntity added)
     {
         //do nothing.
     }

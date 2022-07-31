@@ -102,12 +102,6 @@ public class BashingHelper : MonoBehaviourSingleton<BashingHelper>
 
     public GameObject CreateGameObjectForModel(Component summerJam1ModelViewBridge)
     {
-        if (summerJam1ModelViewBridge.Entity.GetComponent<Card>() != null)
-        {
-            return CreateView(summerJam1ModelViewBridge.Entity, SummerJam1CardFactory.Instance.CardPrefab);
-        }
-        
-
         return null;
     }
 }

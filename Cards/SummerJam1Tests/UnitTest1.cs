@@ -252,38 +252,6 @@ namespace SummerJam1Tests
             }
         }
 
-        [Test]
-        public void BattleStartedByEnteringCell()
-        {
-            MapCreatorComponent mapCreatorCreator = Context.Root.AddComponent<MapCreatorComponent>();
-
-            bool battleStarted = false;
-            ((SummerJam1Events)Context.Events).SubscribeToBattleStarted(Action);
-            CustomMap map = Context.Root.GetComponent<CustomMap>();
-            Assert.NotNull(map);
-
-            Assert.LessOrEqual(map.Height * map.Width, map.Entity.Children.Count);
-
-            CustomCell walkableCell = map.GetAllCells().First(cell => cell.IsWalkable);
-            var encounterEntity = Context.CreateEntity(walkableCell.Entity, (entity) => { entity.AddComponent<Position>(); });
-            encounterEntity.AddComponent<BattleEncounter>().Prefab = "DefaultEncounter.json";
-
-            var player = Context.CreateEntity(walkableCell.Entity, entity =>
-            {
-                entity.AddComponent<Position>();
-                entity.AddComponent<Player>();
-            });
-
-            Assert.That(player.Parent, Is.EqualTo(walkableCell.Entity));
-            Assert.That(player.GetComponent<Position>().Position1.X, Is.EqualTo(walkableCell.X));
-            Assert.That(player.GetComponent<Position>().Position1.Z, Is.EqualTo(walkableCell.Y));
-            Assert.IsTrue(battleStarted);
-
-            void Action(object sender, BattleStartedEventArgs item)
-            {
-                battleStarted = true;
-            }
-        }
 
         [Test]
         public void ChildrenChangesAreWrapped()

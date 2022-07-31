@@ -17,7 +17,7 @@ namespace CardsAndPiles.Components
         }
     }
 
-    public abstract class Card : Component, IPileItem
+    public abstract class Card : Component, IPileItem, IVisual
     {
         protected override void Initialize()
         {

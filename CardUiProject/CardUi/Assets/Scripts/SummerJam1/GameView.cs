@@ -10,9 +10,8 @@ namespace SummerJam1
         [SerializeField] private GameObject m_ObjectiveViewPrefab;
         [SerializeField] private Transform m_ObjectiveViewParent;
 
-        protected override void Start()
+        protected void Awake()
         {
-            base.Start();
             SetModel(GameContext.Instance.Context.Root);
             Model.PropertyChanged += ModelOnPropertyChanged;
         }

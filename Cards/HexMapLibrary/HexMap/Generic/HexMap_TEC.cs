@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
-
-namespace Wunderwunsch.HexMapLibrary.Generic
+﻿namespace Wunderwunsch.HexMapLibrary.Generic
 {
 
     // public class HexMap<T,E,C> : HexMap<T,E> where T : new() where E : new() where C : new()

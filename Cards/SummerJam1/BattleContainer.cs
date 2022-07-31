@@ -14,7 +14,6 @@ namespace SummerJam1
         public IEntity Exhaust { get; private set; }
         public HandPile Hand { get; private set; }
         public DeckPile BattleDeck { get; private set; }
-        private IEntity SlotsParent { get; set; }
 
         public ObjectivesPile ObjectivesPile { get; private set; }
 
@@ -24,7 +23,6 @@ namespace SummerJam1
             base.Initialize();
             Context.CreateEntity(Entity, (entity) => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
 
-            SlotsParent = Context.CreateEntity(Entity);
 
             //Context.CreateEntity(Entity, entity => BattleDeck = entity.AddComponent<DeckPile>());
             Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
@@ -42,7 +40,7 @@ namespace SummerJam1
             return Context.CreateEntity(parent, Path.Combine($"Units", $"{difficulty}", files[index].Name));
         }
 
-        public void StartBattle(string prefab)
+        public void StartBattle()
         {
             BattleDeck = Context.DuplicateEntity(Game.Deck.Entity).GetComponent<DeckPile>();
             BattleDeck.Entity.TrySetParent(Entity);

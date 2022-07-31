@@ -34,8 +34,8 @@ namespace RogueMaps
 
             Entity.RemoveComponent(this);
         }
-
     }
+
     public class MapCreatorComponent : Component
     {
         public Map Map { get; private set; }
@@ -43,7 +43,7 @@ namespace RogueMaps
         protected override void Initialize()
         {
             base.Initialize();
-            Map = RogueSharp.Map.Create(new RandomRoomsMapCreationStrategy<Map>(17, 10, 30, 5, 3));
+            Map = Map.Create(new RandomRoomsMapCreationStrategy<Map>(17, 10, 30, 5, 3));
             var customMap = Entity.AddComponent<CustomMap>();
             customMap.Initialize(Map.Width, Map.Height);
             foreach (Cell cell in Map.GetAllCells())
@@ -250,7 +250,7 @@ namespace RogueMaps
         public int Height { get; private set; }
     }
 
-    public class CustomCell : Component, ICell, IParentConstraint
+    public class CustomCell : Component, ICell, IParentConstraint, IVisual, IPosition
     {
         protected override void Initialize()
         {
@@ -264,10 +264,7 @@ namespace RogueMaps
             {
                 foreach (IEntity eNewItem in e.NewItems)
                 {
-                    foreach (Position variable in eNewItem.GetComponents<Position>())
-                    {
-                        variable.Position1 = new Vector3(this.X, this.Y, 0);
-                    }
+                    eNewItem.GetOrAddComponent<Position>().Pos = new Vector3(X, Y, 0);
                 }
             }
         }
@@ -296,7 +293,11 @@ namespace RogueMaps
             {
                 if (!value)
                 {
-                    Context.CreateEntity(Entity, entity => { entity.AddComponent<BlocksMovement>(); });
+                    Context.CreateEntity(Entity, entity =>
+                    {
+                        entity.AddComponent<BlocksMovement>();
+                        entity.AddComponent<Position>();
+                    });
                 }
                 else
                 {
@@ -317,9 +318,19 @@ namespace RogueMaps
         {
             return IsWalkable;
         }
+
+        public Vector3 Pos
+        {
+            get => new Vector3(X, Y, 0);
+            set
+            {
+                X = (int)value.X;
+                Y = (int)value.Y;
+            }
+        }
     }
 
-    public class BlocksMovement : Component, IBlocksMovement
+    public class BlocksMovement : Component, IBlocksMovement, IVisual
     {
     }
 

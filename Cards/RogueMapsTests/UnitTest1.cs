@@ -32,8 +32,8 @@ namespace Tests
             var player = Context.CreateEntity(walkableCell.Entity, entity => { entity.AddComponent<Position>(); });
 
             Assert.That(player.Parent, Is.EqualTo(walkableCell.Entity));
-            Assert.That(player.GetComponent<Position>().Position1.X, Is.EqualTo(walkableCell.X));
-            Assert.That(player.GetComponent<Position>().Position1.Z, Is.EqualTo(walkableCell.Y));
+            Assert.That(player.GetComponent<Position>().Pos.X, Is.EqualTo(walkableCell.X));
+            Assert.That(player.GetComponent<Position>().Pos.Z, Is.EqualTo(walkableCell.Y));
         }
     }
 }

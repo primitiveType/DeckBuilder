@@ -51,6 +51,10 @@ namespace Api
 
         public IEntity CreateEntity(IEntity parent, string prefabName)
         {
+            if (!prefabName.ToLower().EndsWith(".json"))
+            {
+                prefabName += ".json";
+            }
             string prefab = File.ReadAllText(Path.Combine(PrefabsPath, prefabName));
             Entity entity = Serializer.Deserialize<Entity>(prefab);
             entity.Initialize(this, NextId++);

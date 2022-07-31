@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using Api;
+using External.UnityAsync.UnityAsync.Assets.UnityAsync;
 using UnityEngine;
 
 namespace App
@@ -24,6 +26,19 @@ namespace App
             }
         }
 
+        private void OnDestroy()
+        {
+            if (PileView?.Entity != null)
+            {
+                PileView.Entity.Children.CollectionChanged -= OnPileChanged;
+            }
+
+            foreach (IDisposable disposable in Disposables)
+            {
+                disposable.Dispose();
+            }
+        }
+
 
         private void OnPileChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -32,7 +47,7 @@ namespace App
                 foreach (IEntity added in e.NewItems)
                 {
                     OnItemAddedImmediate(added);
-                    Disposables.Add(AnimationQueue.Instance.Enqueue((() => { OnItemAddedQueued(added); })));
+                    Disposables.Add(AnimationQueue.Instance.Enqueue(async () => { await OnItemAddedQueued(added); }));
                 }
             }
 
@@ -41,7 +56,7 @@ namespace App
                 foreach (IEntity removed in e.OldItems)
                 {
                     OnItemRemovedImmediate(removed);
-                    Disposables.Add(AnimationQueue.Instance.Enqueue((() => { OnItemRemovedQueued(removed); })));
+                    Disposables.Add(AnimationQueue.Instance.Enqueue(() => { OnItemRemovedQueued(removed); }));
                 }
             }
         }
@@ -58,24 +73,17 @@ namespace App
         {
         }
 
-        protected virtual void OnItemAddedQueued(IEntity added)
+        protected virtual async Task OnItemAddedQueued(IEntity added)
         {
             IGameObject view = added.GetComponent<IGameObject>();
+            await new WaitUntil(() =>
+            {
+                Debug.LogWarning("Waiting for view to be populated.");
+                return view?.gameObject != null;
+            });
+
             view.gameObject.transform.SetParent(transform);
             view.gameObject.transform.localPosition = Vector3.zero;
-        }
-
-        private void OnDestroy()
-        {
-            if (PileView?.Entity != null)
-            {
-                PileView.Entity.Children.CollectionChanged -= OnPileChanged;
-            }
-
-            foreach (IDisposable disposable in Disposables)
-            {
-                disposable.Dispose();
-            }
         }
     }
 }

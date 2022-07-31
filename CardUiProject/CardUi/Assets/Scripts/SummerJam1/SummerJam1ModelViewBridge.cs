@@ -16,7 +16,7 @@ namespace SummerJam1
             {
                 if (m_GameObject == null)
                 {
-                    gameObject = ViewFactory.Instance.CreateGameObjectForModel(this);
+                    gameObject = ViewFactory.Instance.CreateGameObjectForModel(Entity);
                 }
 
                 return m_GameObject;

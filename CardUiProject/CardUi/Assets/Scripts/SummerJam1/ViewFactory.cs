@@ -5,6 +5,7 @@ using App;
 using App.Utility;
 using CardsAndPiles;
 using CardsAndPiles.Components;
+using RogueMaps;
 using SummerJam1.Units;
 using UnityEngine;
 
@@ -12,57 +13,100 @@ namespace SummerJam1
 {
     public class ViewFactory : MonoBehaviourSingleton<ViewFactory>
     {
-        private List<IDisposable> Disposables = new List<IDisposable>();
+        [SerializeField] private GameObject m_CardPrefab;
+        [SerializeField] private GameObject m_RelicPrefab;
+        [SerializeField] private GameObject m_UnitPrefab;
 
-        protected override void SingletonAwakened()
+        [SerializeField] private GameObject m_WalkablePrefab;
+        [SerializeField] private GameObject m_WallPrefab;
+        [SerializeField] private GameObject m_HatchEncounterPrefab;
+        [SerializeField] private GameObject m_PlayerPrefab;
+
+
+        private List<IDisposable> Disposables { get; } = new List<IDisposable>();
+        public GameObject CardPrefab => m_CardPrefab;
+        private GameObject RelicPrefab => m_RelicPrefab;
+        private GameObject UnitPrefab => m_UnitPrefab;
+
+        private GameObject WalkablePrefab => m_WalkablePrefab;
+
+        private GameObject WallPrefab => m_WallPrefab;
+
+        private GameObject HatchEncounterPrefab => m_HatchEncounterPrefab;
+        private GameObject PlayerPrefab => m_PlayerPrefab;
+
+        protected override void SingletonStarted()
         {
-            base.SingletonAwakened();
+            base.SingletonStarted();
 
-            Disposables.Add(GameContext.Instance.Events.SubscribeToCardCreated(OnCardCreated));
-            Disposables.Add(GameContext.Instance.Events.SubscribeToRelicCreated(OnRelicCreated));
+            Disposables.Add(GameContext.Instance.Events.SubscribeToEntityCreated(OnEntityCreated));
+            CreateViewsForExistingModels();
         }
 
-        private void OnGameLoadedOrSomething()
+        private void CreateViewsForExistingModels()
         {
-            foreach (Card childCard in GameContext.Instance.Game.Entity.GetComponentsInChildren<Card>())
+            List<IVisual> existing = GameContext.Instance.Context.Root.GetComponentsInChildren<IVisual>();
+            foreach (IVisual child in existing)
             {
-                CreateView(childCard.Entity, SummerJam1CardFactory.Instance.CardPrefab);
-            }
-
-            foreach (RelicComponent relic in GameContext.Instance.Game.Entity.GetComponentsInChildren<RelicComponent>())
-            {
-                CreateView(relic.Entity, SummerJam1CardFactory.Instance.RelicPrefab);
+                GameObject prefab = GetPrefab(child);
+                if (prefab != null)
+                {
+                    CreateView(((IComponent)child).Entity, prefab);
+                }
             }
         }
+
+        private void OnEntityCreated(object sender, EntityCreatedEventArgs item)
+        {
+            CreateGameObjectForModel(item.Entity);
+        }
+
 
         private void OnRelicCreated(object sender, RelicCreatedEventArgs args)
         {
             IEntity entity = args.Relic;
-            CreateView(entity, SummerJam1CardFactory.Instance.RelicPrefab);
+            CreateView(entity, RelicPrefab);
         }
 
 
         private void OnCardCreated(object sender, CardCreatedEventArgs args)
         {
             IEntity entity = args.CardId;
-            CreateView(entity, SummerJam1CardFactory.Instance.CardPrefab);
+            CreateView(entity, CardPrefab);
         }
 
-        public GameObject CreateGameObjectForModel(SummerJam1ModelViewBridge summerJam1ModelViewBridge)
+        public GameObject CreateGameObjectForModel(IEntity entity)
         {
-            if (summerJam1ModelViewBridge.Entity.GetComponent<Unit>() != null)
-            {
-                return CreateView(summerJam1ModelViewBridge.Entity, SummerJam1UnitFactory.Instance.UnitPrefab);
-            }
+            IVisual visual = entity.GetComponent<IVisual>();
+            GameObject prefab = GetPrefab(visual);
+            return prefab != null ? CreateView(entity, prefab) : null;
+        }
 
-            if (summerJam1ModelViewBridge.Entity.GetComponent<Card>() != null)
+        private GameObject GetPrefab(IVisual visual)
+        {
+            switch (visual)
             {
-                return CreateView(summerJam1ModelViewBridge.Entity, SummerJam1CardFactory.Instance.CardPrefab);
-            }
-
-            if (summerJam1ModelViewBridge.Entity.GetComponent<RelicComponent>() != null)
-            {
-                return CreateView(summerJam1ModelViewBridge.Entity, SummerJam1CardFactory.Instance.RelicPrefab);
+                case CustomCell customCell:
+                    return WalkablePrefab;
+                case HatchEncounter hatchEncounter:
+                    return HatchEncounterPrefab;
+                case RelicEncounter relicEncounter:
+                    break;
+                case ShrineEncounter shrineEncounter:
+                    Debug.Log("Found shrine encounter.");
+                    break;
+                case Player player:
+                    return PlayerPrefab;
+                case RelicComponent relic:
+                    return RelicPrefab;
+                case Unit unit:
+                    return UnitPrefab;
+                case Card card:
+                    return CardPrefab;
+                case BlocksMovement blocksMovement:
+                    return WallPrefab;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(visual));
             }
 
 

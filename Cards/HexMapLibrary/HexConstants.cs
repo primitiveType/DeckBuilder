@@ -1,10 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-using System.Linq;
-
-namespace Wunderwunsch.HexMapLibrary
+﻿namespace Wunderwunsch.HexMapLibrary
 {
     internal static class HexConstants 
     {

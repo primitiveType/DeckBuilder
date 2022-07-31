@@ -20,7 +20,7 @@ namespace App
         {
             if (IsDragging)
             {
-                Component.Position1 = PileItemView.GetLocalPosition().ToSystemVector3();
+                Component.Pos = PileItemView.GetLocalPosition().ToSystemVector3();
             }
         }
 
@@ -36,7 +36,7 @@ namespace App
 
         protected override void ComponentOnPropertyChanged()
         {
-            PileItemView.SetTargetPosition(Component.Position1.ToUnityVector3(), Vector3.zero);
+            PileItemView.SetTargetPosition(Component.Pos.ToUnityVector3(), Vector3.zero);
         }
     }
 }

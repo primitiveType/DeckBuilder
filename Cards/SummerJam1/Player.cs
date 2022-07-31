@@ -1,9 +1,10 @@
-﻿using CardsAndPiles;
+﻿using Api;
+using CardsAndPiles;
 using CardsAndPiles.Components;
 
 namespace SummerJam1
 {
-    public class Player : SummerJam1Component, ITooltip
+    public class Player : SummerJam1Component, ITooltip, IVisual
     {
         public int CurrentEnergy { get; set; }
         public int MaxEnergy { get; private set; } = 3;

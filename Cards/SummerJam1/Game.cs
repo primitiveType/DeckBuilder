@@ -44,18 +44,7 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity => RelicPrizePile = entity.AddComponent<SummerJam1RelicPrizePile>());
             Context.CreateEntity(Entity, entity => RelicPile = entity.AddComponent<RelicPile>());
             Context.CreateEntity(Entity, entity => DiscardStagingPile = entity.AddComponent<DiscardStagingPile>());
-            Context.CreateEntity(Entity, entity =>
-            {
-                Player = entity.AddComponent<Player>();
-                entity.AddComponent<HealOnBattleStart>();
-                entity.AddComponent<Stealth>();
-                entity.AddComponent<PlayerUnit>();
-                entity.AddComponent<VisualComponent>().AssetName = "Player";
-                Health health = entity.AddComponent<Health>();
-                entity.AddComponent<Position>();
-                health.SetMax(30);
-                health.SetHealth(30);
-            });
+            Player = Context.CreateEntity(Entity, "player").GetComponent<Player>();
             CurrentLevel = 1;
             CreateNewMap();
 
@@ -63,18 +52,13 @@ namespace SummerJam1
 
             //create an example deck.
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
-            Context.CreateEntity(Deck.Entity, "Cards/Fidget.json");
-            Context.CreateEntity(Deck.Entity, "Cards/ProtoPulse.json");
-            Context.CreateEntity(Deck.Entity, "Cards/Pulse.json");
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 10; i++)
             {
-                Context.CreateEntity(Deck.Entity, "Cards/ProtoField.json");
-                Context.CreateEntity(Deck.Entity, "Cards/EnergyField.json");
-                Context.CreateEntity(Deck.Entity, "Cards/ProtoPulse.json");
-                Context.CreateEntity(Deck.Entity, "Cards/Pulse.json");
+                Context.CreateEntity(Deck.Entity, "Cards/kill.json");
             }
 
             Events.OnGameStarted(new GameStartedEventArgs());
+            StartBattle();
         }
 
         private void CreatePrefabPile()
@@ -113,7 +97,7 @@ namespace SummerJam1
             {
                 if (customCell.IsWalkable)
                 {
-                    Player.Entity.GetComponent<Position>().Position1 = new Vector3(customCell.X, customCell.Y, 0);
+                    Player.Entity.GetComponent<Position>().Pos = new Vector3(customCell.X, customCell.Y, 0);
                     break;
                 }
             }
@@ -196,7 +180,7 @@ namespace SummerJam1
             {
                 if (customCell.IsWalkable)
                 {
-                    Player.Entity.GetComponent<Position>().Position1 = new Vector3(customCell.X, customCell.Y, 0);
+                    Player.Entity.GetComponent<Position>().Pos = new Vector3(customCell.X, customCell.Y, 0);
                     break;
                 }
             }
@@ -300,10 +284,7 @@ namespace SummerJam1
 
         private void CreateEnemyInCell(IEntity customCellEntity, string prefab)
         {
-            IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
-
-            enemyEntity.AddComponent<BattleEncounter>().Prefab = prefab;
-            enemyEntity.AddComponent<VisualComponent>().AssetName = "ghostenemy";
+            IEntity enemyEntity = Context.CreateEntity(customCellEntity, prefab);
         }
 
         private void CreateShrineInCell(IEntity customCellEntity)
@@ -338,7 +319,7 @@ namespace SummerJam1
         }
 
 
-        public void StartBattle(string prefab)
+        public void StartBattle()
         {
             if (Battle != null)
             {
@@ -346,7 +327,7 @@ namespace SummerJam1
             }
 
             Context.CreateEntity(Entity, entity => { Battle = entity.AddComponent<BattleContainer>(); });
-            Battle.StartBattle(prefab);
+            Battle.StartBattle();
         }
 
 
@@ -379,17 +360,6 @@ namespace SummerJam1
         }
     }
 
-    public class BattleEncounter : Encounter
-    {
-        public string Prefab { get; set; }
-
-        protected override void PlayerEnteredCell()
-        {
-            Game.StartBattle(Prefab);
-            Entity.Destroy();
-        }
-    }
-
     public class ShrineEncounter : Encounter
     {
         protected override void PlayerEnteredCell()
@@ -411,7 +381,7 @@ namespace SummerJam1
     }
 
 
-    public abstract class Encounter : SummerJam1Component
+    public abstract class Encounter : SummerJam1Component, IVisual
     {
         protected override void Initialize()
         {

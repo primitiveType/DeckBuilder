@@ -12,34 +12,6 @@ using Logger = App.Logger;
 
 namespace SummerJam1
 {
-    public class MapTester : MonoBehaviour
-    {
-        private void Start()
-        {
-            CreateNewGame();
-        }
-
-        private void CreateNewGame()
-        {
-            SummerJam1Events events = new SummerJam1Events();
-            Context = new Context(events);
-            SubscribeToEvents();
-
-#if UNITY_EDITOR
-            Debug.Log("We are in editor.");
-            Context.SetPrefabsDirectory(Path.Combine("Assets", "External", "Library", "StreamingAssets"));
-#else
-            Debug.Log($"We are in a build. {Application.streamingAssetsPath}");
-            Context.SetPrefabsDirectory(Application.streamingAssetsPath);
-#endif
-            IEntity game = Context.Root;
-
-
-            Game = game.AddComponent<Game>();
-            LoadMenu();
-        }
-    }
-
     public class GameContext : MonoBehaviourSingleton<GameContext>
     {
         private readonly List<IDisposable> Disposables = new List<IDisposable>();
@@ -47,16 +19,14 @@ namespace SummerJam1
         public SummerJam1Events Events => (SummerJam1Events)Context.Events;
         public Game Game { get; private set; }
 
+        [SerializeField] private GameObject _EnableOnCreation;
+
         protected override void SingletonAwakened()
         {
             base.SingletonAwakened();
             Logging.Initialize(new Logger());
         }
 
-        private void OnBattleStarted(object sender, BattleStartedEventArgs item)
-        {
-            SceneManager.LoadScene("Scenes/SummerJam1/BattleScene");
-        }
 
         public void SaveGame()
         {
@@ -110,12 +80,10 @@ namespace SummerJam1
 
 
             Game = game.AddComponent<Game>();
-            LoadMenu();
         }
 
         private void SubscribeToEvents()
         {
-            Disposables.Add(Events.SubscribeToBattleStarted(OnBattleStarted));
             Disposables.Add(Events.SubscribeToCardPlayFailed(OnCardPlayFailed));
         }
 
@@ -145,6 +113,7 @@ namespace SummerJam1
         public void StartGame()
         {
             CreateNewGame();
+            _EnableOnCreation?.SetActive(true);
             // MusicAudo.Play();
         }
     }

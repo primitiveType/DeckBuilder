@@ -11,22 +11,22 @@ public class ControlPositionComponentView : ComponentView<Position>
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            TryMoveTo(Component.Position1.ToUnityVector3() + new Vector3(0, 1, 0));
+            TryMoveTo(Component.Pos.ToUnityVector3() + new Vector3(0, 1, 0));
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            TryMoveTo(Component.Position1.ToUnityVector3() + new Vector3(-1, 0, 0));
+            TryMoveTo(Component.Pos.ToUnityVector3() + new Vector3(-1, 0, 0));
         }
 
         if (Input.GetKeyDown(KeyCode.S))
         {
-            TryMoveTo(Component.Position1.ToUnityVector3() + new Vector3(0, -1, 0 ));
+            TryMoveTo(Component.Pos.ToUnityVector3() + new Vector3(0, -1, 0 ));
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            TryMoveTo(Component.Position1.ToUnityVector3() + new Vector3(1, 0, 0));
+            TryMoveTo(Component.Pos.ToUnityVector3() + new Vector3(1, 0, 0));
         }
     }
 

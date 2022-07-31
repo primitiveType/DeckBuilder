@@ -4,6 +4,7 @@ using App.Utility;
 using CardsAndPiles;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace App
 {
@@ -13,7 +14,8 @@ namespace App
     {
         private PileView TargetPileView { get; set; }
 
-
+        public bool IsInLayoutGroup; //feels a bit hacky, but hopefully reliable?
+        
         public ISortHandler SortHandler { get; private set; }
 
         private float lerpRate = 13;
@@ -34,6 +36,13 @@ namespace App
 
                 RendererSize = bounds.size;
             }
+            
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            IsInLayoutGroup = GetComponentInParent<LayoutGroup>() != null;
         }
 
         private Vector3 RendererSize { get; set; }
@@ -66,7 +75,11 @@ namespace App
 
         public virtual bool TrySendToPile(IPileView pileView)
         {
-            return Entity.TrySetParent(pileView.Entity);
+            bool success = Entity.TrySetParent(pileView.Entity);
+
+            IsInLayoutGroup = GetComponentInParent<LayoutGroup>() != null;
+
+            return success;
         }
 
         //during turn, setting a new target should interrupt.
@@ -94,7 +107,7 @@ namespace App
 
         private void Update()
         {
-            if (!IsDragging)
+            if (!IsDragging && !IsInLayoutGroup)
             {
                 Interpolate(TargetPosition, TargetRotation);
             }
@@ -136,7 +149,7 @@ namespace App
         {
             Ray ray = eventData.pressEventCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
-            foreach (var result in results)
+            foreach (RaycastHit result in results)
             {
                 PileView pileView = result.transform.GetComponent<PileView>();
                 if (pileView != null)

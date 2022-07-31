@@ -9,9 +9,14 @@ namespace CardsAndPiles.Components
         public bool CanDrag { get; set; }
     }
 
-    public class Position : Component
+    public class Position : Component, IPosition
     {
-        public Vector3 Position1 { get; set; }
+        public Vector3 Pos { get; set; }
+    }
+
+    public interface IPosition : IComponent
+    {
+        Vector3 Pos { get; set; }
     }
 
     public interface IDraggable : IComponent
