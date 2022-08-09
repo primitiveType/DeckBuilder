@@ -1,9 +1,10 @@
 using App;
 using App.Utility;
+using CardsAndPiles.Components;
 using SummerJam1.Cards;
 using UnityEngine;
 
-public class CardUiContainer : View<SummerJam1Card>
+public class CardUiContainer : View<Card>
 {
     [SerializeField] private GameObject _Card;
 

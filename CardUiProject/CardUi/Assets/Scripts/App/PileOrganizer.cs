@@ -1,33 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using Api;
+using CardsAndPiles;
 using External.UnityAsync.UnityAsync.Assets.UnityAsync;
 using UnityEngine;
 
 namespace App
 {
-    public class PileOrganizer : MonoBehaviour
+    public class PileOrganizer : View<IPile>
     {
         protected IPileView PileView { get; set; }
-        protected List<IDisposable> Disposables { get; } = new List<IDisposable>();
 
-        protected virtual void Start()
+        protected override void OnInitialized()
         {
             PileView = GetComponentsInParent<IPileView>(true).First();
             PileView.Entity.Children.CollectionChanged += OnPileChanged;
             Debug.Log($"Creating {PileView.Entity.Children} children for {gameObject.name}.");
             foreach (IEntity child in PileView.Entity.Children)
             {
-                OnItemAddedImmediate(child);
-                OnItemAddedQueued(child);
+                FireItemAddedImmediateWhenReady(child);
+                FireItemAddedQueuedWhenReady(child);
             }
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             if (PileView?.Entity != null)
             {
                 PileView.Entity.Children.CollectionChanged -= OnPileChanged;
@@ -46,8 +46,8 @@ namespace App
             {
                 foreach (IEntity added in e.NewItems)
                 {
-                    OnItemAddedImmediate(added);
-                    Disposables.Add(AnimationQueue.Instance.Enqueue(async () => { await OnItemAddedQueued(added); }));
+                    FireItemAddedImmediateWhenReady(added);
+                    FireItemAddedQueuedWhenReady(added);
                 }
             }
 
@@ -61,11 +61,40 @@ namespace App
             }
         }
 
+        private async void FireItemAddedImmediateWhenReady(IEntity added)
+        {
+            IGameObject view = await WaitForGameObject(added);
+            OnItemAddedImmediate(added, view);
+        }
+
+        private async void FireItemAddedQueuedWhenReady(IEntity added)
+        {
+            IGameObject view = await WaitForGameObject(added);
+            Disposables.Add(AnimationQueue.Instance.Enqueue(async () => { await OnItemAddedQueued(added, view); }));
+        }
+
+        private static async Task<IGameObject> WaitForGameObject(IEntity added)
+        {
+            IGameObject view = added.GetComponent<IGameObject>();
+
+            if (view?.gameObject == null)
+            {
+                await new WaitUntil(() =>
+                {
+                    Debug.Log("Waiting for view to be populated.");
+                    view = added.GetComponent<IGameObject>();
+                    return view?.gameObject != null;
+                });
+            }
+
+            return view;
+        }
+
         protected virtual void OnItemRemovedImmediate(IEntity removed)
         {
         }
 
-        protected virtual void OnItemAddedImmediate(IEntity added)
+        protected virtual void OnItemAddedImmediate(IEntity added, IGameObject view)
         {
         }
 
@@ -73,15 +102,8 @@ namespace App
         {
         }
 
-        protected virtual async Task OnItemAddedQueued(IEntity added)
+        protected virtual async Task OnItemAddedQueued(IEntity added, IGameObject view)
         {
-            IGameObject view = added.GetComponent<IGameObject>();
-            await new WaitUntil(() =>
-            {
-                Debug.LogWarning("Waiting for view to be populated.");
-                return view?.gameObject != null;
-            });
-
             view.gameObject.transform.SetParent(transform);
             view.gameObject.transform.localPosition = Vector3.zero;
         }

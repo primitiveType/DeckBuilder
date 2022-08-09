@@ -4,7 +4,7 @@ using CardsAndPiles;
 
 namespace SummerJam1
 {
-    public class SummerJam1PrizePile : PrizePile
+    public class CardPrizePile : PrizePile
     {
         [OnBattleEnded]
         private void OnBattleEnded(object sender, BattleEndedEventArgs args)

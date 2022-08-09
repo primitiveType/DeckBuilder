@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
-using RogueMaps;
 using SummerJam1.Rules;
-using SummerJam1.Units;
 using Random = Api.Random;
 
 namespace SummerJam1
@@ -17,8 +14,8 @@ namespace SummerJam1
     public class Game : SummerJam1Component
     {
         public DeckPile Deck { get; private set; }
-        public SummerJam1PrizePile PrizePile { get; private set; }
-        public SummerJam1RelicPrizePile RelicPrizePile { get; private set; }
+        public CardPrizePile PrizePile { get; private set; }
+        public RelicPrizePile RelicPrizePile { get; private set; }
         public Pile RelicPile { get; private set; }
 
         public BattleContainer Battle { get; private set; }
@@ -26,13 +23,9 @@ namespace SummerJam1
 
         public Random Random { get; private set; }
 
-        public CustomMap CurrentMap { get; private set; }
-
-        public int CurrentLevel { get; private set; }
-        public int MaxLevel { get; } = 3;
-
         public Pile PrefabDebugPileTester { get; private set; }
         public Pile DiscardStagingPile { get; private set; }
+
 
         protected override void Initialize()
         {
@@ -40,13 +33,11 @@ namespace SummerJam1
             Logging.Log("Game Initialized.");
             AddRules();
             Random = Entity.AddComponent<Random>();
-            Context.CreateEntity(Entity, entity => PrizePile = entity.AddComponent<SummerJam1PrizePile>());
-            Context.CreateEntity(Entity, entity => RelicPrizePile = entity.AddComponent<SummerJam1RelicPrizePile>());
+            Context.CreateEntity(Entity, entity => PrizePile = entity.AddComponent<CardPrizePile>());
+            Context.CreateEntity(Entity, entity => RelicPrizePile = entity.AddComponent<RelicPrizePile>());
             Context.CreateEntity(Entity, entity => RelicPile = entity.AddComponent<RelicPile>());
             Context.CreateEntity(Entity, entity => DiscardStagingPile = entity.AddComponent<DiscardStagingPile>());
             Player = Context.CreateEntity(Entity, "player").GetComponent<Player>();
-            CurrentLevel = 1;
-            CreateNewMap();
 
             CreatePrefabPile();
 
@@ -58,7 +49,6 @@ namespace SummerJam1
             }
 
             Events.OnGameStarted(new GameStartedEventArgs());
-            StartBattle();
         }
 
         private void CreatePrefabPile()
@@ -80,192 +70,6 @@ namespace SummerJam1
             }
         }
 
-        public void CreateDebugMap()
-        {
-            Player.Entity.TrySetParent(Context.Root);
-            if (CurrentMap != null)
-            {
-                CurrentMap.Entity.Destroy();
-            }
-
-            Context.CreateEntity(Entity, entity =>
-            {
-                entity.AddComponent<DebugMapComponent>();
-                CurrentMap = entity.GetComponent<CustomMap>();
-            });
-            foreach (CustomCell customCell in CurrentMap.GetAllCells())
-            {
-                if (customCell.IsWalkable)
-                {
-                    Player.Entity.GetComponent<Position>().Pos = new Vector3(customCell.X, customCell.Y, 0);
-                    break;
-                }
-            }
-
-            foreach (CustomCell customCell in CurrentMap.GetAllCells().Reverse())
-            {
-                if (customCell.IsWalkable)
-                {
-                    CreateHatchInCell(customCell.Entity);
-                    break;
-                }
-            }
-
-            int enemies = 0;
-            foreach (string prefab in GetEnemyInfos(1))
-            {
-                IEnumerable<CustomCell> cellsWithNoNeighbors = CurrentMap.GetAllCells()
-                    .Where(c => !c.Entity.Children.Any() &&
-                                CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0));
-
-                CreateEnemyInCell(cellsWithNoNeighbors.First().Entity, prefab);
-            }
-
-            foreach (string prefab in GetEnemyInfos(2))
-            {
-                IEnumerable<CustomCell> cellsWithNoNeighbors = CurrentMap.GetAllCells()
-                    .Where(c => !c.Entity.Children.Any() &&
-                                CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0));
-
-                CreateEnemyInCell(cellsWithNoNeighbors.First().Entity, prefab);
-            }
-
-            foreach (string prefab in GetEnemyInfos(3))
-            {
-                IEnumerable<CustomCell> cellsWithNoNeighbors = CurrentMap.GetAllCells()
-                    .Where(c => !c.Entity.Children.Any() &&
-                                CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0));
-
-                CreateEnemyInCell(cellsWithNoNeighbors.First().Entity, prefab);
-            }
-
-
-            CustomCell shrineCell = CurrentMap.GetAllCells()
-                .Where(c => !c.Entity.Children.Any() &&
-                            CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0)).First();
-
-            CreateShrineInCell(shrineCell.Entity);
-
-            foreach (string relicInfo in GetRelicInfos())
-            {
-                CustomCell relicCell = CurrentMap.GetAllCells()
-                    .Where(c => !c.Entity.Children.Any() &&
-                                CurrentMap.GetAdjacentCells(c.X, c.Y, true).All(neighbor => neighbor.Entity.Children.Count == 0)).First();
-
-                CreateRelicInCell(relicCell.Entity, relicInfo);
-            }
-        }
-
-        public void GoToNextLevel()
-        {
-            CurrentLevel++;
-            CreateNewMap();
-        }
-
-
-        private void CreateNewMap()
-        {
-            Player.Entity.TrySetParent(Context.Root);
-            if (CurrentMap != null)
-            {
-                CurrentMap.Entity.Destroy();
-            }
-
-            Context.CreateEntity(Entity, entity =>
-            {
-                entity.AddComponent<MapCreatorComponent>();
-                CurrentMap = entity.GetComponent<CustomMap>();
-            });
-            foreach (CustomCell customCell in CurrentMap.GetAllCells())
-            {
-                if (customCell.IsWalkable)
-                {
-                    Player.Entity.GetComponent<Position>().Pos = new Vector3(customCell.X, customCell.Y, 0);
-                    break;
-                }
-            }
-
-            foreach (CustomCell customCell in CurrentMap.GetAllCells().Reverse())
-            {
-                if (customCell.IsWalkable)
-                {
-                    if (CurrentLevel < MaxLevel)
-                    {
-                        CreateHatchInCell(customCell.Entity);
-                    }
-                    else
-                    {
-                        CreateEnemyInCell(customCell.Entity, "Units/boss.json");
-                    }
-
-                    break;
-                }
-            }
-
-            int enemies = 0;
-            int shrines = 0;
-            int relics = 0;
-            foreach (CustomCell customCell in CurrentMap.GetAllCells().Reverse())
-            {
-                if (customCell.Entity.Children.Any())
-                {
-                    continue;
-                }
-
-                List<CustomCell> emptyNeighbors =
-                    CurrentMap.GetAdjacentCells(customCell.X, customCell.Y).Where(n => !n.Entity.Children.Any()).ToList();
-                if (emptyNeighbors.Count == 2 && (emptyNeighbors.All(n => n.X == customCell.X) || emptyNeighbors.All(n => n.Y == customCell.Y)))
-                {
-                    if (enemies < 5)
-                    {
-                        CreateRandomEnemyInCell(customCell.Entity, CurrentLevel);
-                        enemies++;
-                    }
-                }
-
-                if (relics == 0)
-                {
-                    CreateRandomRelicInCell(customCell.Entity);
-                    relics++;
-                }
-                else
-                {
-                    if (emptyNeighbors.Count == 4 && shrines < 5)
-                    {
-                        CreateShrineInCell(customCell.Entity);
-                        shrines++;
-                    }
-                }
-
-                if (enemies > 4 && shrines > 4)
-                {
-                    break;
-                }
-            }
-        }
-
-        private void CreateHatchInCell(IEntity customCellEntity)
-        {
-            IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
-            enemyEntity.AddComponent<HatchEncounter>();
-            enemyEntity.AddComponent<VisualComponent>().AssetName = "hatch";
-        }
-
-        private void CreateRandomEnemyInCell(IEntity customCellEntity, int difficulty)
-        {
-            List<string> prefabs = GetEnemyInfos(difficulty);
-            int index = Random.SystemRandom.Next(prefabs.Count);
-            string prefab = prefabs[index];
-            CreateEnemyInCell(customCellEntity, prefab);
-        }
-
-        private void CreateRandomRelicInCell(IEntity customCell)
-        {
-            List<string> prefabs = GetRelicInfos();
-            int index = Random.SystemRandom.Next(prefabs.Count);
-            string prefab = prefabs[index];
-            CreateRelicInCell(customCell, prefab);
-        }
 
         private List<string> GetEnemyInfos(int difficulty)
         {
@@ -352,13 +156,7 @@ namespace SummerJam1
         }
     }
 
-    public class HatchEncounter : Encounter
-    {
-        protected override void PlayerEnteredCell()
-        {
-            Game.GoToNextLevel();
-        }
-    }
+
 
     public class ShrineEncounter : Encounter
     {

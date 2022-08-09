@@ -14,6 +14,14 @@ namespace CardsAndPiles
         public abstract bool AcceptsChild(IEntity child);
     }
 
+    public class DefaultPile : Pile
+    {
+        public override bool AcceptsChild(IEntity child)
+        {
+            return true;
+        }
+    }
+
     public class PlayerDeck : NotifiedPile
     {
         public override bool AcceptsChild(IEntity child)

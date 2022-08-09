@@ -28,9 +28,9 @@ namespace Solitaire
             }
         }
 
-        protected override async Task OnItemAddedQueued(IEntity added)
+        protected override async Task OnItemAddedQueued(IEntity added, IGameObject view)
         {
-            await base.OnItemAddedQueued(added);
+            await base.OnItemAddedQueued(added, view);
             GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
 
             if (entityGO != null)

@@ -9,7 +9,6 @@ namespace SummerJam1
 {
     public class BattleContainer : SummerJam1Component
     {
-        private int NumSlots = 1;
         public IEntity Discard { get; private set; }
         public IEntity Exhaust { get; private set; }
         public HandPile Hand { get; private set; }
@@ -17,18 +16,10 @@ namespace SummerJam1
 
         public ObjectivesPile ObjectivesPile { get; private set; }
 
+        public Pile EncounterDrawPile { get; private set; }
+        public List<Pile> EncounterSlots { get; private set; } = new List<Pile>();
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Context.CreateEntity(Entity, (entity) => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
-
-
-            //Context.CreateEntity(Entity, entity => BattleDeck = entity.AddComponent<DeckPile>());
-            Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
-            Exhaust = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerExhaust>());
-        }
-
+        private const int NumSlots = 5;
 
         public IEntity CreateRandomMonster(IEntity parent, int difficulty)
         {
@@ -47,6 +38,17 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity =>
                 Hand = entity.AddComponent<HandPile>());
 
+            Context.CreateEntity(Entity, (entity) => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
+
+
+            Context.CreateEntity(Entity, entity => EncounterDrawPile = entity.AddComponent<DefaultPile>());
+            for (int i = 0; i < NumSlots; i++)
+            {
+                Context.CreateEntity(Entity, entity => EncounterSlots.Add(entity.AddComponent<DefaultPile>()));
+            }
+
+            Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
+            Exhaust = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerExhaust>());
 
             Events.OnBattleStarted(new BattleStartedEventArgs());
             Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());

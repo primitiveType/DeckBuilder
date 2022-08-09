@@ -30,11 +30,6 @@ public class DebugMode : MonoBehaviourSingleton<DebugMode>, INotifyPropertyChang
         {
             IsDebug = !IsDebug;
         }
-
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            GameContext.Instance.Game.CreateDebugMap();
-        }
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

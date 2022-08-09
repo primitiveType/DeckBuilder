@@ -7,7 +7,6 @@ namespace SummerJam1
         protected void Awake()
         {
             SetModel(GameContext.Instance.Context.Root.GetComponent<Game>().Player.Entity);
-            CameraManager.Instance.SetFollowTarget(gameObject);
         }
     }
 }

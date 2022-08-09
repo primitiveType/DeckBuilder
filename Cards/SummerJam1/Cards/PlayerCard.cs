@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace SummerJam1.Cards
 {
-    public class SummerJam1Card : Card, IDraggable
+    public class PlayerCard : Card, IDraggable
     {
         protected Game Game { get; private set; }
         [JsonIgnore] public bool CanDrag => Entity.Parent == Game.Battle?.Hand.Entity; //can only drag while in hand.
@@ -26,4 +26,6 @@ namespace SummerJam1.Cards
             return played;
         }
     }
+    
+
 }

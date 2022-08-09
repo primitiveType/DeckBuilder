@@ -85,6 +85,12 @@ namespace SummerJam1
         private void SubscribeToEvents()
         {
             Disposables.Add(Events.SubscribeToCardPlayFailed(OnCardPlayFailed));
+            Disposables.Add(Events.SubscribeToBattleStarted(OnBattleStarted));
+        }
+
+        private void OnBattleStarted(object sender, BattleStartedEventArgs item)
+        {
+            SceneManager.LoadScene("BattleScene");
         }
 
         private void OnCardPlayFailed(object sender, CardPlayFailedEventArgs item)
@@ -113,8 +119,18 @@ namespace SummerJam1
         public void StartGame()
         {
             CreateNewGame();
-            _EnableOnCreation?.SetActive(true);
+            if (_EnableOnCreation != null)
+            {
+                _EnableOnCreation.SetActive(true);
+            }
+
+            SceneManager.LoadScene("Scenes/MapScene");
             // MusicAudo.Play();
+        }
+
+        public void StartBattle(int info)
+        {
+            Game.StartBattle();
         }
     }
 }

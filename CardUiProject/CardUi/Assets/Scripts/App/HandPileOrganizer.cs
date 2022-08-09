@@ -24,9 +24,9 @@ namespace App
 
         private List<CardInHand> CardsInHand { get; } = new List<CardInHand>();
 
-        protected override void Start()
+        protected override void OnInitialized()
         {
-            base.Start();
+            base.OnInitialized();
             ((CardEvents)PileView.Entity.Context.Events).SubscribeToTurnBegan(OnTurnBegan);
             ((CardEvents)PileView.Entity.Context.Events).SubscribeToTurnEnded(OnTurnEnded);
         }
@@ -162,9 +162,9 @@ namespace App
             }
         }
 
-        protected override async Task OnItemAddedQueued(IEntity added)
+        protected override async Task OnItemAddedQueued(IEntity added, IGameObject view)
         {
-            await base.OnItemAddedQueued(added);
+            await base.OnItemAddedQueued(added, view);
             GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
             if (entityGO != null && entityGO.GetComponent<CardInHand>() != null)
             {

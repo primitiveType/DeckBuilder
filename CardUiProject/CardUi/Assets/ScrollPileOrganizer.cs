@@ -12,9 +12,9 @@ public class ScrollPileOrganizer : PileOrganizer
 
     private Dictionary<IEntity, CardUiContainer> CreatedContainers { get; } = new Dictionary<IEntity, CardUiContainer>();
 
-    protected override void OnItemAddedImmediate(IEntity added)
+    protected override void OnItemAddedImmediate(IEntity added, IGameObject view)
     {
-        base.OnItemAddedImmediate(added);
+        base.OnItemAddedImmediate(added, view);
         CardUiContainer container = Instantiate(m_ContainerPrefab, m_ContainerParent);
         container.SetModel(added);
         GameObject card = Instantiate(ViewFactory.Instance.CardPrefab);
@@ -37,7 +37,7 @@ public class ScrollPileOrganizer : PileOrganizer
         }
     }
 
-    protected override async Task OnItemAddedQueued(IEntity added)
+    protected override async Task OnItemAddedQueued(IEntity added, IGameObject view)
     {
         //do nothing.
     }

@@ -5,28 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/SummerJam1/StartScene.unity
-    guid: 52929ffdf1752d248a18c2be138f9c61
+    path: Assets/Scenes/BattleScene.unity
+    guid: 500dea07dd5205544838d376ea007b62
   - enabled: 1
-    path: Assets/Scenes/SummerJam1/MenuScene.unity
-    guid: 885e30799233ac84fae6eb338b282a6d
+    path: Assets/Scenes/MapScene.unity
+    guid: f38859a25ef85d6469f7e79193749766
   - enabled: 1
-    path: Assets/Scenes/SummerJam1/BattleScene.unity
-    guid: 6f68e64fd322d2541959220ff28c1238
-  - enabled: 1
-    path: Assets/Scenes/SummerJam1/MapScene.unity
-    guid: 885e30799233ac84fae6eb338b282a6d
+    path: Assets/Scenes/MenuScene.unity
+    guid: 280b8d2613270aa489bbe409c8b34ceb
   m_configObjects: {}

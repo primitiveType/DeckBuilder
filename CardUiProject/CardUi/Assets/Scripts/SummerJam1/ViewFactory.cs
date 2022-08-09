@@ -32,8 +32,6 @@ namespace SummerJam1
 
         private GameObject WallPrefab => m_WallPrefab;
 
-        private GameObject HatchEncounterPrefab => m_HatchEncounterPrefab;
-        private GameObject PlayerPrefab => m_PlayerPrefab;
 
         protected override void SingletonStarted()
         {
@@ -88,15 +86,11 @@ namespace SummerJam1
             {
                 case CustomCell customCell:
                     return WalkablePrefab;
-                case HatchEncounter hatchEncounter:
-                    return HatchEncounterPrefab;
                 case RelicEncounter relicEncounter:
                     break;
                 case ShrineEncounter shrineEncounter:
                     Debug.Log("Found shrine encounter.");
                     break;
-                case Player player:
-                    return PlayerPrefab;
                 case RelicComponent relic:
                     return RelicPrefab;
                 case Unit unit:

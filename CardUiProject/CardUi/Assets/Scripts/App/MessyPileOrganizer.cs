@@ -14,7 +14,7 @@ namespace App
             }
         }
 
-        protected override async Task OnItemAddedQueued(IEntity added)
+        protected override async Task OnItemAddedQueued(IEntity added, IGameObject view1)
         {
             IGameObject view = added.GetComponent<IGameObject>();
             view.gameObject.transform.SetParent(transform);

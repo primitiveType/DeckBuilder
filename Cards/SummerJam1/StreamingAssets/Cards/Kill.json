@@ -4,7 +4,7 @@
   "Id": 30,
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.SummerJam1Card, SummerJam1"
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",

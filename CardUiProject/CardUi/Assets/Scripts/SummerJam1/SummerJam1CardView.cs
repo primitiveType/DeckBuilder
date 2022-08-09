@@ -5,7 +5,7 @@ using SummerJam1.Cards;
 
 namespace SummerJam1
 {
-    public class SummerJam1CardView : PileItemView<SummerJam1Card>, ISetModel
+    public class SummerJam1CardView : PileItemView<Card>, ISetModel
     {
         public override bool TrySendToPile(IPileView pileView)
         {

@@ -4,7 +4,7 @@ using CardsAndPiles;
 
 namespace SummerJam1
 {
-    public class SummerJam1RelicPrizePile : PrizePile
+    public class RelicPrizePile : PrizePile
     {
         [OnLeaveBattle]
         private void OnBattleEnded()

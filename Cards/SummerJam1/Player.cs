@@ -4,7 +4,7 @@ using CardsAndPiles.Components;
 
 namespace SummerJam1
 {
-    public class Player : SummerJam1Component, ITooltip, IVisual
+    public class Player : SummerJam1Component, ITooltip
     {
         public int CurrentEnergy { get; set; }
         public int MaxEnergy { get; private set; } = 3;

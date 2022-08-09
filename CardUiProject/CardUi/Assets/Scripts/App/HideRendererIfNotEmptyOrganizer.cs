@@ -7,15 +7,15 @@ public class HideRendererIfNotEmptyOrganizer : PileOrganizer
 {
     [SerializeField] private GameObject ToHide;
 
-    protected override void Start()
+    protected override void OnInitialized()
     {
-        base.Start();
+        base.OnInitialized();
         SetActive();
     }
 
-    protected override async Task OnItemAddedQueued(IEntity added)
+    protected override async Task OnItemAddedQueued(IEntity added, IGameObject view)
     {
-        await base.OnItemAddedQueued(added);
+        await base.OnItemAddedQueued(added, view);
         SetActive();
     }
 

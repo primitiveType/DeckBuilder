@@ -25,16 +25,16 @@ namespace App
             SortHandler = GetComponent<ISortHandler>();
             SortHandler.SetDepth((int)Sorting.PileItem);
 
-            var renderers = GetComponentsInChildren<Renderer>().ToList();
-            if (renderers.Count > 0)
+            var colliders = GetComponentsInChildren<Collider>().ToList();
+            if (colliders.Count > 0)
             {
-                Bounds bounds = renderers[0].bounds;
-                foreach (Renderer renderer1 in renderers)
+                Bounds bounds = colliders[0].bounds;
+                foreach (Collider renderer1 in colliders)
                 {
                     bounds.Encapsulate(renderer1.bounds);
                 }
 
-                RendererSize = bounds.size;
+                BoundsSize = bounds.size;
             }
             
         }
@@ -45,7 +45,7 @@ namespace App
             IsInLayoutGroup = GetComponentInParent<LayoutGroup>() != null;
         }
 
-        private Vector3 RendererSize { get; set; }
+        private Vector3 BoundsSize { get; set; }
 
         public void OnTriggerEnter(Collider other)
         {
@@ -139,7 +139,7 @@ namespace App
         public Bounds GetBounds()
         {
             var transform1 = transform;
-            return new Bounds(transform1.position, RendererSize * transform1.lossyScale.x);
+            return new Bounds(transform1.position, BoundsSize * transform1.lossyScale.x);
         }
 
 

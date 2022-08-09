@@ -10,56 +10,23 @@ namespace App
         [SerializeField] private Transform m_ParentTransform;
         [SerializeField] private bool SetPosition;
 
-        protected override async Task OnItemAddedQueued(IEntity added)
+        protected override async Task OnItemAddedQueued(IEntity added, IGameObject view)
         {
-            await base.OnItemAddedQueued(added);
-            IGameObject viewGO = added.GetComponent<IGameObject>();
-            if (viewGO == null)
-            {
-                Debug.LogError(
-                    $"Failed to find game object component for entity {added.Id}:{added.GetComponents<IComponent>().FirstOrDefault()?.GetType().Name}.",
-                    gameObject);
-                return;
-            }
+            await base.OnItemAddedQueued(added, view);
+     
 
-            if (viewGO.gameObject == null)
-            {
-                Debug.LogError(
-                    $"Failed to find game object for entity {added.Id}:{added.GetComponents<IComponent>().FirstOrDefault()?.GetType().Name}.",
-                    gameObject);
-                return;
-            }
-
-            IPileItemView view = viewGO.gameObject.GetComponent<IPileItemView>();
-            viewGO.gameObject.transform.SetParent(m_ParentTransform);
+            IPileItemView pileView = view.gameObject.GetComponent<IPileItemView>();
+            view.gameObject.transform.SetParent(m_ParentTransform);
             if (SetPosition)
             {
-                view.SetTargetPosition(new Vector3(), new Vector3());
+                pileView.SetTargetPosition(new Vector3(), new Vector3());
             }
         }
 
-        protected override void OnItemAddedImmediate(IEntity added)
+        protected override void OnItemAddedImmediate(IEntity added, IGameObject view)
         {
-            base.OnItemAddedImmediate(added);
-            IGameObject viewGO = added.GetComponent<IGameObject>();
-            if (viewGO == null)
-            {
-                Debug.LogError(
-                    $"Failed to find game object component for entity {added.Id}:{added.GetComponents<IComponent>().FirstOrDefault()?.GetType().Name}.",
-                    gameObject);
-
-                return;
-            }
-
-            if (viewGO.gameObject == null)
-            {
-                Debug.LogError(
-                    $"Failed to find game object for entity {added.Id}:{added.GetComponents<IComponent>().FirstOrDefault()?.GetType().Name}.",
-                    gameObject);
-                return;
-            }
-            
-            viewGO.gameObject.transform.SetParent(m_ParentTransform, true);
+            base.OnItemAddedImmediate(added, view);
+            view.gameObject.transform.SetParent(m_ParentTransform, true);
         }
     }
 }
