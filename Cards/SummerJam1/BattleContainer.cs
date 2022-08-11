@@ -44,8 +44,10 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity => EncounterDrawPile = entity.AddComponent<DefaultPile>());
             for (int i = 0; i < NumSlots; i++)
             {
-                Context.CreateEntity(Entity, entity => EncounterSlots.Add(entity.AddComponent<DefaultPile>()));
+                Context.CreateEntity(Entity, entity => EncounterSlots.Add(entity.AddComponent<EncounterSlotPile>()));
             }
+
+            PopulateEncounterDrawPile();
 
             Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
             Exhaust = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerExhaust>());
@@ -53,6 +55,14 @@ namespace SummerJam1
             Events.OnBattleStarted(new BattleStartedEventArgs());
             Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
             Events.OnTurnBegan(new TurnBeganEventArgs());
+        }
+
+        private void PopulateEncounterDrawPile()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                Context.CreateEntity(EncounterDrawPile.Entity, "Units/boss.json");
+            }
         }
 
 

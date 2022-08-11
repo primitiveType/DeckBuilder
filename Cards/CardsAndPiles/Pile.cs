@@ -21,6 +21,8 @@ namespace CardsAndPiles
             return true;
         }
     }
+    
+    public class EncounterSlotPile : DefaultPile{}
 
     public class PlayerDeck : NotifiedPile
     {

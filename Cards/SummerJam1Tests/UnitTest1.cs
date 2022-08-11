@@ -63,7 +63,7 @@ namespace SummerJam1Tests
         [Test]
         public void StartBattle()
         {
-            Game.StartBattle("Units/Donut.json");
+            Game.StartBattle();
         }
 
         [Test]
@@ -206,7 +206,7 @@ namespace SummerJam1Tests
         {
             IEntity test1 = Context.CreateEntity();
             IEntity test2 = Context.CreateEntity();
-            Game.StartBattle("Units/Donut.json");
+            Game.StartBattle();
             TestEvents events1 = test1.AddComponent<TestEvents>();
             TestEvents events2 = test2.AddComponent<TestEvents>();
 

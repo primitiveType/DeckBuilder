@@ -86,6 +86,12 @@ namespace SummerJam1
         {
             Disposables.Add(Events.SubscribeToCardPlayFailed(OnCardPlayFailed));
             Disposables.Add(Events.SubscribeToBattleStarted(OnBattleStarted));
+            Disposables.Add(Events.SubscribeToEntityKilled(OnEntityKilled));
+        }
+
+        private void OnEntityKilled(object sender, EntityKilledEventArgs item)
+        {
+            Debug.Log($"Entity : {item.Entity.Id} killed by {item.Source.Id}");
         }
 
         private void OnBattleStarted(object sender, BattleStartedEventArgs item)

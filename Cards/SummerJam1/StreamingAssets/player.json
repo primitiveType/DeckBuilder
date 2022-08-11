@@ -10,9 +10,6 @@
       "Tooltip": "Energy - Cards require energy to be played."
     },
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
-    },
-    {
       "$type": "SummerJam1.HealOnBattleStart, SummerJam1"
     },
     {

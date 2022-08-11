@@ -26,13 +26,16 @@ namespace SummerJam1
 
         public void ButtonClicked()
         {
-            ButtonAudio.PlayOneShot(ButtonAudio.clip);
+            if (ButtonAudio)
+            {
+                ButtonAudio.PlayOneShot(ButtonAudio.clip);
+            }
         }
 
         protected override void SingletonAwakened()
         {
             base.SingletonAwakened();
-            
+
             Disposables.Add(GameContext.Instance.Events.SubscribeToDamageDealt(OnDamageDealt));
             Disposables.Add(GameContext.Instance.Events.SubscribeToCardPlayed(OnCardPlayed));
         }

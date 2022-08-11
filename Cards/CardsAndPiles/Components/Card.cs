@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Api;
+using Component = Api.Component;
 
 namespace CardsAndPiles.Components
 {
@@ -16,6 +18,7 @@ namespace CardsAndPiles.Components
             return true;
         }
     }
+    
 
     public abstract class Card : Component, IPileItem, IVisual
     {
@@ -38,7 +41,7 @@ namespace CardsAndPiles.Components
 
             if (!PlayCard(target))
             {
-                ((CardEvents)Context.Events).OnCardPlayFailed(new CardPlayFailedEventArgs(new List<string> {"I Can't Play that right now."}));
+                ((CardEvents)Context.Events).OnCardPlayFailed(new CardPlayFailedEventArgs(new List<string> { "I Can't Play that right now." }));
                 return false;
             }
 

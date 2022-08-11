@@ -15,6 +15,7 @@ namespace App
 
         private void Awake()
         {
+            ResetScale();
             PileItemView = GetComponentInParent<IPileItemView>();
             if (PileItemView == null)
             {

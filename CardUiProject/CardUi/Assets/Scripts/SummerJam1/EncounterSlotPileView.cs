@@ -1,14 +1,13 @@
 using App;
-using CardsAndPiles;
 using UnityEngine;
 
 namespace SummerJam1
 {
-    public class EncounterSlotPileView : View<IPile>, IPileView
+    public class EncounterSlotPileView : PileView
     {
         [SerializeField] private int SlotNum;
 
-        protected override void Start()
+        protected void Awake()
         {
             base.Start();
             SetModel(GameContext.Instance.Game.Battle.EncounterSlots[SlotNum]);

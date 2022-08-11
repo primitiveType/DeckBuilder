@@ -93,8 +93,6 @@ namespace SummerJam1
                     break;
                 case RelicComponent relic:
                     return RelicPrefab;
-                case Unit unit:
-                    return UnitPrefab;
                 case Card card:
                     return CardPrefab;
                 case BlocksMovement blocksMovement:

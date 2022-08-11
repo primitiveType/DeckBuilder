@@ -50,7 +50,7 @@ namespace App
         public void OnTriggerEnter(Collider other)
         {
             Debug.Log($"collided with {other.gameObject.name}!");
-            TargetPileView = other.gameObject.GetComponent<PileView>();
+            TargetPileView = other.gameObject.GetComponentInParent<PileView>();
         }
 
         public void OnEndDrag(PointerEventData eventData)
