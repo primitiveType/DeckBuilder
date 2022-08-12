@@ -9,8 +9,6 @@ namespace App
     public class AmountComponentView<T> : ComponentView<T> where T : IAmount, INotifyPropertyChanged
     {
         [SerializeField] private bool m_HideIfZero = true;
-        [SerializeField] private bool m_HideIfNull = true;
-        [SerializeField] private GameObject m_VisibilityObject;
         [SerializeField] private TMPro.TMP_Text _text;
 
         protected override void ComponentOnPropertyChanged()

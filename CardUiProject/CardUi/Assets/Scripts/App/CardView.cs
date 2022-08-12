@@ -8,7 +8,7 @@ namespace App
         // {
         //     return Model.TryPlayCard(pileView.Model.Entity);
         // }
-
+    
         protected override void Start()
         {
             base.Start();

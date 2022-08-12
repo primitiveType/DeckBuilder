@@ -14,6 +14,9 @@ namespace App
         protected readonly List<IDisposable> Disposables = new List<IDisposable>(2);
         private IView View { get; set; }
 
+        [SerializeField] protected bool m_HideIfNull = false;
+        [SerializeField] protected GameObject m_VisibilityObject;
+
         protected virtual void Start()
         {
             View = GetComponentInParent<IView>();
@@ -93,6 +96,8 @@ namespace App
             {
                 return;
             }
+
+            m_VisibilityObject.SetActive(Component != null || !m_HideIfNull);
 
             ComponentOnPropertyChanged();
         }

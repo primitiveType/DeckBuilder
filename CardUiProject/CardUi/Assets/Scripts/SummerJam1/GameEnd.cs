@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SummerJam1
 {
-    public class BattleEnd : View<Game>
+    public class GameEnd : View<Game>
     {
         [SerializeField] private TMP_Text Text;
         [SerializeField] private GameObject Defeat;
@@ -14,18 +14,24 @@ namespace SummerJam1
         {
             base.Start();
             SetModel(GameContext.Instance.Game.Entity);
-            Disposables.Add(GameContext.Instance.Events.SubscribeToBattleEnded(OnBattleEnd));
+            Disposables.Add(GameContext.Instance.Events.SubscribeToGameEnded(OnGameEnd));
+            Disposables.Add(GameContext.Instance.Events.SubscribeToGameStarted(OnGameStart));
             gameObject.SetActive(false);
         }
-        
-        private void OnBattleEnd(object sender, BattleEndedEventArgs item)
+
+        private void OnGameStart(object sender, GameStartedEventArgs item)
+        {
+            gameObject.SetActive(false);
+        }
+
+        private void OnGameEnd(object sender, GameEndedEventArgs item)
         {
             AnimationQueue.Instance.Enqueue(() =>
             {
                 gameObject.SetActive(true);
                 if (item.Victory)
                 {
-                    Text.text = "Victory!";
+                    Text.text = "You Win! Play again?";
                     Victory.SetActive(true);
                     Defeat.SetActive(false);
                 }

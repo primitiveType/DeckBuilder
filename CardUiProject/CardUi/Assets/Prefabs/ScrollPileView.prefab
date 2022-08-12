@@ -525,7 +525,7 @@ GameObject:
   - component: {fileID: 7530089240198182889}
   - component: {fileID: 3003696634496635329}
   m_Layer: 5
-  m_Name: DebugPileView
+  m_Name: PileView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -8,6 +8,7 @@ namespace Api
         public static JsonSerializerSettings Settings = new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.Objects,
+            TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
             ContractResolver = new PrivateSetterContractResolver()
         };
 

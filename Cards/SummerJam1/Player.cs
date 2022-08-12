@@ -32,4 +32,22 @@ namespace SummerJam1
 
         public string Tooltip => "Energy - Cards require energy to be played.";
     }
+
+    public class Money : SummerJam1Component, IAmount
+    {
+        public int Amount { get; set; }
+    }
+
+    public class DeathAddsMoneyToPlayer : SummerJam1Component
+    {
+        [OnEntityKilled]
+        private void OnEntityKilled(object sender, EntityKilledEventArgs args)
+        {
+            if (args.Entity == Entity)
+            {
+                var amount = Entity.GetComponent<Money>().Amount;
+                Game.Player.Entity.GetOrAddComponent<Money>().Amount += amount;
+            }
+        }
+    }
 }

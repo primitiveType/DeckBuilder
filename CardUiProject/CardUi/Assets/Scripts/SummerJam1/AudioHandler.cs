@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using App;
 using App.Utility;
 using CardsAndPiles;
+using CardsAndPiles.Components;
 using UnityEngine;
 
 namespace SummerJam1
@@ -16,12 +17,18 @@ namespace SummerJam1
 
         private void OnCardPlayed(object sender, CardPlayedEventArgs item)
         {
-            AnimationQueue.Instance.Enqueue(() => CardAudio.PlayOneShot(CardAudio.clip));
+            if (CardAudio)
+            {
+                AnimationQueue.Instance.Enqueue(() => CardAudio.PlayOneShot(CardAudio.clip));
+            }
         }
 
         private void OnDamageDealt(object sender, DamageDealtEventArgs item)
         {
-            AnimationQueue.Instance.Enqueue(() => HitAudio.PlayOneShot(HitAudio.clip));
+            if (HitAudio)
+            {
+                AnimationQueue.Instance.Enqueue(() => HitAudio.PlayOneShot(HitAudio.clip));
+            }
         }
 
         public void ButtonClicked()

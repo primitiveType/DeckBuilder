@@ -4,7 +4,7 @@ using Api;
 
 namespace CardsAndPiles.Components
 {
-    public class Health : CardsAndPilesComponent, ITakesDamageInternal, IHealable
+    public class Health : CardsAndPilesComponent, ITakesDamageInternal, IHealable, IAmount
     {
         public int Amount { get; set; }
         public int Max { get; set; }
