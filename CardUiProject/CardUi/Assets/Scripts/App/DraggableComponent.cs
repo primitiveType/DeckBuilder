@@ -12,7 +12,7 @@ namespace App
         private Vector3 TargetPosition { get; set; }
 
         private Vector3 Offset { get; set; }
-        public bool Dragging { get; set; }
+        private bool Dragging { get; set; }
 
         protected override void OnInitialized()
         {
