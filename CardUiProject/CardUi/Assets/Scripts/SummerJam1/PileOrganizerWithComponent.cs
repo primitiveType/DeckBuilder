@@ -8,6 +8,7 @@ namespace SummerJam1
 {
     public class PileOrganizerWithComponent<TComponentToAdd> : PileOrganizer where TComponentToAdd : Component
     {
+
         protected override async Task OnItemAddedQueued(IEntity added, IGameObject view)
         {
             await base.OnItemAddedQueued(added, view);

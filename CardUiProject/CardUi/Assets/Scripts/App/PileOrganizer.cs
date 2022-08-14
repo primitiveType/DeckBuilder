@@ -11,6 +11,8 @@ namespace App
 {
     public class PileOrganizer : View<IPile>
     {
+        [SerializeField] private Transform m_ParentTransform;
+        private Transform Parent => m_ParentTransform ? m_ParentTransform : transform;
         protected IPileView PileView { get; set; }
 
         protected override void OnInitialized()
@@ -104,8 +106,16 @@ namespace App
 
         protected virtual async Task OnItemAddedQueued(IEntity added, IGameObject view)
         {
-            view.gameObject.transform.SetParent(transform);
+            var scale = view.gameObject.transform.localScale;
+            
+            if (scale == Vector3.zero)
+            {
+                Debug.LogError("Scale was zero!");
+            }
+            view.gameObject.transform.SetParent(Parent, true);
+            
             view.gameObject.transform.localPosition = Vector3.zero;
+            view.gameObject.transform.localScale = Vector3.one;
         }
     }
 }

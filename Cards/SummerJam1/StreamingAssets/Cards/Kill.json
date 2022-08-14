@@ -11,6 +11,9 @@
       "DamageAmount": 999
     },
     {
+      "$type": "SummerJam1.Cards.Effects.TargetHealthComponent, SummerJam1"
+    },
+    {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
       "AssetName": "earthPulse"
     },

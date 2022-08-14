@@ -7,6 +7,24 @@ using Newtonsoft.Json;
 
 namespace SummerJam1.Cards.Effects
 {
+    public class TargetHealthComponent : SummerJam1Component
+    {
+        [OnRequestPlayCard]
+        private void OnRequestPlayCard(object sender, RequestPlayCardEventArgs args)
+        {
+            if (args.CardId != Entity)
+            {
+                return;
+            }
+
+            var target = args.Target.GetComponentInChildren<Health>();
+
+            if (target == null)
+            {
+                args.Blockers.Add(CardBlockers.INVALID_TARGET);
+            }
+        }
+    }
     public class DamageUnitEqualToStealth : SummerJam1Component, IEffect
     {
         public bool DoEffect(IEntity target)
@@ -205,10 +223,6 @@ namespace SummerJam1.Cards.Effects
 
         public bool DoEffect(IEntity target)
         {
-            if (!Entity.TrySetParent(target))
-            {
-                return false;
-            }
 
             ITakesDamage unit = target.GetComponentInChildren<ITakesDamage>();
 

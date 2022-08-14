@@ -17,9 +17,11 @@ namespace App
         [SerializeField] protected bool m_HideIfNull = false;
         [SerializeField] protected GameObject m_VisibilityObject;
 
+        protected GameObject VisibilityObject => m_VisibilityObject ? m_VisibilityObject : gameObject;
         protected virtual void Start()
         {
             View = GetComponentInParent<IView>();
+            UpdateVisibility();
             if (View.Entity == null)
             {
                 View.PropertyChanged += ViewOnPropertyChanged;
@@ -48,12 +50,13 @@ namespace App
 
         private void ComponentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (!UpdateComponentReference())
+            var changed = UpdateComponentReference();
+            if (!changed)
             {
                 return;
             }
 
-            gameObject.SetActive(Component != null);
+            UpdateVisibility();
         }
 
         /// <summary>
@@ -68,6 +71,7 @@ namespace App
                 return false;
             }
 
+
             if (Component != null && component != null)
             {
                 Debug.LogWarning($"Replacing Component reference in {nameof(ComponentView<T>)}.");
@@ -79,6 +83,7 @@ namespace App
             }
 
             Component = component;
+            UpdateVisibility();
 
             if (Component != null)
             {
@@ -96,10 +101,14 @@ namespace App
             {
                 return;
             }
-
-            m_VisibilityObject.SetActive(Component != null || !m_HideIfNull);
-
+            
+            
             ComponentOnPropertyChanged();
+        }
+
+        private void UpdateVisibility()
+        {
+            VisibilityObject.SetActive(Component != null || !m_HideIfNull);
         }
 
         protected abstract void ComponentOnPropertyChanged();

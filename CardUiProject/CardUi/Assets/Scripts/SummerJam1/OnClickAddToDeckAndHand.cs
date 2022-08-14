@@ -13,8 +13,9 @@ namespace SummerJam1
             IEntity copy = (entity.Context.DuplicateEntity(entity));
             IEntity copy2 = (entity.Context.DuplicateEntity(entity));
 
-            copy.TrySetParent(entity.Context.Root.GetComponent<Game>().Battle.Hand.Entity);
             copy2.TrySetParent(entity.Context.Root.GetComponent<Game>().Deck.Entity);
+            
+            copy.TrySetParent(entity.Context.Root.GetComponent<Game>().Battle.Hand.Entity);
         }
     }
 }

@@ -17,6 +17,7 @@ namespace App
         {
             ResetScale();
             PileItemView = GetComponentInParent<IPileItemView>();
+            GetComponent<RectTransform>().sizeDelta = new Vector2(3, 5);
             if (PileItemView == null)
             {
                 Debug.LogError("Pile item not found when adding card to hand!");
