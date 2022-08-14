@@ -198,13 +198,16 @@ public EventHandle<RelicCreatedEventArgs> SubscribeToRelicCreated(EventHandleDel
 /// (object sender, UnitCreatedEventArgs) args)
 /// </summary>
 public class OnUnitCreatedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToUnitCreated(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -214,6 +217,9 @@ public class OnUnitCreatedAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToUnitCreated(delegate(object sender, UnitCreatedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -231,13 +237,16 @@ public class OnUnitCreatedAttribute : EventsBaseAttribute {
 /// (object sender, IntentStartedEventArgs) args)
 /// </summary>
 public class OnIntentStartedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToIntentStarted(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -247,6 +256,9 @@ public class OnIntentStartedAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToIntentStarted(delegate(object sender, IntentStartedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -264,13 +276,16 @@ public class OnIntentStartedAttribute : EventsBaseAttribute {
 /// (object sender, UnitTransformedEventArgs) args)
 /// </summary>
 public class OnUnitTransformedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToUnitTransformed(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -280,6 +295,9 @@ public class OnUnitTransformedAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToUnitTransformed(delegate(object sender, UnitTransformedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -297,13 +315,16 @@ public class OnUnitTransformedAttribute : EventsBaseAttribute {
 /// (object sender, BattleEndedEventArgs) args)
 /// </summary>
 public class OnBattleEndedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToBattleEnded(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -313,6 +334,9 @@ public class OnBattleEndedAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToBattleEnded(delegate(object sender, BattleEndedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -330,13 +354,16 @@ public class OnBattleEndedAttribute : EventsBaseAttribute {
 /// (object sender, GameEndedEventArgs) args)
 /// </summary>
 public class OnGameEndedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToGameEnded(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -346,6 +373,9 @@ public class OnGameEndedAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToGameEnded(delegate(object sender, GameEndedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -363,13 +393,16 @@ public class OnGameEndedAttribute : EventsBaseAttribute {
 /// (object sender, GameStartedEventArgs) args)
 /// </summary>
 public class OnGameStartedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToGameStarted(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -379,6 +412,9 @@ public class OnGameStartedAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToGameStarted(delegate(object sender, GameStartedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -391,13 +427,16 @@ public class OnGameStartedAttribute : EventsBaseAttribute {
 /// (object sender, BattleStartedEventArgs) args)
 /// </summary>
 public class OnBattleStartedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToBattleStarted(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -407,6 +446,9 @@ public class OnBattleStartedAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToBattleStarted(delegate(object sender, BattleStartedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -419,13 +461,16 @@ public class OnBattleStartedAttribute : EventsBaseAttribute {
 /// (object sender, SomeTwitterEventEventArgs) args)
 /// </summary>
 public class OnSomeTwitterEventAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToSomeTwitterEvent(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -435,6 +480,9 @@ public class OnSomeTwitterEventAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToSomeTwitterEvent(delegate(object sender, SomeTwitterEventEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -447,13 +495,16 @@ public class OnSomeTwitterEventAttribute : EventsBaseAttribute {
 /// (object sender, LeaveBattleEventArgs) args)
 /// </summary>
 public class OnLeaveBattleAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToLeaveBattle(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -463,6 +514,9 @@ public class OnLeaveBattleAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToLeaveBattle(delegate(object sender, LeaveBattleEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -475,13 +529,16 @@ public class OnLeaveBattleAttribute : EventsBaseAttribute {
 /// (object sender, RequestRemoveCardEventArgs) args)
 /// </summary>
 public class OnRequestRemoveCardAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToRequestRemoveCard(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -491,6 +548,9 @@ public class OnRequestRemoveCardAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToRequestRemoveCard(delegate(object sender, RequestRemoveCardEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -503,13 +563,16 @@ public class OnRequestRemoveCardAttribute : EventsBaseAttribute {
 /// (object sender, AttackPhaseStartedEventArgs) args)
 /// </summary>
 public class OnAttackPhaseStartedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToAttackPhaseStarted(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -519,6 +582,9 @@ public class OnAttackPhaseStartedAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToAttackPhaseStarted(delegate(object sender, AttackPhaseStartedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -531,13 +597,16 @@ public class OnAttackPhaseStartedAttribute : EventsBaseAttribute {
 /// (object sender, AttackPhaseEndedEventArgs) args)
 /// </summary>
 public class OnAttackPhaseEndedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToAttackPhaseEnded(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -547,6 +616,9 @@ public class OnAttackPhaseEndedAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToAttackPhaseEnded(delegate(object sender, AttackPhaseEndedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -559,13 +631,16 @@ public class OnAttackPhaseEndedAttribute : EventsBaseAttribute {
 /// (object sender, RelicCreatedEventArgs) args)
 /// </summary>
 public class OnRelicCreatedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((SummerJam1EventsBase)events).SubscribeToRelicCreated(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -575,6 +650,9 @@ public class OnRelicCreatedAttribute : EventsBaseAttribute {
         }
         return ((SummerJam1EventsBase)events).SubscribeToRelicCreated(delegate(object sender, RelicCreatedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }

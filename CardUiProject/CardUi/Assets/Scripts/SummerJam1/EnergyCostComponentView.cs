@@ -16,7 +16,7 @@ namespace SummerJam1
                 EnergyText.gameObject.SetActive(false);
                 return;
             }
-            int amount = Component.Cost;
+            int amount = Component.Amount;
             Disposables.Add(AnimationQueue.Instance.Enqueue(( ()=>SomeRoutine(amount))));
         }
 

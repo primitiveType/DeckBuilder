@@ -25,7 +25,7 @@
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
       "Amount": 1
-    }
+    },
     {
       "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
       "Description": "Add 3 Spike cards to your deck."

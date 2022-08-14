@@ -30,13 +30,16 @@ public EventHandle<EntityCreatedEventArgs> SubscribeToEntityCreated(EventHandleD
 /// (object sender, EntityCreatedEventArgs) args)
 /// </summary>
 public class OnEntityCreatedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((EventsBase)events).SubscribeToEntityCreated(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -46,6 +49,9 @@ public class OnEntityCreatedAttribute : EventsBaseAttribute {
         }
         return ((EventsBase)events).SubscribeToEntityCreated(delegate(object sender, EntityCreatedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }

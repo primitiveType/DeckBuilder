@@ -17,12 +17,7 @@ namespace SummerJam1
         public bool IgnoreStealth { get; set; }
 
         private Player Player { get; set; }
-
-        public override bool Enabled
-        {
-            get => Player.Entity.GetComponent<Stealth>().Amount <= 0 && Entity.GetComponentInParent<EncounterSlotPile>() != null;
-            set => _enabled = value;
-        }
+        
 
         protected override void Initialize()
         {

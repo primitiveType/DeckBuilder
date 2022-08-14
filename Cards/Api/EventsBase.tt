@@ -135,13 +135,16 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 /// (object sender, <#= eventNode.Attributes["id"].Value #>EventArgs) args)
 /// </summary>
 public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((<#= catalogName #>)events).SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -151,6 +154,9 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttr
         }
         return ((<#= catalogName #>)events).SubscribeTo<#= eventNode.Attributes["id"].Value #>(delegate(object sender, <#= eventNode.Attributes["id"].Value #>EventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }

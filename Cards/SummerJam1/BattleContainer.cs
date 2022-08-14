@@ -63,9 +63,9 @@ namespace SummerJam1
             {
                 Context.CreateEntity(EncounterDrawPile.Entity, "Units/mcguffin.json");
                 Context.CreateEntity(EncounterDrawPile.Entity, "Units/treasureChest.json");
-                Context.CreateEntity(EncounterDrawPile.Entity, "Units/notGengar.json");
-                Context.CreateEntity(EncounterDrawPile.Entity, "Units/birthdayBoy.json");
-                Context.CreateEntity(EncounterDrawPile.Entity, "Units/sadRalph.json");
+                Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/notGengar.json");
+                Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/birthdayBoy.json");
+                Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/sadRalph.json");
             }
             
             Context.CreateEntity(EncounterDrawPile.Entity, "Units/boss.json");

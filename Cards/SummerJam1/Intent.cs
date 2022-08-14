@@ -5,7 +5,6 @@ namespace SummerJam1
 {
     public abstract class Intent : SummerJam1Component
     {
-        [JsonIgnore] public virtual bool Enabled { get; set; } = true;
 
         protected override void Initialize()
         {

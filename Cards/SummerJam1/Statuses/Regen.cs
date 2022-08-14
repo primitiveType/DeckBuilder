@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel;
 using System.Linq;
+using System.Net.NetworkInformation;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 
 namespace SummerJam1.Statuses
 {
-    public class Regen : SummerJam1Component, IAmount, IStatusEffect
+    public class Regen : EnabledWhenInEncounterSlot, IAmount, IStatusEffect
     {
         public int Amount { get; set; }
 
@@ -22,7 +23,7 @@ namespace SummerJam1.Statuses
         }
     }
 
-    public class GainArmorEveryTurn : SummerJam1Component, IStatusEffect, ITooltip, IAmount
+    public class GainArmorEveryTurn : EnabledWhenInEncounterSlot, IStatusEffect, ITooltip, IAmount
     {
         [PropertyChanged.DependsOn(nameof(Amount))]
         public string Tooltip => $"Gains {Amount} Armor every turn.";
@@ -36,7 +37,7 @@ namespace SummerJam1.Statuses
         }
     }
 
-    public class PlayerHealingHealsMe : SummerJam1Component, IStatusEffect, ITooltip
+    public class PlayerHealingHealsMe : EnabledWhenInEncounterSlot, IStatusEffect, ITooltip
     {
         public string Tooltip => $"Whenever the player heals, this unit heals for the same amount.";
 
@@ -73,7 +74,7 @@ namespace SummerJam1.Statuses
         }
     }
 
-    public class GainStrengthWhenPlayerHeals : SummerJam1Component, IAmount, ITooltip
+    public class GainStrengthWhenPlayerHeals : EnabledWhenInEncounterSlot, IAmount, ITooltip
     {
         public int Amount { get; set; }
         public string Tooltip => $"Tough - Whenever you heal, gains {Amount} Strength";
@@ -125,7 +126,7 @@ namespace SummerJam1.Statuses
         }
     }
 
-    public class ExhaustCardInHandAtStartOfTurn : SummerJam1Component, IStatusEffect, ITooltip, IAmount
+    public class ExhaustCardInHandAtStartOfTurn : EnabledWhenInEncounterSlot, IStatusEffect, ITooltip, IAmount
     {
         public string Tooltip => $"At the start of every turn, consumes {Amount} card in the player's hand.";
 
@@ -141,13 +142,46 @@ namespace SummerJam1.Statuses
         public int Amount { get; set; } = 1;
     }
 
-    public class DiscardCardInHandAtStartOfTurn : SummerJam1Component, IStatusEffect, ITooltip, IAmount
+    public abstract class EnabledWhenInEncounterSlot : SummerJam1Component
+    {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Entity.PropertyChanged += EntityOnPropertyChanged;
+            UpdateEnabledState();
+        }
+
+        private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Entity.Parent))
+            {
+                UpdateEnabledState();
+            }
+        }
+
+        private void UpdateEnabledState()
+        {
+            Enabled = Entity.GetComponentInParent<EncounterSlotPile>() != null;
+        }
+
+        public override void Terminate()
+        {
+            base.Terminate();
+            Entity.PropertyChanged -= EntityOnPropertyChanged;
+        }
+    }
+    
+    public class DiscardCardInHandAtStartOfTurn : EnabledWhenInEncounterSlot, IStatusEffect, ITooltip, IAmount
     {
         public string Tooltip => $"Scary - At the start of every turn, discards {Amount} card in the player's hand.";
 
         [OnTurnBegan]
         private void OnTurnBegan(object sender, TurnBeganEventArgs args)
         {
+            if (!Enabled)
+            {
+                return;
+            }
             for (int i = 0; i < Amount; i++)
             {
                 Game.Battle.Hand.Entity.Children.FirstOrDefault()?.TrySetParent(Game.Battle.Discard);
@@ -158,7 +192,7 @@ namespace SummerJam1.Statuses
     }
 
 
-    public class ReducePlayerStealthAtStartOfCombat : SummerJam1Component, IStatusEffect, ITooltip, IAmount
+    public class ReducePlayerStealthAtStartOfCombat : EnabledWhenInEncounterSlot, IStatusEffect, ITooltip, IAmount
     {
         public int Amount { get; set; }
 

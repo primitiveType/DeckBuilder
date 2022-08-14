@@ -254,13 +254,16 @@ public EventHandle<CardDrawnEventArgs> SubscribeToCardDrawn(EventHandleDelegate<
 /// (object sender, RequestPlayCardEventArgs) args)
 /// </summary>
 public class OnRequestPlayCardAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToRequestPlayCard(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -270,6 +273,9 @@ public class OnRequestPlayCardAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToRequestPlayCard(delegate(object sender, RequestPlayCardEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -290,13 +296,16 @@ public class OnRequestPlayCardAttribute : EventsBaseAttribute {
 /// (object sender, CardPlayedEventArgs) args)
 /// </summary>
 public class OnCardPlayedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToCardPlayed(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -306,6 +315,9 @@ public class OnCardPlayedAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToCardPlayed(delegate(object sender, CardPlayedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -327,13 +339,16 @@ public class OnCardPlayedAttribute : EventsBaseAttribute {
 /// (object sender, CardCreatedEventArgs) args)
 /// </summary>
 public class OnCardCreatedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToCardCreated(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -343,6 +358,9 @@ public class OnCardCreatedAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToCardCreated(delegate(object sender, CardCreatedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -360,13 +378,16 @@ public class OnCardCreatedAttribute : EventsBaseAttribute {
 /// (object sender, CardDiscardedEventArgs) args)
 /// </summary>
 public class OnCardDiscardedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToCardDiscarded(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -376,6 +397,9 @@ public class OnCardDiscardedAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToCardDiscarded(delegate(object sender, CardDiscardedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -393,13 +417,16 @@ public class OnCardDiscardedAttribute : EventsBaseAttribute {
 /// (object sender, CardExhaustedEventArgs) args)
 /// </summary>
 public class OnCardExhaustedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToCardExhausted(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -409,6 +436,9 @@ public class OnCardExhaustedAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToCardExhausted(delegate(object sender, CardExhaustedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -426,13 +456,16 @@ public class OnCardExhaustedAttribute : EventsBaseAttribute {
 /// (object sender, RequestDamageMultipliersEventArgs) args)
 /// </summary>
 public class OnRequestDamageMultipliersAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToRequestDamageMultipliers(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -442,6 +475,9 @@ public class OnRequestDamageMultipliersAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToRequestDamageMultipliers(delegate(object sender, RequestDamageMultipliersEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -464,13 +500,16 @@ public class OnRequestDamageMultipliersAttribute : EventsBaseAttribute {
 /// (object sender, RequestDamageReductionEventArgs) args)
 /// </summary>
 public class OnRequestDamageReductionAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToRequestDamageReduction(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -480,6 +519,9 @@ public class OnRequestDamageReductionAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToRequestDamageReduction(delegate(object sender, RequestDamageReductionEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -502,13 +544,16 @@ public class OnRequestDamageReductionAttribute : EventsBaseAttribute {
 /// (object sender, CardPlayFailedEventArgs) args)
 /// </summary>
 public class OnCardPlayFailedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToCardPlayFailed(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -518,6 +563,9 @@ public class OnCardPlayFailedAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToCardPlayFailed(delegate(object sender, CardPlayFailedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -535,13 +583,16 @@ public class OnCardPlayFailedAttribute : EventsBaseAttribute {
 /// (object sender, RequestHealEventArgs) args)
 /// </summary>
 public class OnRequestHealAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToRequestHeal(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -551,6 +602,9 @@ public class OnRequestHealAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToRequestHeal(delegate(object sender, RequestHealEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -574,13 +628,16 @@ public class OnRequestHealAttribute : EventsBaseAttribute {
 /// (object sender, ChooseCardsToDiscardEventArgs) args)
 /// </summary>
 public class OnChooseCardsToDiscardAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToChooseCardsToDiscard(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -590,6 +647,9 @@ public class OnChooseCardsToDiscardAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToChooseCardsToDiscard(delegate(object sender, ChooseCardsToDiscardEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -609,13 +669,16 @@ public class OnChooseCardsToDiscardAttribute : EventsBaseAttribute {
 /// (object sender, EntityKilledEventArgs) args)
 /// </summary>
 public class OnEntityKilledAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToEntityKilled(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -625,6 +688,9 @@ public class OnEntityKilledAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToEntityKilled(delegate(object sender, EntityKilledEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -644,13 +710,16 @@ public class OnEntityKilledAttribute : EventsBaseAttribute {
 /// (object sender, DamageDealtEventArgs) args)
 /// </summary>
 public class OnDamageDealtAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToDamageDealt(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -660,6 +729,9 @@ public class OnDamageDealtAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToDamageDealt(delegate(object sender, DamageDealtEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -681,13 +753,16 @@ public class OnDamageDealtAttribute : EventsBaseAttribute {
 /// (object sender, HealDealtEventArgs) args)
 /// </summary>
 public class OnHealDealtAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToHealDealt(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -697,6 +772,9 @@ public class OnHealDealtAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToHealDealt(delegate(object sender, HealDealtEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -718,13 +796,16 @@ public class OnHealDealtAttribute : EventsBaseAttribute {
 /// (object sender, TurnEndedEventArgs) args)
 /// </summary>
 public class OnTurnEndedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToTurnEnded(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -734,6 +815,9 @@ public class OnTurnEndedAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToTurnEnded(delegate(object sender, TurnEndedEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -746,13 +830,16 @@ public class OnTurnEndedAttribute : EventsBaseAttribute {
 /// (object sender, TurnBeganEventArgs) args)
 /// </summary>
 public class OnTurnBeganAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToTurnBegan(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -762,6 +849,9 @@ public class OnTurnBeganAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToTurnBegan(delegate(object sender, TurnBeganEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -774,13 +864,16 @@ public class OnTurnBeganAttribute : EventsBaseAttribute {
 /// (object sender, DrawPhaseBeganEventArgs) args)
 /// </summary>
 public class OnDrawPhaseBeganAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToDrawPhaseBegan(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -790,6 +883,9 @@ public class OnDrawPhaseBeganAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToDrawPhaseBegan(delegate(object sender, DrawPhaseBeganEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }
@@ -802,13 +898,16 @@ public class OnDrawPhaseBeganAttribute : EventsBaseAttribute {
 /// (object sender, CardDrawnEventArgs) args)
 /// </summary>
 public class OnCardDrawnAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, object instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
             return ((CardEventsBase)events).SubscribeToCardDrawn(delegate
             {
+                if(!instance.Enabled){
+                    return;
+                }
                 attached.Invoke(instance, Array.Empty<object>());
             });
         }
@@ -818,6 +917,9 @@ public class OnCardDrawnAttribute : EventsBaseAttribute {
         }
         return ((CardEventsBase)events).SubscribeToCardDrawn(delegate(object sender, CardDrawnEventArgs args)
         {
+            if(!instance.Enabled){
+                return;
+            }
             attached.Invoke(instance, new[] { sender, args });
         });
     }

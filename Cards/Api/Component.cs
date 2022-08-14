@@ -12,6 +12,7 @@ namespace Api
         protected Context Context => Entity.Context;
         private List<IDisposable> EventHandles { get; } = new List<IDisposable>();
         [JsonIgnore] public IEntity Entity { get; private set; }
+        public bool Enabled { get; set; } = true;
 
         [JsonIgnore] public LifecycleState State { get; private set; }
         private Lazy<EventsBase> LazyEvents { get; }

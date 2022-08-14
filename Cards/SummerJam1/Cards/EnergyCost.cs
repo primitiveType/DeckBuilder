@@ -67,7 +67,7 @@ namespace SummerJam1.Cards
             }
         }
 
-        public string Description => "Lose {Amount} Health.";
+        public string Description => $"Lose {Amount} Health.";
         public int Amount { get; set; }
     }
 }
