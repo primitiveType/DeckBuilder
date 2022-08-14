@@ -43,9 +43,13 @@ namespace SummerJam1
 
             //create an example deck.
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
             {
-                Context.CreateEntity(Deck.Entity, "Cards/kill.json");
+                Context.CreateEntity(Deck.Entity, "Cards/Pulse.json");
+            }
+            for (int i = 0; i < 5; i++)
+            {
+                Context.CreateEntity(Deck.Entity, "Cards/NewBlockCard.json");
             }
 
             Events.OnGameStarted(new GameStartedEventArgs());

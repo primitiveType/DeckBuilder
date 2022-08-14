@@ -171,7 +171,7 @@ namespace SummerJam1.Cards.Effects
             return true;
         }
 
-        private int Difference => Math.Max(0, PlayerStartHealth - CurrentHealth) + Entity.GetComponent<HealthCost>()?.Cost ?? 0;
+        private int Difference => Math.Max(0, PlayerStartHealth - CurrentHealth) + Entity.GetComponent<HealthCost>()?.Amount ?? 0;
 
         [PropertyChanged.DependsOn(nameof(CurrentHealth))]
         public string Description => $"Deal {Multiplier} damage for each health lost this turn. ({Difference * Multiplier})";

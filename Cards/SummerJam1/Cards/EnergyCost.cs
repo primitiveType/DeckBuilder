@@ -1,12 +1,13 @@
 using System;
+using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 
 namespace SummerJam1.Cards
 {
-    public class EnergyCost : SummerJam1Component
+    public class EnergyCost : SummerJam1Component, IAmount
     {
-        public int Cost { get; set; }
+        public int Amount { get; set; }
 
 
         [OnRequestPlayCard]
@@ -17,7 +18,7 @@ namespace SummerJam1.Cards
                 return;
             }
 
-            if (Game.Player.CurrentEnergy < Cost)
+            if (Game.Player.CurrentEnergy < Amount)
             {
                 args.Blockers.Add(CardBlockers.NOT_ENOUGH_ENERGY);
             }
@@ -30,7 +31,7 @@ namespace SummerJam1.Cards
             {
                 if (!args.IsFree)
                 {
-                    if (!Game.Player.TryUseEnergy(Cost))
+                    if (!Game.Player.TryUseEnergy(Amount))
                     {
                         throw new Exception("Somehow played a card without the required energy!");
                     }
@@ -39,19 +40,17 @@ namespace SummerJam1.Cards
         }
     }
 
-    public class HealthCost : SummerJam1Component
+    public class HealthCost : SummerJam1Component, IDescription, IAmount
     {
-        public int Cost { get; set; }
-
 
         [OnRequestPlayCard]
         private void TryPlayCard(object sender, RequestPlayCardEventArgs args)
         {
             if (args.CardId == Entity)
             {
-                if(Game.Player.Entity.GetComponent<Health>().Amount <= Cost)
+                if(Game.Player.Entity.GetComponent<Health>().Amount <= Amount)
                 {
-                    //args.Blockers.Add(CardBlockers.NOT_ENOUGH_HEALTH);//DEBUG
+                    args.Blockers.Add(CardBlockers.NOT_ENOUGH_HEALTH);//DEBUG
                 }
             }
         }
@@ -63,9 +62,12 @@ namespace SummerJam1.Cards
             {
                 if (!args.IsFree)
                 {
-                    Game.Player.Entity.GetComponent<Health>().DealDamage(Cost, Entity);
+                    Game.Player.Entity.GetComponent<Health>().DealDamage(Amount, Entity);
                 }
             }
         }
+
+        public string Description => "Lose {Amount} Health.";
+        public int Amount { get; set; }
     }
 }

@@ -59,12 +59,17 @@ namespace SummerJam1
 
         private void PopulateEncounterDrawPile()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 3; i++)
             {
-                Context.CreateEntity(EncounterDrawPile.Entity, "Units/boss.json");
                 Context.CreateEntity(EncounterDrawPile.Entity, "Units/mcguffin.json");
                 Context.CreateEntity(EncounterDrawPile.Entity, "Units/treasureChest.json");
+                Context.CreateEntity(EncounterDrawPile.Entity, "Units/notGengar.json");
+                Context.CreateEntity(EncounterDrawPile.Entity, "Units/birthdayBoy.json");
+                Context.CreateEntity(EncounterDrawPile.Entity, "Units/sadRalph.json");
             }
+            
+            Context.CreateEntity(EncounterDrawPile.Entity, "Units/boss.json");
+
         }
 
 

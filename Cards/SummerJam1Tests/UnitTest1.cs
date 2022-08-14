@@ -123,7 +123,7 @@ namespace SummerJam1Tests
         //     card.AddComponent<NameComponent>();
         //     card.AddComponent<CardVisualComponent>();
         //     card.AddComponent<Draggable>().CanDrag = true;
-        //     card.AddComponent<EnergyCost>().Cost = 1;
+        //     card.AddComponent<EnergyCost>().Amount = 1;
         //
         //
         //     string cardstr = Serializer.Serialize(card);
@@ -319,6 +319,11 @@ namespace SummerJam1Tests
 
     public class TestUnit : Unit
     {
+        protected override bool PlayCard(IEntity target)
+        {
+            return true;
+        }
+
         public override bool AcceptsParent(IEntity parent)
         {
             return true;

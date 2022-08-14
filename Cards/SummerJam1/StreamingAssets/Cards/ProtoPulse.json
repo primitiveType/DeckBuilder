@@ -8,29 +8,22 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 999
-    },
-    {
-      "$type": "SummerJam1.Cards.Effects.TargetHealthComponent, SummerJam1"
+      "DamageAmount": 3
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "earthPulse"
+      "AssetName": "protoPulse"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Kill"
+      "Value": "Proto-Pulse"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Cost": 0
-    },
-    {
-      "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
-      "Cost": 0
+      "Amount": 1
     }
   ]
 }
