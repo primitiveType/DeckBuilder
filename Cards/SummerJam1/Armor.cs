@@ -10,17 +10,17 @@ namespace SummerJam1
     {
         public int Amount { get; set; }
 
-        [OnRequestDamageReduction]
-        private void OnRequestDealDamage(object sender, RequestDamageReductionEventArgs args)
-        {
-            if (args.Target != Entity)
-            {
-                return;
-            }
-            var blocked = Math.Min(args.Amount, Amount);
-            Amount -= blocked;
-            args.Reduction.Add(blocked);
-        }
+        // [OnRequestDamageModifiers]
+        // private void OnRequestDealDamage(object sender, RequestDamageModifiersEventArgrs argrs)
+        // {
+        //     if (argrs.Target != Entity)
+        //     {
+        //         return;
+        //     }
+        //     var blocked = Math.Min(argrs.Amount, Amount);
+        //     Amount -= blocked;
+        //     argrs.Reduction.Add(blocked);
+        // }
 
         [OnBattleEnded]
         [OnAttackPhaseEnded]
@@ -30,5 +30,20 @@ namespace SummerJam1
         }
 
         public string Tooltip => Tooltips.ARMOR_TOOLTIP;
+
+        /// <summary>
+        /// Returns remaining damage.
+        /// </summary>
+        /// <param name="damage"></param>
+        /// <returns></returns>
+        public int TryDealDamage(int damage)
+        {
+            int amountBefore = Amount;
+            Amount = Math.Max(Amount - damage, 0);
+            int damageDealt = amountBefore - Amount;
+
+
+            return damage - damageDealt;
+        }
     }
 }

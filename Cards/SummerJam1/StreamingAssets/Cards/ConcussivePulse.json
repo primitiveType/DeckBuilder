@@ -23,14 +23,11 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 5
+      "DamageAmount": 5,
+      "Aoe": true
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Amount": 2
-    },
-    {
-      "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
       "Amount": 2
     }
   ]

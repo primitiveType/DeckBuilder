@@ -25,11 +25,11 @@
         <arg name="Target" type="IEntity"/>
         <member name="Multiplier" type="List&lt;float&gt;" value="new List&lt;float&gt;()"/>
     </event>
-    <event id="RequestDamageReduction">
+    <event id="RequestDamageModifiers">
         <arg name="Amount" type="int"/>
         <arg name="Source" type="IEntity"/>
         <arg name="Target" type="IEntity"/>
-        <member name="Reduction" type="List&lt;int&gt;" value="new List&lt;int&gt;()"/>
+        <member name="Modifiers" type="List&lt;int&gt;" value="new List&lt;int&gt;()"/>
     </event>
     <event id="CardPlayFailed">
         <arg name="Reasons" type="List&lt;string&gt;" value="new List&lt;string&gt;()"/>

@@ -8,7 +8,8 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 3
+      "DamageAmount": 1,
+      "Attacks": 3
     },
     {
       "$type": "SummerJam1.Cards.Effects.DrawCards, SummerJam1",

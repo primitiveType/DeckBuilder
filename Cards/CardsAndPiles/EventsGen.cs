@@ -95,20 +95,20 @@ public EventHandle<RequestDamageMultipliersEventArgs> SubscribeToRequestDamageMu
     return handler;
 } 
     #endregion Code for event RequestDamageMultipliers
-    #region Code for event RequestDamageReduction
-private event EventHandleDelegate<RequestDamageReductionEventArgs> RequestDamageReduction;
-public virtual void OnRequestDamageReduction(RequestDamageReductionEventArgs args)
+    #region Code for event RequestDamageModifiers
+private event EventHandleDelegate<RequestDamageModifiersEventArgs> RequestDamageModifiers;
+public virtual void OnRequestDamageModifiers(RequestDamageModifiersEventArgs args)
 {
-    RequestDamageReduction?.Invoke(this, args);
+    RequestDamageModifiers?.Invoke(this, args);
 }
 
-public EventHandle<RequestDamageReductionEventArgs> SubscribeToRequestDamageReduction(EventHandleDelegate<RequestDamageReductionEventArgs> action)
+public EventHandle<RequestDamageModifiersEventArgs> SubscribeToRequestDamageModifiers(EventHandleDelegate<RequestDamageModifiersEventArgs> action)
 {
-    var handler = new EventHandle<RequestDamageReductionEventArgs>(action, () => RequestDamageReduction -= action);
-    RequestDamageReduction += handler.Invoke;
+    var handler = new EventHandle<RequestDamageModifiersEventArgs>(action, () => RequestDamageModifiers -= action);
+    RequestDamageModifiers += handler.Invoke;
     return handler;
 } 
-    #endregion Code for event RequestDamageReduction
+    #endregion Code for event RequestDamageModifiers
     #region Code for event CardPlayFailed
 private event EventHandleDelegate<CardPlayFailedEventArgs> CardPlayFailed;
 public virtual void OnCardPlayFailed(CardPlayFailedEventArgs args)
@@ -497,15 +497,15 @@ public class OnRequestDamageMultipliersAttribute : EventsBaseAttribute {
 }
 
         }/// <summary>
-/// (object sender, RequestDamageReductionEventArgs) args)
+/// (object sender, RequestDamageModifiersEventArgs) args)
 /// </summary>
-public class OnRequestDamageReductionAttribute : EventsBaseAttribute {
+public class OnRequestDamageModifiersAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
-            return ((CardEventsBase)events).SubscribeToRequestDamageReduction(delegate
+            return ((CardEventsBase)events).SubscribeToRequestDamageModifiers(delegate
             {
                 if(!instance.Enabled){
                     return;
@@ -514,10 +514,10 @@ public class OnRequestDamageReductionAttribute : EventsBaseAttribute {
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
-        parameters[1].ParameterType != typeof(RequestDamageReductionEventArgs)){
-            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, RequestDamageReductionEventArgs) args)");
+        parameters[1].ParameterType != typeof(RequestDamageModifiersEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, RequestDamageModifiersEventArgs) args)");
         }
-        return ((CardEventsBase)events).SubscribeToRequestDamageReduction(delegate(object sender, RequestDamageReductionEventArgs args)
+        return ((CardEventsBase)events).SubscribeToRequestDamageModifiers(delegate(object sender, RequestDamageModifiersEventArgs args)
         {
             if(!instance.Enabled){
                 return;
@@ -528,13 +528,13 @@ public class OnRequestDamageReductionAttribute : EventsBaseAttribute {
 
 
 }
-    //public delegate void RequestDamageReductionEvent (object sender, RequestDamageReductionEventArgs args);
+    //public delegate void RequestDamageModifiersEvent (object sender, RequestDamageModifiersEventArgs args);
 
-    public class RequestDamageReductionEventArgs {        public  int Amount { get; }
+    public class RequestDamageModifiersEventArgs {        public  int Amount { get; }
         public  IEntity Source { get; }
         public  IEntity Target { get; }
-        public  List<int> Reduction { get; set;} 
-=new List<int>();        public  RequestDamageReductionEventArgs (int Amount, IEntity Source, IEntity Target   ){
+        public  List<int> Modifiers { get; set;} 
+=new List<int>();        public  RequestDamageModifiersEventArgs (int Amount, IEntity Source, IEntity Target   ){
                   this.Amount = Amount; 
               this.Source = Source; 
               this.Target = Target; 

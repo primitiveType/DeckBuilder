@@ -1,10 +1,8 @@
-﻿using System;
-using CardsAndPiles.Components;
+﻿using App;
 using Simple_Health_Bar.Scripts;
-using UnityEditor;
 using UnityEngine;
 
-namespace App
+namespace SummerJam1
 {
     public class HealthComponentView : ComponentView<Health>
     {

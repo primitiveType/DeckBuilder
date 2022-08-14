@@ -29,7 +29,7 @@
       "$type": "SummerJam1.DeathAddsMoneyToPlayer, SummerJam1"
     },
     {
-      "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
+      "$type": "SummerJam1.Health, SummerJam1",
       "Amount": 40,
       "Max": 40
     },

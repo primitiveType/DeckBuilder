@@ -21,6 +21,26 @@ namespace SummerJam1
 
         private const int NumSlots = 5;
 
+        public List<IEntity> GetEntitiesInAdjacentSlots(IEntity slotOrMonster)
+        {
+            List<IEntity> adjacents = new List<IEntity>(2);
+            var slot = slotOrMonster.GetComponentInParent<EncounterSlotPile>();
+            var index = EncounterSlots.IndexOf(slot);
+
+            if (index > 0 && EncounterSlots[index - 1].Entity.Children.Count > 0)
+            {
+                adjacents.Add(EncounterSlots[index - 1].Entity.Children.First());
+            }
+
+            if (index < NumSlots - 1 && EncounterSlots[index + 1].Entity.Children.Count > 0)
+            {
+                adjacents.Add(EncounterSlots[index + 1].Entity.Children.First());
+            }
+
+
+            return adjacents;
+        }
+
         public IEntity CreateRandomMonster(IEntity parent, int difficulty)
         {
             DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, $"Units", "Standard", $"{difficulty}"));
@@ -67,9 +87,8 @@ namespace SummerJam1
                 Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/birthdayBoy.json");
                 Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/sadRalph.json");
             }
-            
-            Context.CreateEntity(EncounterDrawPile.Entity, "Units/boss.json");
 
+            Context.CreateEntity(EncounterDrawPile.Entity, "Units/boss.json");
         }
 
 

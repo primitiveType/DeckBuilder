@@ -25,6 +25,7 @@ namespace SummerJam1.Cards.Effects
             }
         }
     }
+
     public class DamageUnitEqualToStealth : SummerJam1Component, IEffect
     {
         public bool DoEffect(IEntity target)
@@ -219,11 +220,12 @@ namespace SummerJam1.Cards.Effects
     public class DamageUnitCard : SummerJam1Component, IEffect, IDescription
     {
         [JsonProperty] public int DamageAmount { get; private set; }
+        [JsonProperty] public int Attacks { get; private set; } = 1;
+        [JsonProperty] public bool Aoe { get; private set; }
 
 
         public bool DoEffect(IEntity target)
         {
-
             ITakesDamage unit = target.GetComponentInChildren<ITakesDamage>();
 
             if (unit == null)
@@ -231,11 +233,28 @@ namespace SummerJam1.Cards.Effects
                 return false;
             }
 
-
             unit.TryDealDamage(DamageAmount, Entity);
+            if (Aoe)
+            {
+                foreach (IEntity entitiesInAdjacentSlot in Game.Battle.GetEntitiesInAdjacentSlots(target))
+                {
+                    var health = entitiesInAdjacentSlot.GetComponent<ITakesDamage>();
+                    health.TryDealDamage(DamageAmount, Entity);
+                }
+            }
             return true;
         }
 
-        public string Description => $"Deal {DamageAmount} damage.";
+        public string Description
+        {
+            get
+            {
+                if (Aoe)
+                {
+                    return $"Deal {DamageAmount} damage to target and adjacent.";
+                }
+                return $"Deal {DamageAmount} damage.";
+            }
+        }
     }
 }

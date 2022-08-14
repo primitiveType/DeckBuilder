@@ -1,12 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using Api;
+using CardsAndPiles;
+using CardsAndPiles.Components;
 
-namespace CardsAndPiles.Components
+namespace SummerJam1
 {
-    public class Health : CardsAndPilesComponent, ITakesDamageInternal, IHealable, IAmount
+    public class Health : CardsAndPilesComponent, IHealable, IAmount, ITakesDamage
     {
-        public int Amount { get; set; }
+        private int _amount;
+
+        public int Amount
+        {
+            get => _amount;
+            set
+            {
+                
+                _amount = Math.Max(0, value);
+            }
+        }
+
         public int Max { get; set; }
         
         public bool DontDie { get; set; }
@@ -17,15 +30,16 @@ namespace CardsAndPiles.Components
             Events.OnRequestDamageMultipliers(multipliersEventArgs);
             var multipliers = multipliersEventArgs.Multiplier;
 
-            RequestDamageReductionEventArgs reductionEventArgs = new RequestDamageReductionEventArgs(damage, source, Entity);
-            Events.OnRequestDamageReduction(reductionEventArgs);
+            RequestDamageModifiersEventArgs modifiersEventArgrs = new RequestDamageModifiersEventArgs(damage, source, Entity);
+            Events.OnRequestDamageModifiers(modifiersEventArgrs);
 
-            var reductions = reductionEventArgs.Reduction;
-            // Events.OnRequestDealDamage(args); multipliers
-            // Events.OnRequestDealDamage(args); clamps
-            // Events.OnRequestDealDamage(args); reduction
-            int amount = CalculateDamage(multipliersEventArgs.Amount, multipliers, reductions);
+            var modifiers = modifiersEventArgrs.Modifiers;
+            // Events.OnRequestDealDamage(argrs); multipliers
+            // Events.OnRequestDealDamage(argrs); clamps
+            // Events.OnRequestDealDamage(argrs); reduction
+            int amount = CalculateDamage(multipliersEventArgs.Amount, multipliers, modifiers);
             DealDamage(amount, multipliersEventArgs.Source);
+            
             return amount;
         }
 
@@ -48,7 +62,7 @@ namespace CardsAndPiles.Components
 
             foreach (int reduction in reductions)
             {
-                calculated -= reduction;
+                calculated += reduction;
             }
 
             return calculated;
@@ -56,6 +70,12 @@ namespace CardsAndPiles.Components
 
         public void DealDamage(int damage, IEntity source)
         {
+            var armor = Entity.GetComponent<Armor>();
+            
+            if (armor != null)
+            {
+                damage = armor.TryDealDamage(damage);
+            }
             Amount -= damage;
             Events.OnDamageDealt(new DamageDealtEventArgs(Entity, source, damage));
             if (Amount <= 0 && !DontDie)

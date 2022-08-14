@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using SummerJam1.Statuses;
 
 namespace SummerJam1
 {
-    public abstract class Intent : SummerJam1Component
+    public abstract class Intent : EnabledWhenInEncounterSlot
     {
 
         protected override void Initialize()

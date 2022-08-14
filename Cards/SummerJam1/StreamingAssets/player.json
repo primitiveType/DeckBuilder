@@ -27,7 +27,7 @@
       "AssetName": "Player"
     },
     {
-      "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
+      "$type": "SummerJam1.Health, SummerJam1",
       "Amount": 30,
       "Max": 30,
       "DontDie": false

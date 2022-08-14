@@ -26,7 +26,7 @@
       "Amount" : 2
     },
     {
-      "$type": "CardsAndPiles.Components.Health, CardsAndPiles",
+      "$type": "SummerJam1.Health, SummerJam1",
       "Amount": 35,
       "Max": 35
     },

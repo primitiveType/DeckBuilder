@@ -5,6 +5,7 @@ using System.Linq;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
+using CardTestProject;
 using NUnit.Framework;
 using RogueMaps;
 using SummerJam1;
@@ -36,7 +37,7 @@ namespace SummerJam1Tests
     {
         private Context Context { get; set; }
         private Game Game { get; set; }
-
+        private CardEvents Events => (CardEvents)Context.Events;
         [SetUp]
         public void Setup()
         {
@@ -302,7 +303,90 @@ namespace SummerJam1Tests
             CustomCell blockedCell = map.GetAllCells().First(cell => !cell.IsWalkable);
         }
 
-        
+        [Test]
+        public void TestDealDamage()
+        {
+            //Create a game
+            IEntity game = Context.CreateEntity();
+
+            //Add entity with test components
+            IEntity entity = Context.CreateEntity(game);
+            Health health = entity.AddComponent<Health>();
+            health.Amount = 10;
+            Assert.That(health.Amount, Is.EqualTo(10));
+            entity.TrySetParent(game);
+
+
+            health.TryDealDamage(3, entity);
+
+
+            Assert.That(health.Amount, Is.EqualTo(7));
+
+            health.TryDealDamage(30, entity);
+
+            Assert.That(health.Amount, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void TestPredictDamage()
+        {
+            //Create a game
+            IEntity game = Context.Root;
+
+            //Add entity with test components
+            IEntity entity = Context.CreateEntity(game);
+            Health health = entity.AddComponent<Health>();
+            health.Amount = 10;
+            Assert.That(health.Amount, Is.EqualTo(10));
+            entity.TrySetParent(game);
+
+
+            var gameString = Serializer.Serialize(Context);
+            var gameCopy = Serializer.Deserialize<Context>(gameString);
+
+            var healthCopy = gameCopy.Root.Children.First().GetComponent<Health>();
+
+            Assert.NotNull(healthCopy);
+            Assert.AreEqual(healthCopy.Amount, health.Amount);
+
+            RequestDamageMultipliersEventArgs
+                args2 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
+            Events.OnRequestDamageMultipliers(args2);
+
+
+            Assert.NotNull(healthCopy);
+            Assert.AreNotEqual(healthCopy.Amount, health.Amount);
+            Assert.NotNull(healthCopy.Entity);
+            Assert.AreEqual(healthCopy.Entity.Id, health.Entity.Id);
+        }
+
+        [Test]
+        public void TestPreventDamage()
+        {
+            //Create a game
+            IEntity game = Context.CreateEntity();
+
+            //Add entity with test components
+            IEntity entity = Context.CreateEntity(game);
+            Health health = entity.AddComponent<Health>();
+            health.Amount = 10;
+            //Prevent the next source of damage.
+            entity.AddComponent<PreventAllDamageOnceComponent>();
+            Assert.That(health.Amount, Is.EqualTo(10));
+
+
+            RequestDamageMultipliersEventArgs
+                args2 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
+            Events.OnRequestDamageMultipliers(args2);
+            //damage should have been prevented.
+            Assert.That(health.Amount, Is.EqualTo(10));
+
+            RequestDamageMultipliersEventArgs
+                args3 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
+            Events.OnRequestDamageMultipliers(args3);
+            //damage should not have been prevented.
+            Assert.That(health.Amount, Is.EqualTo(0));
+        }
 
         private IEntity MakeUnit()
         {
@@ -340,4 +424,5 @@ namespace SummerJam1Tests
             ToDo.Invoke();
         }
     }
+    
 }
