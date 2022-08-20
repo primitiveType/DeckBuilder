@@ -130,6 +130,17 @@ namespace Api
 
         public bool TrySetParent(IEntity parent)
         {
+            if (!CanSetParent(parent))
+            {
+                return false;
+            }
+
+            SetParent(parent);
+            return true;
+        }
+
+        public bool CanSetParent(IEntity parent)
+        {
             if (parent != null) //setting null is always valid.... ?
             {
                 foreach (IParentConstraint component in GetComponents<IParentConstraint>())
@@ -150,7 +161,6 @@ namespace Api
                 }
             }
 
-            SetParent(parent);
             return true;
         }
 
@@ -179,7 +189,25 @@ namespace Api
         public T GetComponentInParent<T>()
         {
             T component = default(T);
-            var entity = Parent;
+            IEntity entity = Parent;
+            while (entity != null)
+            {
+                component = entity.GetComponent<T>();
+                if (component != null)
+                {
+                    return component;
+                }
+
+                entity = entity.Parent;
+            }
+
+            return component;
+        }
+
+        public T GetComponentInSelfOrParent<T>()
+        {
+            T component = default(T);
+            IEntity entity = this;
             while (entity != null)
             {
                 component = entity.GetComponent<T>();
@@ -319,5 +347,7 @@ namespace Api
         void Destroy();
         T GetOrAddComponent<T>() where T : Component, new();
         bool RemoveComponent<TType>() where TType : Component;
+        T GetComponentInSelfOrParent<T>();
+        bool CanSetParent(IEntity parent);
     }
 }

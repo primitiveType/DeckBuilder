@@ -29,6 +29,10 @@
     </event>
     <event id="AttackPhaseEnded">
     </event>
+    <event id="DungeonPhaseStarted">
+    </event>
+    <event id="DungeonPhaseEnded">
+    </event>
     <event id="RelicCreated">
         <arg name="Relic" type="IEntity"/>
     </event>

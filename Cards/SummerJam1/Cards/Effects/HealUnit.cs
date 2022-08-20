@@ -10,7 +10,7 @@ namespace SummerJam1.Cards.Effects
 
         public bool DoEffect(IEntity target)
         {
-            return Game.Player.Entity.GetComponent<Stealth>().TryUseStealth(-Amount);
+            return Game.Player.Entity.GetOrAddComponent<Stealth>().TryUseStealth(-Amount);
         }
 
         public string Description => $"Gain {Amount} Stealth.";

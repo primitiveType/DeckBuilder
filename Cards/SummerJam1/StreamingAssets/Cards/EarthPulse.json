@@ -28,10 +28,6 @@
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
       "Amount": 1
-    },
-    {
-      "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
-      "Amount": 0
     }
   ]
 }

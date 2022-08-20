@@ -7,6 +7,14 @@
       "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
+      "Amount": 0
+    },
+    {
+      "$type": "SummerJam1.Units.Blood, SummerJam1",
+      "Amount" : 1
+    },
+    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Birthday Boy!"
     },
@@ -16,19 +24,15 @@
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 3
+      "Amount": 2
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 30,
-      "Max": 30
-    },
-    {
-      "$type": "SummerJam1.Statuses.ReducePlayerStealthAtStartOfCombat, SummerJam1",
-      "Amount": 2
+      "Amount": 7,
+      "Max": 7
     },
     {
       "$type": "SummerJam1.Units.CardPrize, SummerJam1",

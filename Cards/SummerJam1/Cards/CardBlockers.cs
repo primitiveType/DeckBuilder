@@ -5,6 +5,7 @@ namespace SummerJam1.Cards
         public const string NOT_ENOUGH_ENERGY = "Not Enough Energy!";
         public const string NOT_ENOUGH_HEALTH = "Not Enough Health!";
         public const string INVALID_TARGET = "Invalid Target!";
+        public const string NOT_ENOUGH_BLOOD = "Not enough blood!";
     }
 
     public class Tooltips

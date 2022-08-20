@@ -9,7 +9,6 @@ namespace SummerJam1
 
         protected void Awake()
         {
-            base.Start();
             SetModel(GameContext.Instance.Game.Battle.EncounterSlots[SlotNum]);
         }
     }

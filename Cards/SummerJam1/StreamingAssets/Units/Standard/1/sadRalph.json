@@ -7,6 +7,14 @@
       "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
+      "Amount": 0
+    },
+    {
+      "$type": "SummerJam1.Units.Blood, SummerJam1",
+      "Amount" : 1
+    },
+    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Sad Ralph"
     },
@@ -23,8 +31,8 @@
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 45,
-      "Max": 45
+      "Amount": 4,
+      "Max": 4
     },
     {
       "$type": "SummerJam1.Statuses.PlayerHealingHealsMe, SummerJam1"

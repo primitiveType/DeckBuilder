@@ -7,6 +7,14 @@
       "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
+      "Amount": 1
+    },
+    {
+      "$type": "SummerJam1.Units.Blood, SummerJam1",
+      "Amount" : 1
+    },
+    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Not Gengar"
     },
@@ -16,7 +24,7 @@
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 6
+      "Amount": 2
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"
@@ -30,13 +38,13 @@
       "Prefab": "Cards/Irreverence.json"
     },
     {
-      "$type": "SummerJam1.Statuses.DiscardCardInHandAtStartOfTurn, SummerJam1",
+      "$type": "SummerJam1.GrantsMultiAttackToAdjacent, SummerJam1",
       "Amount": 1
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 25,
-      "Max": 25
+      "Amount": 5,
+      "Max": 5
     }
   ]
 }

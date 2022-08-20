@@ -9,7 +9,8 @@ namespace SummerJam1.Cards
 
     public class StrengthTooltip : SummerJam1Component, ITooltip
     {
-        public string Tooltip => "Strength- Increases damage dealt by units.";
+        public string Tooltip => s_Tooltip;
+        public static string s_Tooltip = "Strength - Increases damage dealt.";
     }
 
     public class BurnTooltip : SummerJam1Component, ITooltip

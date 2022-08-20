@@ -18,10 +18,6 @@
       "Value": "Concussive Pulse"
     },
     {
-      "$type": "SummerJam1.Cards.Effects.AddStealth, SummerJam1",
-      "Amount": 1
-    },
-    {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
       "DamageAmount": 5,
       "Aoe": true

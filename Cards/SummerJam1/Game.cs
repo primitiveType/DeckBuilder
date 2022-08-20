@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using Api;
@@ -43,15 +44,24 @@ namespace SummerJam1
 
             //create an example deck.
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Context.CreateEntity(Deck.Entity, "Cards/Pulse.json");
             }
-            for (int i = 0; i < 5; i++)
+
+            for (int i = 0; i < 3; i++)
             {
                 Context.CreateEntity(Deck.Entity, "Cards/NewBlockCard.json");
             }
 
+            
+            Context.CreateEntity(Deck.Entity, "Cards/Backpack.json");
+            Context.CreateEntity(Deck.Entity, "Cards/ConcussivePulse.json");
+            Context.CreateEntity(Deck.Entity, "Cards/DesperateStrike.json");
+            Context.CreateEntity(Deck.Entity, "Cards/DrawStrength.json");
+            Context.CreateEntity(Deck.Entity, "Cards/Shivers.json");
+
+            
             Events.OnGameStarted(new GameStartedEventArgs());
         }
 
@@ -114,7 +124,16 @@ namespace SummerJam1
         private void AddRules()
         {
             Context.Root.AddComponent<DiscardHandOnTurnEnd>();
+            Context.Root.AddComponent<DiscardDungeonHandOnTurnEnd>();
             Context.Root.AddComponent<DrawHandOnTurnBegin>();
+            Context.Root.AddComponent<DrawEncounterHandOnTurnBegin>();
+        }
+
+        public void EndDungeonPhase()
+        {
+            Events.OnDungeonPhaseEnded(new DungeonPhaseEndedEventArgs());
+            Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
+            Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 
         public void EndTurn()
@@ -122,8 +141,7 @@ namespace SummerJam1
             Events.OnTurnEnded(new TurnEndedEventArgs());
             Events.OnAttackPhaseStarted(new AttackPhaseStartedEventArgs());
             Events.OnAttackPhaseEnded(new AttackPhaseEndedEventArgs());
-            Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
-            Events.OnTurnBegan(new TurnBeganEventArgs());
+            Events.OnDungeonPhaseStarted(new DungeonPhaseStartedEventArgs());
         }
 
 
@@ -159,7 +177,6 @@ namespace SummerJam1
             return Context.CreateEntity(null, Path.Combine("Relics", files[index].Name));
         }
     }
-
 
 
     public class ShrineEncounter : Encounter

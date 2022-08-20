@@ -7,7 +7,7 @@
       "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Cards.Effects.GainEnergy, SummerJam1",
+      "$type": "SummerJam1.Cards.Effects.GivePlayerStrength, SummerJam1",
       "Amount": 1
     },
     {
@@ -15,7 +15,7 @@
       "AssetName": "drawStrength"
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+      "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
@@ -23,10 +23,6 @@
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Amount": 0
-    },
-    {
-      "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
       "Amount": 1
     }
   ]

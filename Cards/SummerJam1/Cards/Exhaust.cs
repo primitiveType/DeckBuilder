@@ -1,4 +1,5 @@
-﻿using CardsAndPiles;
+﻿using Api;
+using CardsAndPiles;
 using CardsAndPiles.Components;
 
 namespace SummerJam1.Cards
@@ -16,7 +17,10 @@ namespace SummerJam1.Cards
         {
             if (args.CardId == Entity)
             {
-                args.CardId.TrySetParent(Context.Root.GetComponent<Game>().Battle.Exhaust);
+                if (!args.CardId.TrySetParent(Context.Root.GetComponent<Game>().Battle.Exhaust))
+                {
+                    Logging.LogError("Failed to exhaust card...");
+                }
             }
         }
 

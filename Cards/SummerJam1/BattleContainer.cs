@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Api;
 using CardsAndPiles;
+using SummerJam1.Cards;
 
 namespace SummerJam1
 {
@@ -16,25 +17,56 @@ namespace SummerJam1
 
         public ObjectivesPile ObjectivesPile { get; private set; }
 
-        public Pile EncounterDrawPile { get; private set; }
+        public DeckPile EncounterDrawPile { get; private set; }
+        public HandPile EncounterHandPile { get; private set; }
+        public PlayerDiscard EncounterDiscardPile { get; private set; }
         public List<Pile> EncounterSlots { get; private set; } = new List<Pile>();
 
-        private const int NumSlots = 5;
+        public const int NumEncounterSlots = 5;
 
         public List<IEntity> GetEntitiesInAdjacentSlots(IEntity slotOrMonster)
         {
             List<IEntity> adjacents = new List<IEntity>(2);
-            var slot = slotOrMonster.GetComponentInParent<EncounterSlotPile>();
+            var slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
             var index = EncounterSlots.IndexOf(slot);
+
+            if (slot == null)
+            {
+                throw new NullReferenceException(nameof(slot));
+            }
 
             if (index > 0 && EncounterSlots[index - 1].Entity.Children.Count > 0)
             {
                 adjacents.Add(EncounterSlots[index - 1].Entity.Children.First());
             }
 
-            if (index < NumSlots - 1 && EncounterSlots[index + 1].Entity.Children.Count > 0)
+            if (index < NumEncounterSlots - 1 && EncounterSlots[index + 1].Entity.Children.Count > 0)
             {
                 adjacents.Add(EncounterSlots[index + 1].Entity.Children.First());
+            }
+
+
+            return adjacents;
+        }
+
+        public List<IEntity> GetAdjacentSlots(IEntity slotOrMonster)
+        {
+            List<IEntity> adjacents = new List<IEntity>(2);
+            var slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
+            var index = EncounterSlots.IndexOf(slot);
+            if (slot == null)
+            {
+                throw new NullReferenceException(nameof(slot));
+            }
+
+            if (index > 0 && EncounterSlots[index - 1].Entity.Children.Count > 0)
+            {
+                adjacents.Add(EncounterSlots[index - 1].Entity);
+            }
+
+            if (index < NumEncounterSlots - 1 && EncounterSlots[index + 1].Entity.Children.Count > 0)
+            {
+                adjacents.Add(EncounterSlots[index + 1].Entity);
             }
 
 
@@ -57,32 +89,37 @@ namespace SummerJam1
             BattleDeck.Entity.TrySetParent(Entity);
             Context.CreateEntity(Entity, entity =>
                 Hand = entity.AddComponent<HandPile>());
+            Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
+
+            BattleDeck.SetHandAndDiscard(Hand.Entity, Discard);
 
             Context.CreateEntity(Entity, (entity) => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
 
 
-            Context.CreateEntity(Entity, entity => EncounterDrawPile = entity.AddComponent<DefaultPile>());
-            for (int i = 0; i < NumSlots; i++)
+            Context.CreateEntity(Entity, entity => EncounterDrawPile = entity.AddComponent<DeckPile>());
+            Context.CreateEntity(Entity, entity => EncounterHandPile = entity.AddComponent<HandPile>());
+            Context.CreateEntity(Entity, entity => EncounterDiscardPile = entity.AddComponent<PlayerDiscard>());
+            EncounterDrawPile.SetHandAndDiscard(EncounterHandPile.Entity, EncounterDiscardPile.Entity);
+
+            for (int i = 0; i < NumEncounterSlots; i++)
             {
                 Context.CreateEntity(Entity, entity => EncounterSlots.Add(entity.AddComponent<EncounterSlotPile>()));
             }
 
             PopulateEncounterDrawPile();
 
-            Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
             Exhaust = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerExhaust>());
 
             Events.OnBattleStarted(new BattleStartedEventArgs());
-            Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
-            Events.OnTurnBegan(new TurnBeganEventArgs());
+            Events.OnDungeonPhaseStarted(new DungeonPhaseStartedEventArgs());
         }
 
         private void PopulateEncounterDrawPile()
         {
             for (int i = 0; i < 3; i++)
             {
-                Context.CreateEntity(EncounterDrawPile.Entity, "Units/mcguffin.json");
-                Context.CreateEntity(EncounterDrawPile.Entity, "Units/treasureChest.json");
+                // Context.CreateEntity(EncounterDrawPile.Entity, "Units/mcguffin.json");
+                // Context.CreateEntity(EncounterDrawPile.Entity, "Units/treasureChest.json");
                 Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/notGengar.json");
                 Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/birthdayBoy.json");
                 Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/sadRalph.json");

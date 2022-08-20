@@ -14,15 +14,6 @@
       "Amount" : 0
     },
     {
-      "$type": "SummerJam1.HealOnBattleStart, SummerJam1"
-    },
-    {
-      "$type": "SummerJam1.Stealth, SummerJam1",
-      "Amount": 0,
-      "MaxStealth": 5,
-      "Tooltip": "Stealth - While above zero, enemies will not attack."
-    },
-    {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
       "AssetName": "Player"
     },
@@ -31,15 +22,6 @@
       "Amount": 30,
       "Max": 30,
       "DontDie": false
-    },
-    {
-      "$type": "CardsAndPiles.Components.Position, CardsAndPiles",
-      "Position1": {
-        "$type": "System.Numerics.Vector3, System.Numerics",
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      }
     }
   ]
 }

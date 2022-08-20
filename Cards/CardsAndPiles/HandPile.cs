@@ -79,6 +79,12 @@ namespace CardsAndPiles
     {
         public Random Random1 { get; private set; }
 
+        public void SetHandAndDiscard(IEntity hand, IEntity discard)
+        {
+            Hand = hand;
+            Discard = discard;
+        }
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -99,12 +105,10 @@ namespace CardsAndPiles
 
         public void DrawCard(bool isHandDraw = false)
         {
-            var hand = Context.Root.GetComponentInChildren<HandPile>();
-            var discard = Context.Root.GetComponentInChildren<PlayerDiscard>();
             if (Entity.Children.Count == 0)
             {
                 //shuffle discard into deck.
-                foreach (IEntity discarded in discard.Entity.Children.ToList())
+                foreach (IEntity discarded in Discard.Children.ToList())
                 {
                     discarded.TrySetParent(Entity);
                 }
@@ -112,10 +116,14 @@ namespace CardsAndPiles
 
             if (Entity.Children.Count > 0)
             {
-                Entity.Children[Random1.SystemRandom.Next(0, Entity.Children.Count)].TrySetParent(hand.Entity);
+                Entity.Children[Random1.SystemRandom.Next(0, Entity.Children.Count)].TrySetParent(Hand);
                 ((CardsAndPiles.CardEvents)(Context.Events)).OnCardDrawn(new CardDrawnEventArgs(isHandDraw));
             }
         }
+
+        private  IEntity Discard { get; set; }
+
+        private IEntity Hand { get; set; }
     }
     
     public class EncounterDeckPile : Pile

@@ -19,6 +19,22 @@ namespace SummerJam1.Rules
             }
         }
     }
+    
+    public class DiscardDungeonHandOnTurnEnd : SummerJam1Component
+    {
+        [OnDungeonPhaseEnded]
+        private void OnDungeonPhaseEnded()
+        {
+            var game = Context.Root.GetComponent<Game>();
+            foreach (Card componentsInChild in game.Battle.EncounterHandPile.Entity.GetComponentsInChildren<Card>())
+            {
+                if (componentsInChild.Entity.GetComponent<Retain>() == null)
+                {
+                    componentsInChild.Entity.TrySetParent(game.Battle.EncounterDiscardPile.Entity);
+                }
+            }
+        }
+    }
 
    
 }

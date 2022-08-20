@@ -22,8 +22,11 @@ namespace App
                 .Permit(InputAction.Hover, InputState.Hovering)
                 .Permit(InputAction.ChooseDiscard, InputState.ChoosingDiscard)
                 .Permit(InputAction.EndTurn, InputState.EnemyTurn)
+                .PermitReentry(InputAction.EndDungeonPhase)
                 .Ignore(InputAction.EndHover)
                 .Ignore(InputAction.EndDrag)
+                .Ignore(InputAction.BeginDungeonPhase)
+                .Ignore(InputAction.BeginTurn)
                 ;
             StateMachine.Configure(InputState.Dragging)
                 .Ignore(InputAction.PlayCard)
@@ -45,7 +48,7 @@ namespace App
             ;
 
             StateMachine.Configure(InputState.EnemyTurn)
-                .Permit(InputAction.BeginTurn, InputState.Idle);
+                .Permit(InputAction.BeginDungeonPhase, InputState.Idle);
             
         }
 

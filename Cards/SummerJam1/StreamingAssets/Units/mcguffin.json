@@ -7,6 +7,14 @@
       "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
+      "Amount": 0
+    },
+    {
+      "$type": "SummerJam1.Units.Blood, SummerJam1",
+      "Amount" : 1
+    },
+    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Artifact"
     },

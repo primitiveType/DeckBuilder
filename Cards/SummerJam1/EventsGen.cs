@@ -179,6 +179,34 @@ public EventHandle<AttackPhaseEndedEventArgs> SubscribeToAttackPhaseEnded(EventH
     return handler;
 } 
     #endregion Code for event AttackPhaseEnded
+    #region Code for event DungeonPhaseStarted
+private event EventHandleDelegate<DungeonPhaseStartedEventArgs> DungeonPhaseStarted;
+public virtual void OnDungeonPhaseStarted(DungeonPhaseStartedEventArgs args)
+{
+    DungeonPhaseStarted?.Invoke(this, args);
+}
+
+public EventHandle<DungeonPhaseStartedEventArgs> SubscribeToDungeonPhaseStarted(EventHandleDelegate<DungeonPhaseStartedEventArgs> action)
+{
+    var handler = new EventHandle<DungeonPhaseStartedEventArgs>(action, () => DungeonPhaseStarted -= action);
+    DungeonPhaseStarted += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event DungeonPhaseStarted
+    #region Code for event DungeonPhaseEnded
+private event EventHandleDelegate<DungeonPhaseEndedEventArgs> DungeonPhaseEnded;
+public virtual void OnDungeonPhaseEnded(DungeonPhaseEndedEventArgs args)
+{
+    DungeonPhaseEnded?.Invoke(this, args);
+}
+
+public EventHandle<DungeonPhaseEndedEventArgs> SubscribeToDungeonPhaseEnded(EventHandleDelegate<DungeonPhaseEndedEventArgs> action)
+{
+    var handler = new EventHandle<DungeonPhaseEndedEventArgs>(action, () => DungeonPhaseEnded -= action);
+    DungeonPhaseEnded += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event DungeonPhaseEnded
     #region Code for event RelicCreated
 private event EventHandleDelegate<RelicCreatedEventArgs> RelicCreated;
 public virtual void OnRelicCreated(RelicCreatedEventArgs args)
@@ -628,6 +656,74 @@ public class OnAttackPhaseEndedAttribute : EventsBaseAttribute {
     //public delegate void AttackPhaseEndedEvent (object sender, AttackPhaseEndedEventArgs args);
 
     public class AttackPhaseEndedEventArgs {        }/// <summary>
+/// (object sender, DungeonPhaseStartedEventArgs) args)
+/// </summary>
+public class OnDungeonPhaseStartedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToDungeonPhaseStarted(delegate
+            {
+                if(!instance.Enabled){
+                    return;
+                }
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(DungeonPhaseStartedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, DungeonPhaseStartedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToDungeonPhaseStarted(delegate(object sender, DungeonPhaseStartedEventArgs args)
+        {
+            if(!instance.Enabled){
+                return;
+            }
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void DungeonPhaseStartedEvent (object sender, DungeonPhaseStartedEventArgs args);
+
+    public class DungeonPhaseStartedEventArgs {        }/// <summary>
+/// (object sender, DungeonPhaseEndedEventArgs) args)
+/// </summary>
+public class OnDungeonPhaseEndedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToDungeonPhaseEnded(delegate
+            {
+                if(!instance.Enabled){
+                    return;
+                }
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(DungeonPhaseEndedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, DungeonPhaseEndedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToDungeonPhaseEnded(delegate(object sender, DungeonPhaseEndedEventArgs args)
+        {
+            if(!instance.Enabled){
+                return;
+            }
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void DungeonPhaseEndedEvent (object sender, DungeonPhaseEndedEventArgs args);
+
+    public class DungeonPhaseEndedEventArgs {        }/// <summary>
 /// (object sender, RelicCreatedEventArgs) args)
 /// </summary>
 public class OnRelicCreatedAttribute : EventsBaseAttribute {
