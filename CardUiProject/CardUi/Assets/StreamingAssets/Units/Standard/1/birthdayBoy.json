@@ -1,0 +1,50 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
+      "Amount": 0
+    },
+    {
+      "$type": "SummerJam1.Units.Blood, SummerJam1",
+      "Amount" : 1
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Birthday Boy!"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "birthdayBoy"
+    },
+    {
+      "$type": "SummerJam1.Strength, SummerJam1",
+      "Amount": 2
+    },
+    {
+      "$type": "SummerJam1.DamageIntent, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Health, SummerJam1",
+      "Amount": 7,
+      "Max": 7
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/Rattle.json"
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/Leyline.json"
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/DrawStrength.json"
+    }
+  ]
+}

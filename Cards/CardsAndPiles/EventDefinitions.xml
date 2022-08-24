@@ -67,5 +67,6 @@
     </event>
     <event id="CardDrawn">
         <arg name="IsHandDraw" type="bool"/>
+        <arg name="DrawnCard" type="IEntity"/>
     </event>
 </catalog>

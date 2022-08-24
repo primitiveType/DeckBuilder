@@ -1,0 +1,29 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
+      "Amount": 0
+    },
+    {
+      "$type": "SummerJam1.Units.Blood, SummerJam1",
+      "Amount" : 1
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Artifact"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "artifact"
+    },
+    {
+      "$type": "SummerJam1.Units.CollectableIntoDeck, SummerJam1"
+    }
+  ]
+}

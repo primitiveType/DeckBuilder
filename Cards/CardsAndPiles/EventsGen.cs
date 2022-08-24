@@ -929,8 +929,10 @@ public class OnCardDrawnAttribute : EventsBaseAttribute {
     //public delegate void CardDrawnEvent (object sender, CardDrawnEventArgs args);
 
     public class CardDrawnEventArgs {        public  bool IsHandDraw { get; }
-        public  CardDrawnEventArgs (bool IsHandDraw   ){
+        public  IEntity DrawnCard { get; }
+        public  CardDrawnEventArgs (bool IsHandDraw, IEntity DrawnCard   ){
                   this.IsHandDraw = IsHandDraw; 
+              this.DrawnCard = DrawnCard; 
 }
 
         }

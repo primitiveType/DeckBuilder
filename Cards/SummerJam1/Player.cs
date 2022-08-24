@@ -96,6 +96,10 @@ namespace SummerJam1
         {
             base.Initialize();
             Entity.PropertyChanged += EntityOnPropertyChanged;
+            if (Entity.Parent?.GetComponent<EncounterSlotPile>() != null)
+            {
+                AttachToAdjacentSlots();
+            }
         }
 
         private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -199,7 +203,7 @@ namespace SummerJam1
     public class Player : SummerJam1Component, ITooltip
     {
         public int CurrentEnergy { get; set; }
-        public int MaxEnergy => BattleContainer.NumEncounterSlots;
+        public int MaxEnergy { get; private set; } = 3;
 
 
         public bool TryUseEnergy(int amount)
@@ -219,11 +223,10 @@ namespace SummerJam1
         [OnTurnBegan]
         private void OnTurnBegan()
         {
-            int energyGained = Game.Battle.EncounterSlots.Count(slot => slot.Entity.GetComponentInChildren<IGrantsEnergy>() != null);
-            CurrentEnergy = energyGained;
+            CurrentEnergy = MaxEnergy;
         }
 
-        public string Tooltip => "Energy - Cards require energy to be played. Energy is gained from slots filled with creatures.";
+        public string Tooltip => "Energy - Cards require energy to be played.";
     }
 
     public class Money : SummerJam1Component, IAmount

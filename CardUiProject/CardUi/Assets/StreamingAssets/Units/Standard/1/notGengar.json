@@ -1,0 +1,50 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
+      "Amount": 1
+    },
+    {
+      "$type": "SummerJam1.Units.Blood, SummerJam1",
+      "Amount" : 1
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Not Gengar"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "notGengar"
+    },
+    {
+      "$type": "SummerJam1.Strength, SummerJam1",
+      "Amount": 2
+    },
+    {
+      "$type": "SummerJam1.DamageIntent, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/BloodDraw.json"
+    },
+    {
+      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
+      "Prefab": "Cards/Irreverence.json"
+    },
+    {
+      "$type": "SummerJam1.GrantsMultiAttackToAdjacent, SummerJam1",
+      "Amount": 1
+    },
+    {
+      "$type": "SummerJam1.Health, SummerJam1",
+      "Amount": 5,
+      "Max": 5
+    }
+  ]
+}

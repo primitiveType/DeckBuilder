@@ -23,6 +23,25 @@ namespace SummerJam1.Statuses
         }
     }
 
+    public class GainHealthWhenDrawn : SummerJam1Component, IAmount, IDescription
+    {
+        public int Amount { get; set; }
+
+        public string Description => $"Gains {Amount} health each time it is drawn.";
+
+        [OnCardDrawn]
+        private void OnCardDrawn(object sender, CardDrawnEventArgs args)
+        {
+            if (args.DrawnCard != Entity)
+            {
+                return;
+            }
+
+            Entity.GetComponent<Health>().Max += Amount;
+            Entity.GetComponent<Health>().Amount += Amount;
+        }
+    }
+
     public class GainArmorEveryTurn : EnabledWhenInEncounterSlot, IStatusEffect, ITooltip, IAmount
     {
         [PropertyChanged.DependsOn(nameof(Amount))]
@@ -170,7 +189,7 @@ namespace SummerJam1.Statuses
             Entity.PropertyChanged -= EntityOnPropertyChanged;
         }
     }
-    
+
     public class DiscardCardInHandAtStartOfTurn : EnabledWhenInEncounterSlot, IStatusEffect, ITooltip, IAmount
     {
         public string Tooltip => $"Scary - At the start of every turn, discards {Amount} card in the player's hand.";
@@ -182,6 +201,7 @@ namespace SummerJam1.Statuses
             {
                 return;
             }
+
             for (int i = 0; i < Amount; i++)
             {
                 Game.Battle.Hand.Entity.Children.FirstOrDefault()?.TrySetParent(Game.Battle.Discard);

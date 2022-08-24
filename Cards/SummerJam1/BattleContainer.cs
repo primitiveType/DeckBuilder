@@ -18,7 +18,7 @@ namespace SummerJam1
         public ObjectivesPile ObjectivesPile { get; private set; }
 
         public DeckPile EncounterDrawPile { get; private set; }
-        public HandPile EncounterHandPile { get; private set; }
+        // public HandPile EncounterHandPile { get; private set; }
         public PlayerDiscard EncounterDiscardPile { get; private set; }
         public List<Pile> EncounterSlots { get; private set; } = new List<Pile>();
 
@@ -59,18 +59,22 @@ namespace SummerJam1
                 throw new NullReferenceException(nameof(slot));
             }
 
-            if (index > 0 && EncounterSlots[index - 1].Entity.Children.Count > 0)
+            if (index > 0 )
             {
                 adjacents.Add(EncounterSlots[index - 1].Entity);
             }
 
-            if (index < NumEncounterSlots - 1 && EncounterSlots[index + 1].Entity.Children.Count > 0)
+            if (index < NumEncounterSlots - 1)
             {
                 adjacents.Add(EncounterSlots[index + 1].Entity);
             }
 
 
             return adjacents;
+        }
+        public IEnumerable<Pile> GetEmptySlots()
+        {
+            return EncounterSlots.Where(slot => slot.Entity.Children.Count == 0);
         }
 
         public IEntity CreateRandomMonster(IEntity parent, int difficulty)
@@ -97,9 +101,9 @@ namespace SummerJam1
 
 
             Context.CreateEntity(Entity, entity => EncounterDrawPile = entity.AddComponent<DeckPile>());
-            Context.CreateEntity(Entity, entity => EncounterHandPile = entity.AddComponent<HandPile>());
+            // Context.CreateEntity(Entity, entity => EncounterHandPile = entity.AddComponent<HandPile>());
             Context.CreateEntity(Entity, entity => EncounterDiscardPile = entity.AddComponent<PlayerDiscard>());
-            EncounterDrawPile.SetHandAndDiscard(EncounterHandPile.Entity, EncounterDiscardPile.Entity);
+            // EncounterDrawPile.SetHandAndDiscard(EncounterHandPile.Entity, EncounterDiscardPile.Entity);
 
             for (int i = 0; i < NumEncounterSlots; i++)
             {
@@ -111,7 +115,8 @@ namespace SummerJam1
             Exhaust = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerExhaust>());
 
             Events.OnBattleStarted(new BattleStartedEventArgs());
-            Events.OnDungeonPhaseStarted(new DungeonPhaseStartedEventArgs());
+            Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
+            Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 
         private void PopulateEncounterDrawPile()

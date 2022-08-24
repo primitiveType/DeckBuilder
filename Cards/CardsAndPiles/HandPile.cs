@@ -49,7 +49,7 @@ namespace CardsAndPiles
             return true;
         }
     }
-    
+
     public class CardPrefabPile : Pile
     {
         public override bool AcceptsChild(IEntity child)
@@ -105,6 +105,11 @@ namespace CardsAndPiles
 
         public void DrawCard(bool isHandDraw = false)
         {
+            DrawCardInto(Hand, isHandDraw);
+        }
+
+        public void DrawCardInto(IEntity target, bool isHandDraw = false)
+        {
             if (Entity.Children.Count == 0)
             {
                 //shuffle discard into deck.
@@ -116,16 +121,17 @@ namespace CardsAndPiles
 
             if (Entity.Children.Count > 0)
             {
-                Entity.Children[Random1.SystemRandom.Next(0, Entity.Children.Count)].TrySetParent(Hand);
-                ((CardsAndPiles.CardEvents)(Context.Events)).OnCardDrawn(new CardDrawnEventArgs(isHandDraw));
+                var card = Entity.Children[Random1.SystemRandom.Next(0, Entity.Children.Count)];
+                card.TrySetParent(target);
+                ((CardEvents)(Context.Events)).OnCardDrawn(new CardDrawnEventArgs(isHandDraw, card));
             }
         }
 
-        private  IEntity Discard { get; set; }
+        private IEntity Discard { get; set; }
 
         private IEntity Hand { get; set; }
     }
-    
+
     public class EncounterDeckPile : Pile
     {
         public Random Random1 { get; private set; }
@@ -163,8 +169,9 @@ namespace CardsAndPiles
 
             if (Entity.Children.Count > 0)
             {
-                Entity.Children[Random1.SystemRandom.Next(0, Entity.Children.Count)].TrySetParent(hand.Entity);
-                ((CardsAndPiles.CardEvents)(Context.Events)).OnCardDrawn(new CardDrawnEventArgs(isHandDraw));
+                var card = Entity.Children[Random1.SystemRandom.Next(0, Entity.Children.Count)];
+                card.TrySetParent(hand.Entity);
+                ((CardsAndPiles.CardEvents)(Context.Events)).OnCardDrawn(new CardDrawnEventArgs(isHandDraw, card));
             }
         }
     }

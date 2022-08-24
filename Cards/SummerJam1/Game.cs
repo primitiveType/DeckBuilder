@@ -124,7 +124,7 @@ namespace SummerJam1
         private void AddRules()
         {
             Context.Root.AddComponent<DiscardHandOnTurnEnd>();
-            Context.Root.AddComponent<DiscardDungeonHandOnTurnEnd>();
+            Context.Root.AddComponent<FillSlotsOnTurnEnd>();
             Context.Root.AddComponent<DrawHandOnTurnBegin>();
             Context.Root.AddComponent<DrawEncounterHandOnTurnBegin>();
         }
@@ -141,7 +141,9 @@ namespace SummerJam1
             Events.OnTurnEnded(new TurnEndedEventArgs());
             Events.OnAttackPhaseStarted(new AttackPhaseStartedEventArgs());
             Events.OnAttackPhaseEnded(new AttackPhaseEndedEventArgs());
-            Events.OnDungeonPhaseStarted(new DungeonPhaseStartedEventArgs());
+            // Events.OnDungeonPhaseStarted(new DungeonPhaseStartedEventArgs());
+            Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
+            Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 
 
@@ -155,6 +157,7 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity => { Battle = entity.AddComponent<BattleContainer>(); });
             Battle.StartBattle();
         }
+        
 
 
         public IEntity CreateRandomCard()

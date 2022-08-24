@@ -1,0 +1,27 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 5,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Player, SummerJam1",
+      "CurrentEnergy": 0,
+      "MaxEnergy": 3,
+      "Tooltip": "Energy - Cards require energy to be played."
+    },
+    {
+      "$type": "SummerJam1.Money, SummerJam1",
+      "Amount" : 0
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "Player"
+    },
+    {
+      "$type": "SummerJam1.Health, SummerJam1",
+      "Amount": 30,
+      "Max": 30,
+      "DontDie": false
+    }
+  ]
+}
