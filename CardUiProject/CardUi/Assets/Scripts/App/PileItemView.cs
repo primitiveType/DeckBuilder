@@ -15,7 +15,7 @@ namespace App
         private PileView TargetPileView { get; set; }
 
         public bool IsInLayoutGroup; //feels a bit hacky, but hopefully reliable?
-        
+
         public ISortHandler SortHandler { get; private set; }
 
         private float lerpRate = 13;
@@ -36,7 +36,6 @@ namespace App
 
                 BoundsSize = bounds.size;
             }
-            
         }
 
         protected override void Start()
@@ -89,7 +88,6 @@ namespace App
 
         public void SetTargetPosition(Vector3 transformPosition, Vector3 transformRotation, bool immediate = false)
         {
-
             if (immediate)
             {
                 TargetPosition = transformPosition;
@@ -159,6 +157,12 @@ namespace App
                     TargetPileView = pileView;
                 }
             }
+
+            // var pv = eventData.pointerCurrentRaycast.gameObject.GetComponent<PileView>();
+            // if (pv != null)
+            // {
+            //     TargetPileView = pv;
+            // }
         }
 
         public void OnBeginDrag(PointerEventData eventData)
