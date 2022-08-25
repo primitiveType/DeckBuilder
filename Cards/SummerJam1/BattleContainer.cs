@@ -18,11 +18,30 @@ namespace SummerJam1
         public ObjectivesPile ObjectivesPile { get; private set; }
 
         public DeckPile EncounterDrawPile { get; private set; }
-        // public HandPile EncounterHandPile { get; private set; }
+        public HandPile EncounterHandPile { get; private set; }
         public PlayerDiscard EncounterDiscardPile { get; private set; }
-        public List<Pile> EncounterSlots { get; private set; } = new List<Pile>();
+        public List<Pile> EncounterSlots => AllEncounterSlots[CurrentFloor];
+        
+        public Dictionary<int, List<Pile>> AllEncounterSlots { get; } = new Dictionary<int, List<Pile>>();
 
-        public const int NumEncounterSlots = 5;
+        public const int NumEncounterSlotsPerFloor = 5;
+        public const int NumFloors = 4;
+
+        public int CurrentFloor { get; private set; } = 0;
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            for (int i = 0; i < NumFloors; i++)
+            {
+                AllEncounterSlots[i] = new List<Pile>();
+                for (int j = 0; j < NumEncounterSlotsPerFloor; j++)
+                {
+                    int index = i;
+                    Context.CreateEntity(Entity, entity => AllEncounterSlots[index].Add(entity.AddComponent<EncounterSlotPile>()));
+                }
+            }
+        }
 
         public List<IEntity> GetEntitiesInAdjacentSlots(IEntity slotOrMonster)
         {
@@ -40,7 +59,7 @@ namespace SummerJam1
                 adjacents.Add(EncounterSlots[index - 1].Entity.Children.First());
             }
 
-            if (index < NumEncounterSlots - 1 && EncounterSlots[index + 1].Entity.Children.Count > 0)
+            if (index < NumEncounterSlotsPerFloor - 1 && EncounterSlots[index + 1].Entity.Children.Count > 0)
             {
                 adjacents.Add(EncounterSlots[index + 1].Entity.Children.First());
             }
@@ -59,12 +78,12 @@ namespace SummerJam1
                 throw new NullReferenceException(nameof(slot));
             }
 
-            if (index > 0 )
+            if (index > 0)
             {
                 adjacents.Add(EncounterSlots[index - 1].Entity);
             }
 
-            if (index < NumEncounterSlots - 1)
+            if (index < NumEncounterSlotsPerFloor - 1)
             {
                 adjacents.Add(EncounterSlots[index + 1].Entity);
             }
@@ -72,6 +91,7 @@ namespace SummerJam1
 
             return adjacents;
         }
+
         public IEnumerable<Pile> GetEmptySlots()
         {
             return EncounterSlots.Where(slot => slot.Entity.Children.Count == 0);
@@ -101,20 +121,23 @@ namespace SummerJam1
 
 
             Context.CreateEntity(Entity, entity => EncounterDrawPile = entity.AddComponent<DeckPile>());
-            // Context.CreateEntity(Entity, entity => EncounterHandPile = entity.AddComponent<HandPile>());
+            Context.CreateEntity(Entity, entity => EncounterHandPile = entity.AddComponent<HandPile>());
             Context.CreateEntity(Entity, entity => EncounterDiscardPile = entity.AddComponent<PlayerDiscard>());
-            // EncounterDrawPile.SetHandAndDiscard(EncounterHandPile.Entity, EncounterDiscardPile.Entity);
+            EncounterDrawPile.SetHandAndDiscard(EncounterHandPile.Entity, EncounterDiscardPile.Entity);
 
-            for (int i = 0; i < NumEncounterSlots; i++)
-            {
-                Context.CreateEntity(Entity, entity => EncounterSlots.Add(entity.AddComponent<EncounterSlotPile>()));
-            }
+
 
             PopulateEncounterDrawPile();
 
             Exhaust = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerExhaust>());
 
             Events.OnBattleStarted(new BattleStartedEventArgs());
+            Events.OnDungeonPhaseStarted(new DungeonPhaseStartedEventArgs());
+        }
+
+        public void EndDungeonPhase()
+        {
+            Events.OnDungeonPhaseEnded(new DungeonPhaseEndedEventArgs());
             Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
             Events.OnTurnBegan(new TurnBeganEventArgs());
         }

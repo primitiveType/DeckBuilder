@@ -26,6 +26,7 @@ namespace SummerJam1
 
         public Pile PrefabDebugPileTester { get; private set; }
         public Pile DiscardStagingPile { get; private set; }
+        
 
 
         protected override void Initialize()
@@ -124,17 +125,12 @@ namespace SummerJam1
         private void AddRules()
         {
             Context.Root.AddComponent<DiscardHandOnTurnEnd>();
-            Context.Root.AddComponent<FillSlotsOnTurnEnd>();
+            // Context.Root.AddComponent<FillSlotsOnTurnEnd>();
             Context.Root.AddComponent<DrawHandOnTurnBegin>();
             Context.Root.AddComponent<DrawEncounterHandOnTurnBegin>();
         }
 
-        public void EndDungeonPhase()
-        {
-            Events.OnDungeonPhaseEnded(new DungeonPhaseEndedEventArgs());
-            Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
-            Events.OnTurnBegan(new TurnBeganEventArgs());
-        }
+
 
         public void EndTurn()
         {
