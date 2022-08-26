@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using Api;
 using CardsAndPiles;
-using SummerJam1.Cards;
-using SummerJam1.Rules;
+using Random = Api.Random;
 
 namespace SummerJam1
 {
@@ -22,10 +21,10 @@ namespace SummerJam1
         public HandPile EncounterHandPile { get; private set; }
         public PlayerDiscard EncounterDiscardPile { get; private set; }
         public List<Pile> EncounterSlots => AllEncounterSlots[CurrentFloor];
-        
+
         public Dictionary<int, List<Pile>> AllEncounterSlots { get; } = new Dictionary<int, List<Pile>>();
 
-        public const int NumEncounterSlotsPerFloor = 5;
+        public const int NumEncounterSlotsPerFloor = 3;
         public const int NumFloors = 4;
 
         public int CurrentFloor { get; private set; } = 0;
@@ -42,7 +41,6 @@ namespace SummerJam1
                     Context.CreateEntity(Entity, entity => AllEncounterSlots[index].Add(entity.AddComponent<EncounterSlotPile>()));
                 }
             }
-
         }
 
         public void MoveToNextFloor()
@@ -104,14 +102,19 @@ namespace SummerJam1
             return EncounterSlots.Where(slot => slot.Entity.Children.Count == 0);
         }
 
-        public IEntity CreateRandomMonster(IEntity parent, int difficulty)
+        public IEntity CreateRandomMonster(IEntity parent, int difficulty = -1)
         {
+            if (difficulty <= 0)
+            {
+                difficulty = Game.Random.SystemRandom.Next(1, 4);
+            }
+
             DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, $"Units", "Standard", $"{difficulty}"));
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
 
             int index = Game.Random.SystemRandom.Next(files.Count);
 
-            return Context.CreateEntity(parent, Path.Combine($"Units", $"{difficulty}", files[index].Name));
+            return Context.CreateEntity(parent, Path.Combine($"Units", "Standard", $"{difficulty}", files[index].Name));
         }
 
         public void StartBattle()
@@ -133,7 +136,6 @@ namespace SummerJam1
             EncounterDrawPile.SetHandAndDiscard(EncounterHandPile.Entity, EncounterDiscardPile.Entity);
 
 
-
             PopulateEncounterDrawPile();
 
             Exhaust = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerExhaust>());
@@ -151,16 +153,17 @@ namespace SummerJam1
 
         private void PopulateEncounterDrawPile()
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < NumEncounterSlotsPerFloor * NumFloors; i++)
             {
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/mcguffin.json");
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/treasureChest.json");
-                Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/notGengar.json");
-                Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/birthdayBoy.json");
-                Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/sadRalph.json");
+                CreateRandomMonster(EncounterDrawPile.Entity);
+                // Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/notGengar.json");
+                // Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/birthdayBoy.json");
+                // Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/sadRalph.json");
             }
 
-            Context.CreateEntity(EncounterDrawPile.Entity, "Units/boss.json");
+            // Context.CreateEntity(EncounterDrawPile.Entity, "Units/boss.json");
         }
 
 

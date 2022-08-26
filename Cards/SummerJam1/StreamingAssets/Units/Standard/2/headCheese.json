@@ -31,8 +31,8 @@
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 25,
-      "Max": 25
+      "Amount": 10,
+      "Max": 10
     },
     {
       "$type": "SummerJam1.Statuses.GainMultiAttackBelowThreshold, SummerJam1",

@@ -31,12 +31,12 @@
     },
     {
       "$type": "SummerJam1.Statuses.DiscardCardInHandAtStartOfTurn, SummerJam1",
-      "Amount" : 2
+      "Amount" : 1
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 35,
-      "Max": 35
+      "Amount": 12,
+      "Max": 12
     }
   ]
 }

@@ -33,9 +33,6 @@
       "$type": "SummerJam1.Health, SummerJam1",
       "Amount": 15,
       "Max": 15
-    },
-    {
-      "$type": "SummerJam1.Statuses.OnlyPlayerSelfDamageDamagesMe, SummerJam1"
     }
   ]
 }

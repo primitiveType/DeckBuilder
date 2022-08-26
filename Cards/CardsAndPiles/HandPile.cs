@@ -107,6 +107,7 @@ namespace CardsAndPiles
         {
             DrawCardInto(Hand, isHandDraw);
         }
+ 
 
         public void DrawCardInto(IEntity target, bool isHandDraw = false)
         {

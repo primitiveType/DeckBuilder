@@ -24,15 +24,15 @@
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 3
+      "Amount": 6
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 45,
-      "Max": 45
+      "Amount": 15,
+      "Max": 15
     },
     {
       "$type": "SummerJam1.Statuses.GainArmorEveryTurn, SummerJam1",

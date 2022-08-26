@@ -41,16 +41,20 @@ namespace App
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                foreach (TComponent eNewItem in e.NewItems)
+                foreach (IComponent eNewItem in e.NewItems)
                 {
-                    AddListenerForComponent(eNewItem);
+                    if (eNewItem is TComponent component)
+                    {
+                        AddListenerForComponent(component);
+                    }
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                foreach (TComponent eOldItem in e.OldItems)
+                foreach (IComponent eOldItem in e.OldItems)
                 {
-                    RemoveListenerForComponent(eOldItem);
+                    if (eOldItem is TComponent component)
+                        RemoveListenerForComponent(component);
                 }
             }
         }
