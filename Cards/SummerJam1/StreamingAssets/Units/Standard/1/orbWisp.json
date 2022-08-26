@@ -37,14 +37,6 @@
     {
       "$type": "SummerJam1.Statuses.GainArmorEveryTurn, SummerJam1",
       "Amount" : 2
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/NewBlockCard.json"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/DrawPower.json"
     }
   ]
 }

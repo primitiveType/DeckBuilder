@@ -37,18 +37,6 @@
     {
       "$type": "SummerJam1.Statuses.GainArmorEveryTurn, SummerJam1",
       "Amount": 4
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/PhaseShift.json"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/MinorPhasing.json"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/LightningPulse.json"
     }
   ]
 }

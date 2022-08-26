@@ -26,7 +26,6 @@ namespace SummerJam1
 
         public Pile PrefabDebugPileTester { get; private set; }
         public Pile DiscardStagingPile { get; private set; }
-        
 
 
         protected override void Initialize()
@@ -55,14 +54,14 @@ namespace SummerJam1
                 Context.CreateEntity(Deck.Entity, "Cards/NewBlockCard.json");
             }
 
-            
+
             Context.CreateEntity(Deck.Entity, "Cards/Backpack.json");
             Context.CreateEntity(Deck.Entity, "Cards/ConcussivePulse.json");
             Context.CreateEntity(Deck.Entity, "Cards/DesperateStrike.json");
             Context.CreateEntity(Deck.Entity, "Cards/DrawStrength.json");
             Context.CreateEntity(Deck.Entity, "Cards/Shivers.json");
 
-            
+
             Events.OnGameStarted(new GameStartedEventArgs());
         }
 
@@ -132,7 +131,6 @@ namespace SummerJam1
         }
 
 
-
         public void EndTurn()
         {
             Events.OnTurnEnded(new TurnEndedEventArgs());
@@ -158,7 +156,6 @@ namespace SummerJam1
             });
             Battle.StartBattle();
         }
-        
 
 
         public IEntity CreateRandomCard()

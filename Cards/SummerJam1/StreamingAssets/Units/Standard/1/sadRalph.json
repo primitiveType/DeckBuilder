@@ -36,14 +36,6 @@
     },
     {
       "$type": "SummerJam1.Statuses.PlayerHealingHealsMe, SummerJam1"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/SoothingLull.json"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/CallSpirits.json"
     }
   ]
 }

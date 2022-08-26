@@ -34,17 +34,8 @@
       "Amount": 15,
       "Max": 15
     },
-  
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/Shivers.json"
-    },
     {
       "$type": "SummerJam1.Statuses.OnlyPlayerSelfDamageDamagesMe, SummerJam1"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/Smother.json"
     }
   ]
 }

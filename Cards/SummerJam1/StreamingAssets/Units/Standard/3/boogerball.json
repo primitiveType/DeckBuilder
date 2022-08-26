@@ -40,15 +40,6 @@
     },
     {
       "$type": "SummerJam1.Statuses.PlayerHealingHealsMe, SummerJam1"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/ConcussivePulse.json"
-    },
-
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/DesperateStrike.json"
     }
   ]
 }

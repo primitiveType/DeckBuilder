@@ -37,14 +37,6 @@
       "$type": "SummerJam1.Health, SummerJam1",
       "Amount": 35,
       "Max": 35
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/PoisonedConduit.json"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/BlackFog.json"
     }
   ]
 }
