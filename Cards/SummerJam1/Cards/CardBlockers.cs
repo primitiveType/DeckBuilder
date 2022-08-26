@@ -7,9 +7,4 @@ namespace SummerJam1.Cards
         public const string INVALID_TARGET = "Invalid Target!";
         public const string NOT_ENOUGH_BLOOD = "Not enough blood in slot!";
     }
-
-    public class Tooltips
-    {
-        public const string ARMOR_TOOLTIP = "Block - Receives damage before HP. Expires every turn.";
-    }
 }

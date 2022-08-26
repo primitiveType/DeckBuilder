@@ -17,7 +17,6 @@ namespace SummerJam1.Cards
         }
 
 
-
         //TODO: will probably remove this.
         [OnRequestPlayCard]
         private void OnRequestPlayCard(object sender, RequestPlayCardEventArgs args)

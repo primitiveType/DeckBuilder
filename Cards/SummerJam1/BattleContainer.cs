@@ -4,12 +4,13 @@ using System.IO;
 using System.Linq;
 using Api;
 using CardsAndPiles;
-using Random = Api.Random;
 
 namespace SummerJam1
 {
     public class BattleContainer : SummerJam1Component
     {
+        public const int NumEncounterSlotsPerFloor = 3;
+        public const int NumFloors = 4;
         public IEntity Discard { get; private set; }
         public IEntity Exhaust { get; private set; }
         public HandPile Hand { get; private set; }
@@ -24,10 +25,7 @@ namespace SummerJam1
 
         public Dictionary<int, List<Pile>> AllEncounterSlots { get; } = new Dictionary<int, List<Pile>>();
 
-        public const int NumEncounterSlotsPerFloor = 3;
-        public const int NumFloors = 4;
-
-        public int CurrentFloor { get; private set; } = 0;
+        public int CurrentFloor { get; private set; }
 
         protected override void Initialize()
         {
@@ -51,8 +49,8 @@ namespace SummerJam1
         public List<IEntity> GetEntitiesInAdjacentSlots(IEntity slotOrMonster)
         {
             List<IEntity> adjacents = new List<IEntity>(2);
-            var slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
-            var index = EncounterSlots.IndexOf(slot);
+            EncounterSlotPile slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
+            int index = EncounterSlots.IndexOf(slot);
 
             if (slot == null)
             {
@@ -76,8 +74,8 @@ namespace SummerJam1
         public List<IEntity> GetAdjacentSlots(IEntity slotOrMonster)
         {
             List<IEntity> adjacents = new List<IEntity>(2);
-            var slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
-            var index = EncounterSlots.IndexOf(slot);
+            EncounterSlotPile slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
+            int index = EncounterSlots.IndexOf(slot);
             if (slot == null)
             {
                 throw new NullReferenceException(nameof(slot));
@@ -109,12 +107,12 @@ namespace SummerJam1
                 difficulty = Game.Random.SystemRandom.Next(1, 4);
             }
 
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, $"Units", "Standard", $"{difficulty}"));
+            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Units", "Standard", $"{difficulty}"));
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
 
             int index = Game.Random.SystemRandom.Next(files.Count);
 
-            return Context.CreateEntity(parent, Path.Combine($"Units", "Standard", $"{difficulty}", files[index].Name));
+            return Context.CreateEntity(parent, Path.Combine("Units", "Standard", $"{difficulty}", files[index].Name));
         }
 
         public void StartBattle()
@@ -127,7 +125,7 @@ namespace SummerJam1
 
             BattleDeck.SetHandAndDiscard(Hand.Entity, Discard);
 
-            Context.CreateEntity(Entity, (entity) => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
+            Context.CreateEntity(Entity, entity => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
 
 
             Context.CreateEntity(Entity, entity => EncounterDrawPile = entity.AddComponent<DeckPile>());

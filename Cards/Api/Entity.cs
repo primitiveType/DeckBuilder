@@ -7,124 +7,33 @@ using Newtonsoft.Json;
 
 namespace Api
 {
-    public enum LifecycleState
-    {
-        Created,
-        Initialized,
-        Destroyed
-    }
-
     [JsonObject(MemberSerialization.OptIn)]
     internal class Entity : IEntity
     {
+        [JsonProperty] private ChildrenCollection<IEntity> m_Children = new();
+
+        [JsonProperty] private ChildrenCollection<Component> ComponentsInternal { get; set; } = new();
         public Context Context { get; private set; }
         [JsonProperty] public int Id { get; private set; } = -1;
 
         public IChildrenCollection<Component> Components => ComponentsInternal;
-
-        [JsonProperty] private ChildrenCollection<Component> ComponentsInternal { get; set; } = new ChildrenCollection<Component>();
 
         public LifecycleState State { get; private set; }
 
         public IEntity Parent { get; private set; }
 
         public IChildrenCollection<IEntity> Children => m_Children;
-        [JsonProperty] private ChildrenCollection<IEntity> m_Children = new ChildrenCollection<IEntity>();
-
-        internal void Initialize(Context context, int id) //game context parameter?
-        {
-            if (State != LifecycleState.Created)
-            {
-                return;
-            }
-
-            Id = id;
-
-            Context = context;
-
-            Components.CollectionChanged += ComponentsOnCollectionChanged;
-            //call generated code that does reflection to get all event attributes and subscribes to proper events
-            //should also iterate components? OR should it only happen in components? depends on whether this stays sealed.
-
-            foreach (var component in Components.ToList())
-            {
-                component.InternalInitialize(this);
-            }
-
-            State = LifecycleState.Initialized;
-        }
 
         public void Destroy()
         {
             Terminate();
             SetParent(null);
-            foreach (var child in Children.ToList())
+            foreach (IEntity child in Children.ToList())
             {
                 child.Destroy();
             }
 
             State = LifecycleState.Destroyed;
-        }
-
-        private void ComponentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                foreach (Component added in e.NewItems)
-                {
-                    added.InternalInitialize(this);
-                }
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                foreach (Component removed in e.OldItems)
-                {
-                    removed.Terminate();
-                }
-            }
-        }
-
-
-        internal void Terminate()
-        {
-            //dispose event handles we created from initialize.
-            foreach (var component in Components)
-            {
-                component.Terminate();
-            }
-        }
-
-        public void AddChild(Entity entity)
-        {
-            //Add to collection.
-            //set parent./
-            //initialize
-            //fire added event.
-            m_Children.Add(entity, () => { entity.Parent = this; });
-        }
-
-        public bool RemoveChild(Entity entity)
-        {
-            return m_Children.Remove(entity);
-        }
-
-        private void SetParent(IEntity newParent)
-        {
-            if (Parent == newParent)
-            {
-                return;
-            }
-
-            ((Entity)Parent)?.RemoveChild(this);
-
-            if (newParent != null)
-            {
-                ((Entity)newParent).AddChild(this);
-            }
-            else
-            {
-                Parent = null;
-            }
         }
 
 
@@ -188,7 +97,7 @@ namespace Api
 
         public T GetComponentInParent<T>()
         {
-            T component = default(T);
+            T component = default;
             IEntity entity = Parent;
             while (entity != null)
             {
@@ -206,7 +115,7 @@ namespace Api
 
         public T GetComponentInSelfOrParent<T>()
         {
-            T component = default(T);
+            T component = default;
             IEntity entity = this;
             while (entity != null)
             {
@@ -239,12 +148,12 @@ namespace Api
                 }
             }
 
-            return default(T);
+            return default;
         }
 
         public List<T> GetComponentsInChildren<T>()
         {
-            List<T> components = new List<T>();
+            List<T> components = new();
 
             DoGetComponentsInChildren(this);
 
@@ -269,7 +178,7 @@ namespace Api
 
         public T AddComponent<T>() where T : Component, new()
         {
-            T component = new T();
+            T component = new();
             if (State == LifecycleState.Initialized)
             {
                 ComponentsInternal.Add(component, () => { component.InternalInitialize(this); });
@@ -298,6 +207,92 @@ namespace Api
             return RemoveComponent(component);
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        internal void Initialize(Context context, int id) //game context parameter?
+        {
+            if (State != LifecycleState.Created)
+            {
+                return;
+            }
+
+            Id = id;
+
+            Context = context;
+
+            Components.CollectionChanged += ComponentsOnCollectionChanged;
+            //call generated code that does reflection to get all event attributes and subscribes to proper events
+            //should also iterate components? OR should it only happen in components? depends on whether this stays sealed.
+
+            foreach (Component component in Components.ToList())
+            {
+                component.InternalInitialize(this);
+            }
+
+            State = LifecycleState.Initialized;
+        }
+
+        private void ComponentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (Component added in e.NewItems)
+                {
+                    added.InternalInitialize(this);
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (Component removed in e.OldItems)
+                {
+                    removed.Terminate();
+                }
+            }
+        }
+
+
+        internal void Terminate()
+        {
+            //dispose event handles we created from initialize.
+            foreach (Component component in Components)
+            {
+                component.Terminate();
+            }
+        }
+
+        public void AddChild(Entity entity)
+        {
+            //Add to collection.
+            //set parent./
+            //initialize
+            //fire added event.
+            m_Children.Add(entity, () => { entity.Parent = this; });
+        }
+
+        public bool RemoveChild(Entity entity)
+        {
+            return m_Children.Remove(entity);
+        }
+
+        private void SetParent(IEntity newParent)
+        {
+            if (Parent == newParent)
+            {
+                return;
+            }
+
+            ((Entity)Parent)?.RemoveChild(this);
+
+            if (newParent != null)
+            {
+                ((Entity)newParent).AddChild(this);
+            }
+            else
+            {
+                Parent = null;
+            }
+        }
+
 
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
@@ -309,45 +304,8 @@ namespace Api
 
             foreach (IEntity child in Children)
             {
-                ((Entity)child).Parent = (this);
+                ((Entity)child).Parent = this;
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-    }
-
-    public delegate void EntityDestroyedEvent(object sender, EntityDestroyedEventArgs args);
-
-    public class EntityDestroyedEventArgs
-    {
-    }
-
-    public interface IParentConstraint
-    {
-        bool AcceptsParent(IEntity parent);
-        bool AcceptsChild(IEntity child);
-    }
-
-    public interface IEntity : INotifyPropertyChanged
-    {
-        Context Context { get; }
-        int Id { get; }
-        IEntity Parent { get; }
-        IChildrenCollection<IEntity> Children { get; }
-        IChildrenCollection<Component> Components { get; }
-        bool TrySetParent(IEntity parent);
-        T GetComponent<T>();
-        List<T> GetComponents<T>();
-        T GetComponentInParent<T>();
-        T GetComponentInChildren<T>();
-        List<T> GetComponentsInChildren<T>();
-        T AddComponent<T>() where T : Component, new();
-        bool RemoveComponent(Component toRemove);
-        LifecycleState State { get; }
-        void Destroy();
-        T GetOrAddComponent<T>() where T : Component, new();
-        bool RemoveComponent<TType>() where TType : Component;
-        T GetComponentInSelfOrParent<T>();
-        bool CanSetParent(IEntity parent);
     }
 }

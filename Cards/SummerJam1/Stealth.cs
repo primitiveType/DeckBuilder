@@ -8,13 +8,15 @@ namespace SummerJam1
     {
         private int _amount;
 
+        public int MaxStealth { get; set; } = 5;
+
         public int Amount
         {
             get => _amount;
             set => _amount = Math.Max(0, value);
         }
 
-        public int MaxStealth { get; set; } = 5;
+        public string Tooltip => "Stealth - While above zero, enemies will not attack.";
 
         public bool TryUseStealth(int amount)
         {
@@ -41,7 +43,5 @@ namespace SummerJam1
         {
             Amount = MaxStealth;
         }
-
-        public string Tooltip => "Stealth - While above zero, enemies will not attack.";
     }
 }

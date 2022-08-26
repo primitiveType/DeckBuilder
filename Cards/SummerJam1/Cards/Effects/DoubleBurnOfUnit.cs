@@ -7,15 +7,6 @@ namespace SummerJam1.Cards
 {
     public class DoubleBurnOfUnit : SummerJam1Component, IEffect
     {
-        protected override void Initialize()
-        {
-            base.Initialize();
-            if (Entity.GetComponent<DescriptionComponent>() == null)
-            {
-                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Double the amount of Burn on a unit.";
-            }
-        }
-
         public bool DoEffect(IEntity target)
         {
             Unit unit = target.GetComponentInChildren<Unit>();
@@ -28,6 +19,15 @@ namespace SummerJam1.Cards
             burn.Amount *= 2;
 
             return true;
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = "Double the amount of Burn on a unit.";
+            }
         }
     }
 }

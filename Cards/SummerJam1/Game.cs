@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using Api;
@@ -176,60 +174,6 @@ namespace SummerJam1
             int index = Random.SystemRandom.Next(files.Count);
 
             return Context.CreateEntity(null, Path.Combine("Relics", files[index].Name));
-        }
-    }
-
-
-    public class ShrineEncounter : Encounter
-    {
-        protected override void PlayerEnteredCell()
-        {
-            Events.OnRequestRemoveCard(new RequestRemoveCardEventArgs());
-            Entity.Destroy();
-        }
-    }
-
-    public class RelicEncounter : Encounter
-    {
-        public string Prefab { get; set; }
-
-        protected override void PlayerEnteredCell()
-        {
-            Context.CreateEntity(Game.RelicPrizePile.Entity, Prefab);
-            Entity.Destroy();
-        }
-    }
-
-
-    public abstract class Encounter : SummerJam1Component, IVisual
-    {
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Entity.Parent.Children.CollectionChanged += ChildrenOnCollectionChanged;
-        }
-
-        private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                foreach (IEntity item in e.NewItems)
-                {
-                    if (item.GetComponent<Player>() != null)
-                    {
-                        PlayerEnteredCell();
-                    }
-                }
-            }
-        }
-
-        protected abstract void PlayerEnteredCell();
-
-
-        public override void Terminate()
-        {
-            base.Terminate();
-            Entity.Parent.Children.CollectionChanged -= ChildrenOnCollectionChanged;
         }
     }
 }

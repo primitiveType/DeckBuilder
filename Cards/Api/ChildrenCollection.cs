@@ -11,7 +11,7 @@ namespace Api
     [Serializable]
     public class ChildrenCollection<T> : IChildrenCollection<T>, IList<T>
     {
-        [ItemNotNull] [JsonProperty] private List<T> CollectionImplementation { get; set; } = new List<T>();
+        [ItemNotNull] [JsonProperty] private List<T> CollectionImplementation { get; set; } = new();
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
 
@@ -23,6 +23,59 @@ namespace Api
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public int Count => CollectionImplementation.Count;
+
+        public T this[int index]
+        {
+            get => CollectionImplementation[index];
+            set => CollectionImplementation[index] = value;
+        }
+
+        public void Add(T item)
+        {
+            Add(item, null);
+        }
+
+
+        public void Clear()
+        {
+            List<T> oldItems = CollectionImplementation.ToList();
+            CollectionImplementation.Clear();
+            InvokeEvent(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItems));
+        }
+
+        public bool Contains(T item)
+        {
+            return CollectionImplementation.Contains(item);
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            CollectionImplementation.CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(T item)
+        {
+            return Remove(item, null);
+        }
+
+        public bool IsReadOnly => false;
+
+        public int IndexOf(T item)
+        {
+            return CollectionImplementation.FindIndex(child => Equals(child, item));
+        }
+
+        public void Insert(int index, T item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAt(int index)
+        {
+            throw new NotImplementedException();
         }
 
         public void Add(T item, Action invokeBeforeEvent)
@@ -45,33 +98,10 @@ namespace Api
                     }
                     catch (Exception e)
                     {
-                        Logging.LogError($"Error in the handler {handler.Method.Name}: {e}" );
+                        Logging.LogError($"Error in the handler {handler.Method.Name}: {e}");
                     }
                 }
             }
-        }
-
-        public void Add(T item)
-        {
-            Add(item, null);
-        }
-
-
-        public void Clear()
-        {
-            var oldItems = CollectionImplementation.ToList();
-            CollectionImplementation.Clear();
-            InvokeEvent(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItems));
-        }
-
-        public bool Contains(T item)
-        {
-            return CollectionImplementation.Contains(item);
-        }
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            CollectionImplementation.CopyTo(array, arrayIndex);
         }
 
         public bool Remove(T item, Action invokeBeforeEvent)
@@ -85,31 +115,6 @@ namespace Api
             }
 
             return removed;
-        }
-
-        public bool Remove(T item)
-        {
-            return Remove(item, null);
-        }
-
-        public int Count => CollectionImplementation.Count;
-        public bool IsReadOnly => false;
-        public int IndexOf(T item) => CollectionImplementation.FindIndex((child) => Equals(child, item));
-
-        public void Insert(int index, T item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveAt(int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T this[int index]
-        {
-            get => CollectionImplementation[index];
-            set => CollectionImplementation[index] = value;
         }
     }
 }

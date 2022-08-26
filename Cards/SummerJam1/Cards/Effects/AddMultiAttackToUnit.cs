@@ -6,13 +6,6 @@ namespace SummerJam1.Cards
 {
     public class AddMultiAttackToUnit : SummerJam1Component, IEffect
     {
-        protected override void Initialize()
-        {
-            base.Initialize();
-
-            Entity.AddComponent<DescriptionComponent>().Description = $"Grant 1 multi-attack to a unit.";
-        }
-
         public bool DoEffect(IEntity target)
         {
             Unit unit = target.GetComponentInChildren<Unit>();
@@ -25,6 +18,13 @@ namespace SummerJam1.Cards
 
             unit.Entity.GetOrAddComponent<MultiAttack>().Amount++;
             return true;
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            Entity.AddComponent<DescriptionComponent>().Description = "Grant 1 multi-attack to a unit.";
         }
     }
 }

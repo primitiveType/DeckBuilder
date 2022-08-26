@@ -2,20 +2,27 @@
 
 namespace Api
 {
-    public delegate void EventHandleDelegate<T>(object sender, T item);
-
-    public class EventHandle<T> : IDisposable 
+    public class EventHandle<T> : IDisposable
     {
-        private EventHandleDelegate<T> Action { get; }
-        private Action OnDispose { get; set; }
-        
-        private bool IsDisposed { get; set; }
-
-
         public EventHandle(EventHandleDelegate<T> action, Action onDispose)
         {
             Action = action;
             OnDispose = onDispose;
+        }
+
+        private EventHandleDelegate<T> Action { get; }
+        private Action OnDispose { get; set; }
+
+        private bool IsDisposed { get; set; }
+
+        public void Dispose()
+        {
+            if (!IsDisposed)
+            {
+                IsDisposed = true;
+                OnDispose.Invoke();
+                OnDispose = null;
+            }
         }
 
         public void Invoke(object sender, T args)
@@ -30,16 +37,6 @@ namespace Api
                 {
                     Logging.LogError($"Caught exception invoking event handle! {e}");
                 }
-            }
-        }
-        
-        public void Dispose()
-        {
-            if (!IsDisposed)
-            {
-                IsDisposed = true;
-                OnDispose.Invoke();
-                OnDispose = null;
             }
         }
     }

@@ -1,5 +1,5 @@
-﻿using CardsAndPiles;
-using Component = Api.Component;
+﻿using Api;
+using CardsAndPiles;
 
 namespace CardTestProject
 {

@@ -10,26 +10,35 @@ namespace SummerJam1
     {
         private int _amount;
 
-        public int Amount
-        {
-            get => _amount;
-            set { _amount = Math.Max(0, value); }
-        }
-
         public int Max { get; set; }
 
         public bool DontDie { get; set; }
+
+        public int Amount
+        {
+            get => _amount;
+            set => _amount = Math.Max(0, value);
+        }
+
+        public int TryHeal(int damage, IEntity source)
+        {
+            RequestHealEventArgs args = new RequestHealEventArgs(damage, source, Entity);
+            Events.OnRequestHeal(args);
+            int amount = CalculateDamage(args.Amount, args.Multiplier, new List<int>());
+            Heal(amount, args.Source);
+            return amount;
+        }
 
         public int TryDealDamage(int damage, IEntity source)
         {
             RequestDamageMultipliersEventArgs multipliersEventArgs = new RequestDamageMultipliersEventArgs(damage, source, Entity);
             Events.OnRequestDamageMultipliers(multipliersEventArgs);
-            var multipliers = multipliersEventArgs.Multiplier;
+            List<float> multipliers = multipliersEventArgs.Multiplier;
 
             RequestDamageModifiersEventArgs modifiersEventArgrs = new RequestDamageModifiersEventArgs(damage, source, Entity);
             Events.OnRequestDamageModifiers(modifiersEventArgrs);
 
-            var modifiers = modifiersEventArgrs.Modifiers;
+            List<int> modifiers = modifiersEventArgrs.Modifiers;
             // Events.OnRequestDealDamage(argrs); multipliers
             // Events.OnRequestDealDamage(argrs); clamps
             // Events.OnRequestDealDamage(argrs); reduction
@@ -41,8 +50,8 @@ namespace SummerJam1
 
         private int CalculateDamage(int amount, List<float> multipliers, List<int> reductions)
         {
-            var totalMultiplier = 1f;
-            foreach (var multiplier in multipliers)
+            float totalMultiplier = 1f;
+            foreach (float multiplier in multipliers)
             {
                 if (multiplier == 0f)
                 {
@@ -53,7 +62,7 @@ namespace SummerJam1
                 totalMultiplier += multiplier;
             }
 
-            var calculated = (int)Math.Ceiling(amount * totalMultiplier); //TODO: math
+            int calculated = (int)Math.Ceiling(amount * totalMultiplier); //TODO: math
 
 
             foreach (int reduction in reductions)
@@ -66,11 +75,11 @@ namespace SummerJam1
 
         public void DealDamage(int damage, IEntity source)
         {
-            var sourceName = source.GetComponent<NameComponent>()?.Value ?? source.Id.ToString();
-            var myName = Entity.GetComponent<NameComponent>()?.Value ?? Entity.Id.ToString();
+            string sourceName = source.GetComponent<NameComponent>()?.Value ?? source.Id.ToString();
+            string myName = Entity.GetComponent<NameComponent>()?.Value ?? Entity.Id.ToString();
             Logging.Log($"{myName} damaged for {damage} by {sourceName}.");
 
-            var armor = Entity.GetComponent<Armor>();
+            Armor armor = Entity.GetComponent<Armor>();
 
             if (armor != null)
             {
@@ -133,15 +142,6 @@ namespace SummerJam1
             {
                 SetHealth(Amount + diff);
             }
-        }
-
-        public int TryHeal(int damage, IEntity source)
-        {
-            RequestHealEventArgs args = new RequestHealEventArgs(damage, source, Entity);
-            Events.OnRequestHeal(args);
-            int amount = CalculateDamage(args.Amount, args.Multiplier, new List<int>());
-            Heal(amount, args.Source);
-            return amount;
         }
     }
 }

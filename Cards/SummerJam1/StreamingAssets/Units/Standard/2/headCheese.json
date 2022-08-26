@@ -12,7 +12,7 @@
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount" : 1
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
@@ -36,12 +36,12 @@
     },
     {
       "$type": "SummerJam1.Statuses.GainMultiAttackBelowThreshold, SummerJam1",
-      "Amount" : 3,
-      "Threshold" : 5
+      "Amount": 3,
+      "Threshold": 5
     },
     {
       "$type": "SummerJam1.Statuses.GainStrengthWhenPlayerHeals, SummerJam1",
-      "Amount" : 2
+      "Amount": 2
     }
   ]
 }

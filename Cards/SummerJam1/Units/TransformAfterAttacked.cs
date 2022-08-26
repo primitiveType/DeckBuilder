@@ -1,5 +1,4 @@
 ﻿using CardsAndPiles;
-using CardsAndPiles.Components;
 using Newtonsoft.Json;
 
 namespace SummerJam1.Units
@@ -15,8 +14,9 @@ namespace SummerJam1.Units
             {
                 return;
             }
+
             Unit unit = args.Source.GetComponent<Unit>();
-            
+
             args.Multiplier.Add(0); //prevent all damage.
 
             if (unit == null || args.Source.GetComponent<Food>() == null)
@@ -30,10 +30,10 @@ namespace SummerJam1.Units
 
             Entity.GetOrAddComponent<GainStrengthOnTransform>().StrengthToAdd =
                 unit.Entity.GetComponent<Strength>().Amount;
-            
+
             Entity.GetOrAddComponent<GainHealthOnTransform>().HealthToAdd =
                 unit.Entity.GetComponent<Health>().Max - 1;
-            
+
             Entity.RemoveComponent(this);
             Events.OnUnitTransformed(new UnitTransformedEventArgs(Entity));
         }

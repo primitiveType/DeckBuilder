@@ -9,19 +9,21 @@ namespace Api
 {
     public abstract class Component : IComponent
     {
-        protected Context Context => Entity.Context;
-        private List<IDisposable> EventHandles { get; } = new List<IDisposable>();
-        [JsonIgnore] public IEntity Entity { get; private set; }
-        public bool Enabled { get; set; } = true;
-
-        [JsonIgnore] public LifecycleState State { get; private set; }
-        private Lazy<EventsBase> LazyEvents { get; }
-        protected EventsBase Events => LazyEvents.Value;
-
         protected Component()
         {
             LazyEvents = new Lazy<EventsBase>(GetEvents);
         }
+
+        protected Context Context => Entity.Context;
+        private List<IDisposable> EventHandles { get; } = new();
+
+        [JsonIgnore] public LifecycleState State { get; private set; }
+        private Lazy<EventsBase> LazyEvents { get; }
+        protected EventsBase Events => LazyEvents.Value;
+        [JsonIgnore] public IEntity Entity { get; private set; }
+        public bool Enabled { get; set; } = true;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private EventsBase GetEvents()
         {
@@ -50,7 +52,7 @@ namespace Api
             }
 
             //get attributes on each component.
-            var type = GetType();
+            Type type = GetType();
             foreach (MethodInfo method in type.GetMethods(BindingFlags.Default | BindingFlags.Public |
                                                           BindingFlags.Instance | BindingFlags.Static))
             {
@@ -91,14 +93,12 @@ namespace Api
                 return;
             }
 
-            foreach (var eventHandle in EventHandles)
+            foreach (IDisposable eventHandle in EventHandles)
             {
                 eventHandle.Dispose();
             }
 
             State = LifecycleState.Destroyed;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

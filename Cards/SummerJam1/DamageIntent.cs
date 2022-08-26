@@ -1,10 +1,6 @@
-﻿using System.ComponentModel;
-using System.Linq;
-using Api;
-using CardsAndPiles;
+﻿using Api;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
-using SummerJam1.Units;
 
 namespace SummerJam1
 {
@@ -16,7 +12,7 @@ namespace SummerJam1
         public bool IgnoreStealth { get; set; }
 
         private Player Player { get; set; }
-        
+
 
         protected override void Initialize()
         {

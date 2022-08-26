@@ -4,6 +4,5 @@ namespace CardsAndPiles
 {
     public interface IPile : IComponent
     {
-    
     }
 }

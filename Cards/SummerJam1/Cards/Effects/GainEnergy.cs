@@ -7,12 +7,12 @@ namespace SummerJam1.Cards.Effects
     {
         public int Amount { get; set; }
 
+        public string Description => $"Gain {Amount} Energy.";
+
         public bool DoEffect(IEntity target)
         {
             Game.Player.CurrentEnergy += Amount;
             return true;
         }
-
-        public string Description => $"Gain {Amount} Energy.";
     }
 }

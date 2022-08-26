@@ -2,6 +2,5 @@
 {
     public class SummerJam1Events : SummerJam1EventsBase
     {
-        
     }
 }

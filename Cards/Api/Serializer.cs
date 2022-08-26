@@ -5,7 +5,7 @@ namespace Api
 {
     public class Serializer
     {
-        public static JsonSerializerSettings Settings = new JsonSerializerSettings
+        public static JsonSerializerSettings Settings = new()
         {
             TypeNameHandling = TypeNameHandling.Objects,
             TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,

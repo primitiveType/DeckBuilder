@@ -14,7 +14,7 @@ namespace Api
             Root = CreateEntity();
         }
 
-        public Dictionary<int, IEntity> EntityDatabase { get; } = new Dictionary<int, IEntity>();
+        public Dictionary<int, IEntity> EntityDatabase { get; } = new();
 
         [JsonProperty] public IEntity Root { get; private set; }
         [JsonProperty] private int NextId { get; set; }
@@ -36,7 +36,7 @@ namespace Api
 
         public IEntity CreateEntity(IEntity parent = null, Action<IEntity> setup = null)
         {
-            Entity entity = new Entity();
+            Entity entity = new();
             entity.Initialize(this, NextId++);
 
             setup?.Invoke(entity);
@@ -44,6 +44,7 @@ namespace Api
             {
                 throw new Exception("Unable to create entity under target!");
             }
+
             EntityDatabase.Add(entity.Id, entity);
             Events.OnEntityCreated(new EntityCreatedEventArgs(entity));
             return entity;
@@ -55,6 +56,7 @@ namespace Api
             {
                 prefabName += ".json";
             }
+
             string prefab = File.ReadAllText(Path.Combine(PrefabsPath, prefabName));
             Entity entity = Serializer.Deserialize<Entity>(prefab);
             entity.Initialize(this, NextId++);

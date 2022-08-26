@@ -5,6 +5,18 @@ namespace Solitaire
 {
     public class SolitairePileConstraint : Component, IParentConstraint
     {
+        public bool AcceptsParent(IEntity parent)
+        {
+            return true;
+        }
+
+        public bool AcceptsChild(IEntity child)
+        {
+            StandardDeckCard card = child.GetComponent<StandardDeckCard>();
+
+            return card != null && SuitCompatible(card.Suit) && IsNextSequence(card.Number);
+        }
+
         private bool IsNextSequence(int number)
         {
             if (Entity.Children.Last().GetComponent<StandardDeckCard>().Number == number - 1)
@@ -23,18 +35,6 @@ namespace Solitaire
             }
 
             return Entity.Children.First().GetComponent<StandardDeckCard>().Suit == suit;
-        }
-
-        public bool AcceptsParent(IEntity parent)
-        {
-            return true;
-        }
-
-        public bool AcceptsChild(IEntity child)
-        {
-            var card = child.GetComponent<StandardDeckCard>();
-
-            return card != null && SuitCompatible(card.Suit) && IsNextSequence(card.Number);
         }
     }
 }

@@ -16,6 +16,6 @@ namespace SummerJam1
         Meatloaf,
         Donut,
         Soup,
-        Pie,
+        Pie
     }
 }

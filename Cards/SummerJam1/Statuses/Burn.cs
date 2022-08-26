@@ -1,6 +1,5 @@
 ﻿using Api;
 using CardsAndPiles;
-using CardsAndPiles.Components;
 
 namespace SummerJam1.Statuses
 {
@@ -16,25 +15,6 @@ namespace SummerJam1.Statuses
             if (Amount <= 0)
             {
                 Entity.RemoveComponent(this);
-            }
-        }
-    }
-
-    public class Chained : SummerJam1Component//todo
-    {
-        public IEntity ChainedTo { get; set; }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-        }
-
-        [OnCardDrawn]
-        private void OnCardDrawn(object sender, CardDrawnEventArgs args)
-        {
-            if (args.DrawnCard == Entity || args.DrawnCard == ChainedTo)
-            {
-                
             }
         }
     }

@@ -10,6 +10,9 @@ namespace SummerJam1.Cards.Effects
         public int Amount { get; set; }
 
 
+        public string Description => $"Choose {Amount} Card{Amount.ToPluralitySuffix()} to discard.";
+
+
         public bool DoEffect(IEntity target)
         {
             if (Amount >= Game.Battle.Hand.Entity.Children.Count)
@@ -25,8 +28,5 @@ namespace SummerJam1.Cards.Effects
 
             return true;
         }
-
-
-        public string Description => $"Choose {Amount} Card{Amount.ToPluralitySuffix()} to discard.";
     }
 }

@@ -8,7 +8,7 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.AddCardToBattleDeck, SummerJam1",
-      "Prefab" : "Cards/Spike.json",
+      "Prefab": "Cards/Spike.json",
       "Amount": 3
     },
     {

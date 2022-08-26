@@ -1,6 +1,5 @@
 using System;
 using Api;
-using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Cards;
 
@@ -9,6 +8,8 @@ namespace SummerJam1
     public class Armor : SummerJam1Component, IAmount, ITooltip
     {
         public int Amount { get; set; }
+
+        public string Tooltip => Tooltips.ARMOR_TOOLTIP;
 
         // [OnRequestDamageModifiers]
         // private void OnRequestDealDamage(object sender, RequestDamageModifiersEventArgrs argrs)
@@ -29,10 +30,8 @@ namespace SummerJam1
             Amount = 0;
         }
 
-        public string Tooltip => Tooltips.ARMOR_TOOLTIP;
-
         /// <summary>
-        /// Returns remaining damage.
+        ///     Returns remaining damage.
         /// </summary>
         /// <param name="damage"></param>
         /// <returns></returns>

@@ -1,7 +1,6 @@
 ﻿using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
-using Component = Api.Component;
 
 namespace Solitaire
 {
@@ -10,9 +9,19 @@ namespace Solitaire
         public Suit Suit { get; private set; }
         public int Number { get; private set; }
         public bool IsFaceDown { get; set; }
-        public bool CanDrag { get; set; } = true;
 
         public SuitColor SuitColor => Suit == Suit.Clubs || Suit == Suit.Spades ? SuitColor.Black : SuitColor.Red;
+        public bool CanDrag { get; set; } = true;
+
+        public bool AcceptsParent(IEntity parent)
+        {
+            return parent.GetComponent<Pile>() != null;
+        }
+
+        public bool AcceptsChild(IEntity child)
+        {
+            return false;
+        }
 
 
         public void SetCard(int number, Suit suit, bool isFaceDown = false)
@@ -45,16 +54,6 @@ namespace Solitaire
             }
 
             return $"{numberName} of {Suit.ToString()}";
-        }
-
-        public bool AcceptsParent(IEntity parent)
-        {
-            return parent.GetComponent<Pile>() != null;
-        }
-
-        public bool AcceptsChild(IEntity child)
-        {
-            return false;
         }
     }
 }

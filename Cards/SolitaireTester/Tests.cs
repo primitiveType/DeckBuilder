@@ -18,7 +18,7 @@ namespace SolitaireTester
         public void Setup()
         {
             Context = new Context(new CardEvents());
-            var gameEntity = Context.CreateEntity();
+            IEntity gameEntity = Context.CreateEntity();
             Game = gameEntity.AddComponent<SolitaireGame>();
         }
 
@@ -26,7 +26,7 @@ namespace SolitaireTester
         public void Test1()
         {
             Assert.NotNull(Root.GetComponent<SolitaireGame>());
-            var deck = Root.GetComponentInChildren<DeckPile>();
+            DeckPile deck = Root.GetComponentInChildren<DeckPile>();
             Assert.NotNull(deck);
             Assert.NotNull(Root.GetComponentInChildren<HandPile>());
             Assert.That(deck.Entity.Children, Has.Count.EqualTo(52));
@@ -36,7 +36,7 @@ namespace SolitaireTester
         public void PropertyChangesGeneratedForSolitaire()
         {
             Assert.NotNull(Root.GetComponent<SolitaireGame>());
-            var card = Root.GetComponentInChildren<StandardDeckCard>();
+            StandardDeckCard card = Root.GetComponentInChildren<StandardDeckCard>();
             Assert.NotNull(card);
 
             bool fired = false;

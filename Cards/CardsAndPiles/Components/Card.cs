@@ -1,27 +1,22 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Api;
-using Component = Api.Component;
 
 namespace CardsAndPiles.Components
 {
-    public class DescriptionComponent : Component, IDescription
+    public abstract class Card : Component, IPileItem, IVisual
     {
-        public string Description { get; set; }
-    }
+        public virtual bool AcceptsParent(IEntity parent)
+        {
+            return parent.GetComponent<IPile>() != null;
+        }
 
-    public class DoNothingCard : Card
-    {
-        protected override bool PlayCard(IEntity target)
+
+        public virtual bool AcceptsChild(IEntity child)
         {
             return true;
         }
-    }
-    
 
-    public abstract class Card : Component, IPileItem, IVisual
-    {
         protected override void Initialize()
         {
             base.Initialize();
@@ -30,7 +25,7 @@ namespace CardsAndPiles.Components
 
         public bool TryPlayCard(IEntity target)
         {
-            var args = new RequestPlayCardEventArgs(Entity, target);
+            RequestPlayCardEventArgs args = new RequestPlayCardEventArgs(Entity, target);
             ((CardEvents)Context.Events).OnRequestPlayCard(args);
 
             if (args.Blockers.Any())
@@ -45,22 +40,11 @@ namespace CardsAndPiles.Components
                 return false;
             }
 
-            Entity.TrySetParent(null);//it should not be in hand while the play effects occur...
+            Entity.TrySetParent(null); //it should not be in hand while the play effects occur...
             ((CardEvents)Context.Events).OnCardPlayed(new CardPlayedEventArgs(Entity, target, false));
             return true;
         }
 
         protected abstract bool PlayCard(IEntity target);
-
-        public virtual bool AcceptsParent(IEntity parent)
-        {
-            return parent.GetComponent<IPile>() != null;
-        }
-
-
-        public virtual bool AcceptsChild(IEntity child)
-        {
-            return true;
-        }
     }
 }

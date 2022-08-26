@@ -8,15 +8,6 @@ namespace SummerJam1.Cards
 {
     public class AddBurnToUnit : SummerJam1Component, IEffect
     {
-        protected override void Initialize()
-        {
-            base.Initialize();
-            if (Entity.GetComponent<DescriptionComponent>() == null)
-            {
-                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Add {Amount} burn to a unit.";
-            }
-        }
-
         [JsonProperty] public int Amount { get; set; }
 
         public bool DoEffect(IEntity target)
@@ -30,6 +21,15 @@ namespace SummerJam1.Cards
             Burn burn = unit.GetOrAddComponent<Burn>();
             burn.Amount += Amount;
             return true;
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            if (Entity.GetComponent<DescriptionComponent>() == null)
+            {
+                Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Add {Amount} burn to a unit.";
+            }
         }
     }
 }

@@ -8,6 +8,8 @@ namespace SummerJam1.Cards.Effects
     {
         public int Amount { get; set; } = 2;
 
+        public string Description => $"Draw {Amount} Card{Amount.ToPluralitySuffix()}.";
+
         public bool DoEffect(IEntity target)
         {
             for (int i = 0; i < Amount; i++)
@@ -17,7 +19,5 @@ namespace SummerJam1.Cards.Effects
 
             return true;
         }
-
-        public string Description => $"Draw {Amount} Card{Amount.ToPluralitySuffix()}.";
     }
 }

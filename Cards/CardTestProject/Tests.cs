@@ -1,7 +1,5 @@
-using System.Linq;
 using Api;
 using CardsAndPiles;
-using CardsAndPiles.Components;
 using NUnit.Framework;
 
 namespace CardTestProject
@@ -27,9 +25,9 @@ namespace CardTestProject
             IEntity entity = Context.CreateEntity();
             entity.TrySetParent(game);
 
-            var testComponent = entity.AddComponent<CardPlayedComponent>();
+            CardPlayedComponent testComponent = entity.AddComponent<CardPlayedComponent>();
 
-            var testComponent2 = entity.AddComponent<CardDiscardedComponent>();
+            CardDiscardedComponent testComponent2 = entity.AddComponent<CardDiscardedComponent>();
 
             //Verify initial value.
             Assert.IsFalse(testComponent.CardPlayed);
@@ -48,7 +46,5 @@ namespace CardTestProject
             //Verify event was fired from attribute.
             Assert.IsTrue(testComponent2.CardDiscarded);
         }
-
-        
     }
 }
