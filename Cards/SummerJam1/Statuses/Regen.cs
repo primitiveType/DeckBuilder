@@ -167,12 +167,13 @@ namespace SummerJam1.Statuses
         {
             base.Initialize();
             Entity.PropertyChanged += EntityOnPropertyChanged;
+            Game.Battle.PropertyChanged += EntityOnPropertyChanged;
             UpdateEnabledState();
         }
 
         private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Entity.Parent))
+            if (e.PropertyName == nameof(Entity.Parent) || e.PropertyName == nameof(BattleContainer.CurrentFloor))
             {
                 UpdateEnabledState();
             }
@@ -180,7 +181,14 @@ namespace SummerJam1.Statuses
 
         private void UpdateEnabledState()
         {
-            Enabled = Entity.GetComponentInParent<EncounterSlotPile>() != null;
+            var component = Entity.GetComponentInParent<EncounterSlotPile>();
+            if (component == null)
+            {
+                Enabled = false;
+            }
+
+            Enabled = Game.Battle.EncounterSlots.Contains(component);
+
         }
 
         public override void Terminate()

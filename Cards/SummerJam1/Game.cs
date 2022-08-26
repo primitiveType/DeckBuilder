@@ -128,6 +128,7 @@ namespace SummerJam1
             // Context.Root.AddComponent<FillSlotsOnTurnEnd>();
             Context.Root.AddComponent<DrawHandOnTurnBegin>();
             Context.Root.AddComponent<DrawEncounterHandOnTurnBegin>();
+            Context.Root.AddComponent<DrawEncounterHandWhenEmpty>();
         }
 
 
@@ -150,7 +151,11 @@ namespace SummerJam1
                 Battle.Entity.Destroy();
             }
 
-            Context.CreateEntity(Entity, entity => { Battle = entity.AddComponent<BattleContainer>(); });
+            Context.CreateEntity(Entity, entity =>
+            {
+                Battle = entity.AddComponent<BattleContainer>();
+                entity.AddComponent<IncrementCurrentFloorWhenEmpty>();
+            });
             Battle.StartBattle();
         }
         

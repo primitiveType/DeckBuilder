@@ -5,6 +5,7 @@ using System.Linq;
 using Api;
 using CardsAndPiles;
 using SummerJam1.Cards;
+using SummerJam1.Rules;
 
 namespace SummerJam1
 {
@@ -41,6 +42,12 @@ namespace SummerJam1
                     Context.CreateEntity(Entity, entity => AllEncounterSlots[index].Add(entity.AddComponent<EncounterSlotPile>()));
                 }
             }
+
+        }
+
+        public void MoveToNextFloor()
+        {
+            CurrentFloor++;
         }
 
         public List<IEntity> GetEntitiesInAdjacentSlots(IEntity slotOrMonster)

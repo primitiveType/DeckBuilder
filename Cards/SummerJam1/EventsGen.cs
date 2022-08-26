@@ -11,7 +11,7 @@ using Api;
 
 namespace SummerJam1{
 public abstract class SummerJam1EventsBase : CardsAndPiles.CardEvents{
-    #region Code for event UnitCreated
+    #region Code for event eUnitCreatd
 private event EventHandleDelegate<UnitCreatedEventArgs> UnitCreated;
 public virtual void OnUnitCreated(UnitCreatedEventArgs args)
 {

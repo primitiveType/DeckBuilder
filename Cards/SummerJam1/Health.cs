@@ -13,15 +13,11 @@ namespace SummerJam1
         public int Amount
         {
             get => _amount;
-            set
-            {
-                
-                _amount = Math.Max(0, value);
-            }
+            set { _amount = Math.Max(0, value); }
         }
 
         public int Max { get; set; }
-        
+
         public bool DontDie { get; set; }
 
         public int TryDealDamage(int damage, IEntity source)
@@ -39,7 +35,7 @@ namespace SummerJam1
             // Events.OnRequestDealDamage(argrs); reduction
             int amount = CalculateDamage(multipliersEventArgs.Amount, multipliers, modifiers);
             DealDamage(amount, multipliersEventArgs.Source);
-            
+
             return amount;
         }
 
@@ -70,12 +66,17 @@ namespace SummerJam1
 
         public void DealDamage(int damage, IEntity source)
         {
+            var sourceName = source.GetComponent<NameComponent>()?.Value ?? source.Id.ToString();
+            var myName = Entity.GetComponent<NameComponent>()?.Value ?? Entity.Id.ToString();
+            Logging.Log($"{myName} damaged for {damage} by {sourceName}.");
+
             var armor = Entity.GetComponent<Armor>();
-            
+
             if (armor != null)
             {
                 damage = armor.TryDealDamage(damage);
             }
+
             Amount -= damage;
             Events.OnDamageDealt(new DamageDealtEventArgs(Entity, source, damage));
             if (Amount <= 0 && !DontDie)
@@ -142,7 +143,5 @@ namespace SummerJam1
             Heal(amount, args.Source);
             return amount;
         }
-
-        
     }
 }

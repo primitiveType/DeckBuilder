@@ -20,16 +20,16 @@ namespace SummerJam1
             AnimationQueue.Instance.Enqueue(() => { InputStateManager.Instance.StateMachine.Fire(InputAction.BeginTurn); });
         }
         
-        // public void EndDungeonPhase()
-        // {
-        //     if (!InputStateManager.Instance.StateMachine.CanFire(InputAction.EndDungeonPhase))
-        //     {
-        //         return;
-        //     }
-        //
-        //     InputStateManager.Instance.StateMachine.Fire(InputAction.EndDungeonPhase);
-        //     Game.EndDungeonPhase();
-        //     AnimationQueue.Instance.Enqueue(() => { InputStateManager.Instance.StateMachine.Fire(InputAction.BeginTurn); });
-        // }
+        public void EndDungeonPhase()
+        {
+            if (!InputStateManager.Instance.StateMachine.CanFire(InputAction.EndDungeonPhase))
+            {
+                return;
+            }
+        
+            InputStateManager.Instance.StateMachine.Fire(InputAction.EndDungeonPhase);
+            Game.Battle.EndDungeonPhase();
+            AnimationQueue.Instance.Enqueue(() => { InputStateManager.Instance.StateMachine.Fire(InputAction.BeginTurn); });
+        }
     }
 }

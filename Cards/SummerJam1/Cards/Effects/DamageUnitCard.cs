@@ -26,6 +26,25 @@ namespace SummerJam1.Cards.Effects
             }
         }
     }
+    
+    public class TargetSlotComponent : SummerJam1Component
+    {
+        [OnRequestPlayCard]
+        private void OnRequestPlayCard(object sender, RequestPlayCardEventArgs args)
+        {
+            if (args.CardId != Entity)
+            {
+                return;
+            }
+
+            EncounterSlotPile target = args.Target.GetComponentInChildren<EncounterSlotPile>();
+
+            if (target == null || !Game.Battle.EncounterSlots.Contains(target))
+            {
+                args.Blockers.Add(CardBlockers.INVALID_TARGET);
+            }
+        }
+    }
 
     public class DamageUnitEqualToStealth : SummerJam1Component, IEffect
     {
@@ -218,7 +237,7 @@ namespace SummerJam1.Cards.Effects
         public string Description => $"Deal {Multiplier} damage for each card drawn this turn. ({Amount * Multiplier})";
     }
 
-    public class DamageUnitCard : SummerJam1Component, IEffect, IDescription
+    public class DamageUnitCard : TargetSlotComponent, IEffect, IDescription
     {
         [JsonProperty] public int DamageAmount { get; private set; }
         private int FinalDamage => DamageAmount + Strength;
