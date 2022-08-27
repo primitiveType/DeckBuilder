@@ -38,6 +38,7 @@ namespace SummerJam1.Rules
                         if (sourceSlot < 0)
                         {
                             Game.Battle.EncounterDrawPile.DrawCardInto(Game.Battle.EncounterSlotsUpcoming[i].Entity);
+                            found = true;
                         }
                         else
                         {

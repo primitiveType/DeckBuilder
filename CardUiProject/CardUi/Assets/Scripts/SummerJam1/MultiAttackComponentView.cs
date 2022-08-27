@@ -17,6 +17,7 @@ namespace SummerJam1
             if (Component != null)
             {
                 amount = " X " + (1 + Component.Amount);
+                gameObject.SetActive(Component.Amount > 0);
             }
 
 

@@ -18,7 +18,7 @@ namespace App
         
         public ISortHandler SortHandler { get; private set; }
 
-        private float lerpRate = 13;
+        private float lerpRate = 8;
 
         private void Awake()
         {

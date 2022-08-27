@@ -114,8 +114,9 @@ namespace App
             }
             view.gameObject.transform.SetParent(Parent, true);
             
-            view.gameObject.transform.localPosition = Vector3.zero;
+            // view.gameObject.transform.localPosition = Vector3.zero;
             view.gameObject.transform.localScale = Vector3.one;
+            view.gameObject.transform.rotation = Quaternion.identity;
         }
     }
 }
