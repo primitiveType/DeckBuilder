@@ -98,7 +98,9 @@ namespace SummerJam1
                 case BlocksMovement blocksMovement:
                     return WallPrefab;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(visual));
+                    // throw new ArgumentOutOfRangeException(nameof(visual));
+                    Debug.LogWarning("No prefab visual found.");
+                    return null;
             }
 
 

@@ -13,7 +13,7 @@ namespace SummerJam1
         {
             Disposables.Add(GameContext.Instance.Events.SubscribeToTurnBegan(OnTurnBegan));
             Disposables.Add(GameContext.Instance.Events.SubscribeToTurnEnded(OnTurnEnded));
-            gameObject.SetActive(false);
+            // gameObject.SetActive(false);
         }
 
         private void OnDestroy()

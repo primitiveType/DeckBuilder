@@ -9,7 +9,7 @@ namespace SummerJam1
         protected override void Start()
         {
             base.Start();
-            gameObject.SetActive(false);
+            gameObject.SetActive(!GameContext.Instance.Game.Battle.EncounterSlots.Contains(Model));
             GameContext.Instance.Game.Battle.PropertyChanged += BattleOnPropertyChanged;
             Disposables.Add(GameContext.Instance.Events.SubscribeToTurnBegan(OnTurnBegan));
         }
