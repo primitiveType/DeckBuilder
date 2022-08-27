@@ -4,7 +4,7 @@ namespace Wunderwunsch.HexMapLibrary
 {
     public class MapDistanceCalculatorEdges
     {
-        CoordinateWrapper coordinateWrapper;
+        private readonly CoordinateWrapper coordinateWrapper;
 
         public MapDistanceCalculatorEdges(CoordinateWrapper coordinateWrapper)
         {
@@ -12,20 +12,28 @@ namespace Wunderwunsch.HexMapLibrary
         }
 
         /// <summary>
-        /// TODO
-        /// </summary>            
+        ///     TODO
+        /// </summary>
         public int Grid(Vector3Int edgeA, Vector3Int edgeB)
         {
-            if (coordinateWrapper != null) edgeB = coordinateWrapper.ShiftTargetToClosestPeriodicEdgePosition(edgeA, edgeB); //non-wrapping maps just return original
+            if (coordinateWrapper != null)
+            {
+                edgeB = coordinateWrapper.ShiftTargetToClosestPeriodicEdgePosition(edgeA, edgeB); //non-wrapping maps just return original
+            }
+
             return HexGrid.GetDistance.BetweenEdges(edgeA, edgeB);
         }
 
         /// <summary>
-        /// TODO
-        /// </summary> 
+        ///     TODO
+        /// </summary>
         public float Euclidean(Vector3Int edgeA, Vector3Int edgeB)
         {
-            if (coordinateWrapper != null) edgeB = coordinateWrapper.ShiftTargetToClosestPeriodicEdgePosition(edgeA, edgeB); 
+            if (coordinateWrapper != null)
+            {
+                edgeB = coordinateWrapper.ShiftTargetToClosestPeriodicEdgePosition(edgeA, edgeB);
+            }
+
             return Vector3.Distance(HexConverter.EdgeCoordToCartesianCoord(edgeA), HexConverter.EdgeCoordToCartesianCoord(edgeB));
         }
     }

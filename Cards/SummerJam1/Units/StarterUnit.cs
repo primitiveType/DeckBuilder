@@ -1,7 +1,9 @@
-﻿using Api;
+﻿using System.Reflection;
+using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
+using SummerJam1.Cards;
 
 namespace SummerJam1.Units
 {
@@ -15,6 +17,26 @@ namespace SummerJam1.Units
         }
 
 
+        [OnRequestPlayCard]
+        private void OnRequestPlayCard(object sender, RequestPlayCardEventArgs args)
+        {
+            if (args.CardId != Entity)
+            {
+                return;
+            }
+
+            if (args.Target.GetComponent<EncounterSlotPile>() == null)
+            {
+                args.Blockers.Add(CardBlockers.INVALID_TARGET);
+                return;
+            }
+
+            if (args.Target.Children.Count > 0)
+            {
+                args.Blockers.Add(CardBlockers.SLOT_FULL);
+            }
+            
+        }
         [OnCardPlayed]
         private void OnCardPlayed(object sender, CardPlayedEventArgs args)
         {

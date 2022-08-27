@@ -4,15 +4,17 @@ using UnityEngine;
 namespace Wunderwunsch.HexMapLibrary
 {
     /// <summary>
-    /// Add this as custom IEqualityComparer to any Dictionary using Vector3Int as key, 
-    /// this is unfortunately necessary to prevent boxing (and therefore memory allocations) 
-    /// as Unity omitted to implement the IEquatable<Vector3Int> interface on Vector3Int
-    /// Will be obsolete with 2018.2 :-)
+    ///     Add this as custom IEqualityComparer to any Dictionary using Vector3Int as key,
+    ///     this is unfortunately necessary to prevent boxing (and therefore memory allocations)
+    ///     as Unity omitted to implement the IEquatable
+    ///     <Vector3Int>
+    ///         interface on Vector3Int
+    ///         Will be obsolete with 2018.2 :-)
     /// </summary>
     public class Vector3IntEqualityComparer : IEqualityComparer<Vector3Int>
     {
         /// <summary>
-        /// strongly typed equality comparison removing the need to cast to object
+        ///     strongly typed equality comparison removing the need to cast to object
         /// </summary>
         public bool Equals(Vector3Int v1, Vector3Int v2)
         {
@@ -20,14 +22,11 @@ namespace Wunderwunsch.HexMapLibrary
         }
 
         /// <summary>
-        /// HashCode implementation equal to the one Vector3Int uses.
-        /// </summary>        
+        ///     HashCode implementation equal to the one Vector3Int uses.
+        /// </summary>
         public int GetHashCode(Vector3Int v)
         {
-            unchecked
-            {
-                return v.x.GetHashCode() ^ v.y.GetHashCode() << 2 ^ v.z.GetHashCode() >> 2;
-            }
+            return v.x.GetHashCode() ^ (v.y.GetHashCode() << 2) ^ (v.z.GetHashCode() >> 2);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Wunderwunsch.HexMapLibrary
 {
     public class MapDistanceCalculatorCorners
     {
-        CoordinateWrapper coordinateWrapper;
+        private readonly CoordinateWrapper coordinateWrapper;
 
         public MapDistanceCalculatorCorners(CoordinateWrapper coordinateWrapper)
         {
@@ -12,19 +12,28 @@ namespace Wunderwunsch.HexMapLibrary
         }
 
         /// <summary>
-        /// TODO
-        /// </summary>            
+        ///     TODO
+        /// </summary>
         public int Grid(Vector3Int cornerA, Vector3Int cornerB)
         {
-            if (coordinateWrapper != null) cornerB = coordinateWrapper.ShiftTargetToClosestPeriodicCornerPosition(cornerA, cornerB); //non-wrapping maps just return original
+            if (coordinateWrapper != null)
+            {
+                cornerB = coordinateWrapper.ShiftTargetToClosestPeriodicCornerPosition(cornerA, cornerB); //non-wrapping maps just return original
+            }
+
             return HexGrid.GetDistance.BetweenCorners(cornerA, cornerB);
         }
+
         /// <summary>
-        /// TODO
-        /// </summary> 
+        ///     TODO
+        /// </summary>
         public float Euclidean(Vector3Int cornerA, Vector3Int cornerB)
         {
-            if (coordinateWrapper != null) cornerB = coordinateWrapper.ShiftTargetToClosestPeriodicCornerPosition(cornerA, cornerB);
+            if (coordinateWrapper != null)
+            {
+                cornerB = coordinateWrapper.ShiftTargetToClosestPeriodicCornerPosition(cornerA, cornerB);
+            }
+
             return HexGrid.GetDistance.BetweenCornersEuclidean(cornerA, cornerB);
         }
     }

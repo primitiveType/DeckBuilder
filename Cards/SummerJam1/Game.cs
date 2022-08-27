@@ -25,6 +25,7 @@ namespace SummerJam1
         public Pile PrefabDebugPileTester { get; private set; }
         public Pile DiscardStagingPile { get; private set; }
 
+        public int CurrentLevel { get; private set; } = 1;
 
         protected override void Initialize()
         {
@@ -82,7 +83,15 @@ namespace SummerJam1
             }
         }
 
-
+        [OnBattleEnded]
+        public void OnBattleEnded(object sender, BattleEndedEventArgs args)
+        {
+            if (args.Victory)
+            {
+                CurrentLevel++;
+            }
+        }
+        
         private List<string> GetEnemyInfos(int difficulty)
         {
             DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Units", "Standard", difficulty.ToString()));

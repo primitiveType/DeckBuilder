@@ -9,8 +9,13 @@ namespace SummerJam1
     public class Health : CardsAndPilesComponent, IHealable, IAmount, ITakesDamage
     {
         private int _amount;
+        private int _max;
 
-        public int Max { get; set; }
+        public int Max
+        {
+            get => _max;
+            set => _max = Math.Max(value, 1);
+        }
 
         public bool DontDie { get; set; }
 

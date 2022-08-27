@@ -75,7 +75,8 @@ namespace SummerJam1
         {
             List<IEntity> adjacents = new List<IEntity>(2);
             EncounterSlotPile slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
-            int index = EncounterSlots.IndexOf(slot);
+            List<Pile> encounterSlots = AllEncounterSlots.Values.First(slots => slots.Contains(slot));
+            int index = encounterSlots.IndexOf(slot);
             if (slot == null)
             {
                 throw new NullReferenceException(nameof(slot));
@@ -83,12 +84,12 @@ namespace SummerJam1
 
             if (index > 0)
             {
-                adjacents.Add(EncounterSlots[index - 1].Entity);
+                adjacents.Add(encounterSlots[index - 1].Entity);
             }
 
-            if (index < NumEncounterSlotsPerFloor - 1)
+            if (index < encounterSlots.Count - 1)
             {
-                adjacents.Add(EncounterSlots[index + 1].Entity);
+                adjacents.Add(encounterSlots[index + 1].Entity);
             }
 
 
@@ -100,12 +101,10 @@ namespace SummerJam1
             return EncounterSlots.Where(slot => slot.Entity.Children.Count == 0);
         }
 
-        public IEntity CreateRandomMonster(IEntity parent, int difficulty = -1)
+        public IEntity CreateRandomMonster(IEntity parent, int difficultyMin, int difficultyMax)
         {
-            if (difficulty <= 0)
-            {
-                difficulty = Game.Random.SystemRandom.Next(1, 4);
-            }
+            int difficulty = Game.Random.SystemRandom.Next(difficultyMin, difficultyMax + 1);
+
 
             DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Units", "Standard", $"{difficulty}"));
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
@@ -155,7 +154,7 @@ namespace SummerJam1
             {
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/mcguffin.json");
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/treasureChest.json");
-                CreateRandomMonster(EncounterDrawPile.Entity);
+                CreateRandomMonster(EncounterDrawPile.Entity, 1, Game.CurrentLevel);
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/notGengar.json");
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/birthdayBoy.json");
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/sadRalph.json");

@@ -5,8 +5,8 @@ namespace Wunderwunsch.HexMapLibrary.Generic
 {
     public class CornerDataProvider<C> where C : new()
     {
-        private Dictionary<Vector3Int, Corner<C>> cornersByPosition;
-        private CornerPositionProvider cornerPositionProvider;
+        private readonly CornerPositionProvider cornerPositionProvider;
+        private readonly Dictionary<Vector3Int, Corner<C>> cornersByPosition;
 
         public CornerDataProvider(Dictionary<Vector3Int, Corner<C>> cornersByPosition, CornerPositionProvider cornerPositionProvider)
         {
@@ -15,12 +15,16 @@ namespace Wunderwunsch.HexMapLibrary.Generic
         }
 
         /// <summary>
-        /// returns the periodic corner of the input cartesian coordinate
-        /// </summary>        
+        ///     returns the periodic corner of the input cartesian coordinate
+        /// </summary>
         public Corner<C> FromCartesianCoordinate(Vector3 cartesianCoordinate)
         {
             Vector3Int coord = cornerPositionProvider.FromCartesianCoordinate(cartesianCoordinate);
-            if (!cornersByPosition.ContainsKey(coord)) return null;
+            if (!cornersByPosition.ContainsKey(coord))
+            {
+                return null;
+            }
+
             return cornersByPosition[coord];
         }
     }

@@ -30,5 +30,14 @@ namespace SummerJam1
         {
             CurrentEnergy = MaxEnergy;
         }
+
+        [OnEntityKilled]
+        private void OnEntityKilled(object sender, EntityKilledEventArgs args)
+        {
+            if (args.Entity == Entity)
+            {
+                Events.OnBattleEnded(new BattleEndedEventArgs(false));
+            }
+        }
     }
 }

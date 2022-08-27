@@ -7,7 +7,7 @@ namespace Wunderwunsch.HexMapLibrary
         public static class GetDistance
         {
             /// <summary>
-            /// returns the tile-distance of the 2 input tiles
+            ///     returns the tile-distance of the 2 input tiles
             /// </summary>
             public static int BetweenTiles(Vector3Int tileA, Vector3Int tileB)
             {
@@ -18,7 +18,7 @@ namespace Wunderwunsch.HexMapLibrary
             }
 
             /// <summary>
-            /// returns the euclidean distance of the 2 input tiles.
+            ///     returns the euclidean distance of the 2 input tiles.
             /// </summary>
             public static float BetweenTilesEuclidean(Vector3Int tileA, Vector3Int tileB)
             {
@@ -28,27 +28,31 @@ namespace Wunderwunsch.HexMapLibrary
             }
 
             /// <summary>
-            /// returns the edge-distance of the 2 inpute edges
+            ///     returns the edge-distance of the 2 inpute edges
             /// </summary>
             public static int BetweenEdges(Vector3Int edgeA, Vector3Int edgeB)
             {
-                if (edgeA == edgeB) return 0;
-                
+                if (edgeA == edgeB)
+                {
+                    return 0;
+                }
+
                 int DeltaX = Mathf.Abs(edgeA.x - edgeB.x);
                 int DeltaY = Mathf.Abs(edgeA.y - edgeB.y);
                 int DeltaZ = Mathf.Abs(edgeA.z - edgeB.z);
                 int distance = Mathf.Max(DeltaX, DeltaY, DeltaZ);
-                if( (HexUtility.GetEdgeAlignment(edgeA) == EdgeAlignment.ParallelToCubeX && edgeA.x == edgeB.x) ||
-                    (HexUtility.GetEdgeAlignment(edgeA) == EdgeAlignment.ParallelToCubeY && edgeA.y == edgeB.y) ||
-                    (HexUtility.GetEdgeAlignment(edgeA) == EdgeAlignment.ParallelToCubeZ && edgeA.z == edgeB.z))
-                {                    
+                if (HexUtility.GetEdgeAlignment(edgeA) == EdgeAlignment.ParallelToCubeX && edgeA.x == edgeB.x ||
+                    HexUtility.GetEdgeAlignment(edgeA) == EdgeAlignment.ParallelToCubeY && edgeA.y == edgeB.y ||
+                    HexUtility.GetEdgeAlignment(edgeA) == EdgeAlignment.ParallelToCubeZ && edgeA.z == edgeB.z)
+                {
                     distance += 1;
                 }
-                return distance; 
+
+                return distance;
             }
 
             /// <summary>
-            /// returns the euclidean distance between the midpoints of both input edges
+            ///     returns the euclidean distance between the midpoints of both input edges
             /// </summary>
             public static float BetweenEdgesEuclidean(Vector3Int edgeA, Vector3Int edgeB)
             {
@@ -58,7 +62,7 @@ namespace Wunderwunsch.HexMapLibrary
             }
 
             /// <summary>
-            /// returns the corner-distance between both input corners
+            ///     returns the corner-distance between both input corners
             /// </summary>
             public static int BetweenCorners(Vector3Int cornerA, Vector3Int cornerB)
             {
@@ -67,12 +71,16 @@ namespace Wunderwunsch.HexMapLibrary
                 int deltaZ = Mathf.Abs(cornerA.z - cornerB.z);
                 int sum = deltaX + deltaY + deltaZ;
                 int distance = sum / 3;
-                if (sum % 3 == 2) distance += 1;
+                if (sum % 3 == 2)
+                {
+                    distance += 1;
+                }
+
                 return distance;
             }
 
             /// <summary>
-            /// returns the euclidean distance between both input corners
+            ///     returns the euclidean distance between both input corners
             /// </summary>
             public static float BetweenCornersEuclidean(Vector3Int cornerA, Vector3Int cornerB)
             {

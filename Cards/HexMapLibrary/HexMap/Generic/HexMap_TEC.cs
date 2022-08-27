@@ -1,6 +1,5 @@
 ﻿namespace Wunderwunsch.HexMapLibrary.Generic
 {
-
     // public class HexMap<T,E,C> : HexMap<T,E> where T : new() where E : new() where C : new()
     // {
     //     public CornerDataProvider<C> GetCorner { get; private set; }

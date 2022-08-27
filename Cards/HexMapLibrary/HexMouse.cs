@@ -3,23 +3,24 @@
 namespace Wunderwunsch.HexMapLibrary
 {
     /// <summary>
-    /// Updates every frame with the position of the mouse cursor on the XZ-Plane in different coordinate systems. 
+    ///     Updates every frame with the position of the mouse cursor on the XZ-Plane in different coordinate systems.
     /// </summary>
     public class HexMouse : MonoBehaviour
     {
         /// <summary>
-        /// Map which is assigned to the mouse - should always be the current visible map in cases where you have multiple maps.
-        /// if it is null then it will just skip map wrapping and clamping.
+        ///     Map which is assigned to the mouse - should always be the current visible map in cases where you have multiple
+        ///     maps.
+        ///     if it is null then it will just skip map wrapping and clamping.
         /// </summary>
         private HexMap hexMap;
 
         /// <summary>
-        /// collision plane to cast rays against to get mouse position;
+        ///     collision plane to cast rays against to get mouse position;
         /// </summary>
         private Plane plane;
 
         /// <summary>
-        /// Indicates whether the cursor is on the map.
+        ///     Indicates whether the cursor is on the map.
         /// </summary>
         public bool CursorIsOnMap { get; private set; }
 
@@ -30,59 +31,63 @@ namespace Wunderwunsch.HexMapLibrary
         //public bool ClampToClosestValid { get; private set; }
 
         /// <summary>
-        /// cartesian coordinate without map wrap considered
+        ///     cartesian coordinate without map wrap considered
         /// </summary>
         public Vector3 CartesianCoordInfiniteGrid { get; private set; }
+
         /// <summary>
-        /// cartesian coordinate with map wrap considered
+        ///     cartesian coordinate with map wrap considered
         /// </summary>
         public Vector3 CartesianCoordWrapped { get; private set; }
 
         /// <summary>
-        /// cube coordinate without map wrap
+        ///     cube coordinate without map wrap
         /// </summary>
         public Vector3Int CubeCoordRaw { get; private set; }
+
         /// <summary>
-        /// cube coordinate with map wrap
+        ///     cube coordinate with map wrap
         /// </summary>
         public Vector3Int TileCoord { get; private set; }
 
         /// <summary>
-        /// offset coordinate without map wrap
+        ///     offset coordinate without map wrap
         /// </summary>
         public Vector2Int OffsetCoordInfiniteGrid { get; private set; }
+
         /// <summary>
-        /// offset coordinate with map wrap
+        ///     offset coordinate with map wrap
         /// </summary>
         public Vector2Int OffsetCoord { get; private set; }
 
         /// <summary>
-        /// closest edge coordinate without map wrap
+        ///     closest edge coordinate without map wrap
         /// </summary>
         public Vector3Int ClosestEdgeCoordInfiniteGrid { get; private set; }
+
         /// <summary>
-        /// closest edge coordinate with map wrap
+        ///     closest edge coordinate with map wrap
         /// </summary>
         public Vector3Int ClosestEdgeCoord { get; private set; }
 
         /// <summary>
-        /// equals Camera.main.ScreenPointToRay(Input.mousePosition);
+        ///     equals Camera.main.ScreenPointToRay(Input.mousePosition);
         /// </summary>
         public Ray SelectionRay { get; private set; }
 
         /// <summary>
-        /// closest corner coordinate without map wrap
+        ///     closest corner coordinate without map wrap
         /// </summary>
         public Vector3Int ClosestCornerCoordInfiniteGrid { get; private set; }
 
         /// <summary>
-        /// closest corner coordinate with map wrap
+        ///     closest corner coordinate with map wrap
         /// </summary>
         public Vector3Int ClosestCornerCoord { get; private set; }
 
 
         /// <summary>
-        /// Update is called once per frame
+        ///     Update is called once per frame
         /// </summary>
         public virtual void Update()
         {
@@ -90,17 +95,17 @@ namespace Wunderwunsch.HexMapLibrary
         }
 
         /// <summary>
-        /// Call this at start of game or when the map changes to assign the HexMap
-        /// </summary>        
+        ///     Call this at start of game or when the map changes to assign the HexMap
+        /// </summary>
         public void Init(HexMap hexMap)
         {
             this.hexMap = hexMap;
             UpdateMousePositionData();
-            plane = new Plane(Vector3.up,0);
+            plane = new Plane(Vector3.up, 0);
         }
 
         /// <summary>
-        /// returns the cartesian of the mouse, using the active Camera and casting a ray on the XZ-plane
+        ///     returns the cartesian of the mouse, using the active Camera and casting a ray on the XZ-plane
         /// </summary>
         private Vector3 GetPlanePosition()
         {
@@ -108,12 +113,12 @@ namespace Wunderwunsch.HexMapLibrary
             Vector3 mousePos = Input.mousePosition;
             //Debug.Log(mousePos);            
 
-            Ray ray = Camera.main.ScreenPointToRay(mousePos);            
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
             //Debug.Log("Ray origin: " + ray.origin);
             //Debug.Log("Ray direction: " + ray.direction);
 
             //plane = new Plane(Vector3.up, Camera.main.transform.position.y - Camera.main.nearClipPlane);
-            float dist;            
+            float dist;
             Vector3 point = Vector3.zero;
             plane.Raycast(ray, out dist);
             point = ray.GetPoint(dist);
@@ -124,7 +129,7 @@ namespace Wunderwunsch.HexMapLibrary
 
 
         /// <summary>
-        /// updates all the mouse position data
+        ///     updates all the mouse position data
         /// </summary>
         private void UpdateMousePositionData()
         {
@@ -159,7 +164,7 @@ namespace Wunderwunsch.HexMapLibrary
                 TileCoord = HexConverter.CartesianCoordToTileCoord(CartesianCoordWrapped);
                 OffsetCoord = HexConverter.TileCoordToOffsetTileCoord(TileCoord);
                 ClosestEdgeCoord = HexConverter.CartesianCoordToClosestEdgeCoord(CartesianCoordWrapped);
-                ClosestCornerCoord = HexConverter.CartesianCoordToClosestCornerCoord(CartesianCoordWrapped);             
+                ClosestCornerCoord = HexConverter.CartesianCoordToClosestCornerCoord(CartesianCoordWrapped);
             }
         }
     }

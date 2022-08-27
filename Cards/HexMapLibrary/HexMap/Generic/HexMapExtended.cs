@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
+using Api;
 using UnityEngine;
 
 namespace Wunderwunsch.HexMapLibrary.Generic
 {
-    public class HexMapExtended : HexMap 
+    public class HexMapExtended : HexMap
     {
-        public TileDataProvider GetTile { get; private set; }
-        public TilesDataProvider GetTiles { get; private set; }
-        public Dictionary<Vector3Int, Tile> TilesByPosition { get; private set; }
-        public Tile[] Tiles { get; private set; }
-
         public HexMapExtended()
         {
         }
@@ -20,12 +16,17 @@ namespace Wunderwunsch.HexMapLibrary.Generic
             Setup(tileIndexByPosition, coordinateWrapper);
         }
 
+        public TileDataProvider GetTile { get; private set; }
+        public TilesDataProvider GetTiles { get; private set; }
+        public Dictionary<Vector3Int, Tile> TilesByPosition { get; private set; }
+        public Tile[] Tiles { get; private set; }
+
         public override void Setup(Dictionary<Vector3Int, int> tileIndexByPosition, CoordinateWrapper coordinateWrapper = null)
         {
             base.Setup(tileIndexByPosition, coordinateWrapper);
             CreateTileData();
-            GetTile = new TileDataProvider(TilesByPosition, base.GetTilePosition);
-            GetTiles = new TilesDataProvider(TilesByPosition, base.GetTilePositions);
+            GetTile = new TileDataProvider(TilesByPosition, GetTilePosition);
+            GetTiles = new TilesDataProvider(TilesByPosition, GetTilePositions);
         }
 
         public void CreateTileData()
@@ -40,11 +41,11 @@ namespace Wunderwunsch.HexMapLibrary.Generic
             float minZ = center.z - extents.z;
             float maxZ = center.z + extents.z;
 
-            foreach (var kvp in TileIndexByPosition)
+            foreach (KeyValuePair<Vector3Int, int> kvp in TileIndexByPosition)
             {
                 Vector2 normalizedPosition = HexConverter.TileCoordToNormalizedPosition(kvp.Key, minX, maxX, minZ, maxZ);
-                var tileEntity = Context.CreateEntity(Entity);
-                var tile = tileEntity.AddComponent<Tile>();
+                IEntity tileEntity = Context.CreateEntity(Entity);
+                Tile tile = tileEntity.AddComponent<Tile>();
 
                 tile.Setup(kvp.Key, kvp.Value, normalizedPosition);
                 TilesByPosition.Add(kvp.Key, tile);
