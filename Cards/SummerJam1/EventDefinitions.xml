@@ -23,6 +23,9 @@
     </event>
     <event id="LeaveBattle">
     </event>
+    <event id="CardMoved">
+        <arg name="CardId" type="IEntity"/>
+    </event>
     <event id="RequestRemoveCard">
     </event>
     <event id="AttackPhaseStarted">

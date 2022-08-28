@@ -19,7 +19,7 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 5,
+      "DamageAmount": 3,
       "Aoe": true
     },
     {

@@ -5,7 +5,7 @@ using PropertyChanged;
 
 namespace SummerJam1.Statuses
 {
-    public class GainArmorEveryTurn : SummerJam1Component, IStatusEffect, ITooltip, IAmount
+    public class GainArmorEveryTurn : SummerJam1Component, IStatusEffect, ITooltip, IAmount, IDescription
     {
         public int Amount { get; set; }
 
@@ -16,5 +16,7 @@ namespace SummerJam1.Statuses
         {
             Entity.GetOrAddComponent<Armor>().Amount += Amount;
         }
+
+        public string Description => Tooltip;
     }
 }

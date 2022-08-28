@@ -45,12 +45,12 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
             for (int i = 0; i < 3; i++)
             {
-                Context.CreateEntity(Deck.Entity, "Cards/Pulse.json");
+                Context.CreateEntity(Deck.Entity, "Cards/Strike.json");
             }
 
             for (int i = 0; i < 3; i++)
             {
-                Context.CreateEntity(Deck.Entity, "Cards/NewBlockCard.json");
+                Context.CreateEntity(Deck.Entity, "Cards/Block.json");
             }
 
 
@@ -58,7 +58,7 @@ namespace SummerJam1
             Context.CreateEntity(Deck.Entity, "Cards/ConcussivePulse.json");
             Context.CreateEntity(Deck.Entity, "Cards/DesperateStrike.json");
             Context.CreateEntity(Deck.Entity, "Cards/DrawStrength.json");
-            Context.CreateEntity(Deck.Entity, "Cards/Shivers.json");
+            Context.CreateEntity(Deck.Entity, "Cards/Preparation.json");
 
 
             Events.OnGameStarted(new GameStartedEventArgs());

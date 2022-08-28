@@ -21,6 +21,7 @@ namespace SummerJam1.Rules
                     if (child != null)
                     {
                         child.TrySetParent(Game.Battle.EncounterSlots[i].Entity);
+                        Events.OnCardMoved(new CardMovedEventArgs(child));
                     }
                 }
             }
@@ -46,6 +47,7 @@ namespace SummerJam1.Rules
                             if (source != null)
                             {
                                 found = source.TrySetParent(Game.Battle.EncounterSlotsUpcoming[i].Entity);
+                                Events.OnCardMoved(new CardMovedEventArgs(source));
                             }
                         }
 

@@ -137,6 +137,20 @@ public EventHandle<LeaveBattleEventArgs> SubscribeToLeaveBattle(EventHandleDeleg
     return handler;
 } 
     #endregion Code for event LeaveBattle
+    #region Code for event CardMoved
+private event EventHandleDelegate<CardMovedEventArgs> CardMoved;
+public virtual void OnCardMoved(CardMovedEventArgs args)
+{
+    CardMoved?.Invoke(this, args);
+}
+
+public EventHandle<CardMovedEventArgs> SubscribeToCardMoved(EventHandleDelegate<CardMovedEventArgs> action)
+{
+    var handler = new EventHandle<CardMovedEventArgs>(action, () => CardMoved -= action);
+    CardMoved += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event CardMoved
     #region Code for event RequestRemoveCard
 private event EventHandleDelegate<RequestRemoveCardEventArgs> RequestRemoveCard;
 public virtual void OnRequestRemoveCard(RequestRemoveCardEventArgs args)
@@ -568,6 +582,45 @@ public class OnLeaveBattleAttribute : EventsBaseAttribute {
     //public delegate void LeaveBattleEvent (object sender, LeaveBattleEventArgs args);
 
     public class LeaveBattleEventArgs {        }/// <summary>
+/// (object sender, CardMovedEventArgs) args)
+/// </summary>
+public class OnCardMovedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToCardMoved(delegate
+            {
+                if(!instance.Enabled){
+                    return;
+                }
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(CardMovedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, CardMovedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToCardMoved(delegate(object sender, CardMovedEventArgs args)
+        {
+            if(!instance.Enabled){
+                return;
+            }
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void CardMovedEvent (object sender, CardMovedEventArgs args);
+
+    public class CardMovedEventArgs {        public  IEntity CardId { get; }
+        public  CardMovedEventArgs (IEntity CardId   ){
+                  this.CardId = CardId; 
+}
+
+        }/// <summary>
 /// (object sender, RequestRemoveCardEventArgs) args)
 /// </summary>
 public class OnRequestRemoveCardAttribute : EventsBaseAttribute {

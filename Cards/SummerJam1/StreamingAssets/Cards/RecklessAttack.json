@@ -7,28 +7,27 @@
       "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Cards.Effects.AddCardToBattleDeck, SummerJam1",
-      "Prefab": "Cards/Spike.json",
-      "Amount": 3
+      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
+      "DamageAmount": 6
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.ChooseDiscards, SummerJam1",
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "shivers"
+      "AssetName": "earthPulse"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Shivers"
+      "Value": "Reckless Attack"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
       "Amount": 1
-    },
-    {
-      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
-      "Description": "Add 3 Spike cards to your deck."
     }
   ]
 }

@@ -7,19 +7,19 @@
       "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 3
+      "$type": "SummerJam1.Cards.Effects.GrantArmorToPlayer, SummerJam1",
+      "BlockAmount": 4
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "protoPulse"
+      "AssetName": "ectohelm"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Proto-Pulse"
+      "Value": "Block"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",

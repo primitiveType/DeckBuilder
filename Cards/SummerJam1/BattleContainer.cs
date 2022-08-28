@@ -44,7 +44,7 @@ namespace SummerJam1
             for (int j = 0; j < NumEncounterSlotsPerFloor; j++)
             {
                 Context.CreateEntity(Entity, entity => EncounterSlots.Add(entity.AddComponent<EncounterSlotPile>()));
-                Context.CreateEntity(Entity, entity => EncounterSlotsUpcoming.Add(entity.AddComponent<DefaultPile>()));
+                Context.CreateEntity(Entity, entity => EncounterSlotsUpcoming.Add(entity.AddComponent<UpcomingEncounterSlotPile>()));
             }
         }
 
@@ -167,6 +167,8 @@ namespace SummerJam1
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/birthdayBoy.json");
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/sadRalph.json");
             }
+            Context.CreateEntity(EncounterDrawPile.Entity, "Units/treasureChest.json");
+            Context.CreateEntity(EncounterDrawPile.Entity, "Units/treasureChest.json");
 
             // Context.CreateEntity(EncounterDrawPile.Entity, "Units/boss.json");
         }

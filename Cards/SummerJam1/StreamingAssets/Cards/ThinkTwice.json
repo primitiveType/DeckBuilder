@@ -15,7 +15,7 @@
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Rattle"
+      "Value": "Think Twice"
     },
     {
       "$type": "SummerJam1.Cards.Effects.DrawCards, SummerJam1",

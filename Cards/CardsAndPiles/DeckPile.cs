@@ -44,7 +44,7 @@ namespace CardsAndPiles
 
         public void DrawCardInto(IEntity target, bool isHandDraw = false)
         {
-            if (Entity.Children.Count == 0)
+            if (Entity.Children.Count == 0 && Discard != null)
             {
                 //shuffle discard into deck.
                 foreach (IEntity discarded in Discard.Children.ToList())
