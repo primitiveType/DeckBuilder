@@ -113,6 +113,10 @@ namespace App
             {
                 Interpolate(TargetPosition, TargetRotation);
             }
+            else if (IsInLayoutGroup)
+            {
+                transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 0);
+            }
         }
 
         private void Interpolate(Vector3 transformPosition, Vector3 transformRotation)

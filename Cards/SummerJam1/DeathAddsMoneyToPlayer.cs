@@ -14,4 +14,16 @@ namespace SummerJam1
             }
         }
     }
+    
+    public class DeathAddsRandomCardsToPrizePile : SummerJam1Component
+    {
+        [OnEntityKilled]
+        private void OnEntityKilled(object sender, EntityKilledEventArgs args)
+        {
+            if (args.Entity == Entity)
+            {
+                Game.PrizePile.SetupRandomPrizePile();
+            }
+        }
+    }
 }

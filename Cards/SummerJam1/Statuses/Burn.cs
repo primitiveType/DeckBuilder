@@ -1,5 +1,6 @@
 ﻿using Api;
 using CardsAndPiles;
+using SummerJam1.Cards;
 
 namespace SummerJam1.Statuses
 {
@@ -17,5 +18,19 @@ namespace SummerJam1.Statuses
                 Entity.RemoveComponent(this);
             }
         }
+    }
+
+    public class Frozen : SummerJam1Component
+    {
+        [OnRequestPlayCard]
+        private void OnRequestPlayCard(object sender, RequestPlayCardEventArgs args)
+        {
+            if (args.CardId == Entity)
+            {
+                args.Blockers.Add(CardBlockers.FROZEN);
+            }
+        }
+
+     
     }
 }

@@ -7,5 +7,6 @@ namespace SummerJam1.Cards
         public const string INVALID_TARGET = "Invalid Target!";
         public const string SLOT_FULL = "Slot is already full!";
         public const string NOT_ENOUGH_BLOOD = "Not enough blood in slot!";
+        public const string FROZEN = "That card is frozen!";
     }
 }

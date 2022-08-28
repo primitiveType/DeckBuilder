@@ -1,4 +1,14 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=CardsAndPiles_002EAnnotations/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=RogueMaps_002EAnnotations/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=Solitaire_002EAnnotations/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=Solitaire_002EAnnotations/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=ED5850AE61D57046A9D1340FC42F2A37/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=ED5850AE61D57046A9D1340FC42F2A37/AbsolutePath/@EntryValue">C:\Users\Arthu\Documents\Projects\DeckBuilder - Copy (2)\Cards\EventTemplates.DotSettings</s:String>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=ED5850AE61D57046A9D1340FC42F2A37/RelativePath/@EntryValue">..\EventTemplates.DotSettings</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileED5850AE61D57046A9D1340FC42F2A37/@KeyIndexDefined">True</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileED5850AE61D57046A9D1340FC42F2A37/RelativePriority/@EntryValue">1</s:Double>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=59231037B678C14AA2C89C9519345F3B/Shortcut/@EntryValue">OnRequestCardPlayed</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=59231037B678C14AA2C89C9519345F3B/Text/@EntryValue">[OnRequestCardPlayed]
+private void OnRequestCardPlayed(object sender, RequestCardPlayedEventArgs args){
+
+}</s:String></wpf:ResourceDictionary>

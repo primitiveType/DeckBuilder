@@ -22,6 +22,13 @@ using System.Reflection;
 using Api;
 
 <#
+        string pathToTemplates = "EventTemplates.DotSettings";
+        string prefix =
+            "<wpf:ResourceDictionary xml:space=\"preserve\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:s=\"clr-namespace:System;assembly=mscorlib\" xmlns:ss=\"urn:shemas-jetbrains-com:settings-storage-xaml\" xmlns:wpf=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">";
+        string postfix = "\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t</wpf:ResourceDictionary>\n\t";
+        
+        File.WriteAllText(pathToTemplates, prefix);
+        
         string catalogName = "EventsBase";
         foreach (XmlNode node in doc.SelectNodes("/catalog"))
         {
@@ -41,6 +48,7 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 #>    #endregion Code for event <#= eventNode.Attributes["id"].Value #>
 <#
             }
+            File.WriteAllText(pathToTemplates, postfix);
         }
 #>
 }
@@ -56,6 +64,7 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 
         void CreateEvent(XmlNode eventNode)
         {
+            File.WriteAllText(pathToTemplates, CreateRiderTemplate(eventNode.Attributes["id"].Value));
             string argsClassName = eventNode.Attributes["id"].Value + "EventArgs";
 #>
     //public delegate void <#= eventNode.Attributes["id"].Value #>Event (object sender, <#= argsClassName #> args);
@@ -187,13 +196,24 @@ public EventHandle<<#= argsName #>> SubscribeTo<#= eventName #>(EventHandleDeleg
         }
 #>
 
-//TODO: generate attributes with static override functions that get the event handle from a game context.
-//TODO: add generation of invoke functions.? 
+
 
  }
 
     
 <#
+        string CreateRiderTemplate(string eventName)
+        {
+            string guid = Guid.NewGuid().ToString();
+            string template =
+                @$"	<s:String x:Key=""/Default/PatternsAndTemplates/LiveTemplates/Template/={guid}/Shortcut/@EntryValue"">On{eventName}</s:String>
+                        <s:String x:Key=""/Default/PatternsAndTemplates/LiveTemplates/Template/={guid}/Text/@EntryValue"">[On{eventName}]
+                        private void On{eventName}(object sender, {eventName}EventArgs args){{
+
+                    }}</s:String>";
+
+            return template;
+        }
     }
 #>
 
