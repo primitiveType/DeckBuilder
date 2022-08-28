@@ -2,11 +2,26 @@
 	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=CardsAndPiles_002EAnnotations/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=RogueMaps_002EAnnotations/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=Solitaire_002EAnnotations/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=ED5850AE61D57046A9D1340FC42F2A37/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=ED5850AE61D57046A9D1340FC42F2A37/AbsolutePath/@EntryValue">C:\Users\Arthu\Documents\Projects\DeckBuilder - Copy (2)\Cards\EventTemplates.DotSettings</s:String>
-	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=ED5850AE61D57046A9D1340FC42F2A37/RelativePath/@EntryValue">..\EventTemplates.DotSettings</s:String>
-	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileED5850AE61D57046A9D1340FC42F2A37/@KeyIndexDefined">True</s:Boolean>
-	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileED5850AE61D57046A9D1340FC42F2A37/RelativePriority/@EntryValue">1</s:Double>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=6F5954F4C325804AA44A288ADCA51D81/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=6F5954F4C325804AA44A288ADCA51D81/AbsolutePath/@EntryValue">C:\Users\Arthu\Documents\Projects\DeckBuilder - Copy (2)\Cards\SummerJam1-EventTemplates.DotSettings</s:String>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=6F5954F4C325804AA44A288ADCA51D81/RelativePath/@EntryValue">..\SummerJam1-EventTemplates.DotSettings</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=CA896433F385654497ABAF836D4390E5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=CA896433F385654497ABAF836D4390E5/AbsolutePath/@EntryValue">C:\Users\Arthu\Documents\Projects\DeckBuilder - Copy (2)\Cards\Api-EventTemplates.DotSettings</s:String>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=CA896433F385654497ABAF836D4390E5/RelativePath/@EntryValue">..\Api-EventTemplates.DotSettings</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=FD271353A820FC4BA8E9AF48A54706DA/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=FD271353A820FC4BA8E9AF48A54706DA/AbsolutePath/@EntryValue">C:\Users\Arthu\Documents\Projects\DeckBuilder - Copy (2)\Cards\CardsAndPiles-EventTemplates.DotSettings</s:String>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=FD271353A820FC4BA8E9AF48A54706DA/RelativePath/@EntryValue">..\CardsAndPiles-EventTemplates.DotSettings</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File6F5954F4C325804AA44A288ADCA51D81/@KeyIndexDefined">True</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File6F5954F4C325804AA44A288ADCA51D81/RelativePriority/@EntryValue">2</s:Double>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileCA896433F385654497ABAF836D4390E5/@KeyIndexDefined">True</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileCA896433F385654497ABAF836D4390E5/RelativePriority/@EntryValue">0.5</s:Double>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileFD271353A820FC4BA8E9AF48A54706DA/@KeyIndexDefined">True</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileFD271353A820FC4BA8E9AF48A54706DA/RelativePriority/@EntryValue">1</s:Double>
+	
+	
+	
+	
+	
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=59231037B678C14AA2C89C9519345F3B/Shortcut/@EntryValue">OnRequestCardPlayed</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=59231037B678C14AA2C89C9519345F3B/Text/@EntryValue">[OnRequestCardPlayed]
 private void OnRequestCardPlayed(object sender, RequestCardPlayedEventArgs args){

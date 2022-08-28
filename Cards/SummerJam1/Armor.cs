@@ -10,7 +10,7 @@ namespace SummerJam1
         public int Amount { get; set; }
 
         public string Tooltip => Tooltips.ARMOR_TOOLTIP;
-
+        
         // [OnRequestDamageModifiers]
         // private void OnRequestDealDamage(object sender, RequestDamageModifiersEventArgrs argrs)
         // {

@@ -116,6 +116,7 @@ namespace SummerJam1
 
         protected abstract void ProcessAdjacentAdded(IEntity newItem);
 
+        
         public override void Terminate()
         {
             base.Terminate();

@@ -15,6 +15,8 @@ namespace SummerJam1
         }
     }
     
+    
+
     public class DeathAddsRandomCardsToPrizePile : SummerJam1Component
     {
         [OnEntityKilled]

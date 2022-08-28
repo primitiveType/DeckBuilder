@@ -3,7 +3,7 @@
 <#@ assembly name="System.Xml"#>
 
 <#
-    XmlDocument doc = new();
+    System.Xml.XmlDocument doc = new();
     // Replace this file path with yours:
     doc.Load(@"./EventDefinitions.xml");
 
@@ -22,15 +22,18 @@ using System.Reflection;
 using Api;
 
 <#
-        string pathToTemplates = "EventTemplates.DotSettings";
+        System.IO.DirectoryInfo currentDir = new System.IO.DirectoryInfo(System.Environment.CurrentDirectory);
+        string projectName = currentDir.Name;
+        
+        string pathToTemplates = $"./../{projectName}-EventTemplates.DotSettings";
         string prefix =
             "<wpf:ResourceDictionary xml:space=\"preserve\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:s=\"clr-namespace:System;assembly=mscorlib\" xmlns:ss=\"urn:shemas-jetbrains-com:settings-storage-xaml\" xmlns:wpf=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">";
         string postfix = "\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t</wpf:ResourceDictionary>\n\t";
-        
-        File.WriteAllText(pathToTemplates, prefix);
-        
+
+        System.IO.File.WriteAllText(pathToTemplates, prefix);
+
         string catalogName = "EventsBase";
-        foreach (XmlNode node in doc.SelectNodes("/catalog"))
+        foreach (System.Xml.XmlNode node in doc.SelectNodes("/catalog"))
         {
             catalogName = node.Attributes["name"].Value;
             string inherits = node.Attributes["inherits"].Value;
@@ -40,7 +43,7 @@ using Api;
 namespace <#= namespaceName #>{
 public abstract class <#= catalogName #> : <#= inherits #>{
 <#
-            foreach (XmlNode eventNode in node.SelectNodes("event"))
+            foreach (System.Xml.XmlNode eventNode in node.SelectNodes("event"))
             {
 #>    #region Code for event <#= eventNode.Attributes["id"].Value #>
 <#
@@ -48,34 +51,35 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 #>    #endregion Code for event <#= eventNode.Attributes["id"].Value #>
 <#
             }
-            File.WriteAllText(pathToTemplates, postfix);
         }
 #>
 }
 <#
-        foreach (XmlNode node in doc.SelectNodes("/catalog"))
+        foreach (System.Xml.XmlNode node in doc.SelectNodes("/catalog"))
         {
-            foreach (XmlNode eventNode in node.SelectNodes("event"))
+            foreach (System.Xml.XmlNode eventNode in node.SelectNodes("event"))
             {
                 CreateAttribute(eventNode);
                 CreateEvent(eventNode);
             }
         }
 
-        void CreateEvent(XmlNode eventNode)
+        System.IO.File.AppendAllText(pathToTemplates, postfix);
+
+        void CreateEvent(System.Xml.XmlNode eventNode)
         {
-            File.WriteAllText(pathToTemplates, CreateRiderTemplate(eventNode.Attributes["id"].Value));
+            System.IO.File.AppendAllText(pathToTemplates, CreateRiderTemplate(eventNode.Attributes["id"].Value));
             string argsClassName = eventNode.Attributes["id"].Value + "EventArgs";
 #>
     //public delegate void <#= eventNode.Attributes["id"].Value #>Event (object sender, <#= argsClassName #> args);
 
     public class <#= argsClassName #> {<#
-            XmlNodeList argnodes = eventNode.SelectNodes("arg");
-            XmlNodeList memberNodes = eventNode.SelectNodes("member");
+            System.Xml.XmlNodeList argnodes = eventNode.SelectNodes("arg");
+            System.Xml.XmlNodeList memberNodes = eventNode.SelectNodes("member");
             int argCount = argnodes != null ? argnodes.Count : 0;
             if (argCount > 0)
             {
-                foreach (XmlNode argNode in argnodes)
+                foreach (System.Xml.XmlNode argNode in argnodes)
                 {
 #>
         public  <#=
@@ -83,7 +87,7 @@ public abstract class <#= catalogName #> : <#= inherits #>{
                         argNode.Attributes["name"].Value #> { get; }
 <#
                 }
-                foreach (XmlNode argNode in memberNodes)
+                foreach (System.Xml.XmlNode argNode in memberNodes)
                 {
 #>
         public  <#=
@@ -99,7 +103,7 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 #>
         public  <#= argsClassName #> (<#
                 int currentArg = 0;
-                foreach (XmlNode argNode in argnodes)
+                foreach (System.Xml.XmlNode argNode in argnodes)
                 {
                     currentArg++;
 
@@ -115,7 +119,7 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 #>
   ){
     <#
-                foreach (XmlNode argNode in argnodes)
+                foreach (System.Xml.XmlNode argNode in argnodes)
                 {
 //set in ctor
 #>
@@ -136,7 +140,7 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 
 
 <#
-        void CreateAttribute(XmlNode eventNode)
+        void CreateAttribute(System.Xml.XmlNode eventNode)
         {
 #>
 /// <summary>
@@ -174,7 +178,7 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttr
 <#
         }
 
-        void CreateInvocator(XmlNode eventNode)
+        void CreateInvocator(System.Xml.XmlNode eventNode)
         {
             string eventName = eventNode.Attributes["id"].Value;
             string argsName = eventNode.Attributes["id"].Value + "EventArgs";
@@ -205,8 +209,18 @@ public EventHandle<<#= argsName #>> SubscribeTo<#= eventName #>(EventHandleDeleg
         string CreateRiderTemplate(string eventName)
         {
             string guid = Guid.NewGuid().ToString();
+            guid = guid.Replace("-", "");
+            guid = guid.ToUpper();
             string template =
-                @$"	<s:String x:Key=""/Default/PatternsAndTemplates/LiveTemplates/Template/={guid}/Shortcut/@EntryValue"">On{eventName}</s:String>
+                @$"
+     <s:Boolean x:Key=""/Default/PatternsAndTemplates/LiveTemplates/Template/={guid}/@KeyIndexDefined"">True</s:Boolean>
+    <s:Boolean x:Key=""/Default/PatternsAndTemplates/LiveTemplates/Template/={guid}/Applicability/=Live/@EntryIndexedValue"">True</s:Boolean>
+    <s:Boolean x:Key=""/Default/PatternsAndTemplates/LiveTemplates/Template/={guid}/Reformat/@EntryValue"">True</s:Boolean>
+    <s:Boolean x:Key=""/Default/PatternsAndTemplates/LiveTemplates/Template/={guid}/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined"">True</s:Boolean>
+    <s:String x:Key=""/Default/PatternsAndTemplates/LiveTemplates/Template/={guid}/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue"">2.0</s:String>
+    <s:String x:Key=""/Default/PatternsAndTemplates/LiveTemplates/Template/={guid}/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue"">InCSharpFile</s:String>
+    <s:String x:Key=""/Default/PatternsAndTemplates/LiveTemplates/Template/={guid}/Shortcut/@EntryValue"">On{eventName}</s:String>
+    <s:Boolean x:Key=""/Default/PatternsAndTemplates/LiveTemplates/Template/={guid}/ShortenQualifiedReferences/@EntryValue"">True</s:Boolean>
                         <s:String x:Key=""/Default/PatternsAndTemplates/LiveTemplates/Template/={guid}/Text/@EntryValue"">[On{eventName}]
                         private void On{eventName}(object sender, {eventName}EventArgs args){{
 
