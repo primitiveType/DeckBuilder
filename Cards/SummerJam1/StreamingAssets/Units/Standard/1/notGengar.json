@@ -24,7 +24,7 @@
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 2
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"

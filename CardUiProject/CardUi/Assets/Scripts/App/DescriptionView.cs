@@ -3,6 +3,7 @@ using System.ComponentModel;
 using CardsAndPiles.Components;
 using TMPro;
 using UnityEngine;
+using IComponent = Api.IComponent;
 
 namespace App
 {

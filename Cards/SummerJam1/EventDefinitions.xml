@@ -33,6 +33,8 @@
     </event>
     <event id="DungeonPhaseEnded">
     </event>
+    <event id="MovementPhaseBegan">
+    </event>
     <event id="RelicCreated">
         <arg name="Relic" type="IEntity"/>
     </event>

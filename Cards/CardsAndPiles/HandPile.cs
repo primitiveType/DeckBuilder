@@ -22,20 +22,19 @@ namespace CardsAndPiles
             PlayerDiscard discard = Context.Root.GetComponentInChildren<PlayerDiscard>();
             return card.TrySetParent(discard.Entity);
         }
-
+        
 
         public bool DiscardRandom()
         {
-            if (Entity.Children.Count == 0)
+            IEntity card = GetRandom();
+            if (card == null)
             {
                 return false;
             }
-
-            int index = Context.Root.GetComponent<Random>().SystemRandom.Next(0, Entity.Children.Count);
-            IEntity card = Entity.Children.ElementAt(index);
-
             return Discard(card);
         }
+
+
 
         public override bool AcceptsChild(IEntity item)
         {

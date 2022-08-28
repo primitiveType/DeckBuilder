@@ -3,7 +3,7 @@ using SummerJam1.Statuses;
 
 namespace SummerJam1
 {
-    public class HealIfPlayerHealsComponentView : ComponentView<PlayerHealingHealsMe>
+    public class FrozenComponentView : ComponentView<Frozen>
     {
         protected override void ComponentOnPropertyChanged()
         {

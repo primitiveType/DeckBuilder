@@ -31,11 +31,11 @@
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 4,
-      "Max": 4
+      "Amount": 5,
+      "Max": 5
     },
     {
-      "$type": "SummerJam1.Statuses.PlayerHealingHealsMe, SummerJam1"
+      "$type": "SummerJam1.Lifesteal, SummerJam1"
     }
   ]
 }

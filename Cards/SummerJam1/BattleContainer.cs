@@ -161,8 +161,8 @@ namespace SummerJam1
             for (int i = 0; i < NumEncounterSlotsPerFloor * NumFloors; i++)
             {
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/mcguffin.json");
-                Context.CreateEntity(EncounterDrawPile.Entity, "Units/treasureChest.json");
-                // CreateRandomMonster(EncounterDrawPile.Entity, 1, Game.CurrentLevel);
+                // Context.CreateEntity(EncounterDrawPile.Entity, "Units/treasureChest.json");
+                CreateRandomMonster(EncounterDrawPile.Entity, 1, Game.CurrentLevel);
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/notGengar.json");
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/birthdayBoy.json");
                 // Context.CreateEntity(EncounterDrawPile.Entity, "Units/standard/1/sadRalph.json");

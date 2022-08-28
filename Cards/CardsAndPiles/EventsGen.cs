@@ -221,6 +221,20 @@ public EventHandle<TurnBeganEventArgs> SubscribeToTurnBegan(EventHandleDelegate<
     return handler;
 } 
     #endregion Code for event TurnBegan
+    #region Code for event DiscardPhaseBegan
+private event EventHandleDelegate<DiscardPhaseBeganEventArgs> DiscardPhaseBegan;
+public virtual void OnDiscardPhaseBegan(DiscardPhaseBeganEventArgs args)
+{
+    DiscardPhaseBegan?.Invoke(this, args);
+}
+
+public EventHandle<DiscardPhaseBeganEventArgs> SubscribeToDiscardPhaseBegan(EventHandleDelegate<DiscardPhaseBeganEventArgs> action)
+{
+    var handler = new EventHandle<DiscardPhaseBeganEventArgs>(action, () => DiscardPhaseBegan -= action);
+    DiscardPhaseBegan += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event DiscardPhaseBegan
     #region Code for event DrawPhaseBegan
 private event EventHandleDelegate<DrawPhaseBeganEventArgs> DrawPhaseBegan;
 public virtual void OnDrawPhaseBegan(DrawPhaseBeganEventArgs args)
@@ -861,6 +875,40 @@ public class OnTurnBeganAttribute : EventsBaseAttribute {
     //public delegate void TurnBeganEvent (object sender, TurnBeganEventArgs args);
 
     public class TurnBeganEventArgs {        }/// <summary>
+/// (object sender, DiscardPhaseBeganEventArgs) args)
+/// </summary>
+public class OnDiscardPhaseBeganAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToDiscardPhaseBegan(delegate
+            {
+                if(!instance.Enabled){
+                    return;
+                }
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(DiscardPhaseBeganEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, DiscardPhaseBeganEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToDiscardPhaseBegan(delegate(object sender, DiscardPhaseBeganEventArgs args)
+        {
+            if(!instance.Enabled){
+                return;
+            }
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void DiscardPhaseBeganEvent (object sender, DiscardPhaseBeganEventArgs args);
+
+    public class DiscardPhaseBeganEventArgs {        }/// <summary>
 /// (object sender, DrawPhaseBeganEventArgs) args)
 /// </summary>
 public class OnDrawPhaseBeganAttribute : EventsBaseAttribute {

@@ -63,6 +63,8 @@
     </event>
     <event id="TurnBegan">
     </event>
+    <event id="DiscardPhaseBegan">
+    </event>
     <event id="DrawPhaseBegan">
     </event>
     <event id="CardDrawn">

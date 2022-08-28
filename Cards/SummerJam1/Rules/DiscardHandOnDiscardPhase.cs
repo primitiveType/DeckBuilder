@@ -4,10 +4,10 @@ using SummerJam1.Cards;
 
 namespace SummerJam1.Rules
 {
-    public class DiscardHandOnTurnEnd : SummerJam1Component
+    public class DiscardHandOnDiscardPhase : SummerJam1Component
     {
-        [OnTurnEnded]
-        private void OnTurnEnded()
+        [OnDiscardPhaseBegan]
+        private void OnDiscardPhaseBegan()
         {
             Game game = Context.Root.GetComponent<Game>();
             foreach (Card componentsInChild in game.Battle.Hand.Entity.GetComponentsInChildren<Card>())

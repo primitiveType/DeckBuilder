@@ -7,10 +7,10 @@ using CardsAndPiles;
 
 namespace SummerJam1.Rules
 {
-    public class HandleEncounterSlotsOnTurnEnd : SummerJam1Component
+    public class HandleMovementPhase : SummerJam1Component
     {
-        [OnTurnEnded]
-        private void OnTurnEnded(object sender, TurnEndedEventArgs args)
+        [OnMovementPhaseBegan]
+        private void OnMovementPhaseBegan(object sender, MovementPhaseBeganEventArgs args)
         {
             for (int i = 0; i < BattleContainer.NumEncounterSlotsPerFloor; i++)
             {

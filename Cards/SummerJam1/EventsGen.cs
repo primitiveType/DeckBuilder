@@ -207,6 +207,20 @@ public EventHandle<DungeonPhaseEndedEventArgs> SubscribeToDungeonPhaseEnded(Even
     return handler;
 } 
     #endregion Code for event DungeonPhaseEnded
+    #region Code for event MovementPhaseBegan
+private event EventHandleDelegate<MovementPhaseBeganEventArgs> MovementPhaseBegan;
+public virtual void OnMovementPhaseBegan(MovementPhaseBeganEventArgs args)
+{
+    MovementPhaseBegan?.Invoke(this, args);
+}
+
+public EventHandle<MovementPhaseBeganEventArgs> SubscribeToMovementPhaseBegan(EventHandleDelegate<MovementPhaseBeganEventArgs> action)
+{
+    var handler = new EventHandle<MovementPhaseBeganEventArgs>(action, () => MovementPhaseBegan -= action);
+    MovementPhaseBegan += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event MovementPhaseBegan
     #region Code for event RelicCreated
 private event EventHandleDelegate<RelicCreatedEventArgs> RelicCreated;
 public virtual void OnRelicCreated(RelicCreatedEventArgs args)
@@ -724,6 +738,40 @@ public class OnDungeonPhaseEndedAttribute : EventsBaseAttribute {
     //public delegate void DungeonPhaseEndedEvent (object sender, DungeonPhaseEndedEventArgs args);
 
     public class DungeonPhaseEndedEventArgs {        }/// <summary>
+/// (object sender, MovementPhaseBeganEventArgs) args)
+/// </summary>
+public class OnMovementPhaseBeganAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    {
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToMovementPhaseBegan(delegate
+            {
+                if(!instance.Enabled){
+                    return;
+                }
+                attached.Invoke(instance, Array.Empty<object>());
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(MovementPhaseBeganEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, MovementPhaseBeganEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToMovementPhaseBegan(delegate(object sender, MovementPhaseBeganEventArgs args)
+        {
+            if(!instance.Enabled){
+                return;
+            }
+            attached.Invoke(instance, new[] { sender, args });
+        });
+    }
+
+
+}
+    //public delegate void MovementPhaseBeganEvent (object sender, MovementPhaseBeganEventArgs args);
+
+    public class MovementPhaseBeganEventArgs {        }/// <summary>
 /// (object sender, RelicCreatedEventArgs) args)
 /// </summary>
 public class OnRelicCreatedAttribute : EventsBaseAttribute {

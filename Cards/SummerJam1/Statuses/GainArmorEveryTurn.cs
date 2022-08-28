@@ -5,7 +5,7 @@ using PropertyChanged;
 
 namespace SummerJam1.Statuses
 {
-    public class GainArmorEveryTurn : EnabledWhenInEncounterSlot, IStatusEffect, ITooltip, IAmount
+    public class GainArmorEveryTurn : SummerJam1Component, IStatusEffect, ITooltip, IAmount
     {
         public int Amount { get; set; }
 
