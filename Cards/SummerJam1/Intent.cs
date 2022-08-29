@@ -18,12 +18,12 @@ namespace SummerJam1
             }
         }
 
-        [OnAttackPhaseStarted]
-        private void OnAttackPhaseStarted()
-        {
-            DoIntent();
-        }
+        // [OnAttackPhaseStarted]
+        // private void OnAttackPhaseStarted()
+        // {
+        //     DoIntent();
+        // }
 
-        protected abstract void DoIntent();
+        public abstract void DoIntent();
     }
 }

@@ -12,7 +12,7 @@ namespace App
         protected IEntity Entity { get; private set; }
         protected T Component { get; private set; }
         protected readonly List<IDisposable> Disposables = new List<IDisposable>(2);
-        private IView View { get; set; }
+        protected IView View { get; private set; }
 
         [SerializeField] protected bool m_HideIfNull = false;
         [SerializeField] protected GameObject m_VisibilityObject;

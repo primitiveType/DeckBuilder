@@ -56,5 +56,10 @@ namespace SummerJam1
                 eventHandle.Dispose();
             }
         }
+
+        private void OnDisable()
+        {
+            m_Animator.enabled = false;
+        }
     }
 }

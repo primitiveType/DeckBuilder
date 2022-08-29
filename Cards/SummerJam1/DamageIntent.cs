@@ -9,7 +9,6 @@ namespace SummerJam1
         [JsonIgnore] public int Amount => 0;
         [JsonIgnore] private int Attacks => 1 + (Entity.GetComponent<MultiAttack>()?.Amount ?? 0);
 
-        public bool IgnoreStealth { get; set; }
 
         private Player Player { get; set; }
 
@@ -21,7 +20,7 @@ namespace SummerJam1
         }
 
 
-        protected override void DoIntent()
+        public override void DoIntent()
         {
             if (!Enabled)
             {

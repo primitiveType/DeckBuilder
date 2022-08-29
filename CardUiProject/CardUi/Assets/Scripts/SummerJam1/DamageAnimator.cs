@@ -10,7 +10,7 @@ namespace SummerJam1
 {
     public class DamageAnimator : MonoBehaviour
     {
-        [SerializeField] private UltimateTextDamageManager m_TextDamageManager;
+        private TextPopupManager m_TextDamageManager => TextPopupManager.Instance;
 
         private SummerJam1Events Events => GameContext.Instance.Events;
         private Game Game => GameContext.Instance.Game;
@@ -27,7 +27,7 @@ namespace SummerJam1
             var targetGo = item.EntityId.GetComponent<IGameObject>();
             if (targetGo != null)
             {
-                QueueText(targetGo.gameObject.transform, item.Amount.ToString(), "healing");
+                QueueText(targetGo.gameObject.transform, item.Amount.ToString(), TextPopupManager.HEALING_TEXT);
             }
         }
 
@@ -36,7 +36,7 @@ namespace SummerJam1
             var targetGo = item.EntityId.GetComponent<IGameObject>();
             if (targetGo != null)
             {
-                QueueText(targetGo.gameObject.transform, item.Amount.ToString(), "damage");
+                QueueText(targetGo.gameObject.transform, item.Amount.ToString(), TextPopupManager.DAMAGE_TEXT);
             }
         }
 
@@ -45,7 +45,7 @@ namespace SummerJam1
             AnimationQueue.Instance.Enqueue(async () =>
             {
                 await new WaitForEndOfFrame();
-                m_TextDamageManager.Add(text, target, key);
+                m_TextDamageManager.Add(text, target.gameObject, key);
             });
         }
 

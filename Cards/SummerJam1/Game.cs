@@ -164,6 +164,7 @@ namespace SummerJam1
                 Battle = entity.AddComponent<BattleContainer>();
                 // entity.AddComponent<IncrementCurrentFloorWhenEmpty>();
                 entity.AddComponent<HandleMovementPhase>();
+                entity.AddComponent<HandleAttackPhase>();
             });
             Battle.StartBattle();
         }
