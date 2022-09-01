@@ -16,7 +16,7 @@
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount" : 1
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",

@@ -12,7 +12,7 @@
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount" : 3
+      "Amount": 3
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
@@ -31,7 +31,7 @@
     },
     {
       "$type": "SummerJam1.Money, SummerJam1",
-      "Amount" : 1
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.DeathAddsMoneyToPlayer, SummerJam1"

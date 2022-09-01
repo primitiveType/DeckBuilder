@@ -12,7 +12,7 @@
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount" : 1
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
@@ -31,20 +31,12 @@
     },
     {
       "$type": "SummerJam1.Statuses.DiscardCardInHandAtStartOfTurn, SummerJam1",
-      "Amount" : 2
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 35,
-      "Max": 35
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/PoisonedConduit.json"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/BlackFog.json"
+      "Amount": 12,
+      "Max": 12
     }
   ]
 }

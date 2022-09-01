@@ -12,7 +12,7 @@
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount" : 1
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
@@ -31,19 +31,11 @@
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 4,
-      "Max": 4
+      "Amount": 5,
+      "Max": 5
     },
     {
-      "$type": "SummerJam1.Statuses.PlayerHealingHealsMe, SummerJam1"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/SoothingLull.json"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/CallSpirits.json"
+      "$type": "SummerJam1.Lifesteal, SummerJam1"
     }
   ]
 }

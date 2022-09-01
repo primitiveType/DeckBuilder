@@ -27,7 +27,7 @@
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Amount": 1
+      "Amount": 0
     }
   ]
 }

@@ -12,7 +12,7 @@
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount" : 1
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
@@ -31,20 +31,12 @@
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 25,
-      "Max": 25
+      "Amount": 1,
+      "Max": 1
     },
     {
       "$type": "SummerJam1.Statuses.GainArmorEveryTurn, SummerJam1",
-      "Amount" : 2
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/NewBlockCard.json"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/DrawPower.json"
+      "Amount": 2
     }
   ]
 }

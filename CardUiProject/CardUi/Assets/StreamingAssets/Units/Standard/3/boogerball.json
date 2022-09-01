@@ -12,7 +12,7 @@
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount" : 1
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
@@ -24,31 +24,18 @@
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 3
+      "Amount": 8
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 35,
-      "Max": 50
-    },
-    {
-      "$type": "SummerJam1.Statuses.ReducePlayerStealthAtStartOfCombat, SummerJam1",
-      "Amount": 3
+      "Amount": 12,
+      "Max": 12
     },
     {
       "$type": "SummerJam1.Statuses.PlayerHealingHealsMe, SummerJam1"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/ConcussivePulse.json"
-    },
-
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/DesperateStrike.json"
     }
   ]
 }

@@ -6,7 +6,7 @@
     {
       "$type": "SummerJam1.Relics.DealDamageEveryTurn, SummerJam1",
       "PlayerDamage": 0,
-      "EnemyDamage" : 1
+      "EnemyDamage": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",

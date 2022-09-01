@@ -12,7 +12,7 @@
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount" : 1
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
@@ -24,18 +24,10 @@
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 2
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/BloodDraw.json"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/Irreverence.json"
     },
     {
       "$type": "SummerJam1.GrantsMultiAttackToAdjacent, SummerJam1",

@@ -12,7 +12,7 @@
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount" : 1
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
@@ -31,25 +31,17 @@
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 25,
-      "Max": 25
+      "Amount": 10,
+      "Max": 10
     },
     {
       "$type": "SummerJam1.Statuses.GainMultiAttackBelowThreshold, SummerJam1",
-      "Amount" : 3,
-      "Threshold" : 5
+      "Amount": 3,
+      "Threshold": 5
     },
     {
       "$type": "SummerJam1.Statuses.GainStrengthWhenPlayerHeals, SummerJam1",
-      "Amount" : 2
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/BloodWave.json"
-    },
-    {
-      "$type": "SummerJam1.Units.CardPrize, SummerJam1",
-      "Prefab": "Cards/ShatteringPulse.json"
+      "Amount": 2
     }
   ]
 }
