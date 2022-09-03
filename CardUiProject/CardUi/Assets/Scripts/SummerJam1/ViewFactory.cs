@@ -19,6 +19,7 @@ namespace SummerJam1
 
         [SerializeField] private GameObject m_WalkablePrefab;
         [SerializeField] private GameObject m_WallPrefab;
+        [SerializeField] private GameObject m_DungeonPrefab;
         [SerializeField] private GameObject m_HatchEncounterPrefab;
         [SerializeField] private GameObject m_PlayerPrefab;
 
@@ -96,7 +97,9 @@ namespace SummerJam1
                 case Card card:
                     return CardPrefab;
                 case BlocksMovement blocksMovement:
-                    return WallPrefab;
+                    return WallPrefab;    
+                case DungeonPile dungeonPile:
+                    return m_DungeonPrefab;
                 default:
                     // throw new ArgumentOutOfRangeException(nameof(visual));
                     Debug.LogWarning("No prefab visual found.");

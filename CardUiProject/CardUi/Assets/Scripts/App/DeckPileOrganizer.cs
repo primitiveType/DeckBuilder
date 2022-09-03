@@ -19,7 +19,15 @@ namespace App
 
             if (SetPosition)
             {
-                pileView.SetTargetPosition(new Vector3(), new Vector3());
+                if (pileView != null)
+                {
+                    pileView.SetTargetPosition(new Vector3(), new Vector3());
+                }
+                else
+                {
+                    view.gameObject.transform.localPosition = new Vector3();
+                    view.gameObject.transform.localRotation = Quaternion.identity;
+                }
             }
         }
 

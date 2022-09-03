@@ -1,28 +1,23 @@
+using App;
+using CardsAndPiles;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SummerJam1
 {
-    public class StartBattleButton : MonoBehaviour
+    public class StartBattleButton : View<DungeonPile>, ISetModel
     {
-
-        public void SetBattleInfo(int info)
-        {
-            //set info.
-            Info = info;
-        }
-
-        public int Info { get; set; }
-
         [SerializeField] private Button m_Button;
-        private void Start()
+
+        protected override void Start()
         {
+            base.Start();
             m_Button.onClick.AddListener(OnClick);
         }
 
         private void OnClick()
         {
-            GameContext.Instance.StartBattle(Info);
+            GameContext.Instance.Game.StartBattle(Model);
         }
     }
 }

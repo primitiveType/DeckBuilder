@@ -8,7 +8,7 @@ namespace App
     {
         private void Update()
         {
-            foreach (IEntity child in PileView.Entity.Children)
+            foreach (IEntity child in Entity.Children)
             {
                 // OnItemAddedQueued(child);
             }

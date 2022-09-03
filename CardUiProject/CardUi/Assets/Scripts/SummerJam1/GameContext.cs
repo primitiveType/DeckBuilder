@@ -140,9 +140,6 @@ namespace SummerJam1
             // MusicAudo.Play();
         }
 
-        public void StartBattle(int info)
-        {
-            Game.StartBattle();
-        }
+      
     }
 }

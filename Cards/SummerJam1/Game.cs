@@ -27,6 +27,10 @@ namespace SummerJam1
 
         public int CurrentLevel { get; private set; } = 1;
 
+        // public List<Pile> Dungeons { get; private set; } = new List<Pile>();
+
+        public IEntity Dungeons { get; private set; }
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -40,7 +44,13 @@ namespace SummerJam1
             Player = Context.CreateEntity(Entity, "player").GetComponent<Player>();
 
             CreatePrefabPile();
+            PopulatePlayerDeck();
+            PopulateDungeons();
+            Events.OnGameStarted(new GameStartedEventArgs());
+        }
 
+        private void PopulatePlayerDeck()
+        {
             //create an example deck.
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
             for (int i = 0; i < 3; i++)
@@ -59,9 +69,6 @@ namespace SummerJam1
             Context.CreateEntity(Deck.Entity, "Cards/DesperateStrike.json");
             Context.CreateEntity(Deck.Entity, "Cards/DrawStrength.json");
             Context.CreateEntity(Deck.Entity, "Cards/Preparation.json");
-
-
-            Events.OnGameStarted(new GameStartedEventArgs());
         }
 
         private void CreatePrefabPile()
@@ -91,7 +98,7 @@ namespace SummerJam1
                 CurrentLevel++;
             }
         }
-        
+
         private List<string> GetEnemyInfos(int difficulty)
         {
             DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Units", "Standard", difficulty.ToString()));
@@ -152,21 +159,62 @@ namespace SummerJam1
         }
 
 
-        public void StartBattle()
+        public void PopulateDungeons()
         {
-            if (Battle != null)
+            if (Dungeons == null)
             {
-                Battle.Entity.Destroy();
+                Context.CreateEntity(Entity,
+                    entity =>
+                    {
+                        Dungeons = entity;
+                        Dungeons.AddComponent<DungeonParent>();
+                    });
             }
+
+            int numDungeons = 5;
+
+            for (int i = 0; i < numDungeons; i++)
+            {
+                Context.CreateEntity(Dungeons, delegate(IEntity entity)
+                {
+                    DungeonPile pile = entity.AddComponent<DungeonPile>();
+                    foreach (string prefab in GetBattlePrefabs()) //temp code, all dungeons will be the same. 
+                    {
+                        PrefabReference dungeon = null;
+                        Context.CreateEntity(pile.Entity, (child => dungeon = child.AddComponent<PrefabReference>()));
+                        dungeon.Prefab = prefab;
+                    }
+                    // Dungeons.Add(pile);
+                });
+            }
+        }
+
+        public void StartBattle(DungeonPile pile)
+        {
+            Battle?.Entity.Destroy();
 
             Context.CreateEntity(Entity, entity =>
             {
                 Battle = entity.AddComponent<BattleContainer>();
-                // entity.AddComponent<IncrementCurrentFloorWhenEmpty>();
                 entity.AddComponent<HandleMovementPhase>();
                 entity.AddComponent<HandleAttackPhase>();
             });
-            Battle.StartBattle();
+
+            List<PrefabReference> componentsInChildren = pile.Entity.GetComponentsInChildren<PrefabReference>();
+            List<string> prefabs = componentsInChildren.Select(component => component.Prefab).ToList();
+            Battle.StartBattle(prefabs);
+        }
+
+
+        private List<string> GetBattlePrefabs()
+        {
+            List<string> prefabs = new List<string>();
+            for (int i = 0; i < BattleContainer.NumEncounterSlotsPerFloor * BattleContainer.NumFloors; i++)
+            {
+                prefabs.Add(BattleContainer.GetRandomMonsterPrefab(1, Game.CurrentLevel, Entity.GetComponent<Random>()));
+            }
+
+            return prefabs;
         }
 
 

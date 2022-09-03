@@ -1,5 +1,6 @@
 using System;
 using App;
+using UnityEngine;
 
 namespace SummerJam1
 {
@@ -7,7 +8,9 @@ namespace SummerJam1
     {
         protected void Awake()
         {
-            SetModel(GameContext.Instance.Context.Root.GetComponent<Game>().Player.Entity);
+            var game = GameContext.Instance.Context.Root.GetComponent<Game>();
+            var player = game.Player;
+            SetModel(player.Entity);
             var bridge = Entity.GetOrAddComponent<SummerJam1ModelViewBridge>();
             bridge.gameObject = gameObject;
             var component = Entity.GetComponent<IGameObject>();
@@ -15,6 +18,12 @@ namespace SummerJam1
             {
                 throw new NullReferenceException($"Player GO null somehow. {component.GetType()}.");
             }
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            Debug.LogWarning("Player destroyed!");
         }
     }
 }

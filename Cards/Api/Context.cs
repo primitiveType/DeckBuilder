@@ -21,7 +21,7 @@ namespace Api
 
         [JsonProperty] public EventsBase Events { get; private set; }
 
-        public string PrefabsPath { get; private set; }
+        public static string PrefabsPath { get; private set; }
 
 
         public void SetPrefabsDirectory(string path)

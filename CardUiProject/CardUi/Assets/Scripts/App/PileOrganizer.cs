@@ -9,18 +9,19 @@ using UnityEngine;
 
 namespace App
 {
-    public class PileOrganizer : View<IPile>
+    public class PileOrganizer : View<IComponent>
     {
         [SerializeField] private Transform m_ParentTransform;
+
         private Transform Parent => m_ParentTransform ? m_ParentTransform : transform;
-        protected IPileView PileView { get; set; }
+        // protected IPileView PileView { get; set; }
 
         protected override void OnInitialized()
         {
-            PileView = GetComponentsInParent<IPileView>(true).First();
-            PileView.Entity.Children.CollectionChanged += OnPileChanged;
-            Debug.Log($"Creating {PileView.Entity.Children} children for {gameObject.name}.");
-            foreach (IEntity child in PileView.Entity.Children)
+            // PileView = GetComponentsInParent<IPileView>(true).First();
+            Entity.Children.CollectionChanged += OnPileChanged;
+            Debug.Log($"Creating {Entity.Children} children for {gameObject.name}.");
+            foreach (IEntity child in Entity.Children)
             {
                 FireItemAddedImmediateWhenReady(child);
                 FireItemAddedQueuedWhenReady(child);
@@ -30,9 +31,9 @@ namespace App
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            if (PileView?.Entity != null)
+            if (Entity != null)
             {
-                PileView.Entity.Children.CollectionChanged -= OnPileChanged;
+                Entity.Children.CollectionChanged -= OnPileChanged;
             }
 
             foreach (IDisposable disposable in Disposables)
@@ -107,13 +108,14 @@ namespace App
         protected virtual async Task OnItemAddedQueued(IEntity added, IGameObject view)
         {
             var scale = view.gameObject.transform.localScale;
-            
+
             if (scale == Vector3.zero)
             {
                 Debug.LogError("Scale was zero!");
             }
+
             view.gameObject.transform.SetParent(Parent, true);
-            
+
             // view.gameObject.transform.localPosition = Vector3.zero;
             view.gameObject.transform.localScale = Vector3.one;
             view.gameObject.transform.rotation = Quaternion.identity;

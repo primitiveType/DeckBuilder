@@ -27,8 +27,8 @@ namespace App
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            ((CardEvents)PileView.Entity.Context.Events).SubscribeToTurnBegan(OnTurnBegan);
-            ((CardEvents)PileView.Entity.Context.Events).SubscribeToTurnEnded(OnTurnEnded);
+            ((CardEvents)Entity.Context.Events).SubscribeToTurnBegan(OnTurnBegan);
+            ((CardEvents)Entity.Context.Events).SubscribeToTurnEnded(OnTurnEnded);
         }
 
         private bool IsPlayerTurn { get; set; } = true;

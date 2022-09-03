@@ -27,6 +27,6 @@ public class HideRendererIfNotEmptyOrganizer : PileOrganizer
 
     private void SetActive()
     {
-        ToHide.SetActive(PileView.Entity.Children.Count == 0);
+        ToHide.SetActive(Entity.Children.Count == 0);
     }
 }
