@@ -14,18 +14,19 @@ namespace CardsAndPiles
         }
 
         public abstract bool AcceptsChild(IEntity child);
-        
+
         public IEntity GetRandom()
         {
             if (Entity.Children.Count == 0)
             {
                 return null;
             }
+
             int index = Context.Root.GetComponent<Random>().SystemRandom.Next(0, Entity.Children.Count);
             IEntity card = Entity.Children.ElementAt(index);
             return card;
         }
-        
+
         public IEntity GetRandomWithCondition(Func<IEntity, int, bool> condition)
         {
             if (Entity.Children.Count == 0)
@@ -34,8 +35,13 @@ namespace CardsAndPiles
             }
 
             var matchingChildren = Entity.Children.Where(condition).ToList();
-            int index = Context.Root.GetComponent<Random>().SystemRandom.Next(0, matchingChildren.Count);
-            IEntity card = matchingChildren.ElementAt(index);
+            IEntity card = null;
+            if (matchingChildren.Count > 0)
+            {
+                int index = Context.Root.GetComponent<Random>().SystemRandom.Next(0, matchingChildren.Count);
+                card = matchingChildren.ElementAt(index);
+            }
+
             return card;
         }
     }

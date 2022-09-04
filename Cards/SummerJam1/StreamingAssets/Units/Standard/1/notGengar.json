@@ -5,6 +5,9 @@
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },   
+    {
+      "$type": "SummerJam1.Units.BattleEndsWhenDefeated, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",

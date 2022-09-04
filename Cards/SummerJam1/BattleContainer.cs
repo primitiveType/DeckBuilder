@@ -8,6 +8,31 @@ using Random = Api.Random;
 
 namespace SummerJam1
 {
+    public abstract class Reward : SummerJam1Component, IReward
+    {
+        public abstract void TriggerReward();
+        public abstract string RewardText { get; }
+
+        [OnBattleEnded]
+        private void OnBattleEnded(object sender, BattleEndedEventArgs args)
+        {
+            if (Game.Battle == Entity.GetComponentInParent<BattleContainer>())
+            {
+                Logging.Log($"Reward acquired {RewardText}.");
+                TriggerReward();
+            }
+        }
+    }
+
+    public class CardReward : Reward
+    {
+        public override void TriggerReward()
+        {
+            Game.PrizePile.SetupRandomPrizePile();
+        }
+
+        public override string RewardText => "Draft a new card.";
+    }
     public class BattleContainer : SummerJam1Component
     {
         public const int NumEncounterSlotsPerFloor = 5;
@@ -29,6 +54,7 @@ namespace SummerJam1
         // public Dictionary<int, List<Pile>> AllEncounterSlots { get; } = new Dictionary<int, List<Pile>>();
 
         public int CurrentFloor { get; private set; }
+        public DungeonParent CurrentDungeon { get; private set; }
 
         protected override void Initialize()
         {
@@ -128,8 +154,13 @@ namespace SummerJam1
             return name;
         }
 
-        public void StartBattle(List<String> prefabs)
+        public void StartBattle(DungeonPile pile)
         {
+            List<PrefabReference> componentsInChildren = pile.Entity.GetComponentsInChildren<PrefabReference>();
+            List<string> prefabs = componentsInChildren.Select(component => component.Prefab).ToList();
+
+            pile.Entity.TrySetParent(Entity);
+            
             BattleDeck = Context.DuplicateEntity(Game.Deck.Entity).GetComponent<DeckPile>();
             BattleDeck.Entity.TrySetParent(Entity);
             Context.CreateEntity(Entity, entity =>

@@ -1,13 +1,11 @@
-using System;
 using App;
-using App.Utility;
 using CardsAndPiles;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SummerJam1
 {
-    public class StartBattleButton : View<DungeonPile>, ISetModel
+    public class SelectDungeonButton : View<DungeonPile>, ISetModel
     {
         [SerializeField] private Button m_Button;
 
@@ -19,7 +17,7 @@ namespace SummerJam1
 
         private void OnClick()
         {
-            GameContext.Instance.Game.StartBattle(Model);
+            DungeonViewManager.Instance.ViewDungeon(Model);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace SummerJam1
             if (args.Victory)
             {
                 //Player.Entity.TrySetParent(TempPlayerSlot.Entity);
-                SetupRandomPrizePile();
+                //SetupRandomPrizePile();
             }
         }
 

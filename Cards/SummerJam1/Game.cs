@@ -178,6 +178,7 @@ namespace SummerJam1
                 Context.CreateEntity(Dungeons, delegate(IEntity entity)
                 {
                     DungeonPile pile = entity.AddComponent<DungeonPile>();
+                    entity.AddComponent<CardReward>();
                     foreach (string prefab in GetBattlePrefabs()) //temp code, all dungeons will be the same. 
                     {
                         PrefabReference dungeon = null;
@@ -200,16 +201,16 @@ namespace SummerJam1
                 entity.AddComponent<HandleAttackPhase>();
             });
 
-            List<PrefabReference> componentsInChildren = pile.Entity.GetComponentsInChildren<PrefabReference>();
-            List<string> prefabs = componentsInChildren.Select(component => component.Prefab).ToList();
-            Battle.StartBattle(prefabs);
+          
+            Battle.StartBattle(pile);
         }
 
 
         private List<string> GetBattlePrefabs()
         {
             List<string> prefabs = new List<string>();
-            for (int i = 0; i < BattleContainer.NumEncounterSlotsPerFloor * BattleContainer.NumFloors; i++)
+            var count = Random.SystemRandom.Next(15, 20);
+            for (int i = 0; i < count; i++)
             {
                 prefabs.Add(BattleContainer.GetRandomMonsterPrefab(1, Game.CurrentLevel, Entity.GetComponent<Random>()));
             }
