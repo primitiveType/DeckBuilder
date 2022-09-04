@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class HideGameObjectIfNoPrizes : MonoBehaviour
 {
-    private void Awake()
+    private void Start()
     {
         GameContext.Instance.Game.PrizePile.Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
-        GameContext.Instance.Game.RelicPrizePile.Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
         UpdateVisibility();
     }
 
@@ -25,6 +24,5 @@ public class HideGameObjectIfNoPrizes : MonoBehaviour
     private void OnDestroy()
     {
         GameContext.Instance.Game.PrizePile.Entity.Children.CollectionChanged -= ChildrenOnCollectionChanged;
-        GameContext.Instance.Game.RelicPrizePile.Entity.Children.CollectionChanged -= ChildrenOnCollectionChanged;
     }
 }

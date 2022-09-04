@@ -288,6 +288,7 @@ GameObject:
   - component: {fileID: 2698226900113858958}
   - component: {fileID: 3632946766789667350}
   - component: {fileID: 1398575651}
+  - component: {fileID: 7035680696697183114}
   m_Layer: 0
   m_Name: Relic
   m_TagString: Untagged
@@ -376,6 +377,18 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &7035680696697183114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4196543872427929374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb81e0087cd748159fff422a992d774f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5709358458837195916
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,6 +515,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a684d31b1f6a4a2d8fc988245e043c06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HideIfNull: 0
+  m_VisibilityObject: {fileID: 0}
   EnergyText: {fileID: 0}
 --- !u!1 &5709358459293204525
 GameObject:

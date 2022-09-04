@@ -113,7 +113,7 @@ namespace SummerJam1
         public static GameObject CreateView(IEntity entity, GameObject prefab)
         {
             GameObject unitView = Instantiate(prefab);
-            unitView.transform.localPosition = Vector3.one * 10_000;
+            // unitView.transform.localPosition = Vector3.one * 10_000;
             unitView.GetComponent<ISetModel>().SetModel(entity);
             entity.GetOrAddComponent<SummerJam1ModelViewBridge>().gameObject = unitView;
 

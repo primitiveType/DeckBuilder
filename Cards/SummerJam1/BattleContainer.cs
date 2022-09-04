@@ -10,8 +10,8 @@ namespace SummerJam1
 {
     public abstract class Reward : SummerJam1Component, IReward
     {
-        public abstract void TriggerReward();
         public abstract string RewardText { get; }
+        public abstract void TriggerReward();
 
         [OnBattleEnded]
         private void OnBattleEnded(object sender, BattleEndedEventArgs args)
@@ -26,13 +26,24 @@ namespace SummerJam1
 
     public class CardReward : Reward
     {
+        public override string RewardText => "Draft a new card.";
+
         public override void TriggerReward()
         {
             Game.PrizePile.SetupRandomPrizePile();
         }
-
-        public override string RewardText => "Draft a new card.";
     }
+
+    public class RelicReward : Reward
+    {
+        public override string RewardText => "Draft a new relic.";
+
+        public override void TriggerReward()
+        {
+            Game.RelicPrizePile.SetupPrizePile();
+        }
+    }
+
     public class BattleContainer : SummerJam1Component
     {
         public const int NumEncounterSlotsPerFloor = 5;
@@ -47,8 +58,8 @@ namespace SummerJam1
         public DeckPile EncounterDrawPile { get; private set; }
         public HandPile EncounterHandPile { get; private set; }
         public PlayerDiscard EncounterDiscardPile { get; private set; }
-        public List<Pile> EncounterSlots { get; private set; } = new List<Pile>();
-        public List<Pile> EncounterSlotsUpcoming { get; private set; } = new List<Pile>();
+        public List<Pile> EncounterSlots { get; } = new();
+        public List<Pile> EncounterSlotsUpcoming { get; } = new();
 
 
         // public Dictionary<int, List<Pile>> AllEncounterSlots { get; } = new Dictionary<int, List<Pile>>();
@@ -83,7 +94,7 @@ namespace SummerJam1
 
         public List<IEntity> GetEntitiesInAdjacentSlots(IEntity slotOrMonster)
         {
-            List<IEntity> adjacents = new List<IEntity>(2);
+            List<IEntity> adjacents = new(2);
             EncounterSlotPile slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
             int index = EncounterSlots.IndexOf(slot);
 
@@ -106,9 +117,14 @@ namespace SummerJam1
             return adjacents;
         }
 
+        public List<IEntity> GetEntitiesInAllSlots()
+        {
+            return GetFullSlots().Select(pile => pile.Entity.Children.First()).ToList();
+        }
+
         public List<IEntity> GetAdjacentSlots(IEntity slotOrMonster)
         {
-            List<IEntity> adjacents = new List<IEntity>(2);
+            List<IEntity> adjacents = new(2);
             EncounterSlotPile slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
             int index = EncounterSlots.IndexOf(slot);
             if (slot == null)
@@ -135,6 +151,11 @@ namespace SummerJam1
             return EncounterSlots.Where(slot => slot.Entity.Children.Count == 0);
         }
 
+        public IEnumerable<Pile> GetFullSlots()
+        {
+            return EncounterSlots.Where(slot => slot.Entity.Children.Count > 0);
+        }
+
         public IEntity CreateRandomMonster(IEntity parent, int difficultyMin, int difficultyMax)
         {
             string name = GetRandomMonsterPrefab(difficultyMin, difficultyMax, Entity.GetComponentInParent<Random>());
@@ -146,7 +167,7 @@ namespace SummerJam1
             int difficulty = random.SystemRandom.Next(difficultyMin, difficultyMax + 1);
 
 
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Units", "Standard", $"{difficulty}"));
+            DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Units", "Standard", $"{difficulty}"));
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
 
             int index = random.SystemRandom.Next(files.Count);
@@ -160,7 +181,7 @@ namespace SummerJam1
             List<string> prefabs = componentsInChildren.Select(component => component.Prefab).ToList();
 
             pile.Entity.TrySetParent(Entity);
-            
+
             BattleDeck = Context.DuplicateEntity(Game.Deck.Entity).GetComponent<DeckPile>();
             BattleDeck.Entity.TrySetParent(Entity);
             Context.CreateEntity(Entity, entity =>
@@ -206,14 +227,14 @@ namespace SummerJam1
 
         private List<IEntity> CreateRandomObjectives(int count = 2)
         {
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Objectives"));
+            DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Objectives"));
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
             if (count > files.Count)
             {
                 throw new ArgumentException(nameof(count));
             }
 
-            List<int> indices = new List<int>(count);
+            List<int> indices = new(count);
 
             while (indices.Count < count)
             {
@@ -224,7 +245,7 @@ namespace SummerJam1
                 }
             }
 
-            List<IEntity> objectives = new List<IEntity>(count);
+            List<IEntity> objectives = new(count);
             foreach (int index in indices)
             {
                 objectives.Add(Context.CreateEntity(null, Path.Combine("Objectives", files[index].Name)));

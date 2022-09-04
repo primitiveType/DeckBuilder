@@ -178,7 +178,15 @@ namespace SummerJam1
                 Context.CreateEntity(Dungeons, delegate(IEntity entity)
                 {
                     DungeonPile pile = entity.AddComponent<DungeonPile>();
-                    entity.AddComponent<CardReward>();
+                    if (i % 2 == 0)
+                    {
+                        entity.AddComponent<CardReward>();
+                    }
+                    else
+                    {
+                        entity.AddComponent<RelicReward>();
+                    }
+
                     foreach (string prefab in GetBattlePrefabs()) //temp code, all dungeons will be the same. 
                     {
                         PrefabReference dungeon = null;

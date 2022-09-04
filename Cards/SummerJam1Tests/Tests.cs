@@ -45,7 +45,7 @@ namespace SummerJam1Tests
         [Test]
         public void StartBattle()
         {
-            Game.StartBattle();
+            Game.StartBattle(new DungeonPile());
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace SummerJam1Tests
             // Context.CreateEntity(Game.Entity, entity => battle = entity.AddComponent<BattleContainer>());
 
 
-            Game.StartBattle();
+            Game.StartBattle(new DungeonPile());
             BattleContainer battle = Game.Battle;
 
             foreach (Pile battleEncounterSlot in battle.EncounterSlots)
@@ -103,9 +103,9 @@ namespace SummerJam1Tests
         public void TestAdjacencyEffectsWhenAddedFirst()
         {
             // Context.CreateEntity(Game.Entity, entity => battle = entity.AddComponent<BattleContainer>());
+            Game.StartBattle(Game.Dungeons.GetComponentInChildren<DungeonPile>());
 
 
-            Game.StartBattle();
             BattleContainer battle = Game.Battle;
 
             foreach (Pile battleEncounterSlot in battle.EncounterSlots)
@@ -129,6 +129,8 @@ namespace SummerJam1Tests
         public void TryLoadAllPrefabs()
         {
             DirectoryInfo info = new DirectoryInfo(Context.PrefabsPath);
+            Game.StartBattle(Game.Dungeons.GetComponentInChildren<DungeonPile>());
+
 
             TestDirectory(info, "");
 
@@ -240,7 +242,7 @@ namespace SummerJam1Tests
         {
             IEntity test1 = Context.CreateEntity();
             IEntity test2 = Context.CreateEntity();
-            Game.StartBattle();
+            Game.StartBattle(new DungeonPile());
             TestEvents events1 = test1.AddComponent<TestEvents>();
             TestEvents events2 = test2.AddComponent<TestEvents>();
 

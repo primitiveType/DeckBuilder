@@ -115,13 +115,7 @@
         <None Update="StreamingAssets\Relics\RaiseHp.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="StreamingAssets\Relics\RaiseStealth.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="StreamingAssets\Relics\DrawExtraCardsOnFirstTurn.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="StreamingAssets\Relics\NoiseDamagesEnemies.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Units\Standard\1\birthdayBoy.json">
@@ -152,9 +146,6 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Relics\RaiseHpMore.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="StreamingAssets\Relics\SpectralClub.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Relics\CrystalPendant.json">
