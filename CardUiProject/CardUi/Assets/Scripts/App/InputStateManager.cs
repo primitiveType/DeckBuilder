@@ -49,6 +49,7 @@ namespace App
 
             StateMachine.Configure(InputState.EnemyTurn)
                 .Ignore(InputAction.Hover)
+                .Ignore(InputAction.EndHover)
                 .Permit(InputAction.BeginTurn, InputState.Idle);
             
         }

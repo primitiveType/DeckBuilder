@@ -253,5 +253,30 @@ namespace SummerJam1
 
             return objectives;
         }
+
+        public List<IEntity> GetAllPlayerCardsInPlay()
+        {
+            //discard hand and battle deck.
+            return Discard.Children.Concat(Hand.Entity.Children).Concat(BattleDeck.Entity.Children).ToList();
+        }
+
+        public IEntity GetSlotAboveOrBelow(IEntity slotOrMonster)
+        {
+            return GetSlotAboveOrBelow(slotOrMonster.GetComponentInParent<EncounterSlotPile>());
+        }
+
+        public IEntity GetSlotAboveOrBelow(EncounterSlotPile slot)
+        {
+            var index = EncounterSlots.IndexOf(slot);
+
+            if (index < 0)
+            {
+                index = EncounterSlotsUpcoming.IndexOf(slot);
+                return EncounterSlots[index].Entity;
+            }
+
+
+            return EncounterSlotsUpcoming[index].Entity;
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace SummerJam1.Relics
                     return $"At the end of every turn, take {PlayerDamage} damage and deal {EnemyDamage}.";
                 }
 
-                return $"At the end of every turn, deal {EnemyDamage} damage.";
+                return $"At the end of every turn, deal {EnemyDamage} damage to the first enemy.";
             }
         }
 

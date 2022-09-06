@@ -35,9 +35,7 @@
       "Max": 10
     },
     {
-      "$type": "SummerJam1.Statuses.GainMultiAttackBelowThreshold, SummerJam1",
-      "Amount": 3,
-      "Threshold": 5
+      "$type": "SummerJam1.MoveUpWhenAttacking, SummerJam1"
     },
     {
       "$type": "SummerJam1.Statuses.GainStrengthWhenPlayerHeals, SummerJam1",

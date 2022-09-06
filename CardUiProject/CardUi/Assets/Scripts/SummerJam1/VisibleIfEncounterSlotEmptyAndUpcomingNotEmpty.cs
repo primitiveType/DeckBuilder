@@ -33,5 +33,11 @@ namespace SummerJam1
 
             m_DeactivateWhenActive.gameObject.SetActive(!active);
         }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            GameContext.Instance.Game.Battle.EncounterSlots[Index].Entity.Children.CollectionChanged -= SlotChildrenOnCollectionChanged;
+        }
     }
 }

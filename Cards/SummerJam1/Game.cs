@@ -65,7 +65,7 @@ namespace SummerJam1
 
 
             Context.CreateEntity(Deck.Entity, "Cards/Backpack.json");
-            Context.CreateEntity(Deck.Entity, "Cards/ConcussivePulse.json");
+            Context.CreateEntity(Deck.Entity, "Cards/Frostbite.json");
             Context.CreateEntity(Deck.Entity, "Cards/DesperateStrike.json");
             Context.CreateEntity(Deck.Entity, "Cards/DrawStrength.json");
             Context.CreateEntity(Deck.Entity, "Cards/Preparation.json");
@@ -75,7 +75,7 @@ namespace SummerJam1
         {
             Context.CreateEntity(Context.Root, entity => PrefabDebugPileTester = entity.AddComponent<CardPrefabPile>());
 
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Cards"));
+            DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Cards"));
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
             foreach (FileInfo fileInfo in files)
             {
@@ -101,7 +101,7 @@ namespace SummerJam1
 
         private List<string> GetEnemyInfos(int difficulty)
         {
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Units", "Standard", difficulty.ToString()));
+            DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Units", "Standard", difficulty.ToString()));
             List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Units/Standard/{difficulty}/{file.Name}")
                 .ToList();
             return files;
@@ -109,7 +109,7 @@ namespace SummerJam1
 
         private List<string> GetRelicInfos()
         {
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Relics"));
+            DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Relics"));
             List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Relics/{file.Name}").ToList();
             return files;
         }
@@ -172,6 +172,8 @@ namespace SummerJam1
             }
 
             int numDungeons = 5;
+            int minCards = 10;
+            int maxCards = 20;
 
             for (int i = 0; i < numDungeons; i++)
             {
@@ -181,16 +183,21 @@ namespace SummerJam1
                     if (i % 2 == 0)
                     {
                         entity.AddComponent<CardReward>();
+                        maxCards = 14;
+                        minCards = 10;
                     }
                     else
                     {
                         entity.AddComponent<RelicReward>();
+
+                        maxCards = 20;
+                        minCards = 13;
                     }
 
-                    foreach (string prefab in GetBattlePrefabs()) //temp code, all dungeons will be the same. 
+                    foreach (string prefab in GetBattlePrefabs(minCards, maxCards)) //temp code, all dungeons will be the same. 
                     {
                         PrefabReference dungeon = null;
-                        Context.CreateEntity(pile.Entity, (child => dungeon = child.AddComponent<PrefabReference>()));
+                        Context.CreateEntity(pile.Entity, child => dungeon = child.AddComponent<PrefabReference>());
                         dungeon.Prefab = prefab;
                     }
                     // Dungeons.Add(pile);
@@ -209,15 +216,15 @@ namespace SummerJam1
                 entity.AddComponent<HandleAttackPhase>();
             });
 
-          
+
             Battle.StartBattle(pile);
         }
 
 
-        private List<string> GetBattlePrefabs()
+        private List<string> GetBattlePrefabs(int min, int max)
         {
-            List<string> prefabs = new List<string>();
-            var count = Random.SystemRandom.Next(15, 20);
+            List<string> prefabs = new();
+            int count = Random.SystemRandom.Next(min, max);
             for (int i = 0; i < count; i++)
             {
                 prefabs.Add(BattleContainer.GetRandomMonsterPrefab(1, Game.CurrentLevel, Entity.GetComponent<Random>()));
@@ -229,7 +236,7 @@ namespace SummerJam1
 
         public IEntity CreateRandomCard()
         {
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Cards"));
+            DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Cards"));
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
 
             int index = Random.SystemRandom.Next(files.Count);
@@ -239,7 +246,7 @@ namespace SummerJam1
 
         public IEntity CreateRandomRelic()
         {
-            DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath, "Relics"));
+            DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Relics"));
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
 
             int index = Random.SystemRandom.Next(files.Count);

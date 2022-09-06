@@ -9,15 +9,15 @@ namespace SummerJam1.Cards.Effects
     public class DamageUnitCard : TargetSlotComponent, IEffect, IDescription
     {
         [JsonProperty] public int DamageAmount { get; private set; }
-        private int FinalDamage => DamageAmount + Strength;
+        protected virtual int FinalDamage => DamageAmount + Strength;
         [JsonProperty] public int Attacks { get; private set; } = 1;
         [JsonProperty] public bool Aoe { get; private set; }
 
-        private int Strength { get; set; }
+        protected int Strength { get; set; }
 
 
         [DependsOn(nameof(Strength), nameof(DamageAmount), nameof(Attacks), nameof(Aoe))]
-        public string Description
+        public virtual string Description
         {
             get
             {
@@ -40,7 +40,7 @@ namespace SummerJam1.Cards.Effects
             }
         }
 
-        public bool DoEffect(IEntity target)
+        public virtual bool DoEffect(IEntity target)
         {
             for (int i = 0; i < Attacks; i++)
             {

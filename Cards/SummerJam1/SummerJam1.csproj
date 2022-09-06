@@ -142,13 +142,7 @@
         <None Update="StreamingAssets\Units\Standard\1\notGengar.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="StreamingAssets\Units\Standard\2\headCheese.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="StreamingAssets\Relics\RaiseHpMore.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="StreamingAssets\Relics\CrystalPendant.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Relics\CrookedHalo.json">
@@ -173,6 +167,12 @@
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Units\Standard\1\ectongue.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Frostbite.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\Standard\1\headCheese.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
 

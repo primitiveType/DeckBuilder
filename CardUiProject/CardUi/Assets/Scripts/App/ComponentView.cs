@@ -18,10 +18,11 @@ namespace App
         [SerializeField] protected GameObject m_VisibilityObject;
 
         protected GameObject VisibilityObject => m_VisibilityObject ? m_VisibilityObject : gameObject;
+
         protected virtual void Start()
         {
             View = GetComponentInParent<IView>();
-            UpdateVisibility();
+            UpdateVisibility(true);
             if (View.Entity == null)
             {
                 View.PropertyChanged += ViewOnPropertyChanged;
@@ -56,7 +57,7 @@ namespace App
                 return;
             }
 
-            UpdateVisibility();
+            UpdateVisibility(false);
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace App
             }
 
             Component = component;
-            UpdateVisibility();
+            UpdateVisibility(false);
 
             if (Component != null)
             {
@@ -101,14 +102,23 @@ namespace App
             {
                 return;
             }
-            
-            
+
+
             ComponentOnPropertyChanged();
         }
 
-        private void UpdateVisibility()
+        private void UpdateVisibility(bool immediate)
         {
-            VisibilityObject.SetActive(Component != null || !m_HideIfNull);
+            bool visible = Component != null || !m_HideIfNull;
+
+            if (immediate)
+            {
+                VisibilityObject.SetActive(visible);
+            }
+            else
+            {
+                AnimationQueue.Instance.Enqueue(() => VisibilityObject.SetActive(visible));
+            }
         }
 
         protected abstract void ComponentOnPropertyChanged();
