@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using Api;
@@ -8,40 +9,16 @@ using Random = Api.Random;
 
 namespace SummerJam1
 {
-    public abstract class Reward : SummerJam1Component, IReward
+    public class PlayerControl : SummerJam1Component, IPlayerControl
     {
-        public abstract string RewardText { get; }
-        public abstract void TriggerReward();
-
-        [OnBattleEnded]
-        private void OnBattleEnded(object sender, BattleEndedEventArgs args)
-        {
-            if (Game.Battle == Entity.GetComponentInParent<BattleContainer>())
-            {
-                Logging.Log($"Reward acquired {RewardText}.");
-                TriggerReward();
-            }
-        }
+        
     }
 
-    public class CardReward : Reward
+    /// <summary>
+    /// Indicates that the entity belongs to the player. used to mark piles that are considered belonging to the player, such as deck, hand, discard, etc.
+    /// </summary>
+    public interface IPlayerControl
     {
-        public override string RewardText => "Draft a new card.";
-
-        public override void TriggerReward()
-        {
-            Game.PrizePile.SetupRandomPrizePile();
-        }
-    }
-
-    public class RelicReward : Reward
-    {
-        public override string RewardText => "Draft a new relic.";
-
-        public override void TriggerReward()
-        {
-            Game.RelicPrizePile.SetupPrizePile();
-        }
     }
 
     public class BattleContainer : SummerJam1Component
@@ -183,24 +160,46 @@ namespace SummerJam1
             pile.Entity.TrySetParent(Entity);
 
             BattleDeck = Context.DuplicateEntity(Game.Deck.Entity).GetComponent<DeckPile>();
+            BattleDeck.Entity.AddComponent<PlayerControl>();
+
             BattleDeck.Entity.TrySetParent(Entity);
             Context.CreateEntity(Entity, entity =>
-                Hand = entity.AddComponent<HandPile>());
-            Discard = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerDiscard>());
+            {
+                Hand = entity.AddComponent<HandPile>();
+                entity.AddComponent<PlayerControl>();
+            });
+            Discard = Context.CreateEntity(Entity, entity =>
+            {
+                entity.AddComponent<PlayerDiscard>();
+                entity.AddComponent<PlayerControl>();
+            });
 
             BattleDeck.SetHandAndDiscard(Hand.Entity, Discard);
 
             Context.CreateEntity(Entity, entity => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
 
 
-            Context.CreateEntity(Entity, entity => EncounterDrawPile = entity.AddComponent<DeckPile>());
-            Context.CreateEntity(Entity, entity => EncounterHandPile = entity.AddComponent<HandPile>());
-            Context.CreateEntity(Entity, entity => EncounterDiscardPile = entity.AddComponent<PlayerDiscard>());
+            Context.CreateEntity(Entity, setup: entity =>
+            {
+                EncounterDrawPile = entity.AddComponent<DeckPile>();
+            });
+            Context.CreateEntity(Entity, entity =>
+            {
+                EncounterHandPile = entity.AddComponent<HandPile>();
+            });
+            Context.CreateEntity(Entity, entity =>
+            {
+                EncounterDiscardPile = entity.AddComponent<PlayerDiscard>();
+            });
 
 
             PopulateEncounterDrawPile(prefabs);
 
-            Exhaust = Context.CreateEntity(Entity, entity => entity.AddComponent<PlayerExhaust>());
+            Exhaust = Context.CreateEntity(Entity, entity =>
+            {
+                entity.AddComponent<PlayerExhaust>();
+                entity.AddComponent<PlayerControl>();
+            });
 
             Events.OnBattleStarted(new BattleStartedEventArgs());
             // Events.OnDungeonPhaseStarted(new DungeonPhaseStartedEventArgs());

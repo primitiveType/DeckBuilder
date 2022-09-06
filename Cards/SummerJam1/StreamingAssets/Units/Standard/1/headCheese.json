@@ -31,11 +31,15 @@
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 10,
-      "Max": 10
+      "Amount": 5,
+      "Max": 5
     },
     {
       "$type": "SummerJam1.MoveUpWhenAttacking, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.GainStrengthWhenMoving, SummerJam1",
+      "Amount" : 1
     },
     {
       "$type": "SummerJam1.Statuses.GainStrengthWhenPlayerHeals, SummerJam1",

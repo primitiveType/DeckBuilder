@@ -3,18 +3,17 @@ using CardsAndPiles.Components;
 
 namespace SummerJam1
 {
-    public class DeathAddsMoneyToPlayer : SummerJam1Component, ITooltip
+    public class DeathAddsRandomCardsToPrizePile : SummerJam1Component, IDescription
     {
         [OnEntityKilled]
         private void OnEntityKilled(object sender, EntityKilledEventArgs args)
         {
             if (args.Entity == Entity)
             {
-                int amount = Entity.GetComponent<Money>().Amount;
-                Game.Player.Entity.GetOrAddComponent<Money>().Amount += amount;
+                Game.PrizePile.SetupRandomPrizePile();
             }
         }
 
-        public string Tooltip => "Drops money when destroyed.";
+        public string Description => "Destroy to gain a choice of cards.";
     }
 }

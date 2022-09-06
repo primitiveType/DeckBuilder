@@ -18,9 +18,10 @@ namespace SummerJam1
         {
             base.OnInitialized();
             EnemyCountText.text = $"{Entity.Children.Count} cards in dungeon.";
-            OtherText.text = $"Bonus Objective : none.";
+            OtherText.text = $"Objective : {Model.Description}";
             RewardText.text = $"Reward : {Entity.GetComponent<IReward>()?.RewardText}";
             StartDungeonButton.onClick.AddListener(StartDungeon);
+            DifficultyText.text = $"Difficulty: { Model.Difficulty.ToString()}";
         }
 
         private void StartDungeon()

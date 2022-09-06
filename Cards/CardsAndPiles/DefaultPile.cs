@@ -10,9 +10,4 @@ namespace CardsAndPiles
         }
     }
 
-    public class DungeonPile : DefaultPile, IVisual
-    {
-    }
-    
-  
 }

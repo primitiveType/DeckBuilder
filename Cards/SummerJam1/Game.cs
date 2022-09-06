@@ -177,10 +177,18 @@ namespace SummerJam1
 
             for (int i = 0; i < numDungeons; i++)
             {
+                int i1 = i;
                 Context.CreateEntity(Dungeons, delegate(IEntity entity)
                 {
-                    DungeonPile pile = entity.AddComponent<DungeonPile>();
-                    if (i % 2 == 0)
+                    DungeonPile pile = i1 switch
+                    {
+                        0 => entity.AddComponent<ExterminationDungeonPile>(),
+                        1 => entity.AddComponent<BountyDungeonPile>(),
+                        _ => entity.AddComponent<ArtifactHuntDungeonPile>()
+                    };
+
+                    pile.Difficulty = i1;
+                    if (i1 % 2 == 0)
                     {
                         entity.AddComponent<CardReward>();
                         maxCards = 14;
@@ -193,14 +201,6 @@ namespace SummerJam1
                         maxCards = 20;
                         minCards = 13;
                     }
-
-                    foreach (string prefab in GetBattlePrefabs(minCards, maxCards)) //temp code, all dungeons will be the same. 
-                    {
-                        PrefabReference dungeon = null;
-                        Context.CreateEntity(pile.Entity, child => dungeon = child.AddComponent<PrefabReference>());
-                        dungeon.Prefab = prefab;
-                    }
-                    // Dungeons.Add(pile);
                 });
             }
         }
@@ -221,7 +221,7 @@ namespace SummerJam1
         }
 
 
-        private List<string> GetBattlePrefabs(int min, int max)
+        public List<string> GetBattlePrefabs(int min, int max)
         {
             List<string> prefabs = new();
             int count = Random.SystemRandom.Next(min, max);
