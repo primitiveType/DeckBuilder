@@ -37,7 +37,7 @@ namespace Api
             return events;
         }
 
-        public void InternalInitialize(IEntity parent)
+        public void InternalInitialize(IEntity parent, bool attachEvents = true)
         {
             if (State != LifecycleState.Created)
             {
@@ -49,6 +49,12 @@ namespace Api
             if (Context.Events == null)
             {
                 throw new NullReferenceException("No Events object found while initializing component!");
+            }
+
+            if (!attachEvents)
+            {
+                State = LifecycleState.Initialized;
+                return;
             }
 
             //get attributes on each component.

@@ -10,5 +10,7 @@ namespace App
     public interface ISetModel
     {
         void SetModel(IEntity entity);
+        void SetModel(IComponent component);
+
     }
 }

@@ -45,7 +45,7 @@ namespace SummerJam1Tests
         [Test]
         public void StartBattle()
         {
-            Game.StartBattle(new DungeonPile());
+            // Game.StartBattle(new DungeonPile());
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace SummerJam1Tests
             // Context.CreateEntity(Game.Entity, entity => battle = entity.AddComponent<BattleContainer>());
 
 
-            Game.StartBattle(new DungeonPile());
+            Game.StartBattle(new BountyDungeonPile());
             BattleContainer battle = Game.Battle;
 
             foreach (Pile battleEncounterSlot in battle.EncounterSlots)
@@ -242,7 +242,7 @@ namespace SummerJam1Tests
         {
             IEntity test1 = Context.CreateEntity();
             IEntity test2 = Context.CreateEntity();
-            Game.StartBattle(new DungeonPile());
+            Game.StartBattle(new BountyDungeonPile());
             TestEvents events1 = test1.AddComponent<TestEvents>();
             TestEvents events2 = test2.AddComponent<TestEvents>();
 

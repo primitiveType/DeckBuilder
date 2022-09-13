@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Threading.Tasks;
 using Api;
-using CardsAndPiles;
 using External.UnityAsync.UnityAsync.Assets.UnityAsync;
 using UnityEngine;
 
@@ -13,20 +11,9 @@ namespace App
     {
         [SerializeField] private Transform m_ParentTransform;
 
-        private Transform Parent => m_ParentTransform ? m_ParentTransform : transform;
-        // protected IPileView PileView { get; set; }
+        protected virtual bool RequireChildView => true;
 
-        protected override void OnInitialized()
-        {
-            // PileView = GetComponentsInParent<IPileView>(true).First();
-            Entity.Children.CollectionChanged += OnPileChanged;
-            Debug.Log($"Creating {Entity.Children} children for {gameObject.name}.");
-            foreach (IEntity child in Entity.Children)
-            {
-                FireItemAddedImmediateWhenReady(child);
-                FireItemAddedQueuedWhenReady(child);
-            }
-        }
+        protected Transform Parent => m_ParentTransform ? m_ParentTransform : transform;
 
         protected override void OnDestroy()
         {
@@ -39,6 +26,19 @@ namespace App
             foreach (IDisposable disposable in Disposables)
             {
                 disposable.Dispose();
+            }
+        }
+        // protected IPileView PileView { get; set; }
+
+        protected override void OnInitialized()
+        {
+            // PileView = GetComponentsInParent<IPileView>(true).First();
+            Entity.Children.CollectionChanged += OnPileChanged;
+            Debug.Log($"Creating {Entity.Children} children for {gameObject.name}.");
+            foreach (IEntity child in Entity.Children)
+            {
+                FireItemAddedImmediateWhenReady(child);
+                FireItemAddedQueuedWhenReady(child);
             }
         }
 
@@ -66,13 +66,24 @@ namespace App
 
         private async void FireItemAddedImmediateWhenReady(IEntity added)
         {
-            IGameObject view = await WaitForGameObject(added);
+            IGameObject view = null;
+            if (RequireChildView)
+            {
+                view = await WaitForGameObject(added);
+            }
+
             OnItemAddedImmediate(added, view);
         }
 
         private async void FireItemAddedQueuedWhenReady(IEntity added)
         {
-            IGameObject view = await WaitForGameObject(added);
+            IGameObject view = null;
+
+            if (RequireChildView)
+            {
+                view = await WaitForGameObject(added);
+            }
+
             Disposables.Add(AnimationQueue.Instance.Enqueue(async () => { await OnItemAddedQueued(added, view); }));
         }
 
@@ -82,10 +93,17 @@ namespace App
 
             if (view?.gameObject == null)
             {
+                int tries = 0;
                 await new WaitUntil(() =>
                 {
                     Debug.Log("Waiting for view to be populated.");
                     view = added.GetComponent<IGameObject>();
+                    if (tries++ > 100)
+                    {
+                        Debug.Log("Gave up Waiting for view to be populated.");
+                        return true;
+                    }
+
                     return view?.gameObject != null;
                 });
             }
@@ -107,7 +125,11 @@ namespace App
 
         protected virtual async Task OnItemAddedQueued(IEntity added, IGameObject view)
         {
-            var scale = view.gameObject.transform.localScale;
+            if (view == null)
+            {
+                return;
+            }
+            Vector3 scale = view.gameObject.transform.localScale;
 
             if (scale == Vector3.zero)
             {

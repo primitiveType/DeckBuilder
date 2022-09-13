@@ -22,7 +22,8 @@ namespace SummerJam1
 
         public Random Random { get; private set; }
 
-        public Pile PrefabDebugPileTester { get; private set; }
+        public CardPrefabPile PrefabDebugPileTester { get; private set; }
+        public IEntity PrefabsContainer { get; private set; }
         public Pile DiscardStagingPile { get; private set; }
 
         public int CurrentLevel { get; private set; } = 1;
@@ -73,6 +74,45 @@ namespace SummerJam1
 
         private void CreatePrefabPile()
         {
+            PrefabsContainer = Context.CreateEntity(Entity);
+            PrefabsContainer.AddComponent<DefaultPile>();
+            DirectoryInfo info = new(Context.PrefabsPath);
+            string fullPrefabsPath = info.FullName;
+
+            CreatePrefabForFiles(info);
+
+            CreateCardPrefabPile();
+
+            void CreatePrefabForFiles(DirectoryInfo directoryInfo)
+            {
+                List<FileInfo> files = directoryInfo.GetFiles().Where(file => file.Extension == ".json").ToList();
+                foreach (FileInfo fileInfo in files)
+                {
+                    try
+                    {
+                        IEntity entity = Context.CreateEntity(PrefabsContainer, fileInfo.FullName.Replace(fullPrefabsPath, "").Substring(1), null,
+                            true);
+                        foreach (Component entityComponent in entity.Components)
+                        {
+                            entityComponent.Enabled = false;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logging.LogError($"Failed to deserialize card {fileInfo.Name}. {e}");
+                    }
+                }
+
+                foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
+                {
+                    CreatePrefabForFiles(directory);
+                }
+            }
+        }
+
+        private void CreateCardPrefabPile()
+        {
+            //Create separate pile for cards, just for easy testing...
             Context.CreateEntity(Context.Root, entity => PrefabDebugPileTester = entity.AddComponent<CardPrefabPile>());
 
             DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Cards"));

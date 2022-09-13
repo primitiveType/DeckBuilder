@@ -1,3 +1,4 @@
+using System;
 using App;
 using CardsAndPiles;
 using CardsAndPiles.Components;
@@ -21,7 +22,14 @@ namespace SummerJam1
         protected override void Start()
         {
             base.Start();
-            name = $"{Entity.GetComponent<Card>().GetType().Name} ({Entity.Parent.GetComponent<Pile>().GetType().Name})";
+            try
+            {
+                name = $"{Entity.GetComponent<Card>().GetType().Name} ({Entity.Parent.GetComponent<Pile>().GetType().Name})";
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
     }
     

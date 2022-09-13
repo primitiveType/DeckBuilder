@@ -7,25 +7,41 @@ namespace SummerJam1
     {
         public abstract string Type { get; }
         public abstract string Description { get; }
-        
+        public virtual int RequiredCards => 15;
+
+        protected virtual int NumBoosters => 3;
+
         public int Difficulty { get; set; }
 
         protected virtual int GetMinCards(int difficulty)
         {
             return 10 + difficulty;
         }
+
         protected virtual int GetMaxCards(int difficulty)
         {
             return 15 + difficulty;
         }
+
         protected override void Initialize()
         {
-            base.Initialize();       
-            foreach (string prefab in Game.GetBattlePrefabs(GetMinCards(Difficulty), GetMaxCards(Difficulty))) //temp code, all dungeons will be the same. 
+            base.Initialize();
+
+
+            for (int i = 0; i < NumBoosters; i++)
             {
-                PrefabReference dungeon = null;
-                Context.CreateEntity(Entity, child => dungeon = child.AddComponent<PrefabReference>());
-                dungeon.Prefab = prefab;
+                Context.CreateEntity(Entity, child =>
+                {
+                    EncounterBoosterPack pack = child.AddComponent<EncounterBoosterPack>();
+                    foreach (string prefab in Game.GetBattlePrefabs(2, 5))
+                    {
+                        Context.CreateEntity(pack.Entity, setup: card =>
+                        {//add each card to the booster pack.
+                            var cardToAdd = card.AddComponent<PrefabReference>();
+                            cardToAdd.Prefab = prefab;
+                        });
+                    }
+                });
             }
         }
     }

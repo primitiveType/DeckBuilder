@@ -1,11 +1,9 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Api;
 using UnityEngine;
 
 namespace App
 {
- 
     public class DeckPileOrganizer : PileOrganizer
     {
         [SerializeField] private bool SetPosition;

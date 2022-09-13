@@ -16,6 +16,7 @@ namespace Api
 
         public Dictionary<int, IEntity> EntityDatabase { get; } = new();
 
+
         [JsonProperty] public IEntity Root { get; private set; }
         [JsonProperty] private int NextId { get; set; }
 
@@ -50,7 +51,7 @@ namespace Api
             return entity;
         }
 
-        public IEntity CreateEntity(IEntity parent, string prefabName)
+        public IEntity CreateEntity(IEntity parent, string prefabName, Action<IEntity> setup = null, bool shouldInitialize = true)
         {
             if (!prefabName.ToLower().EndsWith(".json"))
             {
@@ -59,10 +60,19 @@ namespace Api
 
             string prefab = File.ReadAllText(Path.Combine(PrefabsPath, prefabName));
             Entity entity = Serializer.Deserialize<Entity>(prefab);
-            entity.Initialize(this, NextId++);
+            entity.AddComponent<SourcePrefab>().Prefab = prefabName;
+            if (shouldInitialize)
+            {
+                entity.Initialize(this, NextId++);
+                EntityDatabase.Add(entity.Id, entity);
+            }
 
-            entity.TrySetParent(parent);
-            EntityDatabase.Add(entity.Id, entity);
+            setup?.Invoke(entity);
+
+            if (!entity.TrySetParent(parent))
+            {
+                throw new Exception($"Failed to parent entity during creation! {prefabName}");
+            }
             Events.OnEntityCreated(new EntityCreatedEventArgs(entity));
             return entity;
         }

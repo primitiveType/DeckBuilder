@@ -9,7 +9,11 @@ namespace SummerJam1.Statuses
         {
             base.Initialize();
             Entity.PropertyChanged += EntityOnPropertyChanged;
-            Game.Battle.PropertyChanged += EntityOnPropertyChanged;
+
+            if (Game.Battle != null)
+            {
+                Game.Battle.PropertyChanged += EntityOnPropertyChanged;
+            }
             UpdateEnabledState();
         }
 
@@ -29,7 +33,7 @@ namespace SummerJam1.Statuses
                 Enabled = false;
             }
 
-            Enabled = Game.Battle.EncounterSlots.Contains(component);
+            Enabled = Game.Battle != null && Game.Battle.EncounterSlots.Contains(component);
         }
 
         public override void Terminate()

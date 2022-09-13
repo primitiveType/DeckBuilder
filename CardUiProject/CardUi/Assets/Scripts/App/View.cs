@@ -125,7 +125,14 @@ namespace App
                     {
                         if (method.Filter == null || method.Filter == args.PropertyName)
                         {
-                            method.MethodInfo.Invoke(this, new[] { sender, args });
+                            if (method.MethodInfo.GetParameters().Length > 0)
+                            {
+                                method.MethodInfo.Invoke(this, new[] { sender, args });
+                            }
+                            else
+                            {
+                                method.MethodInfo.Invoke(this, null);
+                            }
                         }
                     }
                     catch (Exception e)
@@ -141,7 +148,8 @@ namespace App
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"Caught exception executing event! {e.Message}", this);
+                    Debug.LogError($"Caught exception executing event! {e}", this);
+                    Debug.LogException(e);
                 }
             }
         }

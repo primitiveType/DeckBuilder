@@ -18,6 +18,7 @@ namespace SummerJam1
         [SerializeField] private GameObject m_UnitPrefab;
 
         [SerializeField] private GameObject m_WalkablePrefab;
+        [SerializeField] private GameObject m_PrefabReference;
         [SerializeField] private GameObject m_WallPrefab;
         [SerializeField] private GameObject m_DungeonPrefab;
         [SerializeField] private GameObject m_HatchEncounterPrefab;
@@ -81,7 +82,7 @@ namespace SummerJam1
             return prefab != null ? CreateView(entity, prefab) : null;
         }
 
-        private GameObject GetPrefab(IVisual visual)
+        public GameObject GetPrefab(IVisual visual)
         {
             switch (visual)
             {
@@ -100,6 +101,8 @@ namespace SummerJam1
                     return WallPrefab;    
                 case DungeonPile dungeonPile:
                     return m_DungeonPrefab;
+                case PrefabReference prefabReference:
+                    return m_PrefabReference;
                 default:
                     // throw new ArgumentOutOfRangeException(nameof(visual));
                     Debug.LogWarning("No prefab visual found.");

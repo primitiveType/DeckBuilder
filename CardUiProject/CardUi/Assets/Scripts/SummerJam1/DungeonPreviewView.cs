@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using App;
 using CardsAndPiles;
 using TMPro;
@@ -17,11 +18,22 @@ namespace SummerJam1
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            EnemyCountText.text = $"{Entity.Children.Count} cards in dungeon.";
+            Entity.Children.CollectionChanged += UpdateChildCount;
+            UpdateChildCount();
             OtherText.text = $"Objective : {Model.Description}";
             RewardText.text = $"Reward : {Entity.GetComponent<IReward>()?.RewardText}";
             StartDungeonButton.onClick.AddListener(StartDungeon);
-            DifficultyText.text = $"Difficulty: { Model.Difficulty.ToString()}";
+            DifficultyText.text = $"Difficulty: {Model.Difficulty.ToString()}";
+        }
+
+        private void UpdateChildCount(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateChildCount();
+        }
+
+        private void UpdateChildCount()
+        {
+            EnemyCountText.text = $"{Entity.GetComponentsInChildren<PrefabReference>().Count} cards in dungeon.";
         }
 
         private void StartDungeon()

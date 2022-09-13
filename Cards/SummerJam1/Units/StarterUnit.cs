@@ -9,7 +9,7 @@ namespace SummerJam1.Units
 {
     public class StarterUnit : Unit, IDraggable, IGrantsEnergy, IMonster
     {
-        [JsonIgnore] public bool CanDrag => Entity.Parent.GetComponent<HandPile>() != null; //can only drag while in hand.
+        [JsonIgnore] public bool CanDrag => false; 
 
         protected override bool PlayCard(IEntity target)
         {
