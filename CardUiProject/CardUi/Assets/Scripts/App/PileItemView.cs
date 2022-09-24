@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using System.Linq;
 using App.Utility;
 using CardsAndPiles;
@@ -12,20 +12,25 @@ namespace App
     public class PileItemView<T> : View<T>, IEndDragHandler, IPileItemView, IDragHandler, IGameObject,
         IBeginDragHandler where T : IPileItem
     {
+        public bool IsInLayoutGroup; //feels a bit hacky, but hopefully reliable?
+
+        private readonly float lerpRate = 8;
         private PileView TargetPileView { get; set; }
 
-        public bool IsInLayoutGroup; //feels a bit hacky, but hopefully reliable?
-        
-        public ISortHandler SortHandler { get; private set; }
+        private Vector3 BoundsSize { get; set; }
 
-        private float lerpRate = 8;
+        //during turn, setting a new target should interrupt.
+        //during combat, setting a new target should wait until old lerp is finished.
+
+        private Vector3 TargetPosition { get; set; }
+        private Vector3 TargetRotation { get; set; }
 
         private void Awake()
         {
             SortHandler = GetComponent<ISortHandler>();
             SortHandler.SetDepth((int)Sorting.PileItem);
 
-            var colliders = GetComponentsInChildren<Collider>().ToList();
+            List<Collider> colliders = GetComponentsInChildren<Collider>().ToList();
             if (colliders.Count > 0)
             {
                 Bounds bounds = colliders[0].bounds;
@@ -36,7 +41,6 @@ namespace App
 
                 BoundsSize = bounds.size;
             }
-            
         }
 
         protected override void Start()
@@ -45,12 +49,44 @@ namespace App
             IsInLayoutGroup = GetComponentInParent<LayoutGroup>() != null;
         }
 
-        private Vector3 BoundsSize { get; set; }
+        private void Update()
+        {
+            IsInLayoutGroup = GetComponentInParent<LayoutGroup>() != null;
+
+            if (!IsDragging && !IsInLayoutGroup)
+            {
+                Interpolate(TargetPosition, TargetRotation);
+            }
+            else if (IsInLayoutGroup)
+            {
+                transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 0);
+            }
+        }
 
         public void OnTriggerEnter(Collider other)
         {
             Debug.Log($"collided with {other.gameObject.name}!");
             TargetPileView = other.gameObject.GetComponentInParent<PileView>();
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            IsDragging = true;
+            transform.localRotation = Quaternion.identity;
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            Ray ray = eventData.pressEventCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
+            foreach (RaycastHit result in results)
+            {
+                PileView pileView = result.transform.GetComponent<PileView>();
+                if (pileView != null)
+                {
+                    TargetPileView = pileView;
+                }
+            }
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -73,23 +109,10 @@ namespace App
             }
         }
 
-        public virtual bool TrySendToPile(IPileView pileView)
-        {
-            bool success = Entity.TrySetParent(pileView.Entity);
-
-
-            return success;
-        }
-
-        //during turn, setting a new target should interrupt.
-        //during combat, setting a new target should wait until old lerp is finished.
-
-        private Vector3 TargetPosition { get; set; }
-        private Vector3 TargetRotation { get; set; }
+        public ISortHandler SortHandler { get; private set; }
 
         public void SetTargetPosition(Vector3 transformPosition, Vector3 transformRotation, bool immediate = false)
         {
-
             if (immediate)
             {
                 TargetPosition = transformPosition;
@@ -97,38 +120,12 @@ namespace App
             }
             else
             {
-                Disposables.Add(AnimationQueue.Instance.Enqueue((() =>
+                Disposables.Add(AnimationQueue.Instance.Enqueue(() =>
                 {
                     TargetPosition = transformPosition;
                     TargetRotation = transformRotation;
-                })));
+                }));
             }
-        }
-
-        private void Update()
-        {
-            IsInLayoutGroup = GetComponentInParent<LayoutGroup>() != null;
-
-            if (!IsDragging && !IsInLayoutGroup)
-            {
-                Interpolate(TargetPosition, TargetRotation);
-            }
-            else if (IsInLayoutGroup)
-            {
-                transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 0);
-            }
-        }
-
-        private void Interpolate(Vector3 transformPosition, Vector3 transformRotation)
-        {
-            Vector3 lerpedTarget =
-                VectorExtensions.Damp(transform.localPosition, transformPosition, lerpRate, Time.deltaTime);
-            transform.localPosition = lerpedTarget;
-
-            Vector3 lerpedRotation = transformRotation;
-            //     VectorExtensions.Damp(transform.rotation.eulerAngles, transformRotation, lerpRate, Time.deltaTime);
-
-            transform.localRotation = Quaternion.Euler(lerpedRotation);
         }
 
         public void SetLocalPosition(Vector3 transformPosition, Vector3 transformRotation)
@@ -144,31 +141,31 @@ namespace App
 
         public Bounds GetBounds()
         {
-            var transform1 = transform;
+            Transform transform1 = transform;
             return new Bounds(transform1.position, BoundsSize * transform1.lossyScale.x);
         }
 
 
         public bool IsDragging { get; private set; }
 
-        public void OnDrag(PointerEventData eventData)
+        public virtual bool TrySendToPile(IPileView pileView)
         {
-            Ray ray = eventData.pressEventCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
-            foreach (RaycastHit result in results)
-            {
-                PileView pileView = result.transform.GetComponent<PileView>();
-                if (pileView != null)
-                {
-                    TargetPileView = pileView;
-                }
-            }
+            bool success = Entity.TrySetParent(pileView.Entity);
+
+
+            return success;
         }
 
-        public void OnBeginDrag(PointerEventData eventData)
+        private void Interpolate(Vector3 transformPosition, Vector3 transformRotation)
         {
-            IsDragging = true;
-            transform.localRotation = Quaternion.identity;
+            Vector3 lerpedTarget =
+                VectorExtensions.Damp(transform.localPosition, transformPosition, lerpRate, Time.deltaTime);
+            transform.localPosition = lerpedTarget;
+
+            Vector3 lerpedRotation = transformRotation;
+            //     VectorExtensions.Damp(transform.rotation.eulerAngles, transformRotation, lerpRate, Time.deltaTime);
+
+            transform.localRotation = Quaternion.Euler(lerpedRotation);
         }
     }
 }
