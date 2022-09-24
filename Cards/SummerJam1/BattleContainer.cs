@@ -36,7 +36,7 @@ namespace SummerJam1
         public HandPile EncounterHandPile { get; private set; }
         public PlayerDiscard EncounterDiscardPile { get; private set; }
         public List<Pile> EncounterSlots { get; } = new();
-        public List<Pile> EncounterSlotsUpcoming { get; } = new();
+        // public List<Pile> EncounterSlotsUpcoming { get; } = new();
 
 
         // public Dictionary<int, List<Pile>> AllEncounterSlots { get; } = new Dictionary<int, List<Pile>>();
@@ -60,7 +60,7 @@ namespace SummerJam1
             for (int j = 0; j < NumEncounterSlotsPerFloor; j++)
             {
                 Context.CreateEntity(Entity, entity => EncounterSlots.Add(entity.AddComponent<EncounterSlotPile>()));
-                Context.CreateEntity(Entity, entity => EncounterSlotsUpcoming.Add(entity.AddComponent<UpcomingEncounterSlotPile>()));
+                // Context.CreateEntity(Entity, entity => EncounterSlotsUpcoming.Add(entity.AddComponent<UpcomingEncounterSlotPile>()));
             }
         }
 
@@ -258,24 +258,7 @@ namespace SummerJam1
             //discard hand and battle deck.
             return Discard.Children.Concat(Hand.Entity.Children).Concat(BattleDeck.Entity.Children).ToList();
         }
+        
 
-        public IEntity GetSlotAboveOrBelow(IEntity slotOrMonster)
-        {
-            return GetSlotAboveOrBelow(slotOrMonster.GetComponentInParent<EncounterSlotPile>());
-        }
-
-        public IEntity GetSlotAboveOrBelow(EncounterSlotPile slot)
-        {
-            var index = EncounterSlots.IndexOf(slot);
-
-            if (index < 0)
-            {
-                index = EncounterSlotsUpcoming.IndexOf(slot);
-                return EncounterSlots[index].Entity;
-            }
-
-
-            return EncounterSlotsUpcoming[index].Entity;
-        }
     }
 }

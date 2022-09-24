@@ -252,7 +252,6 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity =>
             {
                 Battle = entity.AddComponent<BattleContainer>();
-                entity.AddComponent<HandleMovementPhase>();
                 entity.AddComponent<HandleAttackPhase>();
             });
 

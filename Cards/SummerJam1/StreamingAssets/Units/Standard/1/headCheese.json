@@ -35,9 +35,6 @@
       "Max": 5
     },
     {
-      "$type": "SummerJam1.MoveUpWhenAttacking, SummerJam1"
-    },
-    {
       "$type": "SummerJam1.GainStrengthWhenMoving, SummerJam1",
       "Amount" : 1
     },

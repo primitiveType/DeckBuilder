@@ -12,11 +12,7 @@ namespace SummerJam1.Rules
             {
                 game.Battle.EncounterDrawPile.DrawCardInto(slot.Entity);
             }
-
-            foreach (Pile slot in game.Battle.EncounterSlotsUpcoming)
-            {
-                game.Battle.EncounterDrawPile.DrawCardInto(slot.Entity);
-            }
+            
         }
     }
 }
