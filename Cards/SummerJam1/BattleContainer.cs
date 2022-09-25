@@ -93,9 +93,10 @@ namespace SummerJam1
             return adjacents;
         }
 
-        public List<IEntity> GetEntitiesInAllSlots()
+
+        public List<IEntity> GetTopEntitiesInAllSlots()
         {
-            return GetFullSlots().Select(pile => pile.Entity.Children.First()).ToList();
+            return GetFullSlots().Select(pile => pile.Entity.Children.LastOrDefault()).ToList();
         }
 
         public List<IEntity> GetAdjacentSlots(IEntity slotOrMonster)

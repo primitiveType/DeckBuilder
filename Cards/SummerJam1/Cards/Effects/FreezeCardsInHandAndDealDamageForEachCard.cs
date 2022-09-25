@@ -24,7 +24,7 @@ namespace SummerJam1.Cards.Effects
 
             int damage = frozenCards * DamageAmount;
 
-            foreach (IEntity guy in Game.Battle.GetEntitiesInAllSlots())
+            foreach (IEntity guy in Game.Battle.GetTopEntitiesInAllSlots())
             {
                 guy.GetComponent<ITakesDamage>()?.TryDealDamage(damage, Entity);
             }

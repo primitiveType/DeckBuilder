@@ -117,7 +117,7 @@ namespace App
             }
             else
             {
-                AnimationQueue.Instance.Enqueue(() => VisibilityObject.SetActive(visible));
+                Disposables.Add(AnimationQueue.Instance.Enqueue(() => VisibilityObject.SetActive(visible)));
             }
         }
 

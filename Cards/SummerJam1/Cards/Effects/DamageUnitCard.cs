@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using Api;
+using CardsAndPiles;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
 using PropertyChanged;
@@ -42,9 +44,12 @@ namespace SummerJam1.Cards.Effects
 
         public virtual bool DoEffect(IEntity target)
         {
+            EncounterSlotPile slot = target.GetComponentInSelfOrParent<EncounterSlotPile>();
+
             for (int i = 0; i < Attacks; i++)
             {
-                ITakesDamage unit = target.GetComponentInChildren<ITakesDamage>();
+                
+                ITakesDamage unit = slot.Entity.Children.LastOrDefault()?.GetComponentInChildren<ITakesDamage>();
 
                 if (unit == null)
                 {
@@ -53,7 +58,7 @@ namespace SummerJam1.Cards.Effects
 
                 if (Aoe)
                 {
-                    foreach (IEntity entitiesInAdjacentSlot in Game.Battle.GetEntitiesInAdjacentSlots(target))
+                    foreach (IEntity entitiesInAdjacentSlot in Game.Battle.GetEntitiesInAdjacentSlots(slot.Entity))
                     {
                         ITakesDamage health = entitiesInAdjacentSlot.GetComponent<ITakesDamage>();
                         health.TryDealDamage(DamageAmount, Game.Player.Entity);

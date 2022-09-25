@@ -6,7 +6,6 @@ using Api;
 using App.Utility;
 using External.UnityAsync.UnityAsync.Assets.UnityAsync;
 using External.UnityAsync.UnityAsync.Assets.UnityAsync.Await;
-using External.UnityAsync.UnityAsync.Assets.UnityAsync.AwaitInstructions;
 using UnityEngine;
 
 namespace App
@@ -28,9 +27,9 @@ namespace App
         }
 
 
-        protected override void Awake()
+        protected override void SingletonAwakened()
         {
-            base.Awake();
+            base.SingletonAwakened();
             AnimationLoop();
         }
 

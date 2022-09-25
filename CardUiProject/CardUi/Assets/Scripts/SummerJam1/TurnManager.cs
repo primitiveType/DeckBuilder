@@ -16,8 +16,15 @@ namespace SummerJam1
             }
 
             InputStateManager.Instance.StateMachine.Fire(InputAction.EndTurn);
+            Debug.Log("Ending turn.");
+
             Game.EndTurn();
-            AnimationQueue.Instance.Enqueue(() => { InputStateManager.Instance.StateMachine.Fire(InputAction.BeginTurn); });
+            Debug.Log("Queueing turn start.");
+            AnimationQueue.Instance.Enqueue(() =>
+            {
+                Debug.Log("Starting next turn.");
+                InputStateManager.Instance.StateMachine.Fire(InputAction.BeginTurn);
+            });
         }
         
         public void EndDungeonPhase()

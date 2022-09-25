@@ -6406,7 +6406,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1571824130}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1507073452
 MonoBehaviour:
@@ -7720,7 +7720,7 @@ Transform:
   m_Children:
   - {fileID: 2027412247}
   m_Father: {fileID: 1571824130}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1765302397
 Camera:
@@ -9449,6 +9449,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1369831129438759233, guid: b6ca80596af5778449468bc169251583, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2708719220922628049, guid: b6ca80596af5778449468bc169251583, type: 3}
       propertyPath: m_Cameras.Array.size
       value: 0

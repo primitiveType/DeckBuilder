@@ -222,11 +222,11 @@ MonoBehaviour:
   DEBUG_entity: 0
   m_ParentTransform: {fileID: 0}
   radius: 1
-  overlapRatio: {x: 0, y: 0.2}
+  overlapRatio: {x: 0, y: -0.2}
   rotate: 0
-  reverseDepthSort: 1
+  reverseDepthSort: 0
   radialOffset: 0
-  hoveredOverlapRatio: {x: 0, y: 0.2}
+  hoveredOverlapRatio: {x: 0, y: -0.2}
   overlapReductionPerCard: {x: 0, y: 0}
 --- !u!1 &157504569270204684
 GameObject:

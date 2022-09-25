@@ -61,5 +61,10 @@ namespace SummerJam1
         {
             m_Animator.enabled = false;
         }
+        
+        private void OnEnable()
+        {
+            m_Animator.enabled = true;
+        }
     }
 }

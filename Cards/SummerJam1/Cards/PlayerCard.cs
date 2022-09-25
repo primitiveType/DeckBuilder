@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 
 namespace SummerJam1.Cards
 {
+    public class FaceDown : SummerJam1Component{}
     public class PlayerCard : Card, IDraggable
     {
         protected Game Game { get; private set; }

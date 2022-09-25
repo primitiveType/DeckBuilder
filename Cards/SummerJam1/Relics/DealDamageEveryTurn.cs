@@ -33,7 +33,7 @@ namespace SummerJam1.Relics
 
             if (EnemyDamage > 0)
             {
-                Game.Battle.GetEntitiesInAllSlots().FirstOrDefault()?.GetComponent<Health>().TryDealDamage(EnemyDamage, Entity);
+                Game.Battle.GetTopEntitiesInAllSlots().FirstOrDefault()?.GetComponent<Health>().TryDealDamage(EnemyDamage, Entity);
             }
         }
     }

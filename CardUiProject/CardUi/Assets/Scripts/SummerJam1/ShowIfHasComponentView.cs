@@ -11,7 +11,7 @@ namespace SummerJam1
             Disposables.Add(AnimationQueue.Instance.Enqueue(( ()=>Enable(enable))));
         }
 
-        private void Enable(bool enable)
+        protected virtual void Enable(bool enable)
         {
             gameObject.SetActive(enable);
         }

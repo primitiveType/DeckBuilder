@@ -38,6 +38,11 @@ namespace App
 
         public void SetModel(IEntity entity)
         {
+            if (Entity != null)
+            {
+                Entity.PropertyChanged -= OnEntityDestroyed;
+                Debug.LogWarning("SetModel called on view that already had been populated.");
+            }
             Entity = entity;
             Model = entity.GetComponent<T>();
             if (Model == null)

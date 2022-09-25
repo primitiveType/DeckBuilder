@@ -9,7 +9,7 @@ namespace SummerJam1.Rules
         {
             for (int i = 0; i < BattleContainer.NumEncounterSlotsPerFloor; i++)
             {
-                Intent intent = Game.Battle.EncounterSlots[i].Entity.Children.FirstOrDefault()?.GetComponent<Intent>();
+                Intent intent = Game.Battle.EncounterSlots[i].Entity.Children.LastOrDefault()?.GetComponent<Intent>();
                 intent?.DoIntent();
             }
         }
