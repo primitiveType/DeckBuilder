@@ -3,7 +3,7 @@ using SummerJam1.Statuses;
 
 namespace SummerJam1
 {
-    public abstract class Intent : EnabledWhenInEncounterSlot
+    public abstract class Intent : EnabledWhenAtTopOfEncounterSlot
     {
         protected override void Initialize()
         {

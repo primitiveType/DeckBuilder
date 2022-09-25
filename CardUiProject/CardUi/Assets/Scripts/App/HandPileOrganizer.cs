@@ -1,26 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using Api;
 using App.Utility;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 namespace App
 {
     public class HandPileOrganizer : PileOrganizer
     {
-        [SerializeField] private float lerpRate = .01f;
         [SerializeField] private float radius = 1f;
-        [SerializeField] private float maxWidth = 1f;
-        [SerializeField] private float overlapRatio = 1f;
+        [SerializeField] private Vector2 overlapRatio = new Vector2(1f, 0);
         [SerializeField] private bool rotate = true;
-        [SerializeField] private float offset = 0f;
-        [SerializeField] private float hoveredOverlapRotation = 1f;
-        [SerializeField] private float overlapReductionPerCard = .05f;
+        [SerializeField] private bool reverseDepthSort;
+        [SerializeField] private float radialOffset = 0f;
+        [SerializeField] private Vector2 hoveredOverlapRatio = new Vector2(1f, 0f);
+        [SerializeField] private Vector2 overlapReductionPerCard = new Vector2(.05f, 0);
 
-        private float CurrentOverlapRatio => overlapRatio - (overlapReductionPerCard * CardsInHand.Count);
+        private Vector2 CurrentOverlapRatio => overlapRatio - (overlapReductionPerCard * CardsInHand.Count);
 
         private List<CardInHand> CardsInHand { get; } = new List<CardInHand>();
 
@@ -55,35 +57,40 @@ namespace App
         private void PositionCards()
         {
             float width = GetTotalWidth();
+            float height = GetTotalHeight();
             float xPos = -width / 2f;
+            float yPos = -height / 2f;
             int i = 0;
+            int depthMultiplier = reverseDepthSort ? -1 : 1;
             foreach (CardInHand card in CardsInHand)
             {
-                card.PileItemView.SortHandler?.SetDepth((int)Sorting.PileItem + i++);
-                float halfSize = GetEffectiveCardWidth(card) / 2f;
+                card.PileItemView.SortHandler?.SetDepth((int)Sorting.PileItem + i++ * depthMultiplier);
+                float halfWidth = GetEffectiveCardWidth(card) / 2f;
+                float halfHeight = GetEffectiveCardHeight(card) / 2f;
                 if (card.PileItemView.IsDragging)
                 {
-                    xPos += halfSize / 2f;
-                    card.PileItemView.SortHandler?.SetDepth((int)Sorting.DraggedPileItem);
+                    xPos += halfWidth / 2f;
+                    card.PileItemView.SortHandler?.SetDepth((int)Sorting.DraggedPileItem * depthMultiplier);
                     continue;
                 }
 
 
-                xPos += halfSize;
+                xPos += halfWidth;
+                yPos += halfHeight;
                 float x;
                 float y;
                 if (rotate)
                 {
                     float h = 0;
                     float k = -radius;
-                    float theta = (Mathf.PI / 2f) + offset + (-xPos / radius);
+                    float theta = (Mathf.PI / 2f) + radialOffset + (-xPos / radius);
                     x = radius * Mathf.Cos(theta) + h;
                     y = radius * Mathf.Sin(theta) + k;
                 }
                 else
                 {
                     x = xPos;
-                    y = 0;
+                    y = yPos;
                 }
 
                 Vector3 pileItemPosition = card.PileItemView.GetLocalPosition();
@@ -99,8 +106,15 @@ namespace App
                     card.PileItemView.SetTargetPosition(target, GetRotation(xPos), IsPlayerTurn);
                 }
 
-                xPos += halfSize;
+                xPos += halfWidth;
+                yPos += halfHeight;
             }
+        }
+
+        private float GetEffectiveCardHeight(CardInHand card)
+        {
+            return 2 * card.PileItemView.GetBounds().extents.y *
+                   (card.DisplayWholeCard ? hoveredOverlapRatio.y : CurrentOverlapRatio.y);
         }
 
         private void SetHoveredPosition(CardInHand card, Vector3 target, Vector3 pileItemPosition)
@@ -122,7 +136,7 @@ namespace App
         private float GetEffectiveCardWidth(CardInHand card)
         {
             return 2 * card.PileItemView.GetBounds().extents.x *
-                   (card.DisplayWholeCard ? hoveredOverlapRotation : CurrentOverlapRatio);
+                   (card.DisplayWholeCard ? hoveredOverlapRatio.x : CurrentOverlapRatio.x);
         }
 
         //theta = arclength/radius
@@ -134,7 +148,19 @@ namespace App
                 return Vector3.zero;
             }
 
-            return new Vector3(0, 0, Mathf.Rad2Deg * (offset + (-xPos / radius)));
+            return new Vector3(0, 0, Mathf.Rad2Deg * (radialOffset + (-xPos / radius)));
+        }
+
+        private float GetTotalHeight()
+        {
+            float height = 0;
+
+            foreach (CardInHand card in CardsInHand.Where(item => !item.PileItemView.IsDragging))
+            {
+                height += GetEffectiveCardHeight(card);
+            }
+
+            return height;
         }
 
         private float GetTotalWidth()

@@ -4,7 +4,7 @@ using CardsAndPiles.Components;
 
 namespace SummerJam1.Statuses
 {
-    public class GainStrengthWhenPlayerHeals : EnabledWhenInEncounterSlot, IAmount, ITooltip
+    public class GainStrengthWhenPlayerHeals : EnabledWhenAtTopOfEncounterSlot, IAmount, ITooltip
     {
         public int Amount { get; set; }
         public string Tooltip => $"Tough - Whenever you heal, gains {Amount} Strength";

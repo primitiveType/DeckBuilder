@@ -6,7 +6,7 @@ using SummerJam1.Statuses;
 
 namespace SummerJam1
 {
-    public class FreezeOnAttack : EnabledWhenInEncounterSlot, ITooltip, IDescription
+    public class FreezeOnAttack : EnabledWhenAtTopOfEncounterSlot, ITooltip, IDescription
     {
         public string Description => Tooltip;
 

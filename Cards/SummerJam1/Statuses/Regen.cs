@@ -3,7 +3,7 @@ using CardsAndPiles;
 
 namespace SummerJam1.Statuses
 {
-    public class Regen : EnabledWhenInEncounterSlot, IAmount, IStatusEffect
+    public class Regen : EnabledWhenAtTopOfEncounterSlot, IAmount, IStatusEffect
     {
         public int Amount { get; set; }
 

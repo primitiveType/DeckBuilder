@@ -11,7 +11,6 @@ namespace SummerJam1
 {
     public class PlayerControl : SummerJam1Component, IPlayerControl
     {
-        
     }
 
     /// <summary>
@@ -33,8 +32,8 @@ namespace SummerJam1
         public ObjectivesPile ObjectivesPile { get; private set; }
 
         public DeckPile EncounterDrawPile { get; private set; }
-        public HandPile EncounterHandPile { get; private set; }
         public PlayerDiscard EncounterDiscardPile { get; private set; }
+
         public List<Pile> EncounterSlots { get; } = new();
         // public List<Pile> EncounterSlotsUpcoming { get; } = new();
 
@@ -159,6 +158,31 @@ namespace SummerJam1
 
             pile.Entity.TrySetParent(Entity);
 
+            SetupBattleDeck();
+
+            Context.CreateEntity(Entity, entity => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
+
+
+            Context.CreateEntity(Entity, setup: entity => { EncounterDrawPile = entity.AddComponent<DeckPile>(); });
+
+            Context.CreateEntity(Entity, entity => { EncounterDiscardPile = entity.AddComponent<PlayerDiscard>(); });
+
+
+            PopulateEncounterPiles(prefabs);
+
+            Exhaust = Context.CreateEntity(Entity, entity =>
+            {
+                entity.AddComponent<PlayerExhaust>();
+                entity.AddComponent<PlayerControl>();
+            });
+
+            Events.OnBattleStarted(new BattleStartedEventArgs());
+            Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
+            Events.OnTurnBegan(new TurnBeganEventArgs());
+        }
+
+        private void SetupBattleDeck()
+        {
             BattleDeck = Context.DuplicateEntity(Game.Deck.Entity).GetComponent<DeckPile>();
             BattleDeck.Entity.AddComponent<PlayerControl>();
 
@@ -175,36 +199,6 @@ namespace SummerJam1
             });
 
             BattleDeck.SetHandAndDiscard(Hand.Entity, Discard);
-
-            Context.CreateEntity(Entity, entity => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
-
-
-            Context.CreateEntity(Entity, setup: entity =>
-            {
-                EncounterDrawPile = entity.AddComponent<DeckPile>();
-            });
-            Context.CreateEntity(Entity, entity =>
-            {
-                EncounterHandPile = entity.AddComponent<HandPile>();
-            });
-            Context.CreateEntity(Entity, entity =>
-            {
-                EncounterDiscardPile = entity.AddComponent<PlayerDiscard>();
-            });
-
-
-            PopulateEncounterDrawPile(prefabs);
-
-            Exhaust = Context.CreateEntity(Entity, entity =>
-            {
-                entity.AddComponent<PlayerExhaust>();
-                entity.AddComponent<PlayerControl>();
-            });
-
-            Events.OnBattleStarted(new BattleStartedEventArgs());
-            // Events.OnDungeonPhaseStarted(new DungeonPhaseStartedEventArgs());
-            Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
-            Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 
         public void EndDungeonPhase()
@@ -214,12 +208,15 @@ namespace SummerJam1
             Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 
-        private void PopulateEncounterDrawPile(List<string> prefabs)
+        private void PopulateEncounterPiles(List<string> prefabs)
         {
             Logging.Log($"Starting battle with {prefabs.Count} encounters.");
-            foreach (string prefab in prefabs)
+            int index = 0;
+            foreach (string prefab in prefabs) //fill encounter slots.
             {
-                Context.CreateEntity(EncounterDrawPile.Entity, prefab);
+                int i = index % EncounterSlots.Count;
+                Context.CreateEntity(EncounterSlots[i].Entity, prefab);
+                index++;
             }
         }
 
@@ -258,7 +255,5 @@ namespace SummerJam1
             //discard hand and battle deck.
             return Discard.Children.Concat(Hand.Entity.Children).Concat(BattleDeck.Entity.Children).ToList();
         }
-        
-
     }
 }

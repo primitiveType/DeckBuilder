@@ -3,7 +3,7 @@ using CardsAndPiles.Components;
 
 namespace SummerJam1.Statuses
 {
-    public class ReducePlayerStealthAtStartOfCombat : EnabledWhenInEncounterSlot, IStatusEffect, ITooltip, IAmount
+    public class ReducePlayerStealthAtStartOfCombat : EnabledWhenAtTopOfEncounterSlot, IStatusEffect, ITooltip, IAmount
     {
         public int Amount { get; set; }
 
