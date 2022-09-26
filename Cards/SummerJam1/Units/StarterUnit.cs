@@ -4,6 +4,7 @@ using CardsAndPiles;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
 using SummerJam1.Cards;
+using SummerJam1.Piles;
 using SummerJam1.Statuses;
 
 namespace SummerJam1.Units
@@ -17,22 +18,7 @@ namespace SummerJam1.Units
         {
             return true;
         }
-
-        [OnBattleStarted]
-        [OnTurnEnded]
-        private void OnTurnEnded()
-        {
-            IsTopMonster topCheck = Entity.GetOrAddComponent<IsTopMonster>(); //could be problematic with serialization.
-
-            if (!topCheck.Enabled)
-            {
-                Entity.GetOrAddComponent<FaceDown>();//will have to change if other things can cause face down.
-            }
-            else
-            {
-                Entity.RemoveComponent<FaceDown>();
-            }
-        }
+        
 
 
         [OnRequestPlayCard]

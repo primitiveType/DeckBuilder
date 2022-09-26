@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Specialized;
+using System.Linq;
 using Api;
 
 namespace CardsAndPiles
@@ -9,9 +10,6 @@ namespace CardsAndPiles
         {
              return base.AcceptsChild(child) && !Entity.Children.Any();
         }
-    }
-    public class EncounterSlotPile : DefaultPile
-    {
     }
     public class UpcomingEncounterSlotPile : DefaultPile
     {

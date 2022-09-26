@@ -5,6 +5,7 @@ using CardsAndPiles;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
 using PropertyChanged;
+using SummerJam1.Piles;
 
 namespace SummerJam1.Cards.Effects
 {

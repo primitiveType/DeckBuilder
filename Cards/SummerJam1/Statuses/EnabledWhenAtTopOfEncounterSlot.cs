@@ -3,41 +3,14 @@ using System.ComponentModel;
 using System.Linq;
 using Api;
 using CardsAndPiles;
-using SummerJam1.Cards;
+using SummerJam1.Piles;
 
 namespace SummerJam1.Statuses
 {
-    public class IsTopMonster : EnabledWhenAtTopOfEncounterSlot
-    {
-        protected override void Initialize()
-        {
-            base.Initialize();
-            PropertyChanged += EntityOnPropertyChanged;
-        }
-
-        private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Enabled))
-            {
-                if (Enabled)
-                {
-                    Entity.RemoveComponent<FaceDown>();
-                }
-                else
-                {
-                    Entity.GetOrAddComponent<FaceDown>();
-                }
-            }
-        }
-
-        public override void Terminate()
-        {
-            base.Terminate();
-            PropertyChanged -= EntityOnPropertyChanged;
-        }
-    }
     public abstract class EnabledWhenAtTopOfEncounterSlot : SummerJam1Component
     {
+        protected bool EnableOnTurnStart { get; set; }
+
         private IEntity CachedParent { get; set; }
         protected override void Initialize()
         {
@@ -95,13 +68,31 @@ namespace SummerJam1.Statuses
                 Enabled = false;
             }
 
-            Enabled = Game.Battle != null && Entity.Parent != null && Entity.Parent.Children.LastOrDefault() == Entity;
+            if (Game.Battle != null && Entity.Parent != null && Entity.Parent.Children.LastOrDefault() == Entity)
+            {
+                EnableOnTurnStart = true;
+            }
+            else
+            {
+                Enabled = false;
+            }
+        }
+
+        [OnTurnBegan]
+        private void OnTurnBegan(object sender, TurnBeganEventArgs args)
+        {
+            if (EnableOnTurnStart)
+            {
+                EnableOnTurnStart = false;
+                Enabled = true;
+            }
         }
 
         public override void Terminate()
         {
             base.Terminate();
             Entity.PropertyChanged -= EntityOnPropertyChanged;
+            DetachFromOldParent();
         }
     }
     
