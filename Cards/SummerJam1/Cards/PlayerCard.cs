@@ -5,7 +5,26 @@ using Newtonsoft.Json;
 
 namespace SummerJam1.Cards
 {
-    public class FaceDown : SummerJam1Component{}
+    public class FaceDown : SummerJam1Component, IDisableAbilities{}
+
+    public interface IDisableAbilities
+    {
+    }
+
+    public class Asleep : SummerJam1Component, IDisableAbilities
+    {
+        [OnTurnBegan]
+        private void OnTurnBegan(object sender, TurnBeganEventArgs args)
+        {
+            Entity.RemoveComponent(this);
+            Entity.AddComponent<Aggro>();
+        }
+    }
+
+    public class Aggro : SummerJam1Component
+    {
+    }
+
     public class PlayerCard : Card, IDraggable
     {
         protected Game Game { get; private set; }

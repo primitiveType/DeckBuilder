@@ -21,9 +21,11 @@ namespace SummerJam1.Piles
             {
                 if (index == count - 1)
                 {
-                    if (entityChild.RemoveComponent<FaceDown>())
+                    //Aggro component indicates this monster was already awakened once. 
+                    //This pattern is kinda bad so might have to revisit this with some sort of tryAddComponent or something.
+                    if (entityChild.RemoveComponent<FaceDown>() && entityChild.GetComponent<Aggro>() == null)
                     {
-                        entityChild.
+                        entityChild.AddComponent<Asleep>();
                     }
                     break;
                 }
