@@ -14,6 +14,7 @@ namespace SummerJam1.Cards.Effects
         protected virtual int FinalDamage => DamageAmount + Strength;
         [JsonProperty] public int Attacks { get; private set; } = 1;
         [JsonProperty] public bool Aoe { get; private set; }
+        [JsonProperty] public bool Pierce { get; private set; }
 
         protected int Strength { get; set; }
 
@@ -23,22 +24,23 @@ namespace SummerJam1.Cards.Effects
         {
             get
             {
+                string pierceString = Pierce ? "Pierce." : "";
                 if (Attacks == 1)
                 {
                     if (Aoe)
                     {
-                        return $"Deal {FinalDamage} damage to target and adjacent.";
+                        return $"Deal {FinalDamage} damage to target and adjacent. {pierceString}";
                     }
 
-                    return $"Deal {FinalDamage} damage.";
+                    return $"Deal {FinalDamage} damage. {pierceString}";
                 }
 
                 if (Aoe)
                 {
-                    return $"Deal {FinalDamage} damage to target and adjacent, {Attacks} times.";
+                    return $"Deal {FinalDamage} damage to target and adjacent, {Attacks} times. {pierceString}";
                 }
 
-                return $"Deal {FinalDamage} damage, {Attacks} times.";
+                return $"Deal {FinalDamage} damage, {Attacks} times. {pierceString}";
             }
         }
 
@@ -53,6 +55,12 @@ namespace SummerJam1.Cards.Effects
                 if (unit == null)
                 {
                     return false;
+                }
+
+                if (Pierce && slot.Entity.Children.Count > 1)
+                {
+                    ITakesDamage backUnit = slot.Entity.Children.ElementAt(slot.Entity.Children.Count - 2).GetComponentInChildren<ITakesDamage>();
+                    backUnit.TryDealDamage(DamageAmount, Game.Player.Entity);
                 }
 
                 if (Aoe)
