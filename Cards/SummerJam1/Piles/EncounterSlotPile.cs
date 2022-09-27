@@ -15,7 +15,7 @@ namespace SummerJam1.Piles
 
         private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var count = Entity.Children.Count;
+            int count = Entity.Children.Count;
             int index = 0;
             foreach (IEntity entityChild in Entity.Children)
             {

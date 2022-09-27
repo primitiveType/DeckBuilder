@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using Api;
-using CardsAndPiles;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
 using PropertyChanged;
@@ -9,6 +8,39 @@ using SummerJam1.Piles;
 
 namespace SummerJam1.Cards.Effects
 {
+    public class PushUnit : TargetSlotComponent, IEffect, IDescription, ITooltip
+    {
+        public string Description => "Push.";
+
+        public bool DoEffect(IEntity target)
+        {
+            EncounterSlotPile slot = target.GetComponentInSelfOrParent<EncounterSlotPile>();
+
+            IEntity unit = slot.Entity.Children.LastOrDefault();
+
+            if (unit == null)
+            {
+                return false;
+            }
+
+            IEntity targetSlot = Game.Battle.GetSlotToRight(unit);
+            if (targetSlot == null)
+            {
+                return false;
+            }
+
+            if (unit.TrySetParent(targetSlot))
+            {
+                Events.OnCardMoved(new CardMovedEventArgs(unit)); //todo: introduce try move event.
+                return true;
+            }
+
+            return false;
+        }
+
+        public string Tooltip => "Push - Pushes the unit to the right.";
+    }
+
     public class DamageUnitCard : TargetSlotComponent, IEffect, IDescription
     {
         [JsonProperty] public int DamageAmount { get; private set; }
@@ -49,7 +81,6 @@ namespace SummerJam1.Cards.Effects
 
             for (int i = 0; i < Attacks; i++)
             {
-                
                 ITakesDamage unit = slot.Entity.Children.LastOrDefault()?.GetComponentInChildren<ITakesDamage>();
 
                 if (unit == null)

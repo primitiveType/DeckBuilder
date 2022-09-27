@@ -5,7 +5,6 @@ using CardsAndPiles.Components;
 using Newtonsoft.Json;
 using SummerJam1.Cards;
 using SummerJam1.Piles;
-using SummerJam1.Statuses;
 
 namespace SummerJam1.Units
 {
@@ -18,7 +17,6 @@ namespace SummerJam1.Units
         {
             return true;
         }
-        
 
 
         [OnRequestPlayCard]
@@ -35,8 +33,8 @@ namespace SummerJam1.Units
                 return;
             }
 
-            var topMonsterHealth = args.Target.Children.LastOrDefault()?.GetComponent<Health>();
-            var myHealth = Entity.GetComponent<Health>();
+            Health topMonsterHealth = args.Target.Children.LastOrDefault()?.GetComponent<Health>();
+            Health myHealth = Entity.GetComponent<Health>();
             if (topMonsterHealth != null && topMonsterHealth.Amount <= myHealth.Amount)
             {
                 args.Blockers.Add(CardBlockers.TOP_MONSTER_HAS_LESS_HEALTH);
@@ -53,7 +51,10 @@ namespace SummerJam1.Units
 
             EncounterSlotPile slot = args.Target.GetComponentInSelfOrParent<EncounterSlotPile>();
 
-            Entity.TrySetParent(slot.Entity);
+            if (Entity.TrySetParent(slot.Entity))
+            {
+                ((SummerJam1Events)Events).OnCardMoved(new CardMovedEventArgs(Entity)); //todo: introduce try move event.
+            }
         }
 
         [OnEntityKilled]

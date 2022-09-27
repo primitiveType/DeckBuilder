@@ -99,6 +99,24 @@ namespace SummerJam1
         {
             return GetFullSlots().Select(pile => pile.Entity.Children.LastOrDefault()).ToList();
         }
+        public IEntity GetSlotToRight(IEntity slotOrMonster)
+        {
+            List<IEntity> adjacents = new(2);
+            EncounterSlotPile slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
+            int index = EncounterSlots.IndexOf(slot);
+            if (slot == null)
+            {
+                throw new NullReferenceException(nameof(slot));
+            }
+
+         
+            if (index < EncounterSlots.Count - 1)
+            {
+                return EncounterSlots[index + 1].Entity;
+            }
+
+            return null;
+        }
 
         public List<IEntity> GetAdjacentSlots(IEntity slotOrMonster)
         {
