@@ -69,7 +69,7 @@ namespace SummerJam1
             CurrentFloor++;
         }
 
-        public List<IEntity> GetEntitiesInAdjacentSlots(IEntity slotOrMonster)
+        public List<IEntity> GetTopEntitiesInAdjacentSlots(IEntity slotOrMonster)
         {
             List<IEntity> adjacents = new(2);
             EncounterSlotPile slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
@@ -82,12 +82,12 @@ namespace SummerJam1
 
             if (index > 0 && EncounterSlots[index - 1].Entity.Children.Count > 0)
             {
-                adjacents.Add(EncounterSlots[index - 1].Entity.Children.First());
+                adjacents.Add(EncounterSlots[index - 1].Entity.Children.Last());
             }
 
             if (index < NumEncounterSlotsPerFloor - 1 && EncounterSlots[index + 1].Entity.Children.Count > 0)
             {
-                adjacents.Add(EncounterSlots[index + 1].Entity.Children.First());
+                adjacents.Add(EncounterSlots[index + 1].Entity.Children.Last());
             }
 
 

@@ -8,39 +8,6 @@ using SummerJam1.Piles;
 
 namespace SummerJam1.Cards.Effects
 {
-    public class PushUnit : TargetSlotComponent, IEffect, IDescription, ITooltip
-    {
-        public string Description => "Push.";
-
-        public bool DoEffect(IEntity target)
-        {
-            EncounterSlotPile slot = target.GetComponentInSelfOrParent<EncounterSlotPile>();
-
-            IEntity unit = slot.Entity.Children.LastOrDefault();
-
-            if (unit == null)
-            {
-                return false;
-            }
-
-            IEntity targetSlot = Game.Battle.GetSlotToRight(unit);
-            if (targetSlot == null)
-            {
-                return false;
-            }
-
-            if (unit.TrySetParent(targetSlot))
-            {
-                Events.OnCardMoved(new CardMovedEventArgs(unit)); //todo: introduce try move event.
-                return true;
-            }
-
-            return false;
-        }
-
-        public string Tooltip => "Push - Pushes the unit to the right.";
-    }
-
     public class DamageUnitCard : TargetSlotComponent, IEffect, IDescription
     {
         [JsonProperty] public int DamageAmount { get; private set; }
@@ -90,7 +57,7 @@ namespace SummerJam1.Cards.Effects
 
                 if (Aoe)
                 {
-                    foreach (IEntity entitiesInAdjacentSlot in Game.Battle.GetEntitiesInAdjacentSlots(slot.Entity))
+                    foreach (IEntity entitiesInAdjacentSlot in Game.Battle.GetTopEntitiesInAdjacentSlots(slot.Entity))
                     {
                         ITakesDamage health = entitiesInAdjacentSlot.GetComponent<ITakesDamage>();
                         health.TryDealDamage(DamageAmount, Game.Player.Entity);
