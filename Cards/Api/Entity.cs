@@ -10,7 +10,7 @@ namespace Api
     [JsonObject(MemberSerialization.OptIn)]
     internal class Entity : IEntity
     {
-        [JsonProperty] private ChildrenCollection<IEntity> m_Children = new();
+        [JsonProperty] private ChildrenCollection<IEntity> _children = new();
 
         [JsonProperty] private ChildrenCollection<Component> ComponentsInternal { get; set; } = new();
         public Context Context { get; private set; }
@@ -22,7 +22,7 @@ namespace Api
 
         public IEntity Parent { get; private set; }
 
-        public IChildrenCollection<IEntity> Children => m_Children;
+        public IChildrenCollection<IEntity> Children => _children;
 
         public void Destroy()
         {
@@ -266,12 +266,12 @@ namespace Api
             //set parent./
             //initialize
             //fire added event.
-            m_Children.Add(entity, () => { entity.Parent = this; });
+            _children.Add(entity, () => { entity.Parent = this; });
         }
 
         public bool RemoveChild(Entity entity)
         {
-            return m_Children.Remove(entity);
+            return _children.Remove(entity);
         }
 
         private void SetParent(IEntity newParent)

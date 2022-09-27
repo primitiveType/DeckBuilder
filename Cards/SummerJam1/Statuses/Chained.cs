@@ -7,11 +7,6 @@ namespace SummerJam1.Statuses
     {
         public IEntity ChainedTo { get; set; }
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-        }
-
         [OnCardDrawn]
         private void OnCardDrawn(object sender, CardDrawnEventArgs args)
         {

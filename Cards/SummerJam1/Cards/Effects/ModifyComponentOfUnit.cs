@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using SummerJam1.Units;
 
-namespace SummerJam1.Cards
+namespace SummerJam1.Cards.Effects
 {
     public abstract class ModifyComponentOfUnit<T> : SummerJam1Component, IEffect where T : Component, new()
     {

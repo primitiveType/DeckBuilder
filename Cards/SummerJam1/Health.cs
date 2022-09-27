@@ -27,7 +27,7 @@ namespace SummerJam1
 
         public int TryHeal(int damage, IEntity source)
         {
-            RequestHealEventArgs args = new RequestHealEventArgs(damage, source, Entity);
+            RequestHealEventArgs args = new(damage, source, Entity);
             Events.OnRequestHeal(args);
             int amount = CalculateDamage(args.Amount, args.Multiplier, new List<int>());
             Heal(amount, args.Source);
@@ -36,11 +36,11 @@ namespace SummerJam1
 
         public int TryDealDamage(int damage, IEntity source)
         {
-            RequestDamageMultipliersEventArgs multipliersEventArgs = new RequestDamageMultipliersEventArgs(damage, source, Entity);
+            RequestDamageMultipliersEventArgs multipliersEventArgs = new(damage, source, Entity);
             Events.OnRequestDamageMultipliers(multipliersEventArgs);
             List<float> multipliers = multipliersEventArgs.Multiplier;
 
-            RequestDamageModifiersEventArgs modifiersEventArgrs = new RequestDamageModifiersEventArgs(damage, source, Entity);
+            RequestDamageModifiersEventArgs modifiersEventArgrs = new(damage, source, Entity);
             Events.OnRequestDamageModifiers(modifiersEventArgrs);
 
             List<int> modifiers = modifiersEventArgrs.Modifiers;

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using SummerJam1.Statuses;
 using SummerJam1.Units;
 
-namespace SummerJam1.Cards
+namespace SummerJam1.Cards.Effects
 {
     public class AddBurnToUnit : SummerJam1Component, IEffect
     {

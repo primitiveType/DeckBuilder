@@ -6,12 +6,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\CardsAndPiles\CardsAndPiles.csproj" />
-        <ProjectReference Include="..\RogueMaps\RogueMaps.csproj" />
+        <ProjectReference Include="..\CardsAndPiles\CardsAndPiles.csproj"/>
+        <ProjectReference Include="..\RogueMaps\RogueMaps.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
+        <PackageReference Include="PropertyChanged.Fody" Version="3.4.1"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -155,25 +155,25 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Units\treasureChest.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Units\mcguffin.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Kill.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Units\Standard\1\boneBoy.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Units\Standard\1\ectongue.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Cards\Frostbite.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Units\Standard\1\headCheese.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
 
     </ItemGroup>

@@ -7,7 +7,7 @@ namespace SummerJam1.Rules
         [OnAttackPhaseStarted]
         private void OnAttackPhaseStarted(object sender, AttackPhaseStartedEventArgs args)
         {
-            for (int i = 0; i < BattleContainer.NumEncounterSlotsPerFloor; i++)
+            for (int i = 0; i < BattleContainer.NUM_ENCOUNTER_SLOTS_PER_FLOOR; i++)
             {
                 Intent intent = Game.Battle.EncounterSlots[i].Entity.Children.LastOrDefault()?.GetComponent<Intent>();
                 intent?.DoIntent();

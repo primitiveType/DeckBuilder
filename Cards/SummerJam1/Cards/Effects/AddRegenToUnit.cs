@@ -5,11 +5,11 @@ using Newtonsoft.Json;
 using SummerJam1.Statuses;
 using SummerJam1.Units;
 
-namespace SummerJam1.Cards
+namespace SummerJam1.Cards.Effects
 {
     public class AddRegenToUnit : SummerJam1Component, IEffect
     {
-        private bool initialized;
+        private bool _initialized;
         [JsonProperty] public int Amount { get; set; }
 
 
@@ -29,12 +29,12 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            if (initialized)
+            if (_initialized)
             {
                 throw new Exception("WHAT");
             }
 
-            initialized = true;
+            _initialized = true;
             if (Entity.GetComponent<DescriptionComponent>() == null)
             {
                 Entity.GetOrAddComponent<DescriptionComponent>().Description = $"Add {Amount} regen to a unit.";

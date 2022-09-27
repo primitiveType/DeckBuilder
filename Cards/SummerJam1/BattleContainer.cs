@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using Api;
@@ -15,7 +14,8 @@ namespace SummerJam1
     }
 
     /// <summary>
-    /// Indicates that the entity belongs to the player. used to mark piles that are considered belonging to the player, such as deck, hand, discard, etc.
+    ///     Indicates that the entity belongs to the player. used to mark piles that are considered belonging to the player,
+    ///     such as deck, hand, discard, etc.
     /// </summary>
     public interface IPlayerControl
     {
@@ -23,8 +23,8 @@ namespace SummerJam1
 
     public class BattleContainer : SummerJam1Component
     {
-        public const int NumEncounterSlotsPerFloor = 5;
-        public const int NumFloors = 4;
+        public const int NUM_ENCOUNTER_SLOTS_PER_FLOOR = 5;
+        public const int NUM_FLOORS = 4;
         public IEntity Discard { get; private set; }
         public IEntity Exhaust { get; private set; }
         public HandPile Hand { get; private set; }
@@ -42,7 +42,6 @@ namespace SummerJam1
         // public Dictionary<int, List<Pile>> AllEncounterSlots { get; } = new Dictionary<int, List<Pile>>();
 
         public int CurrentFloor { get; private set; }
-        public DungeonParent CurrentDungeon { get; private set; }
 
         protected override void Initialize()
         {
@@ -57,7 +56,7 @@ namespace SummerJam1
             //     }
             // }
 
-            for (int j = 0; j < NumEncounterSlotsPerFloor; j++)
+            for (int j = 0; j < NUM_ENCOUNTER_SLOTS_PER_FLOOR; j++)
             {
                 Context.CreateEntity(Entity, entity => EncounterSlots.Add(entity.AddComponent<EncounterSlotPile>()));
                 // Context.CreateEntity(Entity, entity => EncounterSlotsUpcoming.Add(entity.AddComponent<UpcomingEncounterSlotPile>()));
@@ -85,7 +84,7 @@ namespace SummerJam1
                 adjacents.Add(EncounterSlots[index - 1].Entity.Children.Last());
             }
 
-            if (index < NumEncounterSlotsPerFloor - 1 && EncounterSlots[index + 1].Entity.Children.Count > 0)
+            if (index < NUM_ENCOUNTER_SLOTS_PER_FLOOR - 1 && EncounterSlots[index + 1].Entity.Children.Count > 0)
             {
                 adjacents.Add(EncounterSlots[index + 1].Entity.Children.Last());
             }
@@ -99,9 +98,9 @@ namespace SummerJam1
         {
             return GetFullSlots().Select(pile => pile.Entity.Children.LastOrDefault()).ToList();
         }
+
         public IEntity GetSlotToRight(IEntity slotOrMonster)
         {
-            List<IEntity> adjacents = new(2);
             EncounterSlotPile slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
             int index = EncounterSlots.IndexOf(slot);
             if (slot == null)
@@ -109,7 +108,7 @@ namespace SummerJam1
                 throw new NullReferenceException(nameof(slot));
             }
 
-         
+
             if (index < EncounterSlots.Count - 1)
             {
                 return EncounterSlots[index + 1].Entity;
@@ -183,7 +182,7 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
 
 
-            Context.CreateEntity(Entity, setup: entity => { EncounterDrawPile = entity.AddComponent<DeckPile>(); });
+            Context.CreateEntity(Entity, entity => { EncounterDrawPile = entity.AddComponent<DeckPile>(); });
 
             Context.CreateEntity(Entity, entity => { EncounterDiscardPile = entity.AddComponent<PlayerDiscard>(); });
 

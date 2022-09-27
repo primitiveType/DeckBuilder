@@ -3,7 +3,7 @@
 <#@ assembly name="System.Xml"#>
 
 <#
-    System.Xml.XmlDocument doc = new();
+    XmlDocument doc = new();
     // Replace this file path with yours:
     doc.Load(@"./EventDefinitions.xml");
 
@@ -22,7 +22,7 @@ using System.Reflection;
 using Api;
 
 <#
-        System.IO.DirectoryInfo currentDir = new System.IO.DirectoryInfo(System.Environment.CurrentDirectory);
+        DirectoryInfo currentDir = new DirectoryInfo(Environment.CurrentDirectory);
         string projectName = currentDir.Name;
         
         string pathToTemplates = $"./../{projectName}-EventTemplates.DotSettings";
@@ -30,10 +30,11 @@ using Api;
             "<wpf:ResourceDictionary xml:space=\"preserve\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:s=\"clr-namespace:System;assembly=mscorlib\" xmlns:ss=\"urn:shemas-jetbrains-com:settings-storage-xaml\" xmlns:wpf=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">";
         string postfix = "\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t</wpf:ResourceDictionary>\n\t";
 
-        System.IO.File.WriteAllText(pathToTemplates, prefix);
+        File.WriteAllText(pathToTemplates, prefix);
 
         string catalogName = "EventsBase";
-        foreach (System.Xml.XmlNode node in doc.SelectNodes("/catalog"))
+        // ReSharper disable PossibleNullReferenceException
+        foreach (XmlNode node in doc.SelectNodes("/catalog"))
         {
             catalogName = node.Attributes["name"].Value;
             string inherits = node.Attributes["inherits"].Value;
@@ -43,7 +44,7 @@ using Api;
 namespace <#= namespaceName #>{
 public abstract class <#= catalogName #> : <#= inherits #>{
 <#
-            foreach (System.Xml.XmlNode eventNode in node.SelectNodes("event"))
+            foreach (XmlNode eventNode in node.SelectNodes("event"))
             {
 #>    #region Code for event <#= eventNode.Attributes["id"].Value #>
 <#
@@ -55,31 +56,31 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 #>
 }
 <#
-        foreach (System.Xml.XmlNode node in doc.SelectNodes("/catalog"))
+        foreach (XmlNode node in doc.SelectNodes("/catalog"))
         {
-            foreach (System.Xml.XmlNode eventNode in node.SelectNodes("event"))
+            foreach (XmlNode eventNode in node.SelectNodes("event"))
             {
                 CreateAttribute(eventNode);
                 CreateEvent(eventNode);
             }
         }
 
-        System.IO.File.AppendAllText(pathToTemplates, postfix);
+        File.AppendAllText(pathToTemplates, postfix);
 
-        void CreateEvent(System.Xml.XmlNode eventNode)
+        void CreateEvent(XmlNode eventNode)
         {
-            System.IO.File.AppendAllText(pathToTemplates, CreateRiderTemplate(eventNode.Attributes["id"].Value));
+            File.AppendAllText(pathToTemplates, CreateRiderTemplate(eventNode.Attributes["id"].Value));
             string argsClassName = eventNode.Attributes["id"].Value + "EventArgs";
 #>
     //public delegate void <#= eventNode.Attributes["id"].Value #>Event (object sender, <#= argsClassName #> args);
 
     public class <#= argsClassName #> {<#
-            System.Xml.XmlNodeList argnodes = eventNode.SelectNodes("arg");
-            System.Xml.XmlNodeList memberNodes = eventNode.SelectNodes("member");
+            XmlNodeList argnodes = eventNode.SelectNodes("arg");
+            XmlNodeList memberNodes = eventNode.SelectNodes("member");
             int argCount = argnodes != null ? argnodes.Count : 0;
             if (argCount > 0)
             {
-                foreach (System.Xml.XmlNode argNode in argnodes)
+                foreach (XmlNode argNode in argnodes)
                 {
 #>
         public  <#=
@@ -87,7 +88,7 @@ public abstract class <#= catalogName #> : <#= inherits #>{
                         argNode.Attributes["name"].Value #> { get; }
 <#
                 }
-                foreach (System.Xml.XmlNode argNode in memberNodes)
+                foreach (XmlNode argNode in memberNodes)
                 {
 #>
         public  <#=
@@ -103,23 +104,23 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 #>
         public  <#= argsClassName #> (<#
                 int currentArg = 0;
-                foreach (System.Xml.XmlNode argNode in argnodes)
+                foreach (XmlNode argNode in argnodes)
                 {
                     currentArg++;
 
-                    string postfix = "";
+                    string argPostfix = "";
                     if (currentArg != argCount)
                     {
                         //add comma between arguments
-                        postfix = ",";
+                        argPostfix = ",";
                     }
 #><#= argNode.Attributes["type"].Value #> <#=
-                        argNode.Attributes["name"].Value + postfix #> <#
+                        argNode.Attributes["name"].Value + argPostfix #> <#
                 }
 #>
   ){
     <#
-                foreach (System.Xml.XmlNode argNode in argnodes)
+                foreach (XmlNode argNode in argnodes)
                 {
 //set in ctor
 #>
@@ -140,7 +141,7 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 
 
 <#
-        void CreateAttribute(System.Xml.XmlNode eventNode)
+        void CreateAttribute(XmlNode eventNode)
         {
 #>
 /// <summary>
@@ -178,7 +179,7 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttr
 <#
         }
 
-        void CreateInvocator(System.Xml.XmlNode eventNode)
+        void CreateInvocator(XmlNode eventNode)
         {
             string eventName = eventNode.Attributes["id"].Value;
             string argsName = eventNode.Attributes["id"].Value + "EventArgs";

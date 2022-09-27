@@ -1,6 +1,6 @@
 ﻿using CardsAndPiles.Components;
 
-namespace SummerJam1.Cards
+namespace SummerJam1.Cards.Effects
 {
     public class ModifyMaxHealthOfUnitByStrength : ModifyComponentOfUnit<Health>
     {

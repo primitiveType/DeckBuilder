@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Api;
 using CardsAndPiles;
-using CardsAndPiles.Components;
 using SummerJam1.Rules;
 using Random = Api.Random;
 
@@ -90,8 +89,7 @@ namespace SummerJam1
                 {
                     try
                     {
-                        IEntity entity = Context.CreateEntity(PrefabsContainer, fileInfo.FullName.Replace(fullPrefabsPath, "").Substring(1), null,
-                            true);
+                        IEntity entity = Context.CreateEntity(PrefabsContainer, fileInfo.FullName.Replace(fullPrefabsPath, "").Substring(1));
                         foreach (Component entityComponent in entity.Components)
                         {
                             entityComponent.Enabled = false;
@@ -139,6 +137,7 @@ namespace SummerJam1
             }
         }
 
+        // ReSharper disable once UnusedMember.Local
         private List<string> GetEnemyInfos(int difficulty)
         {
             DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Units", "Standard", difficulty.ToString()));
@@ -147,33 +146,14 @@ namespace SummerJam1
             return files;
         }
 
+        // ReSharper disable once UnusedMember.Local
         private List<string> GetRelicInfos()
         {
             DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Relics"));
             List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Relics/{file.Name}").ToList();
             return files;
         }
-
-        private void CreateEnemyInCell(IEntity customCellEntity, string prefab)
-        {
-            IEntity enemyEntity = Context.CreateEntity(customCellEntity, prefab);
-        }
-
-        private void CreateShrineInCell(IEntity customCellEntity)
-        {
-            IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
-
-            enemyEntity.AddComponent<ShrineEncounter>();
-            enemyEntity.AddComponent<VisualComponent>().AssetName = "bloodAltar";
-        }
-
-        private void CreateRelicInCell(IEntity customCellEntity, string prefab)
-        {
-            IEntity enemyEntity = Context.CreateEntity(customCellEntity, entity => { entity.AddComponent<Position>(); });
-
-            enemyEntity.AddComponent<RelicEncounter>().Prefab = prefab;
-            enemyEntity.AddComponent<VisualComponent>().AssetName = "relic";
-        }
+        
 
         private void AddRules()
         {
@@ -199,7 +179,7 @@ namespace SummerJam1
         }
 
 
-        public void PopulateDungeons()
+        private void PopulateDungeons()
         {
             if (Dungeons == null)
             {
@@ -212,8 +192,6 @@ namespace SummerJam1
             }
 
             int numDungeons = 5;
-            int minCards = 10;
-            int maxCards = 20;
 
             for (int i = 0; i < numDungeons; i++)
             {
@@ -231,15 +209,10 @@ namespace SummerJam1
                     if (i1 % 2 == 0)
                     {
                         entity.AddComponent<CardReward>();
-                        maxCards = 14;
-                        minCards = 10;
                     }
                     else
                     {
                         entity.AddComponent<RelicReward>();
-
-                        maxCards = 20;
-                        minCards = 13;
                     }
                 });
             }

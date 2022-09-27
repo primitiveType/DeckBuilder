@@ -1,6 +1,6 @@
 ﻿using Api;
 
-namespace SummerJam1.Cards
+namespace SummerJam1.Cards.Effects
 {
     public class DrawNewHandCard : SummerJam1Component, IEffect
     {

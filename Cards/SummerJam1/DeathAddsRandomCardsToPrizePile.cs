@@ -5,6 +5,8 @@ namespace SummerJam1
 {
     public class DeathAddsRandomCardsToPrizePile : SummerJam1Component, IDescription
     {
+        public string Description => "Destroy to gain a choice of cards.";
+
         [OnEntityKilled]
         private void OnEntityKilled(object sender, EntityKilledEventArgs args)
         {
@@ -13,7 +15,5 @@ namespace SummerJam1
                 Game.PrizePile.SetupRandomPrizePile();
             }
         }
-
-        public string Description => "Destroy to gain a choice of cards.";
     }
 }

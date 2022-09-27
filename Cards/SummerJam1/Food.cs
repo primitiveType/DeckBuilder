@@ -2,6 +2,5 @@
 {
     public class Food : SummerJam1Component
     {
-        
     }
 }

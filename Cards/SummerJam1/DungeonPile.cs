@@ -1,5 +1,4 @@
 ﻿using Api;
-using CardsAndPiles;
 
 namespace SummerJam1
 {
@@ -35,9 +34,9 @@ namespace SummerJam1
                     EncounterBoosterPack pack = child.AddComponent<EncounterBoosterPack>();
                     foreach (string prefab in Game.GetBattlePrefabs(2, 5))
                     {
-                        Context.CreateEntity(pack.Entity, setup: card =>
-                        {//add each card to the booster pack.
-                            var cardToAdd = card.AddComponent<PrefabReference>();
+                        Context.CreateEntity(pack.Entity, card =>
+                        { //add each card to the booster pack.
+                            PrefabReference cardToAdd = card.AddComponent<PrefabReference>();
                             cardToAdd.Prefab = prefab;
                         });
                     }

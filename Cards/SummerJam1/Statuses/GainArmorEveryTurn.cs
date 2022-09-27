@@ -9,6 +9,8 @@ namespace SummerJam1.Statuses
     {
         public int Amount { get; set; }
 
+        public string Description => Tooltip;
+
         [DependsOn(nameof(Amount))] public string Tooltip => $"Gains {Amount} Armor every turn.";
 
         [OnTurnBegan]
@@ -16,7 +18,5 @@ namespace SummerJam1.Statuses
         {
             Entity.GetOrAddComponent<Armor>().Amount += Amount;
         }
-
-        public string Description => Tooltip;
     }
 }

@@ -10,7 +10,7 @@ namespace SummerJam1.Piles
         protected override void Initialize()
         {
             base.Initialize();
-            Entity.Children.CollectionChanged += ChildrenOnCollectionChanged; 
+            Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
         }
 
         private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -27,6 +27,7 @@ namespace SummerJam1.Piles
                     {
                         entityChild.AddComponent<Asleep>();
                     }
+
                     break;
                 }
 
@@ -41,5 +42,4 @@ namespace SummerJam1.Piles
             Entity.Children.CollectionChanged -= ChildrenOnCollectionChanged;
         }
     }
-
 }

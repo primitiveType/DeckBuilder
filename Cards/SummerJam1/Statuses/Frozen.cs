@@ -7,6 +7,9 @@ namespace SummerJam1.Statuses
     public class Frozen : SummerJam1Component, ITooltip
     {
         private bool CardDrawn { get; set; }
+
+        public string Tooltip => "Frozen. This card cannot be played until drawn and discarded.";
+
         [OnRequestPlayCard]
         private void OnRequestPlayCard(object sender, RequestPlayCardEventArgs args)
         {
@@ -36,7 +39,5 @@ namespace SummerJam1.Statuses
                 }
             }
         }
-
-        public string Tooltip => "Frozen. This card cannot be played until drawn and discarded.";
     }
 }

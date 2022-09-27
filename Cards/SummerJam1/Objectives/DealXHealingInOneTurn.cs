@@ -7,8 +7,8 @@ namespace SummerJam1.Objectives
 {
     public class DealXHealingInOneTurn : Objective, IAmount
     {
-        [JsonProperty] public int Amount { get; set; } = 0;
         [JsonProperty] public int Required { get; set; } = 15;
+        [JsonProperty] public int Amount { get; set; }
 
         [OnTurnBegan]
         private void OnTurnBegan()
@@ -20,7 +20,7 @@ namespace SummerJam1.Objectives
         private void OnHealDealt(object sender, HealDealtEventArgs args)
         {
             if (args.SourceEntityId == Game.Player.Entity || args.SourceEntityId.GetComponent<Card>() != null ||
-                Game.Player.Entity == (args.SourceEntityId))
+                Game.Player.Entity == args.SourceEntityId)
             {
                 Amount += args.Amount;
             }

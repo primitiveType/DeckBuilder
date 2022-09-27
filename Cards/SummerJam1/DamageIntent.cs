@@ -10,16 +10,6 @@ namespace SummerJam1
         [JsonIgnore] private int Attacks => 1 + (Entity.GetComponent<MultiAttack>()?.Amount ?? 0);
 
 
-        private Player Player { get; set; }
-
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Player = Context.Root.GetComponent<Game>().Player;
-        }
-
-
         public override void DoIntent()
         {
             if (!Enabled)
@@ -27,10 +17,7 @@ namespace SummerJam1
                 return;
             }
 
-            bool isFriendly = false;
-
-            IEntity targetSlot;
-            targetSlot = Game.Player.Entity;
+            IEntity targetSlot = Game.Player.Entity;
 
             if (targetSlot == null)
             {

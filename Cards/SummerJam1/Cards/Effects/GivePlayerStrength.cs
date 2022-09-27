@@ -15,6 +15,6 @@ namespace SummerJam1.Cards.Effects
             return true;
         }
 
-        public string Tooltip => StrengthTooltip.s_Tooltip;
+        public string Tooltip => StrengthTooltip.STRENGTH_TOOLTIP;
     }
 }

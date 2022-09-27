@@ -6,8 +6,8 @@ namespace SummerJam1.Objectives
 {
     public class PlayXCardsInOneTurn : Objective, IAmount
     {
-        [JsonProperty] public int Amount { get; set; } = 0;
         [JsonProperty] public int Required { get; set; } = 4;
+        [JsonProperty] public int Amount { get; set; }
 
         [OnTurnBegan]
         private void OnTurnBegan()

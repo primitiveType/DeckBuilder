@@ -7,8 +7,8 @@ namespace SummerJam1.Objectives
 {
     public class DealXDamageInOneTurn : Objective, IAmount
     {
-        [JsonProperty] public int Amount { get; set; } = 0;
         [JsonProperty] public int Required { get; set; } = 15;
+        [JsonProperty] public int Amount { get; set; }
 
         [OnTurnBegan]
         private void OnTurnBegan()

@@ -2,10 +2,13 @@
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
+using SummerJam1.Cards.Effects;
 
 namespace SummerJam1.Cards
 {
-    public class FaceDown : SummerJam1Component, IDisableAbilities{}
+    public class FaceDown : SummerJam1Component, IDisableAbilities
+    {
+    }
 
     public interface IDisableAbilities
     {

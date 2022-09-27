@@ -1,12 +1,14 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Api
 {
+    [PublicAPI]
     public class Logging : ILogger
     {
         private static ILogger s_logger;
 
-        public static ILogger s_Logger
+        public static ILogger Logger
         {
             get
             {
@@ -23,38 +25,38 @@ namespace Api
 
         void ILogger.LogWarning(string message)
         {
-            s_Logger.LogWarning(message);
+            Logger.LogWarning(message);
         }
 
         void ILogger.LogError(string message)
         {
-            s_Logger.LogError(message);
+            Logger.LogError(message);
         }
 
         void ILogger.Log(string message)
         {
-            s_Logger.Log(message);
+            Logger.Log(message);
         }
 
         public static void Initialize(ILogger logger)
         {
-            s_Logger = logger;
-            s_Logger.Log("Initialized Logger instance.");
+            Logger = logger;
+            Logger.Log("Initialized Logger instance.");
         }
 
         public static void Log(string message)
         {
-            s_Logger.Log(message);
+            Logger.Log(message);
         }
 
         public static void LogWarning(string message)
         {
-            s_Logger.LogWarning(message);
+            Logger.LogWarning(message);
         }
 
         public static void LogError(string message)
         {
-            s_Logger.LogError(message);
+            Logger.LogError(message);
         }
     }
 }

@@ -8,9 +8,10 @@ namespace Api
                       ImplicitUseTargetFlags.WithMembers)]
     public abstract class EventsBaseAttribute : Attribute
     {
-        public readonly EventAttachmentLifetime Lifetime;
-
-        public EventsBaseAttribute(EventAttachmentLifetime lifetime = EventAttachmentLifetime.Permanent)
+        [PublicAPI]
+        public EventAttachmentLifetime Lifetime { get; }
+        
+        protected EventsBaseAttribute(EventAttachmentLifetime lifetime = EventAttachmentLifetime.Permanent)
         {
             Lifetime = lifetime;
         }

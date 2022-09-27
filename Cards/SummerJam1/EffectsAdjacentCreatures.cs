@@ -12,7 +12,7 @@ namespace SummerJam1
     {
         public abstract bool EveryTurn { get; }
 
-        private List<IEntity> Tracked { get; } = new List<IEntity>();
+        private List<IEntity> Tracked { get; } = new();
 
         public abstract string Description { get; }
 
@@ -117,7 +117,7 @@ namespace SummerJam1
 
         protected abstract void ProcessAdjacentAdded(IEntity newItem);
 
-        
+
         public override void Terminate()
         {
             base.Terminate();

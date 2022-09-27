@@ -7,7 +7,6 @@ using CardsAndPiles;
 using CardsAndPiles.Components;
 using CardTestProject;
 using NUnit.Framework;
-using RogueMaps;
 using SummerJam1;
 using SummerJam1.Statuses;
 using SummerJam1.Units;
@@ -274,7 +273,7 @@ namespace SummerJam1Tests
             Tester += OnTester;
             Tester += OnTester2;
 
-            Tester.Invoke();
+            Tester?.Invoke();
             Assert.Fail();
 
             void OnTester()
@@ -324,19 +323,7 @@ namespace SummerJam1Tests
         }
 
 
-        [Test]
-        public void CellsContainBlockedCells()
-        {
-            MapCreatorComponent mapCreatorCreator = Context.Root.AddComponent<MapCreatorComponent>();
-
-            bool battleStarted = false;
-            CustomMap map = Context.Root.GetComponent<CustomMap>();
-            Assert.NotNull(map);
-
-            Assert.LessOrEqual(map.Height * map.Width, map.Entity.Children.Count);
-
-            CustomCell blockedCell = map.GetAllCells().First(cell => !cell.IsWalkable);
-        }
+    
 
         [Test]
         public void TestDealDamage()

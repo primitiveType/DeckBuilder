@@ -12,7 +12,6 @@ namespace SummerJam1.Rules
             {
                 game.Battle.EncounterDrawPile.DrawCardInto(slot.Entity);
             }
-            
         }
     }
 }

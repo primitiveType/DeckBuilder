@@ -3,7 +3,7 @@ using CardsAndPiles.Components;
 using SummerJam1.Statuses;
 using SummerJam1.Units;
 
-namespace SummerJam1.Cards
+namespace SummerJam1.Cards.Effects
 {
     public class DoubleBurnOfUnit : SummerJam1Component, IEffect
     {

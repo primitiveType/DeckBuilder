@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-
-namespace SummerJam1
+﻿namespace SummerJam1
 {
-    public class 
-    ExterminationDungeonPile : DungeonPile
+    public class
+        ExterminationDungeonPile : DungeonPile
     {
         public override string Type => "Extermination";
         public override string Description => "Defeat all enemies to win.";
@@ -20,7 +17,7 @@ namespace SummerJam1
             if (wallet.Amount >= Cost)
             {
                 wallet.Amount -= Cost;
-                foreach (PrefabReference prefab in Entity.GetComponentsInChildren<PrefabReference>()) 
+                foreach (PrefabReference prefab in Entity.GetComponentsInChildren<PrefabReference>())
                 {
                     PrefabReference dungeon = null;
                     Context.CreateEntity(Entity.Parent, child => dungeon = child.AddComponent<PrefabReference>());
@@ -32,7 +29,7 @@ namespace SummerJam1
 
     public interface IBuyable
     {
-        void Buy();
         int Cost { get; }
+        void Buy();
     }
 }

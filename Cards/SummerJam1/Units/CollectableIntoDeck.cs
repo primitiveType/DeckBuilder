@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using CardsAndPiles;
 
 namespace SummerJam1.Units
 {
     public class CollectableIntoDeck : SummerJam1Component
     {
     }
-    
+
     public class VictoryWhenNoneOfThisTypeExistsInBattle : SummerJam1Component
     {
         protected override void Initialize()
@@ -27,12 +26,13 @@ namespace SummerJam1.Units
 
         private void CheckForWinCondition()
         {
-            List<VictoryWhenNoneOfThisTypeExistsInBattle> these = Game.Battle.Entity.GetComponentsInChildren<VictoryWhenNoneOfThisTypeExistsInBattle>();
+            List<VictoryWhenNoneOfThisTypeExistsInBattle> these =
+                Game.Battle.Entity.GetComponentsInChildren<VictoryWhenNoneOfThisTypeExistsInBattle>();
             if (these.Any(conditional => conditional.Entity.GetComponentInParent<IPlayerControl>() == null))
             {
-                return;//if any of them are not in our control, return;
+                return; //if any of them are not in our control, return;
             }
-            
+
             Events.OnBattleEnded(new BattleEndedEventArgs(true));
         }
     }

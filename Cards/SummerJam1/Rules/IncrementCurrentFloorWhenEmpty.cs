@@ -8,7 +8,7 @@ namespace SummerJam1.Rules
 {
     public class IncrementCurrentFloorWhenEmpty : SummerJam1Component
     {
-        private List<Pile> Slots { get; } = new List<Pile>();
+        private List<Pile> Slots { get; } = new();
 
         protected override void Initialize()
         {
@@ -58,7 +58,7 @@ namespace SummerJam1.Rules
         [OnTurnBegan]
         private void TryMoveToNextFloor()
         {
-            if (Game.Battle.GetEmptySlots().Count() != BattleContainer.NumEncounterSlotsPerFloor)
+            if (Game.Battle.GetEmptySlots().Count() != BattleContainer.NUM_ENCOUNTER_SLOTS_PER_FLOOR)
             {
                 return;
             }

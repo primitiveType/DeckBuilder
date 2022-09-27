@@ -11,17 +11,6 @@ namespace SummerJam1
 
         public string Tooltip => Tooltips.ARMOR_TOOLTIP;
         
-        // [OnRequestDamageModifiers]
-        // private void OnRequestDealDamage(object sender, RequestDamageModifiersEventArgrs argrs)
-        // {
-        //     if (argrs.Target != Entity)
-        //     {
-        //         return;
-        //     }
-        //     var blocked = Math.Min(argrs.Amount, Amount);
-        //     Amount -= blocked;
-        //     argrs.Reduction.Add(blocked);
-        // }
 
         [OnBattleEnded]
         [OnAttackPhaseEnded]

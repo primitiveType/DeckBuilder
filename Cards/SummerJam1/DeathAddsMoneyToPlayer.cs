@@ -5,6 +5,8 @@ namespace SummerJam1
 {
     public class DeathAddsMoneyToPlayer : SummerJam1Component, ITooltip
     {
+        public string Tooltip => "Drops money when destroyed.";
+
         [OnEntityKilled]
         private void OnEntityKilled(object sender, EntityKilledEventArgs args)
         {
@@ -14,7 +16,5 @@ namespace SummerJam1
                 Game.Player.Entity.GetOrAddComponent<Money>().Amount += amount;
             }
         }
-
-        public string Tooltip => "Drops money when destroyed.";
     }
 }

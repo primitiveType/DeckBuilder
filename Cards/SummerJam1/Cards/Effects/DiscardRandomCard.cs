@@ -1,6 +1,6 @@
 ﻿using Api;
 
-namespace SummerJam1.Cards
+namespace SummerJam1.Cards.Effects
 {
     public class DiscardRandomCard : SummerJam1Component, IEffect
     {
