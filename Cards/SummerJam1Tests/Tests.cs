@@ -22,7 +22,7 @@ namespace SummerJam1Tests
         [SetUp]
         public void Setup()
         {
-            Logging.Initialize(new TestLogger());
+            Logging.Initialize(new DefaultLogger());
             Context = new Context(new SummerJam1Events());
             IEntity gameEntity = Context.Root;
             Context.SetPrefabsDirectory("StreamingAssets");
