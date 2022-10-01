@@ -60,7 +60,7 @@ namespace Api
 
             string prefab = File.ReadAllText(Path.Combine(PrefabsPath, prefabName));
             Entity entity = Serializer.Deserialize<Entity>(prefab);
-            entity.AddComponent<SourcePrefab>().Prefab = prefabName;
+            entity.GetOrAddComponent<SourcePrefab>().Prefab = prefabName;
             if (shouldInitialize)
             {
                 entity.Initialize(this, NextId++);
@@ -68,7 +68,7 @@ namespace Api
             }
 
             setup?.Invoke(entity);
-
+            
             if (!entity.TrySetParent(parent))
             {
                 throw new Exception($"Failed to parent entity during creation! {prefabName}");

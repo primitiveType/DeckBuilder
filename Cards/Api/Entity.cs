@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -179,6 +180,21 @@ namespace Api
         public T AddComponent<T>() where T : Component, new()
         {
             T component = new();
+            if (State == LifecycleState.Initialized)
+            {
+                ComponentsInternal.Add(component, () => { component.InternalInitialize(this); });
+            }
+            else
+            {
+                ComponentsInternal.Add(component);
+            }
+
+            return component;
+        }
+        
+        public IComponent AddComponent(Type type)
+        {
+            Component component = (Component) Activator.CreateInstance(type);
             if (State == LifecycleState.Initialized)
             {
                 ComponentsInternal.Add(component, () => { component.InternalInitialize(this); });

@@ -18,4 +18,8 @@
       <ProjectReference Include="..\SummerJam1\SummerJam1.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="TestLogger.cs" />
+    </ItemGroup>
+
 </Project>
