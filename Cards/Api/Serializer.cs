@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Api
 {
-    public class Serializer
+    public static class Serializer
     {
         private static readonly JsonSerializerSettings Settings = new()
         {

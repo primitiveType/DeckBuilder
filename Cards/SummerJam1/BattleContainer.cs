@@ -9,18 +9,6 @@ using Random = Api.Random;
 
 namespace SummerJam1
 {
-    public class PlayerControl : SummerJam1Component, IPlayerControl
-    {
-    }
-
-    /// <summary>
-    ///     Indicates that the entity belongs to the player. used to mark piles that are considered belonging to the player,
-    ///     such as deck, hand, discard, etc.
-    /// </summary>
-    public interface IPlayerControl
-    {
-    }
-
     public class BattleContainer : SummerJam1Component
     {
         public const int NUM_ENCOUNTER_SLOTS_PER_FLOOR = 5;

@@ -8,7 +8,7 @@ using SummerJam1.Piles;
 
 namespace SummerJam1.Cards.Effects
 {
-    public class DamageUnitCard : TargetSlotComponent, IEffect, IDescription
+    public class DamageUnitCard : TargetSlotComponent, IEffect, IDescription, ITooltip
     {
         [JsonProperty] public int DamageAmount { get; private set; }
         protected virtual int FinalDamage => DamageAmount + Strength;
@@ -57,11 +57,15 @@ namespace SummerJam1.Cards.Effects
                     return false;
                 }
 
-                if (Pierce && slot.Entity.Children.Count > 1)
+                if (Pierce)
                 {
-                    ITakesDamage backUnit = slot.Entity.Children.ElementAt(slot.Entity.Children.Count - 2).GetComponentInChildren<ITakesDamage>();
-                    backUnit.TryDealDamage(DamageAmount, Game.Player.Entity);
+                    foreach (IEntity entity in slot.Entity.Children.Where(card => card.GetComponent<FaceDown>() == null))
+                    {
+                        ITakesDamage backUnit = entity.GetComponentInChildren<ITakesDamage>();
+                        backUnit.TryDealDamage(DamageAmount, Game.Player.Entity);   
+                    }
                 }
+                
 
                 if (Aoe)
                 {
@@ -72,7 +76,10 @@ namespace SummerJam1.Cards.Effects
                     }
                 }
 
-                unit.TryDealDamage(DamageAmount, Game.Player.Entity);
+                if (!Pierce)
+                {
+                    unit.TryDealDamage(DamageAmount, Game.Player.Entity);
+                }
             }
 
             return true;
@@ -96,5 +103,7 @@ namespace SummerJam1.Cards.Effects
             base.Terminate();
             Game.Player.Entity.GetComponent<Strength>().PropertyChanged -= StrengthChanged;
         }
+
+        public string Tooltip => Pierce ? PierceTooltip.PIERCE_TOOLTIP : null;
     }
 }
