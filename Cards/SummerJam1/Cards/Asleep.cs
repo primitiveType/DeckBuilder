@@ -7,8 +7,12 @@ namespace SummerJam1.Cards
         [OnTurnBegan]
         private void OnTurnBegan(object sender, TurnBeganEventArgs args)
         {
+            if (!Game.Battle.IsTopCard(Entity))
+            {
+                return;
+            }
+
             Entity.RemoveComponent(this);
-            Entity.AddComponent<Aggro>();
         }
     }
 }

@@ -51,6 +51,11 @@ namespace App
             List<ITooltip> components = Entity.GetComponents<ITooltip>();
             foreach (ITooltip component in components)
             {
+                if (component.Tooltip == null)
+                {
+                    continue;
+                }
+
                 GameObject tooltip = Instantiate(TooltipPrefab, TooltipParent);
                 tooltip.GetComponentInChildren<TMP_Text>().text = component.Tooltip;
             }

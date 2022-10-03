@@ -23,7 +23,7 @@ namespace SummerJam1
         public DeckPile EncounterDrawPile { get; private set; }
         public PlayerDiscard EncounterDiscardPile { get; private set; }
 
-        public List<Pile> EncounterSlots { get; } = new();
+        public List<EncounterSlotPile> EncounterSlots { get; } = new();
         // public List<Pile> EncounterSlotsUpcoming { get; } = new();
 
 
@@ -84,7 +84,11 @@ namespace SummerJam1
 
         public List<IEntity> GetTopEntitiesInAllSlots()
         {
-            return GetFullSlots().Select(pile => pile.Entity.Children.LastOrDefault()).ToList();
+            return GetNonEmptySlots().Select(pile => pile.Entity.Children.LastOrDefault()).ToList();
+        }
+        public bool IsTopCard(IEntity card)
+        {
+            return card.Parent.Children.LastOrDefault() == card;
         }
 
         public IEntity GetSlotToRight(IEntity slotOrMonster)
@@ -134,7 +138,7 @@ namespace SummerJam1
             return EncounterSlots.Where(slot => slot.Entity.Children.Count == 0);
         }
 
-        public IEnumerable<Pile> GetFullSlots()
+        public IEnumerable<Pile> GetNonEmptySlots()
         {
             return EncounterSlots.Where(slot => slot.Entity.Children.Count > 0);
         }
@@ -221,10 +225,25 @@ namespace SummerJam1
             int index = 0;
             foreach (string prefab in prefabs) //fill encounter slots.
             {
-                int i = index % EncounterSlots.Count;
-                Context.CreateEntity(EncounterSlots[i].Entity, prefab);
+                int i = index % EncounterSlots.Count + 1;
+                if (i == EncounterSlots.Count)
+                {
+                    Context.CreateEntity(EncounterDrawPile.Entity, prefab);
+                }
+                else
+                {
+                    Context.CreateEntity(EncounterSlots[i].Entity, prefab);
+                }
+
                 index++;
             }
+
+            foreach (EncounterSlotPile encounterSlot in EncounterSlots)
+            {
+                encounterSlot.SetAllButTopFaceDown();
+            }
+
+            EncounterSlots[0].Entity.AddComponent<OnlyAllowCardsFromDungeonDeck>();
         }
 
 

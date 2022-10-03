@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
@@ -10,7 +11,7 @@ namespace SummerJam1.Units
 {
     public class StarterUnit : Unit, IDraggable, IGrantsEnergy, IMonster
     {
-        [JsonIgnore] public bool CanDrag => true;
+        [JsonIgnore] public bool CanDrag => Entity.Parent.Children.LastOrDefault() == Entity;
 
 
         protected override bool PlayCard(IEntity target)

@@ -2,6 +2,7 @@
 using System.Linq;
 using App.Utility;
 using CardsAndPiles;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -24,6 +25,8 @@ namespace App
 
         private Vector3 TargetPosition { get; set; }
         private Vector3 TargetRotation { get; set; }
+
+        public IPileView CurrentPileView { get; set; }
 
         private void Awake()
         {
@@ -73,16 +76,18 @@ namespace App
         {
             IsDragging = true;
             transform.localRotation = Quaternion.identity;
+            CurrentPileView = transform.GetComponentInParent<IPileView>();
         }
 
         public void OnDrag(PointerEventData eventData)
         {
             Ray ray = eventData.pressEventCamera.ScreenPointToRay(Input.mousePosition);
+            
             RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
-            foreach (RaycastHit result in results)
+            foreach (var result in eventData.hovered)
             {
                 PileView pileView = result.transform.GetComponent<PileView>();
-                if (pileView != null)
+                if (pileView != null && pileView != CurrentPileView)
                 {
                     TargetPileView = pileView;
                 }
@@ -106,6 +111,10 @@ namespace App
             if (!TrySendToPile(TargetPileView))
             {
                 Debug.Log($"Failed to add {name} to {TargetPileView.name}.");
+            }
+            else
+            {
+                CurrentPileView = TargetPileView;
             }
         }
 

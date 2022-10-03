@@ -6,6 +6,7 @@ using UnityEngine;
 public class HideRendererIfNotEmptyOrganizer : PileOrganizer
 {
     [SerializeField] private GameObject ToHide;
+    [SerializeField] private bool inverse;
 
     protected override void OnInitialized()
     {
@@ -27,6 +28,13 @@ public class HideRendererIfNotEmptyOrganizer : PileOrganizer
 
     private void SetActive()
     {
-        ToHide.SetActive(Entity.Children.Count == 0);
+        if (inverse)
+        {
+            ToHide.SetActive(Entity.Children.Count != 0);
+        }
+        else
+        {
+            ToHide.SetActive(Entity.Children.Count == 0);
+        }
     }
 }

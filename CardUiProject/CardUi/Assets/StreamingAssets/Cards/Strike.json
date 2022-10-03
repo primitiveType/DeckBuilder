@@ -11,6 +11,9 @@
       "DamageAmount": 3
     },
     {
+      "$type": "SummerJam1.Cards.Effects.PushUnit, SummerJam1"
+    },
+    {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
       "AssetName": "pulse"
     },
