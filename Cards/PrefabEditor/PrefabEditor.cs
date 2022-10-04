@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Api;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using SummerJam1.Statuses;
 using Component = Api.Component;
 
 namespace PrefabEditor
@@ -98,17 +99,24 @@ namespace PrefabEditor
         {
             prefabsListBox.Items.Clear();
             var files = Service.GetFilelist();
+            Regex regex = new Regex(prefabsSearch.Text, RegexOptions.IgnoreCase);
+
             foreach (var file in files)
             {
-                prefabsListBox.Items.Add(file);
-
+                string name = file;
+                if (regex.IsMatch(name))
+                {
+                    prefabsListBox.Items.Add(file);
+                }
             }
+
+            
         }
 
         private void UpdateComponentList()
         {
             componentsListBox.Items.Clear();
-            Regex regex = new Regex("");
+            Regex regex = new Regex(currentComponentsSearch.Text, RegexOptions.IgnoreCase);
             if(Service?.CurrentEntity == null)
             {
                 return;
@@ -171,6 +179,16 @@ namespace PrefabEditor
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             UpdateAddComponentListBox();
+        }
+
+        private void currentComponentsSearch_TextChanged(object sender, EventArgs e)
+        {
+            UpdateComponentList();
+        }
+
+        private void prefabsSearch_TextChanged(object sender, EventArgs e)
+        {
+            UpdatePrefabsList();
         }
     }
 

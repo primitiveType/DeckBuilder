@@ -42,6 +42,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.propertyGrid2 = new System.Windows.Forms.PropertyGrid();
+            this.prefabsSearch = new System.Windows.Forms.TextBox();
+            this.currentComponentsSearch = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // propertyGrid1
@@ -118,7 +121,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(598, 526);
+            this.button1.Location = new System.Drawing.Point(597, 164);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(160, 23);
             this.button1.TabIndex = 8;
@@ -161,11 +164,37 @@
             this.label4.TabIndex = 12;
             this.label4.Text = "Filter:";
             // 
+            // propertyGrid2
+            // 
+            this.propertyGrid2.Location = new System.Drawing.Point(136, 1061);
+            this.propertyGrid2.Name = "propertyGrid2";
+            this.propertyGrid2.Size = new System.Drawing.Size(130, 130);
+            this.propertyGrid2.TabIndex = 13;
+            // 
+            // prefabsSearch
+            // 
+            this.prefabsSearch.Location = new System.Drawing.Point(29, 142);
+            this.prefabsSearch.Name = "prefabsSearch";
+            this.prefabsSearch.Size = new System.Drawing.Size(292, 20);
+            this.prefabsSearch.TabIndex = 14;
+            this.prefabsSearch.TextChanged += new System.EventHandler(this.prefabsSearch_TextChanged);
+            // 
+            // currentComponentsSearch
+            // 
+            this.currentComponentsSearch.Location = new System.Drawing.Point(385, 529);
+            this.currentComponentsSearch.Name = "currentComponentsSearch";
+            this.currentComponentsSearch.Size = new System.Drawing.Size(329, 20);
+            this.currentComponentsSearch.TabIndex = 15;
+            this.currentComponentsSearch.TextChanged += new System.EventHandler(this.currentComponentsSearch_TextChanged);
+            // 
             // PrefabEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1426, 816);
+            this.Controls.Add(this.currentComponentsSearch);
+            this.Controls.Add(this.prefabsSearch);
+            this.Controls.Add(this.propertyGrid2);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label3);
@@ -202,5 +231,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.PropertyGrid propertyGrid2;
+        private System.Windows.Forms.TextBox prefabsSearch;
+        private System.Windows.Forms.TextBox currentComponentsSearch;
     }
 }
