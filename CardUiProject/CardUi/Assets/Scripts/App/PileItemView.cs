@@ -84,14 +84,20 @@ namespace App
             Ray ray = eventData.pressEventCamera.ScreenPointToRay(Input.mousePosition);
             
             RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
-            foreach (var result in eventData.hovered)
+            Debug.Log($"{results.Count()} items hovered.");
+
+            PileView target = null;
+            foreach (var result in results)
             {
-                PileView pileView = result.transform.GetComponent<PileView>();
+                PileView pileView = result.transform.GetComponentInParent<PileView>();
                 if (pileView != null && pileView != CurrentPileView)
                 {
-                    TargetPileView = pileView;
+                    target = pileView;
+                    Debug.Log("Found target pile view : " + pileView.name);
                 }
             }
+
+            TargetPileView = target;
         }
 
         public void OnEndDrag(PointerEventData eventData)
