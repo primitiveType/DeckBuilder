@@ -10,11 +10,11 @@ namespace SummerJam1.Cards.Effects
 {
     public class DamageUnitCard : TargetSlotComponent, IEffect, IDescription, ITooltip
     {
-        [JsonProperty] public int DamageAmount { get; private set; }
+        [JsonProperty] public int DamageAmount { get; set; }
         protected virtual int FinalDamage => DamageAmount + Strength;
-        [JsonProperty] public int Attacks { get; private set; } = 1;
-        [JsonProperty] public bool Aoe { get; private set; }
-        [JsonProperty] public bool Pierce { get; private set; }
+        [JsonProperty] public int Attacks { get; set; } = 1;
+        [JsonProperty] public bool Aoe { get; set; }
+        [JsonProperty] public bool Pierce { get; set; }
 
         protected int Strength { get; set; }
 
@@ -62,10 +62,10 @@ namespace SummerJam1.Cards.Effects
                     foreach (IEntity entity in slot.Entity.Children.Where(card => card.GetComponent<FaceDown>() == null))
                     {
                         ITakesDamage backUnit = entity.GetComponentInChildren<ITakesDamage>();
-                        backUnit.TryDealDamage(DamageAmount, Game.Player.Entity);   
+                        backUnit.TryDealDamage(DamageAmount, Game.Player.Entity);
                     }
                 }
-                
+
 
                 if (Aoe)
                 {

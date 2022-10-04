@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Api;
 using CardsAndPiles;
+using SummerJam1.Cards;
 using SummerJam1.Rules;
 using Random = Api.Random;
 
@@ -53,22 +54,30 @@ namespace SummerJam1
         {
             //create an example deck.
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
-            for (int i = 0; i < 3; i++)
+
+            foreach (StartingCard prefabsContainerChild in PrefabsContainer.GetComponentsInChildren<StartingCard>())
             {
-                Context.CreateEntity(Deck.Entity, "Cards/Strike.json");
+                for (int i = 0; i < prefabsContainerChild.Amount; i++)
+                {
+                    Context.CreateEntity(Deck.Entity, prefabsContainerChild.Entity.GetComponent<SourcePrefab>().Prefab);
+                }
             }
-
-            for (int i = 0; i < 3; i++)
-            {
-                Context.CreateEntity(Deck.Entity, "Cards/Block.json");
-            }
-
-
-            Context.CreateEntity(Deck.Entity, "Cards/Backpack.json");
-            Context.CreateEntity(Deck.Entity, "Cards/Frostbite.json");
-            Context.CreateEntity(Deck.Entity, "Cards/DesperateStrike.json");
-            Context.CreateEntity(Deck.Entity, "Cards/DrawStrength.json");
-            Context.CreateEntity(Deck.Entity, "Cards/Preparation.json");
+            // for (int i = 0; i < 3; i++)
+            // {
+            //     Context.CreateEntity(Deck.Entity, "Cards/Strike.json");
+            // }
+            //
+            // for (int i = 0; i < 3; i++)
+            // {
+            //     Context.CreateEntity(Deck.Entity, "Cards/Block.json");
+            // }
+            //
+            //
+            // Context.CreateEntity(Deck.Entity, "Cards/Backpack.json");
+            // Context.CreateEntity(Deck.Entity, "Cards/Frostbite.json");
+            // Context.CreateEntity(Deck.Entity, "Cards/DesperateStrike.json");
+            // Context.CreateEntity(Deck.Entity, "Cards/DrawStrength.json");
+            // Context.CreateEntity(Deck.Entity, "Cards/Preparation.json");
         }
 
         private void CreatePrefabPile()

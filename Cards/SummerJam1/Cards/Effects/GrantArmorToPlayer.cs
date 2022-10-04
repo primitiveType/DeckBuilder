@@ -6,7 +6,7 @@ namespace SummerJam1.Cards.Effects
 {
     public class GrantArmorToPlayer : SummerJam1Component, IEffect, IDescription, ITooltip
     {
-        [JsonProperty] public int BlockAmount { get; private set; }
+        [JsonProperty] public int BlockAmount { get; set; }
 
         public string Description => $"Gain {BlockAmount} block.";
 
