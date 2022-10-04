@@ -9,7 +9,8 @@ namespace Api
         {
             TypeNameHandling = TypeNameHandling.Objects,
             TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
-            ContractResolver = new PrivateSetterContractResolver()
+            ContractResolver = new PrivateSetterContractResolver(), 
+            DefaultValueHandling = DefaultValueHandling.Ignore,
         };
 
         public static string Serialize(object o)

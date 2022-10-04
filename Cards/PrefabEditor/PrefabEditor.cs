@@ -16,6 +16,7 @@ namespace PrefabEditor
     {
         public ComponentService Service { get; private set; }
         public CommonOpenFileDialog openFileDialog1;
+        private Proxy CurrentProxy;
         public PrefabEditor()
         {
             openFileDialog1 = new CommonOpenFileDialog();
@@ -27,11 +28,17 @@ namespace PrefabEditor
         {
             Service = new ComponentService();
             propertyGrid1.PropertySort = PropertySort.NoSort;
+            propertyGrid1.PropertyValueChanged += PropertyGrid1_PropertyValueChanged;
             
             Service.PropertyChanged += Service_PropertyChanged;
             buttonPrefabDirectory.Click += buttonPrefabDirectory_Click;
             addComponentListBox.DoubleClick += AddComponentListBox_DoubleClick;
             UpdateAddComponentListBox();
+        }
+
+        private void PropertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            CurrentProxy.SetProperty(e.ChangedItem.PropertyDescriptor, e.ChangedItem.Value);
         }
 
         private void UpdateAddComponentListBox()
@@ -144,7 +151,18 @@ namespace PrefabEditor
 
         private void UpdatePropertyGrid()
         {
-            propertyGrid1.SelectedObject = componentsListBox.SelectedItem;
+            object selected = componentsListBox.SelectedItem;
+            if (componentsListBox.SelectedItem != null)
+            {
+                CurrentProxy = new Proxy(componentsListBox.SelectedItem);
+                selected = CurrentProxy;
+            }
+            else
+            {
+                CurrentProxy = null;
+            }
+
+            propertyGrid1.SelectedObject = selected;
         }
 
         private void prefabsListBox_SelectedIndexChanged(object sender, EventArgs e)

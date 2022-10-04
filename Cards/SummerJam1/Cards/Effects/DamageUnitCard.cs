@@ -10,7 +10,7 @@ namespace SummerJam1.Cards.Effects
 {
     public class DamageUnitCard : TargetSlotComponent, IEffect, IDescription, ITooltip
     {
-        [JsonProperty] public int DamageAmount { get; set; }
+        [JsonProperty] public int DamageAmount { get; private set; }
         protected virtual int FinalDamage => DamageAmount + Strength;
         [JsonProperty] public int Attacks { get; set; } = 1;
         [JsonProperty] public bool Aoe { get; set; }

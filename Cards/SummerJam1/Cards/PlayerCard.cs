@@ -9,7 +9,7 @@ namespace SummerJam1.Cards
     public class PlayerCard : Card, IDraggable
     {
         protected Game Game { get; private set; }
-        [JsonIgnore] public bool CanDrag => Entity.Parent == Game.Battle?.Hand.Entity; //can only drag while in hand.
+        [JsonIgnore] public bool CanDrag => Entity?.Parent != null && Entity.Parent == Game.Battle?.Hand.Entity; //can only drag while in hand.
 
         protected override void Initialize()
         {
