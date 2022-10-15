@@ -59,7 +59,7 @@ namespace SummerJam1.Cards.Effects
 
                 if (Pierce)
                 {
-                    foreach (IEntity entity in slot.Entity.Children.Where(card => card.GetComponent<FaceDown>() == null))
+                    foreach (IEntity entity in slot.Entity.Children.Where(card => card.GetComponent<FaceDown>() == null).ToList())//create snapshot
                     {
                         ITakesDamage backUnit = entity.GetComponentInChildren<ITakesDamage>();
                         backUnit.TryDealDamage(DamageAmount, Game.Player.Entity);
@@ -69,7 +69,7 @@ namespace SummerJam1.Cards.Effects
 
                 if (Aoe)
                 {
-                    foreach (IEntity entitiesInAdjacentSlot in Game.Battle.GetTopEntitiesInAdjacentSlots(slot.Entity))
+                    foreach (IEntity entitiesInAdjacentSlot in Game.Battle.GetTopEntitiesInAdjacentSlots(slot.Entity).ToList())//create snapshot.
                     {
                         ITakesDamage health = entitiesInAdjacentSlot.GetComponent<ITakesDamage>();
                         health.TryDealDamage(DamageAmount, Game.Player.Entity);

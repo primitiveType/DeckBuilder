@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using SummerJam1.Cards;
 using SummerJam1.Piles;
 
@@ -12,6 +13,7 @@ namespace SummerJam1.Statuses
             base.Initialize();
             Entity.PropertyChanged += EntityOnPropertyChanged;
             Entity.Components.CollectionChanged += ComponentsOnCollectionChanged;
+            UpdateEnabledState();
         }
 
         private void ComponentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -37,6 +39,11 @@ namespace SummerJam1.Statuses
                 return;
             }
 
+            DetachFromParentCollectionChanged();
+
+            CurrentParent = component;
+            CurrentParent.Entity.Children.CollectionChanged += ParentChildrenChanged;
+
             if (Entity.GetComponent<IDisableAbilities>() != null)
             {
                 Enabled = false;
@@ -50,7 +57,29 @@ namespace SummerJam1.Statuses
                 return;
             }
 
+            //if we are not at the top of the stack.
+            if (CurrentParent.Entity.Children.LastOrDefault() != Entity)
+            {
+                Enabled = false;
+                return;
+            }
+
             Enabled = true;
+        }
+
+        private void DetachFromParentCollectionChanged()
+        {
+            if (CurrentParent != null)
+            {
+                CurrentParent.Entity.Children.CollectionChanged -= ParentChildrenChanged;
+            }
+        }
+
+        public EncounterSlotPile CurrentParent { get; set; }
+
+        private void ParentChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateEnabledState();
         }
 
 
@@ -59,6 +88,7 @@ namespace SummerJam1.Statuses
             base.Terminate();
             Entity.PropertyChanged -= EntityOnPropertyChanged;
             Entity.Components.CollectionChanged -= ComponentsOnCollectionChanged;
+            DetachFromParentCollectionChanged();
         }
     }
 }

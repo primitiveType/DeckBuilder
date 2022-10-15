@@ -1,10 +1,11 @@
 ﻿using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
+using SummerJam1.Statuses;
 
 namespace SummerJam1
 {
-    public abstract class GainStatWhenMoving<T> : SummerJam1Component, IAmount, IDescription where T : Component, IAmount, new()
+    public abstract class GainStatWhenMoving<T> : EnabledWhenAtTopOfEncounterSlot, IAmount, IDescription where T : Component, IAmount, new()
     {
         protected abstract string StatName { get; }
         public int Amount { get; set; }
@@ -26,8 +27,8 @@ namespace SummerJam1
             }
         }
 
-        [OnCardMoved]
-        private void OnCardMoved(object sender, CardMovedEventArgs args)
+        [OnUnitMoved]
+        private void OnCardMoved(object sender, UnitMovedEventArgs args)
         {
             if (AnyMovementCounts || args.CardId == Entity)
             {

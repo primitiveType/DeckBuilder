@@ -1,10 +1,13 @@
 ﻿using CardsAndPiles;
 using CardsAndPiles.Components;
+using SummerJam1.Cards;
 
 namespace SummerJam1
 {
     public class Player : SummerJam1Component, ITooltip
     {
+        public int Movements { get; private set; }
+        public const int MovementsPerTurn = 3;
         public int CurrentEnergy { get; set; }
         public int MaxEnergy { get; } = 3;
 
@@ -29,6 +32,7 @@ namespace SummerJam1
         private void OnTurnBegan()
         {
             CurrentEnergy = MaxEnergy;
+            Movements = MovementsPerTurn;
         }
 
         [OnEntityKilled]
@@ -37,6 +41,29 @@ namespace SummerJam1
             if (args.Entity == Entity)
             {
                 Events.OnBattleEnded(new BattleEndedEventArgs(false));
+            }
+        }
+
+        [OnRequestMoveUnit]
+        private void OnRequestMoveUnit(object sender, RequestMoveUnitEventArgs args)
+        {
+            if (!args.UsesMovement)
+            {
+                return;
+            }
+
+            if (Movements == 0)
+            {
+                args.Blockers.Add(CardBlockers.NOT_ENOUGH_MOVEMENT);
+            }
+        }
+
+        [OnUnitMoved]
+        private void OnUnitMoved(object sender, UnitMovedEventArgs args)
+        {
+            if (args.UsesMovement)
+            {
+                Movements--;
             }
         }
     }

@@ -34,7 +34,8 @@ namespace SummerJam1.Piles
         {
             //when a card is covered, it is asleep.
             //when it is uncovered for the first time, it is aggro'd. and turned face up. and put to sleep until turn start.
-            //
+            //the aggro component puts the card back to sleep if it is covered on turn start.
+            //I think this could probably be simplified quite a bit.
 
 
             int count = Entity.Children.Count;

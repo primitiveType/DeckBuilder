@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Linq;
+﻿using System.Linq;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
@@ -34,11 +33,17 @@ namespace SummerJam1.Units
                 return;
             }
 
-            Health topMonsterHealth = args.Target.Children.LastOrDefault()?.GetComponent<Health>();
-            Health myHealth = Entity.GetComponent<Health>();
-            if (topMonsterHealth != null && topMonsterHealth.Amount <= myHealth.Amount)
+
+            RequestMoveUnitEventArgs tryMoveArgs = new(Entity, true, args.Target);
+            ((SummerJam1Events)Events).OnRequestMoveUnit(tryMoveArgs);
+            if (tryMoveArgs.Blockers.Any())
             {
-                args.Blockers.Add(CardBlockers.TOP_MONSTER_HAS_LESS_HEALTH);
+                args.Blockers.Add(CardBlockers.UNIT_CANT_MOVE);
+
+                foreach (string blocker in tryMoveArgs.Blockers)
+                {
+                    Logging.Logger.Log($"Unable to move unit : {blocker}.");
+                }
             }
         }
 
@@ -54,7 +59,7 @@ namespace SummerJam1.Units
 
             if (Entity.TrySetParent(slot.Entity))
             {
-                ((SummerJam1Events)Events).OnCardMoved(new CardMovedEventArgs(Entity)); //todo: introduce try move event.
+                ((SummerJam1Events)Events).OnUnitMoved(new UnitMovedEventArgs(Entity, true, slot.Entity));
             }
         }
 
@@ -68,5 +73,6 @@ namespace SummerJam1.Units
                 slot.Entity.GetOrAddComponent<Blood>().Amount += blood.Amount;
             }
         }
+        
     }
 }

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Security;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Api;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using SummerJam1.Statuses;
 using Component = Api.Component;
 
 namespace PrefabEditor
@@ -207,6 +203,19 @@ namespace PrefabEditor
         private void prefabsSearch_TextChanged(object sender, EventArgs e)
         {
             UpdatePrefabsList();
+        }
+
+        private void OnMouseDown(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Right)
+            {
+                Clipboard.SetText(prefabsListBox.SelectedItem.ToString());
+            }
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

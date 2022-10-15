@@ -28,7 +28,17 @@ namespace SummerJam1.Cards.Effects
 
             if (unit.TrySetParent(targetSlot))
             {
-                Events.OnCardMoved(new CardMovedEventArgs(unit)); //todo: introduce try move event.
+                RequestMoveUnitEventArgs tryMoveArgs = new(Entity, false, target);
+                if (!tryMoveArgs.Blockers.Any())
+                {
+                    foreach (string blocker in tryMoveArgs.Blockers)
+                    {
+                        Logging.Log($"Unable to push card : {blocker}");
+                    }
+                    return false;
+                }
+
+                Events.OnUnitMoved(new UnitMovedEventArgs(unit, false, target)); 
                 return true;
             }
 

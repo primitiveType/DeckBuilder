@@ -5,10 +5,11 @@ using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Piles;
+using SummerJam1.Statuses;
 
 namespace SummerJam1
 {
-    public abstract class EffectsAdjacentCreatures : SummerJam1Component, IDescription
+    public abstract class EffectsAdjacentCreatures : EnabledWhenAtTopOfEncounterSlot, IDescription
     {
         public abstract bool EveryTurn { get; }
 
@@ -37,9 +38,18 @@ namespace SummerJam1
         {
             base.Initialize();
             Entity.PropertyChanged += EntityOnPropertyChanged;
+            this.PropertyChanged += OnComponentPropertyChanged;
             if (Entity.Parent?.GetComponent<EncounterSlotPile>() != null)
             {
                 AttachToAdjacentSlots();
+            }
+        }
+
+        private void OnComponentPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Enabled))
+            {
+                UpdateState();
             }
         }
 
@@ -47,14 +57,19 @@ namespace SummerJam1
         {
             if (e.PropertyName == nameof(Entity.Parent))
             {
-                if (Entity.Parent?.GetComponent<EncounterSlotPile>() != null)
-                {
-                    AttachToAdjacentSlots();
-                }
-                else
-                {
-                    RemoveFromAdjacent();
-                }
+                UpdateState();
+            }
+        }
+
+        private void UpdateState()
+        {
+            if (Enabled && Entity.Parent?.GetComponent<EncounterSlotPile>() != null)
+            {
+                AttachToAdjacentSlots();
+            }
+            else
+            {
+                RemoveFromAdjacent();
             }
         }
 

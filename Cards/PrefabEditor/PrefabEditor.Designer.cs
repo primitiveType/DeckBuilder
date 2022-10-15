@@ -45,11 +45,12 @@
             this.propertyGrid2 = new System.Windows.Forms.PropertyGrid();
             this.prefabsSearch = new System.Windows.Forms.TextBox();
             this.currentComponentsSearch = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Location = new System.Drawing.Point(829, 162);
+            this.propertyGrid1.Location = new System.Drawing.Point(829, 377);
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.Size = new System.Drawing.Size(476, 347);
             this.propertyGrid1.TabIndex = 0;
@@ -66,7 +67,7 @@
             // componentsListBox
             // 
             this.componentsListBox.FormattingEnabled = true;
-            this.componentsListBox.Location = new System.Drawing.Point(382, 193);
+            this.componentsListBox.Location = new System.Drawing.Point(382, 408);
             this.componentsListBox.Name = "componentsListBox";
             this.componentsListBox.Size = new System.Drawing.Size(386, 316);
             this.componentsListBox.TabIndex = 2;
@@ -77,9 +78,10 @@
             this.prefabsListBox.FormattingEnabled = true;
             this.prefabsListBox.Location = new System.Drawing.Point(29, 41);
             this.prefabsListBox.Name = "prefabsListBox";
-            this.prefabsListBox.Size = new System.Drawing.Size(292, 95);
+            this.prefabsListBox.Size = new System.Drawing.Size(292, 290);
             this.prefabsListBox.TabIndex = 3;
             this.prefabsListBox.SelectedIndexChanged += new System.EventHandler(this.prefabsListBox_SelectedIndexChanged);
+            this.prefabsListBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // label1
             // 
@@ -102,7 +104,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1211, 607);
+            this.button2.Location = new System.Drawing.Point(1230, 761);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 6;
@@ -113,7 +115,7 @@
             // addComponentListBox
             // 
             this.addComponentListBox.FormattingEnabled = true;
-            this.addComponentListBox.Location = new System.Drawing.Point(29, 193);
+            this.addComponentListBox.Location = new System.Drawing.Point(29, 408);
             this.addComponentListBox.Name = "addComponentListBox";
             this.addComponentListBox.Size = new System.Drawing.Size(329, 316);
             this.addComponentListBox.TabIndex = 7;
@@ -121,7 +123,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(597, 164);
+            this.button1.Location = new System.Drawing.Point(597, 379);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(160, 23);
             this.button1.TabIndex = 8;
@@ -132,7 +134,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(32, 174);
+            this.label2.Location = new System.Drawing.Point(32, 389);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(183, 13);
             this.label2.TabIndex = 9;
@@ -141,7 +143,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(382, 173);
+            this.label3.Location = new System.Drawing.Point(382, 388);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(168, 13);
             this.label3.TabIndex = 10;
@@ -149,7 +151,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(29, 529);
+            this.textBox1.Location = new System.Drawing.Point(29, 744);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(329, 20);
             this.textBox1.TabIndex = 11;
@@ -173,7 +175,7 @@
             // 
             // prefabsSearch
             // 
-            this.prefabsSearch.Location = new System.Drawing.Point(29, 142);
+            this.prefabsSearch.Location = new System.Drawing.Point(29, 343);
             this.prefabsSearch.Name = "prefabsSearch";
             this.prefabsSearch.Size = new System.Drawing.Size(292, 20);
             this.prefabsSearch.TabIndex = 14;
@@ -181,17 +183,28 @@
             // 
             // currentComponentsSearch
             // 
-            this.currentComponentsSearch.Location = new System.Drawing.Point(385, 529);
+            this.currentComponentsSearch.Location = new System.Drawing.Point(385, 744);
             this.currentComponentsSearch.Name = "currentComponentsSearch";
             this.currentComponentsSearch.Size = new System.Drawing.Size(329, 20);
             this.currentComponentsSearch.TabIndex = 15;
             this.currentComponentsSearch.TextChanged += new System.EventHandler(this.currentComponentsSearch_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(328, 81);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(244, 13);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "<- Right click a prefab name to copy it to clipboard";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // PrefabEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1426, 816);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.currentComponentsSearch);
             this.Controls.Add(this.prefabsSearch);
             this.Controls.Add(this.propertyGrid2);
@@ -234,5 +247,6 @@
         private System.Windows.Forms.PropertyGrid propertyGrid2;
         private System.Windows.Forms.TextBox prefabsSearch;
         private System.Windows.Forms.TextBox currentComponentsSearch;
+        private System.Windows.Forms.Label label5;
     }
 }

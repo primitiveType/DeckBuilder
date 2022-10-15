@@ -14,7 +14,7 @@ namespace SummerJam1.Units
 
         private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Entity.Parent))
+            if (e.PropertyName == nameof(Entity.Parent) && Game.Battle != null)
             {
                 CheckForWinCondition();
             }

@@ -23,8 +23,16 @@
     </event>
     <event id="LeaveBattle">
     </event>
-    <event id="CardMoved">
+    <event id="RequestMoveUnit">
         <arg name="CardId" type="IEntity"/>
+        <arg name="UsesMovement" type="bool"/>
+        <arg name="Target" type="IEntity"/>
+        <member name="Blockers" type="List&lt;string&gt;" value="new List&lt;string&gt;()"/>
+    </event>
+    <event id="UnitMoved">
+        <arg name="CardId" type="IEntity"/>
+        <arg name="UsesMovement" type="bool"/>
+        <arg name="Target" type="IEntity"/>
     </event>
     <event id="RequestRemoveCard">
     </event>

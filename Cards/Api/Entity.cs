@@ -160,12 +160,7 @@ namespace Api
 
             void DoGetComponentsInChildren(IEntity entity)
             {
-                T component = entity.GetComponent<T>();
-                if (component != null)
-                {
-                    components.Add(component);
-                }
-
+                components.AddRange(entity.GetComponents<T>());
 
                 foreach (IEntity child in entity.Children)
                 {
