@@ -9,7 +9,7 @@ namespace SummerJam1.Rules
         private void OnRequestMoveUnit(object sender, RequestMoveUnitEventArgs args)
         {
             Health topMonsterHealth = args.Target.Children.LastOrDefault()?.GetComponent<Health>();
-            Health myHealth = Entity.GetComponent<Health>();
+            Health myHealth = args.CardId.GetComponent<Health>();
             if (topMonsterHealth != null && topMonsterHealth.Amount <= myHealth.Amount)
             {
                 args.Blockers.Add(CardBlockers.TOP_MONSTER_HAS_LESS_HEALTH);
