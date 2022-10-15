@@ -86,6 +86,7 @@ namespace SummerJam1
         {
             return GetNonEmptySlots().Select(pile => pile.Entity.Children.LastOrDefault()).ToList();
         }
+
         public bool IsTopCard(IEntity card)
         {
             return card.Parent.Children.LastOrDefault() == card;
@@ -172,7 +173,6 @@ namespace SummerJam1
             SetupBattleDeck();
 
             Context.CreateEntity(Entity, entity => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
-
 
             Context.CreateEntity(Entity, entity => { EncounterDrawPile = entity.AddComponent<DeckPile>(); });
 
