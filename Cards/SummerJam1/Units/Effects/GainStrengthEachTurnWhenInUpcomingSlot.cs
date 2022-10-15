@@ -2,7 +2,7 @@
 using CardsAndPiles;
 using CardsAndPiles.Components;
 
-namespace SummerJam1
+namespace SummerJam1.Units.Effects
 {
     public class GainStrengthEachTurnWhenInUpcomingSlot : SummerJam1Component, IAmount, IDescription
     {

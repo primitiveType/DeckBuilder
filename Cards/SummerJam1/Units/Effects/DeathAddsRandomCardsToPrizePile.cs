@@ -1,7 +1,7 @@
 ﻿using CardsAndPiles;
 using CardsAndPiles.Components;
 
-namespace SummerJam1
+namespace SummerJam1.Units.Effects
 {
     public class DeathAddsRandomCardsToPrizePile : SummerJam1Component, IDescription
     {

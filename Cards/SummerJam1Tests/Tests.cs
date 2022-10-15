@@ -10,6 +10,7 @@ using NUnit.Framework;
 using SummerJam1;
 using SummerJam1.Statuses;
 using SummerJam1.Units;
+using SummerJam1.Units.Effects;
 
 namespace SummerJam1Tests
 {

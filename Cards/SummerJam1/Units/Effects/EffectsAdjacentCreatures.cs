@@ -7,7 +7,7 @@ using CardsAndPiles.Components;
 using SummerJam1.Piles;
 using SummerJam1.Statuses;
 
-namespace SummerJam1
+namespace SummerJam1.Units.Effects
 {
     public abstract class EffectsAdjacentCreatures : EnabledWhenAtTopOfEncounterSlot, IDescription
     {

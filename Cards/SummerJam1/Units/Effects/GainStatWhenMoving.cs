@@ -3,7 +3,7 @@ using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Statuses;
 
-namespace SummerJam1
+namespace SummerJam1.Units.Effects
 {
     public abstract class GainStatWhenMoving<T> : EnabledWhenAtTopOfEncounterSlot, IAmount, IDescription where T : Component, IAmount, new()
     {

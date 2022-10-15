@@ -41,7 +41,7 @@ namespace PrefabEditor
             {
                 foreach (Type type in a.GetTypes())
                 {
-                    if (typeof(IComponent).IsAssignableFrom(type))
+                    if (typeof(IComponent).IsAssignableFrom(type) && !type.IsAbstract && !type.IsInterface && !type.IsGenericType)
                     {
                         AllComponentTypes.Add(type);
                     }
@@ -86,10 +86,7 @@ namespace PrefabEditor
             Logging.Log($"Loaded {CurrentEntity.GetComponent<NameComponent>()?.Value}.");
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-        }
+  
 
         internal void SaveCurrentPrefab()
         {

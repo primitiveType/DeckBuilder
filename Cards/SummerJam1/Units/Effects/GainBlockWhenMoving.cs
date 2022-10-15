@@ -1,4 +1,4 @@
-﻿namespace SummerJam1
+﻿namespace SummerJam1.Units.Effects
 {
     public class GainBlockWhenMoving : GainStatWhenMoving<Armor>
     {
