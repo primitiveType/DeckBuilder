@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
+using System.Security.AccessControl;
 using IComponent = Api.IComponent;
 
 namespace PrefabEditor
@@ -92,7 +93,13 @@ namespace PrefabEditor
         {
             var source = CurrentEntity.GetComponent<SourcePrefab>();
             var json = Serializer.Serialize(CurrentEntity);
-            File.WriteAllText(Path.Combine(Context.PrefabsPath, source.Prefab), json);
+            string path = Path.Combine(Context.PrefabsPath, source.Prefab);
+            var info = new FileInfo(path);
+            if (!Directory.Exists(info.Directory.FullName))
+            {
+                Directory.CreateDirectory(path);
+            }
+            File.WriteAllText(path, json);
         }
     }
 

@@ -187,5 +187,9 @@
         </Compile>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="StreamingAssets\Units\Special" />
+    </ItemGroup>
+
 
 </Project>
