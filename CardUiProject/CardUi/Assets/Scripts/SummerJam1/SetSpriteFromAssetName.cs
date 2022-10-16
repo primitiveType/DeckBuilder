@@ -8,7 +8,6 @@ public abstract class SetSpriteFromAssetName : View<VisualComponent>
     [PropertyListener(nameof(VisualComponent.AssetName))]
     private void OnAssetNameChanged(object sender, PropertyChangedEventArgs args)
     {
-        Debug.Log($"Getting texture for : {Model.AssetName}!");
 
         // Disposables.Add(AnimationQueue.Instance.Enqueue(() =>
         // {
