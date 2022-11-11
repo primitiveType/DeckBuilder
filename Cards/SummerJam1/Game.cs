@@ -138,7 +138,7 @@ namespace SummerJam1
         }
 
         [OnBattleEnded]
-        public void OnBattleEnded(object sender, BattleEndedEventArgs args)
+        private void OnBattleEnded(object sender, BattleEndedEventArgs args)
         {
             if (args.Victory)
             {

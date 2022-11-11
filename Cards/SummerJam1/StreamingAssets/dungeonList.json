@@ -9,79 +9,10 @@
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\birthdayBoy.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\boneBoy.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\ectongue.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\headCheese.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\notGengar.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\orbWisp.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\sadRalph.json",
-      "Enabled": true
-    },
-    {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "dungeonList.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\birthdayBoy.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\boneBoy.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\ectongue.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\headCheese.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\notGengar.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\orbWisp.json",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\sadRalph.json",
+      "Prefab": "Units\\exit.json",
       "Enabled": true
     }
+   
   ],
   "Id": 116
 }

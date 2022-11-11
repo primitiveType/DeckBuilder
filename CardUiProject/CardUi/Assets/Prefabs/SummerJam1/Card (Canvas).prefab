@@ -5427,6 +5427,7 @@ GameObject:
   - component: {fileID: 3541272046727422317}
   - component: {fileID: 2927448722488216988}
   - component: {fileID: 1665066439749963234}
+  - component: {fileID: 8875041854177728580}
   m_Layer: 0
   m_Name: Card (Canvas)
   m_TagString: Untagged
@@ -5585,6 +5586,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26385eb57c764f6985fadbb30fbf4395, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8875041854177728580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8432613368176806903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec2ce89f7442b0e4089b6ca2ac00838a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HideIfNull: 0
+  m_VisibilityObject: {fileID: 0}
 --- !u!1 &8465753026025527381
 GameObject:
   m_ObjectHideFlags: 0
@@ -5979,14 +5994,14 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 1449543606289198504, guid: 80b37adfb2c0029468462dc04b17ec07, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 80b37adfb2c0029468462dc04b17ec07, type: 3}
---- !u!224 &1703777889487840495 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1703777889138675315, guid: 80b37adfb2c0029468462dc04b17ec07, type: 3}
-  m_PrefabInstance: {fileID: 894495388}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1449543606604826422 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1449543606289198506, guid: 80b37adfb2c0029468462dc04b17ec07, type: 3}
+  m_PrefabInstance: {fileID: 894495388}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1703777889487840495 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1703777889138675315, guid: 80b37adfb2c0029468462dc04b17ec07, type: 3}
   m_PrefabInstance: {fileID: 894495388}
   m_PrefabAsset: {fileID: 0}
 --- !u!222 &2126428302861761002
