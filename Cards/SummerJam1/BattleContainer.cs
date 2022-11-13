@@ -209,7 +209,7 @@ namespace SummerJam1
         {
             Logging.Log($"Starting battle with {pile.Entity.Children.Count} encounters.");
             int index = 0;
-            foreach (IEntity entity in pile.Entity.Children.OrderBy(entity => entity.HasComponent<IBottomCard>())) //fill encounter slots.
+            foreach (IEntity entity in pile.Entity.Children.OrderByDescending(entity => entity.HasComponent<IBottomCard>())) //fill encounter slots.
             {
                 int i = index % EncounterSlots.Count;
                 entity.TrySetParent(EncounterSlots[i].Entity); 
