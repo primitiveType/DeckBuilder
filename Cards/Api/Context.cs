@@ -8,6 +8,13 @@ namespace Api
 {
     public class Context
     {
+        //create
+        //initialize
+        //setup
+        //parent
+
+        public delegate void SetupBeforeParenting(IEntity newChild);
+
         public Context(EventsBase events)
         {
             Events = events;
@@ -30,12 +37,13 @@ namespace Api
             PrefabsPath = path;
         }
 
-        //create
-        //initialize
-        //setup
-        //parent
+        public TComponent CreateEntity<TComponent>(IEntity parent = null) where TComponent : Component, new()
+        {
+            TComponent component = null;
+            CreateEntity(parent, child => component = child.AddComponent<TComponent>());
 
-        public delegate void SetupBeforeParenting(IEntity newChild);
+            return component;
+        }
 
         public IEntity CreateEntity(IEntity parent = null, SetupBeforeParenting setup = null)
         {

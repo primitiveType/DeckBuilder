@@ -14,13 +14,17 @@
             int numItems = 4;
             for (int i = 0; i < numItems; i++)
             {
-                Context.CreateEntity(Entity, newChild =>
+                string prefab = Game.GetRandomCardSource();
+
+                Context.CreateEntity(Entity, prefab, newChild =>
                 {
-                    newChild.AddComponent<PrefabReference>().Prefab = Game.GetRandomCardSource();
                     ClickToBuy buyable = newChild.AddComponent<ClickToBuy>();
-                    buyable.Amount = 50; //temp.
+                    Money cost = newChild.AddComponent<Money>();
+                    cost.Amount = 50; //temp.
                 });
             }
+
+            Context.CreateEntity(Entity, "Units\\exit.json");
         }
     }
 }

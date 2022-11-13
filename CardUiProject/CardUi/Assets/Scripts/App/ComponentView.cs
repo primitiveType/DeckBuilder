@@ -13,6 +13,7 @@ namespace App
         protected T Component { get; private set; }
         protected readonly List<IDisposable> Disposables = new List<IDisposable>(2);
         protected IView View { get; private set; }
+        protected virtual bool SearchParents => false;
 
         [SerializeField] protected bool m_HideIfNull = false;
         protected virtual bool m_DisableComponentIfNull => false;

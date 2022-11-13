@@ -4,21 +4,17 @@ using SummerJam1.Cards;
 
 namespace SummerJam1.Units
 {
-    public class ClickToBuy : PlayerCard, IClickable, IAmount
+    public class ClickToBuy : PlayerCard, IClickable
     {
-        /// <summary>
-        ///     The cost of the item.
-        /// </summary>
-        public int Amount { get; set; }
-        
         public bool AllowMultiple { get; set; }
 
         public void Click()
         {
+            Money cost = Entity.GetComponent<Money>();
             Money wallet = Game.Player.Entity.GetComponent<Money>();
-            if (wallet.Amount >= Amount)
+            if (wallet.Amount >= cost.Amount)
             {
-                wallet.Amount -= Amount;
+                wallet.Amount -= cost.Amount;
                 OnBuy();
                 if (!AllowMultiple)
                 {
@@ -29,8 +25,8 @@ namespace SummerJam1.Units
 
         protected virtual void OnBuy()
         {
-            var prefab = Entity.GetComponent<PrefabReference>().Prefab;
-            var bought = Context.CreateEntity(null, prefab);
+            string prefab = Entity.GetComponent<SourcePrefab>().Prefab;
+            IEntity bought = Context.CreateEntity(null, prefab);
             if (bought.HasComponent<Card>())
             {
                 bought.TrySetParent(Game.Deck.Entity);
