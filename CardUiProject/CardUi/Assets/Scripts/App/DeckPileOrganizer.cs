@@ -13,7 +13,7 @@ namespace App
             await base.OnItemAddedQueued(added, view);
 
 
-            IPileItemView pileItemView = view.gameObject.GetComponent<IPileItemView>();
+            IPileItemView pileItemView = view.gameObject.GetComponentInChildren<IPileItemView>();
 
             if (SetPosition)
             {

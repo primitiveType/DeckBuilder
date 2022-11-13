@@ -1761,6 +1761,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1679191543}
     m_Modifications:
+    - target: {fileID: 441325675, guid: 1374227d06bc1b54bb4e7b4f92d3ab74, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 478429510, guid: 1374227d06bc1b54bb4e7b4f92d3ab74, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470840187, guid: 1374227d06bc1b54bb4e7b4f92d3ab74, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470840187, guid: 1374227d06bc1b54bb4e7b4f92d3ab74, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470840187, guid: 1374227d06bc1b54bb4e7b4f92d3ab74, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470840187, guid: 1374227d06bc1b54bb4e7b4f92d3ab74, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8778107295029427939, guid: 1374227d06bc1b54bb4e7b4f92d3ab74, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2203,6 +2227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 784010972}
   - component: {fileID: 784010973}
+  - component: {fileID: 784010974}
   m_Layer: 0
   m_Name: Add Card Button
   m_TagString: Untagged
@@ -2244,6 +2269,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DEBUG_entity: 0
+--- !u!114 &784010974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784010971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c51235edd7bcf4f4c92b469a35bea92e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &861069684
 GameObject:
   m_ObjectHideFlags: 0
@@ -2395,6 +2432,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 956487597}
+  - component: {fileID: 956487598}
   m_Layer: 0
   m_Name: 'Create relic Prizes button '
   m_TagString: Untagged
@@ -2422,6 +2460,18 @@ RectTransform:
   m_AnchoredPosition: {x: 1674.5, y: 772.5}
   m_SizeDelta: {x: 215.4653, y: 100}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &956487598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956487596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c51235edd7bcf4f4c92b469a35bea92e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &988352845
 GameObject:
   m_ObjectHideFlags: 0
@@ -4868,6 +4918,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1810850647}
   - component: {fileID: 1810850648}
+  - component: {fileID: 1810850649}
   m_Layer: 0
   m_Name: Create Prizes button
   m_TagString: Untagged
@@ -4909,6 +4960,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DEBUG_entity: 0
+--- !u!114 &1810850649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810850646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c51235edd7bcf4f4c92b469a35bea92e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1863648202
 GameObject:
   m_ObjectHideFlags: 0
@@ -5021,7 +5084,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0001796933}
+  m_AnchoredPosition: {x: 0, y: -0.000058523416}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1867641147

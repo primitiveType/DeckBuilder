@@ -17,12 +17,12 @@
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Exit",
+      "Value": "Shop",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "exit",
+      "AssetName": "shop",
       "Enabled": true
     },
     {
@@ -34,11 +34,11 @@
     },
     {
       "$type": "Api.SourcePrefab, Api",
-      "Prefab": "Units\\exit.json",
+      "Prefab": "Units\\shop.json",
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Units.DungeonExit, SummerJam1",
+      "$type": "SummerJam1.Units.ShopExit, SummerJam1",
       "Enabled": true
     }
   ],

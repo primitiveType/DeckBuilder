@@ -26,4 +26,5 @@
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=59231037B678C14AA2C89C9519345F3B/Text/@EntryValue">[OnRequestCardPlayed]
 private void OnRequestCardPlayed(object sender, RequestCardPlayedEventArgs args){
 
-}</s:String></wpf:ResourceDictionary>
+}</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=buyable/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

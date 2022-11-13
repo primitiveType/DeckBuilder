@@ -35,7 +35,9 @@ namespace Api
         //setup
         //parent
 
-        public IEntity CreateEntity(IEntity parent = null, Action<IEntity> setup = null)
+        public delegate void SetupBeforeParenting(IEntity newChild);
+
+        public IEntity CreateEntity(IEntity parent = null, SetupBeforeParenting setup = null)
         {
             Entity entity = new();
             entity.Initialize(this, NextId++);
@@ -68,11 +70,12 @@ namespace Api
             }
 
             setup?.Invoke(entity);
-            
+
             if (!entity.TrySetParent(parent))
             {
                 throw new Exception($"Failed to parent entity during creation! {prefabName}");
             }
+
             Events.OnEntityCreated(new EntityCreatedEventArgs(entity));
             return entity;
         }
@@ -111,4 +114,3 @@ namespace Api
         }
     }
 }
-

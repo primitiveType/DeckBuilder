@@ -11,6 +11,11 @@
       "$type": "SummerJam1.PrefabReference, SummerJam1",
       "Prefab": "Units\\exit.json",
       "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.PrefabReference, SummerJam1",
+      "Prefab": "Units\\shop.json",
+      "Enabled": true
     }
    
   ],

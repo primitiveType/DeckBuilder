@@ -15,6 +15,7 @@ namespace App
         protected IView View { get; private set; }
 
         [SerializeField] protected bool m_HideIfNull = false;
+        protected virtual bool m_DisableComponentIfNull => false;
         [SerializeField] protected GameObject m_VisibilityObject;
 
         protected GameObject VisibilityObject => m_VisibilityObject ? m_VisibilityObject : gameObject;
@@ -110,14 +111,16 @@ namespace App
         private void UpdateVisibility(bool immediate)
         {
             bool visible = Component != null || !m_HideIfNull;
-
+            bool disabled = Component == null && m_DisableComponentIfNull;
             if (immediate)
             {
                 VisibilityObject.SetActive(visible);
+                enabled = !disabled;
             }
             else
             {
                 Disposables.Add(AnimationQueue.Instance.Enqueue(() => VisibilityObject.SetActive(visible)));
+                enabled = !disabled;
             }
         }
 

@@ -13,7 +13,7 @@ namespace App
         private void Awake()
         {
             HoverExpand = gameObject.AddComponent<HoverExpand>();
-            PileItemView = GetComponentInParent<IPileItemView>();
+            PileItemView = GetComponentInChildren<IPileItemView>();
             GetComponent<RectTransform>().sizeDelta = new Vector2(3, 5);
             if (PileItemView == null)
             {

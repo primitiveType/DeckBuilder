@@ -79,6 +79,11 @@ namespace Api
             return GetComponents<T>().FirstOrDefault();
         }
 
+        public bool HasComponent<T>()
+        {
+            return Components.OfType<T>().Any();
+        }
+
 
         public T GetOrAddComponent<T>() where T : Component, new()
         {

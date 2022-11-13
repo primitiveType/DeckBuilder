@@ -5,6 +5,7 @@ using System.Linq;
 using Api;
 using CardsAndPiles;
 using SummerJam1.Piles;
+using SummerJam1.Units;
 using Random = Api.Random;
 
 namespace SummerJam1
@@ -34,20 +35,10 @@ namespace SummerJam1
         protected override void Initialize()
         {
             base.Initialize();
-            // for (int i = 0; i < NumFloors; i++)
-            // {
-            //     AllEncounterSlots[i] = new List<Pile>();
-            //     for (int j = 0; j < NumEncounterSlotsPerFloor; j++)
-            //     {
-            //         int index = i;
-            //         Context.CreateEntity(Entity, entity => AllEncounterSlots[index].Add(entity.AddComponent<EncounterSlotPile>()));
-            //     }
-            // }
 
             for (int j = 0; j < NUM_ENCOUNTER_SLOTS_PER_FLOOR; j++)
             {
                 Context.CreateEntity(Entity, entity => EncounterSlots.Add(entity.AddComponent<EncounterSlotPile>()));
-                // Context.CreateEntity(Entity, entity => EncounterSlotsUpcoming.Add(entity.AddComponent<UpcomingEncounterSlotPile>()));
             }
         }
 
@@ -165,21 +156,16 @@ namespace SummerJam1
 
         public void StartBattle(DungeonPile pile)
         {
-            List<PrefabReference> componentsInChildren = pile.Entity.GetComponentsInChildren<PrefabReference>();
-            List<string> prefabs = componentsInChildren.Select(component => component.Prefab).ToList();
-
             pile.Entity.TrySetParent(Entity);
 
             SetupBattleDeck();
 
             Context.CreateEntity(Entity, entity => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
-
-            Context.CreateEntity(Entity, entity => { EncounterDrawPile = entity.AddComponent<DeckPile>(); });
-
-            Context.CreateEntity(Entity, entity => { EncounterDiscardPile = entity.AddComponent<PlayerDiscard>(); });
+            Context.CreateEntity(Entity, entity => EncounterDrawPile = entity.AddComponent<DeckPile>());
+            Context.CreateEntity(Entity, entity => EncounterDiscardPile = entity.AddComponent<PlayerDiscard>());
 
 
-            PopulateEncounterPiles(prefabs);
+            PopulateEncounterPiles(pile);
 
             Exhaust = Context.CreateEntity(Entity, entity =>
             {
@@ -219,22 +205,14 @@ namespace SummerJam1
             Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 
-        private void PopulateEncounterPiles(List<string> prefabs)
+        private void PopulateEncounterPiles(DungeonPile pile)
         {
-            Logging.Log($"Starting battle with {prefabs.Count} encounters.");
+            Logging.Log($"Starting battle with {pile.Entity.Children.Count} encounters.");
             int index = 0;
-            foreach (string prefab in prefabs) //fill encounter slots.
+            foreach (IEntity entity in pile.Entity.Children.OrderBy(entity => entity.HasComponent<IBottomCard>())) //fill encounter slots.
             {
-                int i = index % EncounterSlots.Count + 1;
-                if (i == EncounterSlots.Count)
-                {
-                    Context.CreateEntity(EncounterDrawPile.Entity, prefab);
-                }
-                else
-                {
-                    Context.CreateEntity(EncounterSlots[i].Entity, prefab);
-                }
-
+                int i = index % EncounterSlots.Count;
+                entity.TrySetParent(EncounterSlots[i].Entity); 
                 index++;
             }
 
@@ -242,8 +220,20 @@ namespace SummerJam1
             {
                 encounterSlot.SetAllButTopFaceDown();
             }
-
-            EncounterSlots[0].Entity.AddComponent<OnlyAllowCardsFromDungeonDeck>();
+            // Logging.Log($"Starting battle with {prefabs.Count} encounters.");
+            // int index = 0;
+            // foreach (IEntity prefab in prefabs.OrderBy(entity => entity.HasComponent<IBottomCard>())) //fill encounter slots.
+            // {
+            //     int i = index % EncounterSlots.Count;
+            //     prefab.TrySetParent(EncounterSlots[i].Entity); 
+            //     Context.CreateEntity(prefab, prefab.GetComponent<PrefabReference>().Prefab);
+            //     index++;
+            // }
+            //
+            // foreach (EncounterSlotPile encounterSlot in EncounterSlots)
+            // {
+            //     encounterSlot.SetAllButTopFaceDown();
+            // }
         }
 
 

@@ -13,6 +13,7 @@ namespace SummerJam1
         {
             base.Start();
             m_Button.onClick.AddListener(OnClick);
+            DungeonViewManager.Instance.ViewDungeon(Model);
         }
 
         private void OnClick()

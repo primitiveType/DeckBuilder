@@ -176,6 +176,9 @@
         <None Update="StreamingAssets\Units\Standard\1\headCheese.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="StreamingAssets\Units\shop.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
 
     </ItemGroup>
 

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Api;
+using Api.Extensions;
 using CardsAndPiles;
 using SummerJam1.Cards;
 using SummerJam1.Rules;
@@ -28,8 +30,6 @@ namespace SummerJam1
 
         public int CurrentLevel { get; private set; } = 1;
 
-        // public List<Pile> Dungeons { get; private set; } = new List<Pile>();
-
         public IEntity Dungeons { get; private set; }
 
         protected override void Initialize()
@@ -46,7 +46,7 @@ namespace SummerJam1
 
             CreatePrefabPile();
             PopulatePlayerDeck();
-            PopulateDungeons();
+            PrepareNextDungeon(Context.CreateEntity(null, entity => entity.AddComponent<ExterminationDungeonPile>()));
             Events.OnGameStarted(new GameStartedEventArgs());
         }
 
@@ -62,22 +62,6 @@ namespace SummerJam1
                     Context.CreateEntity(Deck.Entity, prefabsContainerChild.Entity.GetComponent<SourcePrefab>().Prefab);
                 }
             }
-            // for (int i = 0; i < 3; i++)
-            // {
-            //     Context.CreateEntity(Deck.Entity, "Cards/Strike.json");
-            // }
-            //
-            // for (int i = 0; i < 3; i++)
-            // {
-            //     Context.CreateEntity(Deck.Entity, "Cards/Block.json");
-            // }
-            //
-            //
-            // Context.CreateEntity(Deck.Entity, "Cards/Backpack.json");
-            // Context.CreateEntity(Deck.Entity, "Cards/Frostbite.json");
-            // Context.CreateEntity(Deck.Entity, "Cards/DesperateStrike.json");
-            // Context.CreateEntity(Deck.Entity, "Cards/DrawStrength.json");
-            // Context.CreateEntity(Deck.Entity, "Cards/Preparation.json");
         }
 
         private void CreatePrefabPile()
@@ -162,7 +146,31 @@ namespace SummerJam1
             List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Relics/{file.Name}").ToList();
             return files;
         }
+
+        private IEnumerable<IEntity> GetRelicPrefabs(Func<IEntity, bool> constraint = null)
+        {
+            return PrefabsContainer.Children
+                .Where(entity => entity.HasComponent<RelicComponent>())
+                .Where(entity => constraint != null && constraint.Invoke(entity));
+        }
+
+        public string GetRandomRelicSource(Func<IEntity, bool> constraint = null)
+        {
+            return GetRelicPrefabs(constraint).Random(Random, constraint).GetComponent<SourcePrefab>().Prefab;
+        }
         
+        private IEnumerable<IEntity> GetCardPrefabs(Func<IEntity, bool> constraint = null)
+        {
+            return PrefabsContainer.Children
+                .Where(entity => entity.HasComponent<PlayerCard>())
+                .Where(entity => constraint == null || constraint.Invoke(entity));
+        }
+
+        public string GetRandomCardSource(Func<IEntity, bool> constraint = null)
+        {
+            return GetCardPrefabs(constraint).Random(Random, constraint).GetComponent<SourcePrefab>().Prefab;
+        }
+
 
         private void AddRules()
         {
@@ -189,7 +197,7 @@ namespace SummerJam1
         }
 
 
-        private void PopulateDungeons()
+        public void PrepareNextDungeon(IEntity dungeon)
         {
             if (Dungeons == null)
             {
@@ -203,29 +211,12 @@ namespace SummerJam1
 
             int numDungeons = 5;
 
-            for (int i = 0; i < numDungeons; i++)
+            foreach (IEntity child in Dungeons.Children.ToList())
             {
-                int i1 = i;
-                Context.CreateEntity(Dungeons, delegate(IEntity entity)
-                {
-                    DungeonPile pile = i1 switch
-                    {
-                        0 => entity.AddComponent<ExterminationDungeonPile>(),
-                        1 => entity.AddComponent<BountyDungeonPile>(),
-                        _ => entity.AddComponent<ArtifactHuntDungeonPile>()
-                    };
-
-                    pile.Difficulty = i1;
-                    if (i1 % 2 == 0)
-                    {
-                        entity.AddComponent<CardReward>();
-                    }
-                    else
-                    {
-                        entity.AddComponent<RelicReward>();
-                    }
-                });
+                child.Destroy();
             }
+
+            dungeon.TrySetParent(Dungeons);
         }
 
         public void StartBattle(DungeonPile pile)
@@ -239,7 +230,7 @@ namespace SummerJam1
             });
 
 
-            Battle.StartBattle(pile);
+            Battle.StartBattle(Dungeons.GetComponentInChildren<DungeonPile>());
         }
 
 

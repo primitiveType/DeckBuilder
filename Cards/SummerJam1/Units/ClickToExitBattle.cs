@@ -1,25 +1,25 @@
-﻿using System.ComponentModel;
-using Api;
-using SummerJam1.Cards;
+﻿using Api;
 
 namespace SummerJam1.Units
 {
-    public class ClickToExitBattle : SummerJam1Component, IClickable
+    public abstract class ClickToExitBattle<TNextDungeonType> : SummerJam1Component, IClickable, IBottomCard
+        where TNextDungeonType : DungeonPile, new()
     {
         public void Click()
         {
             Logging.Log("Clicked to exit.");
             if (Game.Battle.IsTopCard(Entity))
             {
+                IEntity dungeon = Context.CreateEntity(Entity, delegate(IEntity entity) { entity.AddComponent<TNextDungeonType>(); });
+                ExtraSetup(dungeon);
+                Game.PrepareNextDungeon(dungeon);
                 Events.OnBattleEnded(new BattleEndedEventArgs(true));
-                IEntity dungeon = Context.CreateEntity(Game.Dungeons, delegate(IEntity entity) { entity.AddComponent<ExterminationDungeonPile>(); });
-                Game.StartBattle(dungeon.GetComponent<DungeonPile>());
             }
         }
-    }
 
-    public interface IClickable
-    {
-        void Click();
+        protected virtual void ExtraSetup(IEntity dungeonPile)
+        {
+            //do nothing by default.
+        }
     }
 }

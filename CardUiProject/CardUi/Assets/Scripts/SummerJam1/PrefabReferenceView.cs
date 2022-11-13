@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SummerJam1
 {
-    public class PrefabReferenceView : View<PrefabReference>, ISetModel
+    public class PrefabReferenceView : PileItemView<PrefabReference>, ISetModel, ISortHandler
     {
         protected override void OnInitialized()
         {
@@ -13,7 +13,7 @@ namespace SummerJam1
             IEntity prefabEntity = GetPrefabEntity(Model.Prefab);
 
             GameObject prefabGo = Instantiate(ViewFactory.Instance.GetPrefab(prefabEntity.GetComponent<IVisual>()), transform);
-            
+
             prefabGo.GetComponent<ISetModel>().SetModel(prefabEntity);
         }
 
@@ -24,6 +24,14 @@ namespace SummerJam1
                 SourcePrefab source = entity.GetComponent<SourcePrefab>();
                 return source != null && source.Prefab == Model.Prefab;
             }).FirstOrDefault();
+        }
+
+        private ISortHandler ChildSortHandler { get; set; }
+
+        public void SetDepth(int depth)
+        {
+            ChildSortHandler ??= gameObject.GetComponentsInChildren<ISortHandler>().FirstOrDefault(o => o != this);
+            ChildSortHandler?.SetDepth(depth);
         }
     }
 }

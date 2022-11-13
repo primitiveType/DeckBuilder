@@ -14,6 +14,7 @@ namespace Api
         LifecycleState State { get; }
         bool TrySetParent(IEntity parent);
         T GetComponent<T>();
+        bool HasComponent<T>();
         List<T> GetComponents<T>();
         T GetComponentInParent<T>();
         T GetComponentInChildren<T>();

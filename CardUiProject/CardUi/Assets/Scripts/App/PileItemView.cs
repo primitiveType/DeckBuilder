@@ -11,7 +11,7 @@ namespace App
 {
     [RequireComponent(typeof(ISortHandler))]
     public class PileItemView<T> : View<T>, IEndDragHandler, IPileItemView, IDragHandler, IGameObject,
-        IBeginDragHandler where T : IPileItem
+        IBeginDragHandler
     {
         public bool IsInLayoutGroup; //feels a bit hacky, but hopefully reliable?
 
@@ -54,7 +54,7 @@ namespace App
 
         private void Update()
         {
-            IsInLayoutGroup = GetComponentInParent<LayoutGroup>() != null;
+            IsInLayoutGroup = transform.parent.GetComponentInParent<LayoutGroup>() != null;
 
             if (!IsDragging && !IsInLayoutGroup)
             {
