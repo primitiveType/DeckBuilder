@@ -54,7 +54,7 @@ namespace App
 
         private void Update()
         {
-            IsInLayoutGroup = transform.parent.GetComponentInParent<LayoutGroup>() != null;
+            IsInLayoutGroup = transform.parent?.GetComponentInParent<LayoutGroup>() != null;
 
             if (!IsDragging && !IsInLayoutGroup)
             {

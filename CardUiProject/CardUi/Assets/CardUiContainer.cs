@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CardUiContainer : View<Card>
 {
-    [SerializeField] private GameObject _Card;
+    [SerializeField] private GameObject m_Card;
 
     private RectTransform MyRectTransform { get; set; }
 
@@ -30,7 +30,7 @@ public class CardUiContainer : View<Card>
 
     public void AddCard(GameObject card)
     {
-        _Card = card;
+        m_Card = card;
         card.transform.SetParent(transform);
         card.transform.localPosition = new Vector3(0, 0, -1);
         UpdateSizeOfCard();
@@ -38,13 +38,13 @@ public class CardUiContainer : View<Card>
 
     private void UpdateSizeOfCard()
     {
-        _Card.transform.SetLayerRecursively(LayerMask.NameToLayer("card"));
-        _Card.transform.localScale = Vector3.one;
-        BoxCollider box = _Card.GetComponentInChildren<BoxCollider>(); //treat a box as this thing's bounds.
+        m_Card.transform.SetLayerRecursively(LayerMask.NameToLayer("card"));
+        m_Card.transform.localScale = Vector3.one;
+        BoxCollider box = m_Card.GetComponentInChildren<BoxCollider>(); //treat a box as this thing's bounds.
 
         Vector2 mySize = MyRectTransform.rect.size;
         Vector2 cardSize = box.size;
-        float cardAspect = _Card.transform.localScale.x / _Card.transform.localScale.y; //2:3, .66
+        float cardAspect = m_Card.transform.localScale.x / m_Card.transform.localScale.y; //2:3, .66
 
 
         Vector2 newDimensions = new Vector2(mySize.x / cardSize.x, mySize.y / cardSize.y); //1:1, 1
@@ -60,6 +60,6 @@ public class CardUiContainer : View<Card>
             newDimensions.y = newDimensions.x / cardAspect;
         }
 
-        _Card.transform.localScale = new Vector3(newDimensions.x, newDimensions.y, 1);
+        m_Card.transform.localScale = new Vector3(newDimensions.x, newDimensions.y, 1);
     }
 }

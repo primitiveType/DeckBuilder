@@ -40,7 +40,7 @@
     },
     {
       "$type": "Api.SourcePrefab, Api",
-      "Prefab": "Kill.json",
+      "Prefab": "Cards\\Kill.json",
       "Enabled": true
     }
   ],

@@ -161,9 +161,6 @@
         <None Update="StreamingAssets\Units\mcguffin.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="StreamingAssets\Kill.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="StreamingAssets\Units\Standard\1\boneBoy.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
@@ -177,6 +174,9 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Units\shop.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Kill.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
 

@@ -7,6 +7,7 @@ using CardsAndPiles;
 using CardsAndPiles.Components;
 using RogueMaps;
 using SummerJam1.Units;
+using TMPro;
 using UnityEngine;
 
 namespace SummerJam1
@@ -24,6 +25,7 @@ namespace SummerJam1
         [SerializeField] private GameObject m_HatchEncounterPrefab;
         [SerializeField] private GameObject m_PlayerPrefab;
 
+        public GameObject m_DefaultParent;
 
         private List<IDisposable> Disposables { get; } = new List<IDisposable>();
         public GameObject CardPrefab => m_CardPrefab;
@@ -119,7 +121,7 @@ namespace SummerJam1
             // unitView.transform.localPosition = Vector3.one * 10_000;
             unitView.GetComponent<ISetModel>().SetModel(entity);
             entity.GetOrAddComponent<SummerJam1ModelViewBridge>().gameObject = unitView;
-
+            unitView.transform.SetParent(Instance.m_DefaultParent.transform);
             return unitView;
         }
     }

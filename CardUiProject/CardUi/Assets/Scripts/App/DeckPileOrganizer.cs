@@ -12,7 +12,11 @@ namespace App
         {
             await base.OnItemAddedQueued(added, view);
 
-
+            if (view?.gameObject == null)
+            {
+                Debug.LogError($"Added game object was null. Entity {added.Id}.", this);
+            }
+            
             IPileItemView pileItemView = view.gameObject.GetComponentInChildren<IPileItemView>();
 
             if (SetPosition)
