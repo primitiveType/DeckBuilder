@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Api;
 using CardsAndPiles;
+using CardsAndPiles.Components;
 using SummerJam1.Piles;
 using SummerJam1.Units;
+using SummerJam1.Units.Effects;
 using Random = Api.Random;
 
 namespace SummerJam1
@@ -209,10 +212,15 @@ namespace SummerJam1
         {
             Logging.Log($"Starting battle with {pile.Entity.Children.Count} encounters.");
             int index = 0;
-            foreach (IEntity entity in pile.Entity.Children.OrderByDescending(entity => entity.HasComponent<IBottomCard>())) //fill encounter slots.
+            foreach (IEntity entity in pile.Entity.Children.OrderByDescending(entity => entity.HasComponent<IBottomCard>()).ThenBy((_)=> Game.Random.SystemRandom.Next())) //fill encounter slots.
             {
                 int i = index % EncounterSlots.Count;
-                entity.TrySetParent(EncounterSlots[i].Entity); 
+
+                if (!entity.TrySetParent(EncounterSlots[i].Entity))
+                {
+                    Logging.LogError($"Failed to parent encounter card! : {entity.GetComponent<NameComponent>().Value}.");
+                }
+
                 index++;
             }
 

@@ -24,7 +24,7 @@ namespace SummerJam1
             base.Start();
             try
             {
-                name = $"{Entity.GetComponent<Card>().GetType().Name} ({Entity.Parent.GetComponent<Pile>().GetType().Name})";
+                name = $"{Entity.GetComponent<Card>().GetType().Name} {Entity.GetComponent<NameComponent>().Value} ({Entity.Parent.GetComponent<Pile>().GetType().Name})";
             }
             catch (Exception)
             {

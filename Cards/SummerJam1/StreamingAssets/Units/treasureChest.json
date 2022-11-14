@@ -7,6 +7,13 @@
       "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
+      "$type": "SummerJam1.Units.Effects.DeathAddsRandomCardsToPrizePile, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Units.DestroyAfterTurns, SummerJam1",
+      "Amount": 2
+    },
+    {
       "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
       "Amount": 0
     },
@@ -27,12 +34,9 @@
       "Amount": 5
     },
     {
-      "$type": "SummerJam1.Units.Effects.DeathAddsRandomCardsToPrizePile, SummerJam1"
-    },
-    {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 1,
-      "Max": 1
+      "Amount": 5,
+      "Max": 5
     }
   ]
 }

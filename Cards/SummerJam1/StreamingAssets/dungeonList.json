@@ -81,6 +81,16 @@
       "$type": "SummerJam1.PrefabReference, SummerJam1",
       "Prefab": "Units\\Standard\\1\\orbWisp.json",
       "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.PrefabReference, SummerJam1",
+      "Prefab": "Units\\treasureChest.json",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.PrefabReference, SummerJam1",
+      "Prefab": "Units\\treasureChest.json",
+      "Enabled": true
     }
   ],
   "Id": 116
