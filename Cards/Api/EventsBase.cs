@@ -1,4 +1,5 @@
 ﻿
+
 // ReSharper disable RedundantUsingDirective
 // ReSharper disable PossibleNullReferenceException
 // ReSharper disable InconsistentNaming
@@ -30,8 +31,9 @@ public EventHandle<EntityCreatedEventArgs> SubscribeToEntityCreated(EventHandleD
 /// (object sender, EntityCreatedEventArgs) args)
 /// </summary>
 public class OnEntityCreatedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -40,7 +42,13 @@ public class OnEntityCreatedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -52,7 +60,13 @@ public class OnEntityCreatedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
