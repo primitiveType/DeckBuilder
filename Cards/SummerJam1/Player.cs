@@ -7,7 +7,7 @@ namespace SummerJam1
     public class Player : SummerJam1Component, ITooltip
     {
         public int Movements { get; private set; }
-        public const int MovementsPerTurn = 3;
+        public int MovementsPerTurn { get; private set; }
         public int CurrentEnergy { get; set; }
         public int MaxEnergy { get; } = 3;
 

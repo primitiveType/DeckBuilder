@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
-using SummerJam1.Piles;
 using SummerJam1.Statuses;
 
 namespace SummerJam1.Units.Effects
@@ -16,6 +15,29 @@ namespace SummerJam1.Units.Effects
         private List<IEntity> Tracked { get; } = new();
 
         public abstract string Description { get; }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Entity.PropertyChanged += EntityOnPropertyChanged;
+            PropertyChanged += OnComponentPropertyChanged;
+        }
+
+        void OnComponentPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Enabled))
+            {
+                UpdateStateOfTrackedItems();
+            }
+        }
+
+        void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Entity.Parent))
+            {
+                UpdateStateOfTrackedItems();
+            }
+        }
 
         [OnTurnBegan]
         private void OnTurnBegan()
@@ -34,92 +56,41 @@ namespace SummerJam1.Units.Effects
             }
         }
 
-        protected override void Initialize()
+        [OnBattleStarted]
+        [OnEntityKilled]
+        [OnEntityCreated]
+        [OnUnitMoved]
+        private void UpdateStateOfTrackedItems()
         {
-            base.Initialize();
-            Entity.PropertyChanged += EntityOnPropertyChanged;
-            this.PropertyChanged += OnComponentPropertyChanged;
-            if (Entity.Parent?.GetComponent<EncounterSlotPile>() != null)
-            {
-                AttachToAdjacentSlots();
-            }
-        }
-
-        private void OnComponentPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Enabled))
-            {
-                UpdateState();
-            }
-        }
-
-        private void EntityOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Entity.Parent))
-            {
-                UpdateState();
-            }
-        }
-
-        private void UpdateState()
-        {
-            if (Enabled && Entity.Parent?.GetComponent<EncounterSlotPile>() != null)
-            {
-                AttachToAdjacentSlots();
-            }
-            else
+            if (!Enabled)
             {
                 RemoveFromAdjacent();
+                return;
             }
-        }
 
-        private void AttachToAdjacentSlots()
-        {
-            List<IEntity> neighbors = Game.Battle.GetAdjacentSlots(Entity.Parent);
+            List<IEntity> currentAdj = Game.Battle.GetTopEntitiesInAdjacentSlots(Entity);
 
-            foreach (IEntity neighbor in neighbors)
+            foreach (IEntity entity in Tracked.ToList())
             {
-                AttachToSlot(neighbor);
+                if (!currentAdj.Contains(entity))
+                {
+                    ProcessAdjacentRemovedInternal(entity);
+                }
             }
-        }
 
-        private void AttachToSlot(IEntity neighbor)
-        {
-            neighbor.Children.CollectionChanged += NeighborChildrenChanged;
-            foreach (IEntity neighborChild in neighbor.Children)
+            foreach (IEntity entity in currentAdj)
             {
-                ProcessAdjacentAddedInternal(neighborChild);
+                if (!Tracked.Contains(entity))
+                {
+                    ProcessAdjacentAddedInternal(entity);
+                }
             }
-        }
-
-        private void DetachFromSlot(IEntity neighbor)
-        {
-            neighbor.Children.CollectionChanged -= NeighborChildrenChanged;
         }
 
         private void ProcessAdjacentAddedInternal(IEntity neighborChild)
         {
             Tracked.Add(neighborChild);
             ProcessAdjacentAdded(neighborChild);
-        }
-
-        private void NeighborChildrenChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                foreach (IEntity newItem in e.NewItems)
-                {
-                    ProcessAdjacentAddedInternal(newItem);
-                }
-            }
-
-            else if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                foreach (IEntity eOldItem in e.OldItems)
-                {
-                    ProcessAdjacentRemovedInternal(eOldItem);
-                }
-            }
         }
 
         private void ProcessAdjacentRemovedInternal(IEntity eOldItem)
@@ -137,6 +108,8 @@ namespace SummerJam1.Units.Effects
         {
             base.Terminate();
             RemoveFromAdjacent();
+            Entity.PropertyChanged -= EntityOnPropertyChanged;
+            PropertyChanged -= OnComponentPropertyChanged;
         }
 
         private void RemoveFromAdjacent()
@@ -147,8 +120,6 @@ namespace SummerJam1.Units.Effects
                 {
                     ProcessAdjacentRemoved(entity);
                 }
-
-                DetachFromSlot(entity.Parent);
             }
 
             Tracked.Clear();

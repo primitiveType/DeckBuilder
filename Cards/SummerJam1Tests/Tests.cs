@@ -8,6 +8,7 @@ using CardsAndPiles.Components;
 using CardTestProject;
 using NUnit.Framework;
 using SummerJam1;
+using SummerJam1.Cards;
 using SummerJam1.Statuses;
 using SummerJam1.Units;
 using SummerJam1.Units.Effects;
@@ -20,6 +21,18 @@ namespace SummerJam1Tests
         private Game Game { get; set; }
         private CardEvents Events => (CardEvents)Context.Events;
 
+        [Test]
+        public void TestReentrancy()
+        {
+            var card = Context.CreateEntity(Game.Deck.Entity, child =>
+            {
+                child.AddComponent<TestComponent>();
+                child.AddComponent<PlayerCard>();
+            });
+
+            card.GetComponent<Card>().TryPlayCard(Game.Entity);
+        }
+        
         [SetUp]
         public void Setup()
         {

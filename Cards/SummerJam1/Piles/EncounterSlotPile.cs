@@ -30,6 +30,8 @@ namespace SummerJam1.Piles
             }
         }
 
+ 
+
         private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             //when a card is covered, it is asleep.

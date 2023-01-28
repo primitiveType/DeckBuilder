@@ -28,6 +28,8 @@ namespace SummerJam1
         public PlayerDiscard EncounterDiscardPile { get; private set; }
 
         public List<EncounterSlotPile> EncounterSlots { get; } = new();
+        
+        public bool BattleStarted { get; private set; }
         // public List<Pile> EncounterSlotsUpcoming { get; } = new();
 
 
@@ -86,6 +88,11 @@ namespace SummerJam1
             return card.Parent.Children.LastOrDefault() == card;
         }
 
+        public IEntity GetTopCard(IEntity slot)
+        {
+            return slot.Children.LastOrDefault();
+        }
+
         public IEntity GetSlotToRight(IEntity slotOrMonster)
         {
             EncounterSlotPile slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
@@ -99,6 +106,23 @@ namespace SummerJam1
             if (index < EncounterSlots.Count - 1)
             {
                 return EncounterSlots[index + 1].Entity;
+            }
+
+            return null;
+        }
+        public IEntity GetSlotToLeft(IEntity slotOrMonster)
+        {
+            EncounterSlotPile slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
+            int index = EncounterSlots.IndexOf(slot);
+            if (slot == null)
+            {
+                throw new NullReferenceException(nameof(slot));
+            }
+
+
+            if (index >= 1)
+            {
+                return EncounterSlots[index - 1].Entity;
             }
 
             return null;
@@ -176,6 +200,7 @@ namespace SummerJam1
                 entity.AddComponent<PlayerControl>();
             });
 
+            BattleStarted = true;
             Events.OnBattleStarted(new BattleStartedEventArgs());
             Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
             Events.OnTurnBegan(new TurnBeganEventArgs());
@@ -208,40 +233,94 @@ namespace SummerJam1
             Events.OnTurnBegan(new TurnBeganEventArgs());
         }
 
+        public bool TryMoveUnitRight(IEntity unit)
+        {
+            IEntity targetSlot = Game.Battle.GetSlotToRight(unit);
+            if (targetSlot == null)
+            {
+                return false;
+            }
+
+            return TryMoveUnit(unit, targetSlot);
+        }
+
+        public bool TryMoveUnitLeft(IEntity unit)
+        {
+            IEntity targetSlot = Game.Battle.GetSlotToLeft(unit);
+            if (targetSlot == null)
+            {
+                return false;
+            }
+
+            return TryMoveUnit(unit, targetSlot);
+        }
+        
+        public bool TryMoveUnit(IEntity unit, IEntity targetSlot)
+        {
+            RequestMoveUnitEventArgs tryMoveArgs = new(Entity, false, targetSlot);
+            if (tryMoveArgs.Blockers.Any())
+            {
+                foreach (string blocker in tryMoveArgs.Blockers)
+                {
+                    Logging.Log($"Unable to push card : {blocker}");
+                }
+
+                return false;
+            }
+
+            if (unit.TrySetParent(targetSlot))
+            {
+                Events.OnUnitMoved(new UnitMovedEventArgs(unit, false, targetSlot));
+                return true;
+            }
+
+            return false;
+        }
+
         private void PopulateEncounterPiles(DungeonPile pile)
         {
             Logging.Log($"Starting battle with {pile.Entity.Children.Count} encounters.");
             int index = 0;
-            foreach (IEntity entity in pile.Entity.Children.OrderByDescending(entity => entity.HasComponent<IBottomCard>()).ThenBy((_)=> Game.Random.SystemRandom.Next())) //fill encounter slots.
+            List<IEntity>[] lists = new List<IEntity>[NUM_ENCOUNTER_SLOTS_PER_FLOOR];
+            for (int i = 0; i < lists.Length; i++)
+            {
+                lists[i] = new List<IEntity>();
+            }
+
+            foreach (IEntity entity in pile.Entity.Children.OrderByDescending(entity => entity.HasComponent<IBottomCard>())
+                         .ThenBy(DungeonOrder)) //fill encounter slots.
             {
                 int i = index % EncounterSlots.Count;
+                
+                lists[i].Add(entity);
+            
 
-                if (!entity.TrySetParent(EncounterSlots[i].Entity))
+                index+=2;
+            }
+
+            for (int i = 0; i < lists.Length; i++)
+            {
+                //lists[i] = lists[i].OrderByDescending(entity => entity.GetComponent<Health>()?.Amount).ToList();
+
+                foreach (IEntity entity in lists[i])
                 {
-                    Logging.LogError($"Failed to parent encounter card! : {entity.GetComponent<NameComponent>().Value}.");
+                    if (!entity.TrySetParent(EncounterSlots[i].Entity))
+                    {
+                        Logging.LogError($"Failed to parent encounter card! : {entity.GetComponent<NameComponent>().Value}.");
+                    }
                 }
-
-                index++;
             }
 
             foreach (EncounterSlotPile encounterSlot in EncounterSlots)
             {
                 encounterSlot.SetAllButTopFaceDown();
             }
-            // Logging.Log($"Starting battle with {prefabs.Count} encounters.");
-            // int index = 0;
-            // foreach (IEntity prefab in prefabs.OrderBy(entity => entity.HasComponent<IBottomCard>())) //fill encounter slots.
-            // {
-            //     int i = index % EncounterSlots.Count;
-            //     prefab.TrySetParent(EncounterSlots[i].Entity); 
-            //     Context.CreateEntity(prefab, prefab.GetComponent<PrefabReference>().Prefab);
-            //     index++;
-            // }
-            //
-            // foreach (EncounterSlotPile encounterSlot in EncounterSlots)
-            // {
-            //     encounterSlot.SetAllButTopFaceDown();
-            // }
+     
+        }
+
+        private int DungeonOrder(IEntity _)
+        {
+            return Game.Random.SystemRandom.Next();
         }
 
 

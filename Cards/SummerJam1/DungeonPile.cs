@@ -12,6 +12,7 @@ namespace SummerJam1
         protected virtual int NumBoosters => 3;
 
         public int Difficulty { get; set; }
+        public string DungeonList { get; set; }
 
         protected virtual int GetMinCards(int difficulty)
         {

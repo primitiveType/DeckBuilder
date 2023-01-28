@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Api
 {
-    public abstract class Component : IComponent
+    public abstract class Component : IEventfulComponent
     {
         protected Component()
         {
@@ -106,5 +106,7 @@ namespace Api
 
             State = LifecycleState.Destroyed;
         }
+
+        public Dictionary<int, int> EventEntrance { get; } = new();
     }
 }

@@ -1,4 +1,6 @@
-﻿using Api;
+﻿using System.ComponentModel;
+using SummerJam1.Statuses;
+using Component = Api.Component;
 
 namespace SummerJam1
 {
@@ -11,6 +13,36 @@ namespace SummerJam1
         {
             base.Initialize();
             Game = Context.Root.GetComponent<Game>();
+            PropertyChanged += OnEnabledChanged;
+            if (Enabled)
+            {
+                OnEnable();
+            }
+        }
+
+        private void OnEnabledChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Enabled))
+            {
+                if (Enabled)
+                {
+                    OnEnable();
+                }
+                else
+                {
+                    OnDisable();
+                }
+            }
+        }
+
+        protected virtual void OnDisable()
+        {
+            
+        }
+
+        protected virtual void OnEnable()
+        {
+            
         }
     }
 }

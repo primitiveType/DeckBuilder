@@ -3,6 +3,7 @@ using System.IO;
 using System.Security;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Api;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Component = Api.Component;
 
@@ -13,11 +14,30 @@ namespace PrefabEditor
         public ComponentService Service { get; private set; }
         public CommonOpenFileDialog openFileDialog1;
         private Proxy CurrentProxy;
+        private PrefabEditorSettings Settings { get; set; }
+        private class PrefabEditorSettings
+        {
+            public string PrefabsDirectory { get; set; }
+        }
         public PrefabEditor()
         {
             openFileDialog1 = new CommonOpenFileDialog();
             openFileDialog1.IsFolderPicker = true;
             InitializeComponent();
+            LoadSettings();
+        }
+
+        private void LoadSettings()
+        {
+            if (File.Exists("Settings.json"))
+            {
+                Settings = Serializer.Deserialize<PrefabEditorSettings>(File.ReadAllText("Settings.json"));
+            }
+            else
+            {
+                Settings = new PrefabEditorSettings();
+            }
+
         }
 
         private void Form1_Load(object sender, System.EventArgs e)
@@ -30,6 +50,7 @@ namespace PrefabEditor
             buttonPrefabDirectory.Click += buttonPrefabDirectory_Click;
             addComponentListBox.DoubleClick += AddComponentListBox_DoubleClick;
             UpdateAddComponentListBox();
+            OpenPrefabsDirectory();
         }
 
         private void PropertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
@@ -81,14 +102,9 @@ namespace PrefabEditor
                 try
                 {
                     var di = new DirectoryInfo(openFileDialog1.FileName);
-                    Service.Start(di.FullName);
-
-                    UpdateAddComponentListBox();
-
-                    UpdatePrefabsList();
-
-                    UpdateComponentList();
-
+                    Settings.PrefabsDirectory = di.FullName;
+                    SaveSettings();
+                    OpenPrefabsDirectory();
                 }
                 catch (SecurityException ex)
                 {
@@ -96,6 +112,28 @@ namespace PrefabEditor
                     $"Details:\n\n{ex.StackTrace}");
                 }
             }
+        }
+
+        private void SaveSettings()
+        {
+            string settings = Serializer.Serialize(Settings);
+            File.WriteAllText("Settings.json", settings);
+        }
+
+        private void OpenPrefabsDirectory()
+        {
+            if(Settings?.PrefabsDirectory == null)
+            {
+                return;
+            }
+
+            Service.Start(Settings.PrefabsDirectory);
+
+            UpdateAddComponentListBox();
+
+            UpdatePrefabsList();
+
+            UpdateComponentList();
         }
 
         private void UpdatePrefabsList()
@@ -145,13 +183,28 @@ namespace PrefabEditor
 
         }
 
+        private class ErrorObject
+        {
+           public string Error = "There was an error trying to display the selected component.";
+           public string Exception { get; set; }
+        }
+
         private void UpdatePropertyGrid()
         {
             object selected = componentsListBox.SelectedItem;
             if (componentsListBox.SelectedItem != null)
             {
-                CurrentProxy = new Proxy(componentsListBox.SelectedItem);
-                selected = CurrentProxy;
+                try
+                {
+                    CurrentProxy = new Proxy(componentsListBox.SelectedItem);
+                    selected = CurrentProxy;
+                }catch(Exception e)
+                {
+                    selected = new ErrorObject
+                    {
+                        Exception = e.Message
+                    };
+                }
             }
             else
             {

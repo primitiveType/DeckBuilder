@@ -34,11 +34,11 @@
     },
     {
       "$type": "Api.SourcePrefab, Api",
-      "Prefab": "Units\\exit.json",
+      "Prefab": "Units\\exitToMountains.json",
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Units.DungeonExit, SummerJam1",
+      "$type": "SummerJam1.Units.FirstDungeonExit, SummerJam1",
       "Enabled": true
     }
   ],

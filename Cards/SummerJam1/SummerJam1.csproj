@@ -119,9 +119,6 @@
         <None Update="StreamingAssets\Relics\DrawExtraCardsOnFirstTurn.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="StreamingAssets\Units\Standard\1\birthdayBoy.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="StreamingAssets\Units\Standard\1\orbWisp.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

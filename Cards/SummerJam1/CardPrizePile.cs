@@ -44,7 +44,16 @@ namespace SummerJam1
         {
             if (child != null)
             {
-                child.TrySetParent(Entity.GetComponentInParent<Game>().Deck.Entity);
+                var prefab = child.GetComponent<SourcePrefab>().Prefab;
+
+                var game = Entity.GetComponentInParent<Game>();
+
+                Context.CreateEntity(game.Deck.Entity, prefab);
+
+                if (game.Battle != null)
+                {
+                    Context.CreateEntity(game.Battle.Hand.Entity, prefab);
+                }
             }
 
             Clear();

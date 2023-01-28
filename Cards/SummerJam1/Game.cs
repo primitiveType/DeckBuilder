@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -46,7 +45,7 @@ namespace SummerJam1
 
             CreatePrefabPile();
             PopulatePlayerDeck();
-            PrepareNextDungeon(Context.CreateEntity(null, entity => entity.AddComponent<ExterminationDungeonPile>()));
+            PrepareNextDungeon(Context.CreateEntity(null, entity => entity.AddComponent<FirstDungeonPile>()));
             Events.OnGameStarted(new GameStartedEventArgs());
         }
 
@@ -134,7 +133,8 @@ namespace SummerJam1
         private List<string> GetEnemyInfos(int difficulty)
         {
             DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Units", "Standard", difficulty.ToString()));
-            List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Units/Standard/{difficulty}/{file.Name}")
+            List<string> files = info.GetFiles().Where(file => file.Extension == ".json")
+                .Select(file => $"Units/Standard/{difficulty}/{file.Name}")
                 .ToList();
             return files;
         }
@@ -158,7 +158,7 @@ namespace SummerJam1
         {
             return GetRelicPrefabs(constraint).Random(Random, constraint).GetComponent<SourcePrefab>().Prefab;
         }
-        
+
         private IEnumerable<IEntity> GetCardPrefabs(Func<IEntity, bool> constraint = null)
         {
             return PrefabsContainer.Children

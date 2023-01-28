@@ -1,6 +1,10 @@
 ﻿namespace SummerJam1.Units
 {
-    public class DungeonExit : ClickToExitBattle<ExterminationDungeonPile>
+    public class FirstDungeonExit : ClickToExitBattle<SecondDungeonPile>
     {
     }
+    public class SecondDungeonExit : ClickToExitBattle<FirstDungeonPile>
+    {
+    }
+
 }

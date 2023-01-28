@@ -8,6 +8,10 @@ namespace SummerJam1.Rules
         [OnRequestMoveUnit]
         private void OnRequestMoveUnit(object sender, RequestMoveUnitEventArgs args)
         {
+            if (!args.UsesMovement)
+            {
+                return;
+            }
             Health topMonsterHealth = args.Target.Children.LastOrDefault()?.GetComponent<Health>();
             Health myHealth = args.CardId.GetComponent<Health>();
             if (topMonsterHealth != null && topMonsterHealth.Amount <= myHealth.Amount)

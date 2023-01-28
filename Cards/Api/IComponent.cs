@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Api
 {
@@ -6,5 +7,10 @@ namespace Api
     {
         IEntity Entity { get; }
         bool Enabled { get; set; }
+    }
+
+    internal interface IEventfulComponent : IComponent
+    {
+        Dictionary<int, int> EventEntrance { get; }
     }
 }

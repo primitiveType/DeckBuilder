@@ -9,77 +9,97 @@
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\exit.json",
+      "Prefab": "Units\\exitToMountains.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\shop.json",
+      "Prefab": "Units\\Standard\\1\\cavalry.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\boneBoy.json",
+      "Prefab": "Units\\Standard\\1\\cavalry.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\ectongue.json",
+      "Prefab": "Units\\Standard\\1\\cavalry.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\headCheese.json",
+      "Prefab": "Units\\Standard\\1\\cavalry.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\notGengar.json",
+      "Prefab": "Units\\Standard\\1\\commander.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\orbWisp.json",
+      "Prefab": "Units\\Standard\\1\\commander.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\sadRalph.json",
-      "Enabled": true
-    },
-    {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "dungeonList.json",
+      "Prefab": "Units\\Standard\\1\\commander.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\birthdayBoy.json",
+      "Prefab": "Units\\Standard\\1\\commander.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\boneBoy.json",
+      "Prefab": "Units\\Standard\\1\\bannerman.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\ectongue.json",
+      "Prefab": "Units\\Standard\\1\\bannerman.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\headCheese.json",
+      "Prefab": "Units\\Standard\\1\\bannerman.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\notGengar.json",
+      "Prefab": "Units\\Standard\\1\\bannerman.json",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
-      "Prefab": "Units\\Standard\\1\\orbWisp.json",
+      "Prefab": "Units\\Standard\\1\\soldier.json",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.PrefabReference, SummerJam1",
+      "Prefab": "Units\\Standard\\1\\soldier.json",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.PrefabReference, SummerJam1",
+      "Prefab": "Units\\Standard\\1\\soldier.json",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.PrefabReference, SummerJam1",
+      "Prefab": "Units\\Standard\\1\\soldier.json",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.PrefabReference, SummerJam1",
+      "Prefab": "Units\\Standard\\1\\soldier.json",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.PrefabReference, SummerJam1",
+      "Prefab": "Units\\Standard\\1\\soldier.json",
       "Enabled": true
     },
     {

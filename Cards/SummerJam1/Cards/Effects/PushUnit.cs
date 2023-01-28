@@ -20,29 +20,7 @@ namespace SummerJam1.Cards.Effects
                 return false;
             }
 
-            IEntity targetSlot = Game.Battle.GetSlotToRight(unit);
-            if (targetSlot == null)
-            {
-                return false;
-            }
-
-            if (unit.TrySetParent(targetSlot))
-            {
-                RequestMoveUnitEventArgs tryMoveArgs = new(Entity, false, target);
-                if (!tryMoveArgs.Blockers.Any())
-                {
-                    foreach (string blocker in tryMoveArgs.Blockers)
-                    {
-                        Logging.Log($"Unable to push card : {blocker}");
-                    }
-                    return false;
-                }
-
-                Events.OnUnitMoved(new UnitMovedEventArgs(unit, false, target)); 
-                return true;
-            }
-
-            return false;
+            return Game.Battle.TryMoveUnitRight(unit);
         }
 
         public string Tooltip => "Push - Pushes the unit to the right.";

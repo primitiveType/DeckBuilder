@@ -148,7 +148,7 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 /// (object sender, <#= eventNode.Attributes["id"].Value #>EventArgs) args)
 /// </summary>
 public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -158,7 +158,13 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttr
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logger.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.";
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -170,7 +176,13 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttr
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logger.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.";
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 

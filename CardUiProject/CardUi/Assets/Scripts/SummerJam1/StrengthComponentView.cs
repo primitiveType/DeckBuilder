@@ -16,7 +16,8 @@ namespace SummerJam1
                 int diff = _previous.HasValue ? amount.Value - _previous.Value : amount.Value;
                 if (diff != 0)
                 {
-                    TextPopupManager.Instance.Add($"+{diff} Strength", ((MonoBehaviour)View).gameObject,
+                    string sign = diff > 0 ? "+" : "";
+                    TextPopupManager.Instance.Add($"{sign}{diff} Strength", ((MonoBehaviour)View).gameObject,
                         TextPopupManager.STAT_TEXT);
                 }
             }

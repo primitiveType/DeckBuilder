@@ -1,6 +1,8 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using Api;
 using SummerJam1.Cards;
 using SummerJam1.Piles;
 
@@ -8,12 +10,18 @@ namespace SummerJam1.Statuses
 {
     public abstract class EnabledWhenAtTopOfEncounterSlot : SummerJam1Component
     {
+        private bool IsInBattle => Game.Battle != null && Game.Battle.BattleStarted;
+        private IDisposable Disposable { get; set; }
+
         protected override void Initialize()
         {
             base.Initialize();
             Entity.PropertyChanged += EntityOnPropertyChanged;
             Entity.Components.CollectionChanged += ComponentsOnCollectionChanged;
             UpdateEnabledState();
+
+            //Subscribe manually since we will be disabled.
+            Disposable = Events.SubscribeToBattleStarted(OnBattleStarted);
         }
 
         private void ComponentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -29,9 +37,26 @@ namespace SummerJam1.Statuses
             }
         }
 
+        private void OnBattleStarted(object sender, BattleStartedEventArgs args)
+        {
+            Logging.Log("Battle started. Updating enabled state.");
+            UpdateEnabledState();
+        }
+
+        [OnBattleEnded]
+        private void OnBattleEnded(object sender, BattleEndedEventArgs args)
+        {
+            UpdateEnabledState();
+        }
 
         private void UpdateEnabledState()
         {
+            if (!IsInBattle)
+            {
+                Enabled = false;
+                return;
+            }
+
             EncounterSlotPile component = Entity.GetComponentInParent<EncounterSlotPile>();
             if (component == null)
             {
@@ -89,6 +114,7 @@ namespace SummerJam1.Statuses
             Entity.PropertyChanged -= EntityOnPropertyChanged;
             Entity.Components.CollectionChanged -= ComponentsOnCollectionChanged;
             DetachFromParentCollectionChanged();
+            Disposable?.Dispose();
         }
     }
 }
