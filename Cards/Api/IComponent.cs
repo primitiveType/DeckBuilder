@@ -9,7 +9,7 @@ namespace Api
         bool Enabled { get; set; }
     }
 
-    internal interface IEventfulComponent : IComponent
+    public interface IEventfulComponent : IComponent
     {
         Dictionary<int, int> EventEntrance { get; }
     }

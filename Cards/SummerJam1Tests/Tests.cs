@@ -24,7 +24,7 @@ namespace SummerJam1Tests
         [Test]
         public void TestReentrancy()
         {
-            var card = Context.CreateEntity(Game.Deck.Entity, child =>
+            IEntity card = Context.CreateEntity(Game.Deck.Entity, child =>
             {
                 child.AddComponent<TestComponent>();
                 child.AddComponent<PlayerCard>();
@@ -36,12 +36,16 @@ namespace SummerJam1Tests
         [SetUp]
         public void Setup()
         {
+            long memoryBefore = GC.GetTotalMemory(true);
             Logging.Initialize(new DefaultLogger());
             Context = new Context(new SummerJam1Events());
             IEntity gameEntity = Context.Root;
             Context.SetPrefabsDirectory("StreamingAssets");
-
             Game = gameEntity.AddComponent<Game>();
+            long memoryAfter = GC.GetTotalMemory(false);
+            long memoryLast = GC.GetTotalMemory(true);
+
+            Logging.Log($"Memory before : {memoryBefore}. Memory after : {memoryAfter}. Memory after cleanup {memoryLast}.");
         }
 
         [Test]

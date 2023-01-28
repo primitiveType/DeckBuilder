@@ -8,24 +8,32 @@
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" />
         <PackageReference Include="JsonNet.ContractResolvers" Version="2.0.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta1" />
-        <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
         <PackageReference Include="RandN" Version="0.3.0" />
     </ItemGroup>
+    <PropertyGroup>
+        <TransformOnBuild>true</TransformOnBuild>
+        <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
+    </PropertyGroup>
 
     <ItemGroup>
         <None Update="EventsBase.tt">
             <Generator>TextTemplatingFileGenerator</Generator>
             <LastGenOutput>EventsBase.cs</LastGenOutput>
         </None>
+        <None Update="Tester.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>Tester.cs</LastGenOutput>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="EventsBase.cs">
-            <AutoGen>True</AutoGen>
-            <DesignTime>True</DesignTime>
-            <DependentUpon>EventsBase.tt</DependentUpon>
-        </Compile>
+      <Compile Update="EventsBase.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>EventsBase.tt</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

@@ -25,6 +25,6 @@ namespace Api
             Id = GetNextId();
         }
 
-        public abstract IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events);
+        public abstract IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events);
     }
 }

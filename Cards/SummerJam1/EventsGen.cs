@@ -1,3 +1,4 @@
+﻿
 
 // ReSharper disable RedundantUsingDirective
 // ReSharper disable PossibleNullReferenceException
@@ -268,7 +269,7 @@ public EventHandle<RelicCreatedEventArgs> SubscribeToRelicCreated(EventHandleDel
 /// (object sender, UnitCreatedEventArgs) args)
 /// </summary>
 public class OnUnitCreatedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -278,7 +279,13 @@ public class OnUnitCreatedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -290,7 +297,13 @@ public class OnUnitCreatedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -307,7 +320,7 @@ public class OnUnitCreatedAttribute : EventsBaseAttribute {
 /// (object sender, IntentStartedEventArgs) args)
 /// </summary>
 public class OnIntentStartedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -317,7 +330,13 @@ public class OnIntentStartedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -329,7 +348,13 @@ public class OnIntentStartedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -346,7 +371,7 @@ public class OnIntentStartedAttribute : EventsBaseAttribute {
 /// (object sender, UnitTransformedEventArgs) args)
 /// </summary>
 public class OnUnitTransformedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -356,7 +381,13 @@ public class OnUnitTransformedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -368,7 +399,13 @@ public class OnUnitTransformedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -385,7 +422,7 @@ public class OnUnitTransformedAttribute : EventsBaseAttribute {
 /// (object sender, BattleEndedEventArgs) args)
 /// </summary>
 public class OnBattleEndedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -395,7 +432,13 @@ public class OnBattleEndedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -407,7 +450,13 @@ public class OnBattleEndedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -424,7 +473,7 @@ public class OnBattleEndedAttribute : EventsBaseAttribute {
 /// (object sender, GameEndedEventArgs) args)
 /// </summary>
 public class OnGameEndedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -434,7 +483,13 @@ public class OnGameEndedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -446,7 +501,13 @@ public class OnGameEndedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -463,7 +524,7 @@ public class OnGameEndedAttribute : EventsBaseAttribute {
 /// (object sender, GameStartedEventArgs) args)
 /// </summary>
 public class OnGameStartedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -473,7 +534,13 @@ public class OnGameStartedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -485,7 +552,13 @@ public class OnGameStartedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -497,7 +570,7 @@ public class OnGameStartedAttribute : EventsBaseAttribute {
 /// (object sender, BattleStartedEventArgs) args)
 /// </summary>
 public class OnBattleStartedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -507,7 +580,13 @@ public class OnBattleStartedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -519,7 +598,13 @@ public class OnBattleStartedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -531,7 +616,7 @@ public class OnBattleStartedAttribute : EventsBaseAttribute {
 /// (object sender, SomeTwitterEventEventArgs) args)
 /// </summary>
 public class OnSomeTwitterEventAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -541,7 +626,13 @@ public class OnSomeTwitterEventAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -553,7 +644,13 @@ public class OnSomeTwitterEventAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -565,7 +662,7 @@ public class OnSomeTwitterEventAttribute : EventsBaseAttribute {
 /// (object sender, LeaveBattleEventArgs) args)
 /// </summary>
 public class OnLeaveBattleAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -575,7 +672,13 @@ public class OnLeaveBattleAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -587,7 +690,13 @@ public class OnLeaveBattleAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -599,7 +708,7 @@ public class OnLeaveBattleAttribute : EventsBaseAttribute {
 /// (object sender, RequestMoveUnitEventArgs) args)
 /// </summary>
 public class OnRequestMoveUnitAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -609,7 +718,13 @@ public class OnRequestMoveUnitAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -621,7 +736,13 @@ public class OnRequestMoveUnitAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -643,7 +764,7 @@ public class OnRequestMoveUnitAttribute : EventsBaseAttribute {
 /// (object sender, UnitMovedEventArgs) args)
 /// </summary>
 public class OnUnitMovedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -653,7 +774,13 @@ public class OnUnitMovedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -665,7 +792,13 @@ public class OnUnitMovedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -686,7 +819,7 @@ public class OnUnitMovedAttribute : EventsBaseAttribute {
 /// (object sender, RequestRemoveCardEventArgs) args)
 /// </summary>
 public class OnRequestRemoveCardAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -696,7 +829,13 @@ public class OnRequestRemoveCardAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -708,7 +847,13 @@ public class OnRequestRemoveCardAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -720,7 +865,7 @@ public class OnRequestRemoveCardAttribute : EventsBaseAttribute {
 /// (object sender, AttackPhaseStartedEventArgs) args)
 /// </summary>
 public class OnAttackPhaseStartedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -730,7 +875,13 @@ public class OnAttackPhaseStartedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -742,7 +893,13 @@ public class OnAttackPhaseStartedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -754,7 +911,7 @@ public class OnAttackPhaseStartedAttribute : EventsBaseAttribute {
 /// (object sender, AttackPhaseEndedEventArgs) args)
 /// </summary>
 public class OnAttackPhaseEndedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -764,7 +921,13 @@ public class OnAttackPhaseEndedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -776,7 +939,13 @@ public class OnAttackPhaseEndedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -788,7 +957,7 @@ public class OnAttackPhaseEndedAttribute : EventsBaseAttribute {
 /// (object sender, DungeonPhaseStartedEventArgs) args)
 /// </summary>
 public class OnDungeonPhaseStartedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -798,7 +967,13 @@ public class OnDungeonPhaseStartedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -810,7 +985,13 @@ public class OnDungeonPhaseStartedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -822,7 +1003,7 @@ public class OnDungeonPhaseStartedAttribute : EventsBaseAttribute {
 /// (object sender, DungeonPhaseEndedEventArgs) args)
 /// </summary>
 public class OnDungeonPhaseEndedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -832,7 +1013,13 @@ public class OnDungeonPhaseEndedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -844,7 +1031,13 @@ public class OnDungeonPhaseEndedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -856,7 +1049,7 @@ public class OnDungeonPhaseEndedAttribute : EventsBaseAttribute {
 /// (object sender, MovementPhaseBeganEventArgs) args)
 /// </summary>
 public class OnMovementPhaseBeganAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -866,7 +1059,13 @@ public class OnMovementPhaseBeganAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -878,7 +1077,13 @@ public class OnMovementPhaseBeganAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 
@@ -890,7 +1095,7 @@ public class OnMovementPhaseBeganAttribute : EventsBaseAttribute {
 /// (object sender, RelicCreatedEventArgs) args)
 /// </summary>
 public class OnRelicCreatedAttribute : EventsBaseAttribute {
-    public override IDisposable GetEventHandle(MethodInfo attached, IComponent instance, EventsBase events)
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
@@ -900,7 +1105,13 @@ public class OnRelicCreatedAttribute : EventsBaseAttribute {
                 if(!instance.Enabled){
                     return;
                 }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
                 attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
@@ -912,7 +1123,13 @@ public class OnRelicCreatedAttribute : EventsBaseAttribute {
             if(!instance.Enabled){
                 return;
             }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
             attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
         });
     }
 

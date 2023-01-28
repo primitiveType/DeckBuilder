@@ -155,7 +155,6 @@ public abstract class <#= catalogName #> : <#= inherits #>{
 public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
-        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -165,7 +164,7 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttr
                     return;
                 }
                 if(instance.EventEntrance[Id] > 0){
-                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    Logger.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.";
                     return;
                 }
                 instance.EventEntrance[Id]++;
@@ -183,7 +182,7 @@ public class On<#= eventNode.Attributes["id"].Value #>Attribute : EventsBaseAttr
                 return;
             }
             if(instance.EventEntrance[Id] > 0){
-                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                Logger.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.";
                 return;
             }
             instance.EventEntrance[Id]++;

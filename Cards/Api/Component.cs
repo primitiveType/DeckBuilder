@@ -107,6 +107,6 @@ namespace Api
             State = LifecycleState.Destroyed;
         }
 
-        public Dictionary<int, int> EventEntrance { get; } = new();
+        public Dictionary<int, int> EventEntrance { get; } = new(0);
     }
 }
