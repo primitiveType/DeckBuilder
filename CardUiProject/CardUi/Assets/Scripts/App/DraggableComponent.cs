@@ -18,6 +18,7 @@ namespace App
         {
             base.OnInitialized();
             InputStateManager.Instance.StateMachine.OnTransitioned(OnInputStateChanged);
+            
             SetEnabledState();
         }
 

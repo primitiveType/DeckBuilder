@@ -42,7 +42,9 @@ namespace E7.Introloop.Editor
         {
             AudioImporter imp = AssetImporter.GetAtPath(path) as AudioImporter;
             imp.loadInBackground = true;
-            imp.preloadAudioData = false;
+            var impSettings = imp.defaultSampleSettings;
+            impSettings.preloadAudioData = false;
+            imp.defaultSampleSettings = impSettings;
             AudioImporterSampleSettings settings = imp.defaultSampleSettings;
             settings.compressionFormat = AudioCompressionFormat.Vorbis;
             imp.defaultSampleSettings = settings;

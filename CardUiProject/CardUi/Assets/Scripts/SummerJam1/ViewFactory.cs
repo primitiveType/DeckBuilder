@@ -5,7 +5,6 @@ using App;
 using App.Utility;
 using CardsAndPiles;
 using CardsAndPiles.Components;
-using RogueMaps;
 using SummerJam1.Units;
 using TMPro;
 using UnityEngine;
@@ -88,8 +87,6 @@ namespace SummerJam1
         {
             switch (visual)
             {
-                case CustomCell customCell:
-                    return WalkablePrefab;
                 case RelicEncounter relicEncounter:
                     break;
                 case ShrineEncounter shrineEncounter:
@@ -99,8 +96,6 @@ namespace SummerJam1
                     return RelicPrefab;
                 case Card card:
                     return CardPrefab;
-                case BlocksMovement blocksMovement:
-                    return WallPrefab;    
                 case DungeonPile dungeonPile:
                     return m_DungeonPrefab;
                 case PrefabReference prefabReference:

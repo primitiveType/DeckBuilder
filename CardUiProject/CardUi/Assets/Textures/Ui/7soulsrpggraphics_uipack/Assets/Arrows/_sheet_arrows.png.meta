@@ -435,7 +435,7 @@ TextureImporter:
       213: -8704721887638413039
     second: _sheet_arrows_143
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -452,10 +452,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -494,6 +496,8 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -509,6 +513,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -3556,9 +3572,153 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      _sheet_arrows_35: -3086226798956890886
+      _sheet_arrows_11: 3619701225741922737
+      _sheet_arrows_87: -2397439664917650424
+      _sheet_arrows_121: -8349848899341526321
+      _sheet_arrows_140: -4093698636779686904
+      _sheet_arrows_18: 3112742427145019734
+      _sheet_arrows_134: 8049631119575524802
+      _sheet_arrows_33: 7775244397213744862
+      _sheet_arrows_96: -2830933631079045596
+      _sheet_arrows_57: -2262310182989222537
+      _sheet_arrows_111: -7186202695171121393
+      _sheet_arrows_90: -5952578045747207874
+      _sheet_arrows_53: 1831159670980547380
+      _sheet_arrows_128: -6320777871408248048
+      _sheet_arrows_7: 5361169156086806292
+      _sheet_arrows_51: -5902568869254590718
+      _sheet_arrows_86: 7046067377719577234
+      _sheet_arrows_13: 7190327588632756341
+      _sheet_arrows_69: -4718655570293707272
+      _sheet_arrows_105: 2031998587525984893
+      _sheet_arrows_2: -492682021285123603
+      _sheet_arrows_72: 9040476948474440884
+      _sheet_arrows_129: -7831829590345762
+      _sheet_arrows_84: -4584146262426530357
+      _sheet_arrows_66: 5647110579200816020
+      _sheet_arrows_81: -9124243436852061693
+      _sheet_arrows_52: -7688233387679944231
+      _sheet_arrows_116: 6814867551864024205
+      _sheet_arrows_28: -7371691902439833597
+      _sheet_arrows_8: 2389687588047886728
+      _sheet_arrows_9: -2699430197603443570
+      _sheet_arrows_25: -6690947369374045437
+      _sheet_arrows_74: -6788390128243105861
+      _sheet_arrows_47: 4997758699412036493
+      _sheet_arrows_70: -7404565446615239166
+      _sheet_arrows_1: -9029743171685527571
+      _sheet_arrows_143: -8704721887638413039
+      _sheet_arrows_93: -4658093900943251159
+      _sheet_arrows_49: -8458273046203540323
+      _sheet_arrows_101: -2137262898136433974
+      _sheet_arrows_102: -4793234032477510409
+      _sheet_arrows_62: 5456498253780498218
+      _sheet_arrows_107: 5841694611951530882
+      _sheet_arrows_39: -2009138971978549017
+      _sheet_arrows_5: -4446788344952413977
+      _sheet_arrows_27: -2575752072246589528
+      _sheet_arrows_100: -7428433612382920764
+      _sheet_arrows_10: 3062681601769741005
+      _sheet_arrows_15: 5613527406470768423
+      _sheet_arrows_38: -3479028141296031451
+      _sheet_arrows_73: 667881545816392701
+      _sheet_arrows_76: -26973906244959886
+      _sheet_arrows_131: -3079269697888077440
+      _sheet_arrows_130: -1821564307607404975
+      _sheet_arrows_34: -3672709309012643401
+      _sheet_arrows_37: -5822626914907270041
+      _sheet_arrows_115: -4682926114744979179
+      _sheet_arrows_17: 3915083812336313410
+      _sheet_arrows_44: -3744762974301284478
+      _sheet_arrows_137: 4463371675803082926
+      _sheet_arrows_108: -7350589164366483154
+      _sheet_arrows_132: 1052357692422024048
+      _sheet_arrows_83: -6200641325907043782
+      _sheet_arrows_43: 7435519100825937288
+      _sheet_arrows_24: -2750862200926089564
+      _sheet_arrows_110: 1144566332716588996
+      _sheet_arrows_109: -3112974513715670425
+      _sheet_arrows_133: -2149859631636710728
+      _sheet_arrows_14: -7619895928271321453
+      _sheet_arrows_16: 6632468596250091106
+      _sheet_arrows_139: 2915382664440881818
+      _sheet_arrows_138: 6672867412387512727
+      _sheet_arrows_29: 4653880433238307582
+      _sheet_arrows_123: -7867525138219780049
+      _sheet_arrows_120: -1249955653960584949
+      _sheet_arrows_125: -6690004323690166079
+      _sheet_arrows_79: 3751743899546725363
+      _sheet_arrows_41: -4938122342617594770
+      _sheet_arrows_22: 3481582744680986216
+      _sheet_arrows_80: -2360684076946004372
+      _sheet_arrows_31: 2143553077600413103
+      _sheet_arrows_113: 6475275044132307472
+      _sheet_arrows_117: 3562161781275780129
+      _sheet_arrows_91: -8265695674770511133
+      _sheet_arrows_104: 1465440333520329814
+      _sheet_arrows_106: -2549560728737093686
+      _sheet_arrows_50: 4452716192530134076
+      _sheet_arrows_40: -1647782154837075883
+      _sheet_arrows_64: 3318340432520261572
+      _sheet_arrows_19: -2728329017577646726
+      _sheet_arrows_124: -2368464963490771518
+      _sheet_arrows_95: 1753567705008649346
+      _sheet_arrows_56: 4933794966465412451
+      _sheet_arrows_3: -3969267984418063408
+      _sheet_arrows_119: 3066277404148606186
+      _sheet_arrows_136: 5736288541744270076
+      _sheet_arrows_30: -135372659074249433
+      _sheet_arrows_42: 4854433272222052335
+      _sheet_arrows_55: 5998461171036479678
+      _sheet_arrows_78: -1213117751887618140
+      _sheet_arrows_63: -4849721253163222923
+      _sheet_arrows_67: -6649396642679058150
+      _sheet_arrows_127: -7454152755701719141
+      _sheet_arrows_21: 8240272223521851042
+      _sheet_arrows_89: -2326033926527276658
+      _sheet_arrows_45: -3807224046316243990
+      _sheet_arrows_46: -1230757994501026203
+      _sheet_arrows_58: 3393851630701149033
+      _sheet_arrows_88: 3074160772946624983
+      _sheet_arrows_26: 8047248387271276727
+      _sheet_arrows_65: -9014460289152018539
+      _sheet_arrows_97: -7642903600975596864
+      _sheet_arrows_59: 4428646563068242368
+      _sheet_arrows_98: -1715575403027788156
+      _sheet_arrows_68: -5472273530797587415
+      _sheet_arrows_142: -6487617166384639289
+      _sheet_arrows_54: 6345609774495738143
+      _sheet_arrows_32: -3416280722702969087
+      _sheet_arrows_82: -7850481443669810365
+      _sheet_arrows_92: -5055476475793970662
+      _sheet_arrows_0: 7766265295139349038
+      _sheet_arrows_20: -7256065761895148122
+      _sheet_arrows_12: -7953846443746829695
+      _sheet_arrows_23: -3374844254207390210
+      _sheet_arrows_122: 5279184421787039357
+      _sheet_arrows_112: 7614021256579599174
+      _sheet_arrows_75: -45591401769964517
+      _sheet_arrows_141: -3670563510997517284
+      _sheet_arrows_60: 8622356486731806678
+      _sheet_arrows_118: -3864536582416388764
+      _sheet_arrows_6: 8633995622411829091
+      _sheet_arrows_71: 4884579137775344784
+      _sheet_arrows_135: 8457459698594186353
+      _sheet_arrows_114: -8789903825433395775
+      _sheet_arrows_77: -51197162456631018
+      _sheet_arrows_99: 1645226993469718706
+      _sheet_arrows_4: -3058923226107171840
+      _sheet_arrows_85: -1293708505988017730
+      _sheet_arrows_36: -3980305938317264633
+      _sheet_arrows_61: 733570609489307749
+      _sheet_arrows_103: -3243147728559760940
+      _sheet_arrows_126: 8903365080723033837
+      _sheet_arrows_94: 7586617914811112507
+      _sheet_arrows_48: -7623980024412176797
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

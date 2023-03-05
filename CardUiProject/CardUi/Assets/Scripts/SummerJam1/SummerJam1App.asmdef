@@ -6,8 +6,8 @@
         "UnityAsync",
         "SimpleHealthBar",
         "Unity.TextMeshPro",
-        "UltimateTextDamage",
-        "Cinemachine"
+        "Cinemachine",
+        "UTD"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

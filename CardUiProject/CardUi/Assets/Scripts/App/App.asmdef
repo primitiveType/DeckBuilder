@@ -5,7 +5,8 @@
         "GUID:1180d927ddba90c4186f4e3e8628c803",
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
         "GUID:3a4e935828f104039b90d535bc856a32",
-        "GUID:4307f53044263cf4b835bd812fc161a4"
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:c14dc32fe93937d479b542f83971531f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -15,7 +16,8 @@
         "Api.dll",
         "CardsAndPiles.dll",
         "Stateless.dll",
-        "Newtonsoft.Json.dll"
+        "Newtonsoft.Json.dll",
+        "SummerJam1.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

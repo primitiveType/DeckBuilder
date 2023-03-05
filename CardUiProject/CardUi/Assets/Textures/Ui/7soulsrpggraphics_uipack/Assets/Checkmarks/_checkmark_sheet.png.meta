@@ -363,7 +363,7 @@ TextureImporter:
       213: -1616613992702621673
     second: _checkmark_sheet_119
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -380,10 +380,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -422,6 +424,8 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -437,6 +441,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -2980,9 +2996,129 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-  spritePackingTag: 
+    nameFileIdTable:
+      _checkmark_sheet_61: -1291202815560223250
+      _checkmark_sheet_115: -2899453808170668339
+      _checkmark_sheet_111: -4624557282725938157
+      _checkmark_sheet_65: -2550647688560155497
+      _checkmark_sheet_97: -2073740029991223614
+      _checkmark_sheet_35: 1522558668144482441
+      _checkmark_sheet_101: 9076695516676473871
+      _checkmark_sheet_59: -2848168783161752389
+      _checkmark_sheet_10: -2797535043884487594
+      _checkmark_sheet_84: 3131844289154519652
+      _checkmark_sheet_90: -2838772938518854691
+      _checkmark_sheet_107: -6724277917889265754
+      _checkmark_sheet_113: 3180417594063896141
+      _checkmark_sheet_36: -1687673528157138006
+      _checkmark_sheet_4: 4975401092967403262
+      _checkmark_sheet_11: 2716450954669334979
+      _checkmark_sheet_103: 6410103894865466004
+      _checkmark_sheet_49: 8523622878647871916
+      _checkmark_sheet_112: -5317064252900843745
+      _checkmark_sheet_33: -2050150430218251611
+      _checkmark_sheet_18: -7723350188633579926
+      _checkmark_sheet_77: 5097666218632307046
+      _checkmark_sheet_102: 4418685475867272167
+      _checkmark_sheet_82: 3064076771020627053
+      _checkmark_sheet_27: 6369217458612675057
+      _checkmark_sheet_16: 7081075565674758642
+      _checkmark_sheet_34: 8870169326168186440
+      _checkmark_sheet_9: 5774134276227859249
+      _checkmark_sheet_17: -9054844636121454728
+      _checkmark_sheet_62: -5422136061867965703
+      _checkmark_sheet_28: -5524706702695253614
+      _checkmark_sheet_48: 6552433112855132585
+      _checkmark_sheet_47: 238001270612603149
+      _checkmark_sheet_91: 9090736670078896228
+      _checkmark_sheet_20: -1294918526296309473
+      _checkmark_sheet_12: -1316143706348363763
+      _checkmark_sheet_45: -1029730630616739765
+      _checkmark_sheet_73: -528882493659558630
+      _checkmark_sheet_13: 3080539177914405292
+      _checkmark_sheet_58: 7449691088520941293
+      _checkmark_sheet_78: 6804745411468320052
+      _checkmark_sheet_8: -6915746635595329505
+      _checkmark_sheet_25: -2150103344977554815
+      _checkmark_sheet_89: 4132133560823569096
+      _checkmark_sheet_5: 5294792700182693473
+      _checkmark_sheet_56: 640423909423960470
+      _checkmark_sheet_79: -8857152686691287634
+      _checkmark_sheet_81: 4326312885780785867
+      _checkmark_sheet_71: -481190773389605004
+      _checkmark_sheet_118: 5503518734134584504
+      _checkmark_sheet_0: 877894505154536957
+      _checkmark_sheet_53: 8708970200085229435
+      _checkmark_sheet_52: -1170052310468123537
+      _checkmark_sheet_40: 6619122553265858485
+      _checkmark_sheet_30: -1639864674449943087
+      _checkmark_sheet_67: -8158358464723238637
+      _checkmark_sheet_117: -4497569336431524582
+      _checkmark_sheet_99: -3301315555910088331
+      _checkmark_sheet_72: -7031744711931360606
+      _checkmark_sheet_69: 8685455508801144138
+      _checkmark_sheet_76: 4868246027742174414
+      _checkmark_sheet_114: -2883782012535863359
+      _checkmark_sheet_66: 7675430217300865569
+      _checkmark_sheet_106: -6465814049056966088
+      _checkmark_sheet_88: 4285764747252415310
+      _checkmark_sheet_38: -2387818416540498560
+      _checkmark_sheet_22: 3579729293109633494
+      _checkmark_sheet_104: -9103569664758456122
+      _checkmark_sheet_1: 819581546537476264
+      _checkmark_sheet_31: 8156995025026919851
+      _checkmark_sheet_100: -551986487184467750
+      _checkmark_sheet_54: 4493662442923116477
+      _checkmark_sheet_14: 548843754835471573
+      _checkmark_sheet_46: 6834538219628976562
+      _checkmark_sheet_87: -3261982590681460253
+      _checkmark_sheet_24: -7553609724566921973
+      _checkmark_sheet_98: -3754742595481631737
+      _checkmark_sheet_70: -5666495301190346777
+      _checkmark_sheet_21: -2221286751125432831
+      _checkmark_sheet_29: -5789666031055292189
+      _checkmark_sheet_42: 1431384940361318657
+      _checkmark_sheet_119: -1616613992702621673
+      _checkmark_sheet_15: -733830926718780692
+      _checkmark_sheet_37: 2993742209337588
+      _checkmark_sheet_55: 1491522365678469108
+      _checkmark_sheet_23: 3758449159393629028
+      _checkmark_sheet_2: 8476183722613364149
+      _checkmark_sheet_7: -9208317461664552461
+      _checkmark_sheet_3: -6334622970008396672
+      _checkmark_sheet_110: 483132561436834946
+      _checkmark_sheet_60: -6801194517738698025
+      _checkmark_sheet_57: -6472397221958291238
+      _checkmark_sheet_93: -4368519479186341429
+      _checkmark_sheet_41: 2344715368877050898
+      _checkmark_sheet_51: 5207019086228785707
+      _checkmark_sheet_105: 2377997664066121807
+      _checkmark_sheet_108: -720161765993925294
+      _checkmark_sheet_109: -5010301175218548381
+      _checkmark_sheet_63: 1448957649109655112
+      _checkmark_sheet_19: -2551064369825770135
+      _checkmark_sheet_43: 3620567270778808928
+      _checkmark_sheet_80: -3242480564651624412
+      _checkmark_sheet_94: -4694851186664539443
+      _checkmark_sheet_32: 8609423066113631535
+      _checkmark_sheet_68: 9188182456902815581
+      _checkmark_sheet_86: -7651177522710933946
+      _checkmark_sheet_92: 6459704590843969768
+      _checkmark_sheet_39: 4287849833835787152
+      _checkmark_sheet_50: -6861683069576340508
+      _checkmark_sheet_44: -3312429716180412941
+      _checkmark_sheet_83: 1054711262883155958
+      _checkmark_sheet_26: 3059119981388948187
+      _checkmark_sheet_6: 8616478873553036248
+      _checkmark_sheet_75: -5664425163187419545
+      _checkmark_sheet_74: 4009111048230736688
+      _checkmark_sheet_95: -4391646454050993583
+      _checkmark_sheet_64: 6160010724039689169
+      _checkmark_sheet_116: 274507890739058154
+      _checkmark_sheet_85: 2333480543596415623
+      _checkmark_sheet_96: 242578400628667762
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

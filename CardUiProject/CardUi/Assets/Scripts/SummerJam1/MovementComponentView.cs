@@ -17,7 +17,7 @@ namespace SummerJam1
             }
 
             int amount = Component.Movements;
-            Disposables.Add(AnimationQueue.Instance.Enqueue(() => SomeRoutine(amount, Player.MovementsPerTurn)));
+            Disposables.Add(AnimationQueue.Instance.Enqueue(() => SomeRoutine(amount, Component.MovementsPerTurn)));
         }
 
         private void SomeRoutine(int health, int max)
