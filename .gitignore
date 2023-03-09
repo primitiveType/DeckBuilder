@@ -36,7 +36,7 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-/CardUiProject/CardUi/Assets/External/
+*/CardUiProject/CardUi/Assets/External/*
 /CardUiProject/CardUi/Assets/TextMesh Pro/
 /CardUiProject/CardUi/Assets/UltimateTextDamage/
 /CardUiProject/CardUi/Assets/LevelMeshes/
