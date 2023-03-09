@@ -23,7 +23,7 @@
       "Value": "Spike"
     },
     {
-      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
       "Amount": 0
     }
   ]

@@ -34,6 +34,9 @@
         <arg name="UsesMovement" type="bool"/>
         <arg name="Target" type="IEntity"/>
     </event>
+    <event id="BeatOverloaded">
+        <arg name="Amount" type="int"/>
+    </event>
     <event id="RequestRemoveCard">
     </event>
     <event id="AttackPhaseStarted">

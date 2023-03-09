@@ -6,7 +6,8 @@
       "$type": "SummerJam1.Player, SummerJam1",
       "MaxEnergy": 3,
       "Tooltip": "Energy - Cards require energy to be played.",
-      "Enabled": true
+      "Enabled": true,
+      "MovementsPerTurn" : 0
     },
     {
       "$type": "SummerJam1.Money, SummerJam1",

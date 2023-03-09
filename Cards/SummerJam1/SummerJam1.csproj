@@ -174,7 +174,7 @@
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Cards\Kill.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
 
     </ItemGroup>
@@ -188,8 +188,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="StreamingAssets\Units\Special" />
+        <Folder Include="StreamingAssets\Units\Special" />
     </ItemGroup>
+
+    <Target Name="PostPublish" AfterTargets="Publish">
+        <Exec Command="del &quot;$(SolutionDir)..\CardUiProject\CardUi\Assets\External\Library\Jetbrains.Annotations.dll&quot;" ContinueOnError="true" />
+        <Exec Command="del &quot;$(SolutionDir)..\CardUiProject\CardUi\Assets\External\Library\System.Reflection.TypeExtensions.dll&quot;" ContinueOnError="true" />
+    </Target>
 
 
 </Project>

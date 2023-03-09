@@ -1,9 +1,10 @@
-﻿using CardsAndPiles;
+﻿using Api;
+using CardsAndPiles;
 using CardsAndPiles.Components;
 
 namespace SummerJam1.Units
 {
-    public abstract class Unit : Card
+    public abstract class Unit : SummerJam1Component, IVisual
     {
         protected override void Initialize()
         {

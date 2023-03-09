@@ -8,22 +8,10 @@ using SummerJam1.Units;
 
 namespace SummerJam1Tests
 {
-    public class TestUnit : Unit
-    {
-        protected override bool PlayCard(IEntity target)
-        {
-            return true;
-        }
-
-        public override bool AcceptsParent(IEntity parent)
-        {
-            return true;
-        }
-    }
-
     public class TestComponent : SummerJam1Component, IEffect
     {
         private int _entrancies = 0;
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -39,6 +27,7 @@ namespace SummerJam1Tests
             {
                 return;
             }
+
             _entrancies++;
 
             args.CardId.GetComponent<Card>().TryPlayCard(args.Target);

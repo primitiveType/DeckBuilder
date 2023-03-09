@@ -20,7 +20,7 @@ namespace App
         protected virtual async Task ValueChanged(int? amount)
         {
             bool hide = (m_HideIfNull && amount == null) || (m_HideIfZero && amount is 0);
-            m_VisibilityObject.SetActive(!hide);
+            VisibilityObject.SetActive(!hide);
 
             if (amount == null)
             {

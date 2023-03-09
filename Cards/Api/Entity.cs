@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ using Newtonsoft.Json;
 namespace Api
 {
     [JsonObject(MemberSerialization.OptIn)]
+    [DebuggerDisplay("{GetComponent<IComponent>()?.GetType()?.Name ?? 'Entity'}")]
     internal class Entity : IEntity
     {
         [JsonProperty] private ChildrenCollection<IEntity> _children = new();

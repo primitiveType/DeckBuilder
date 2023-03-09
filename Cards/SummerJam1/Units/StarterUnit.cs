@@ -13,12 +13,6 @@ namespace SummerJam1.Units
         [JsonIgnore] public bool CanDrag => Entity.Parent.Children.LastOrDefault() == Entity;
 
 
-        protected override bool PlayCard(IEntity target)
-        {
-            return true;
-        }
-
-
         [OnRequestPlayCard]
         private void OnRequestPlayCard(object sender, RequestPlayCardEventArgs args)
         {
@@ -73,6 +67,5 @@ namespace SummerJam1.Units
                 slot.Entity.GetOrAddComponent<Blood>().Amount += blood.Amount;
             }
         }
-        
     }
 }

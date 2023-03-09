@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Api;
 using App;
 
@@ -5,9 +6,9 @@ namespace SummerJam1
 {
     public class PrefabDeckPileOrganizer : DeckPileOrganizer
     {
-        protected override void OnItemAddedImmediate(IEntity added, IGameObject view)
+        protected override async Task OnItemAddedQueued(IEntity added, IGameObject view)
         {
-            base.OnItemAddedImmediate(added, view);
+            await base.OnItemAddedQueued(added, view);
             view.gameObject.AddComponent<OnClickAddToDeckAndHand>();
         }
 

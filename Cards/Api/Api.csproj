@@ -23,17 +23,17 @@
             <LastGenOutput>EventsBase.cs</LastGenOutput>
         </None>
         <None Update="Tester.tt">
-          <Generator>TextTemplatingFileGenerator</Generator>
-          <LastGenOutput>Tester.cs</LastGenOutput>
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>Tester.cs</LastGenOutput>
         </None>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="EventsBase.cs">
-        <AutoGen>True</AutoGen>
-        <DesignTime>True</DesignTime>
-        <DependentUpon>EventsBase.tt</DependentUpon>
-      </Compile>
+        <Compile Update="EventsBase.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>EventsBase.tt</DependentUpon>
+        </Compile>
     </ItemGroup>
 
 </Project>

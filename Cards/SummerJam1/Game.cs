@@ -174,10 +174,10 @@ namespace SummerJam1
 
         private void AddRules()
         {
-            Context.Root.AddComponent<MovedUnitMustHaveLessHealthThanUnitUnderneath>();
+            // Context.Root.AddComponent<MovedUnitMustHaveLessHealthThanUnitUnderneath>();
             Context.Root.AddComponent<DiscardHandOnDiscardPhase>();
             // Context.Root.AddComponent<FillSlotsOnBattleStarted>();
-            Context.Root.AddComponent<DrawHandOnTurnBegin>();
+            Context.Root.AddComponent<DrawHandOnBattleBegin>();
             // Context.Root.AddComponent<DrawEncounterHandOnTurnBegin>();
             // Context.Root.AddComponent<DrawEncounterHandWhenEmpty>();
         }

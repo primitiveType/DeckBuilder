@@ -1,6 +1,7 @@
 ﻿using App;
 using Simple_Health_Bar.Scripts;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SummerJam1
 {

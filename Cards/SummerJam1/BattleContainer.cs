@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Api;
@@ -8,7 +7,6 @@ using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Piles;
 using SummerJam1.Units;
-using SummerJam1.Units.Effects;
 using Random = Api.Random;
 
 namespace SummerJam1
@@ -21,6 +19,7 @@ namespace SummerJam1
         public IEntity Exhaust { get; private set; }
         public HandPile Hand { get; private set; }
         public DeckPile BattleDeck { get; private set; }
+        public BeatTracker BeatTracker { get; private set; }
 
         public ObjectivesPile ObjectivesPile { get; private set; }
 
@@ -28,7 +27,7 @@ namespace SummerJam1
         public PlayerDiscard EncounterDiscardPile { get; private set; }
 
         public List<EncounterSlotPile> EncounterSlots { get; } = new();
-        
+
         public bool BattleStarted { get; private set; }
         // public List<Pile> EncounterSlotsUpcoming { get; } = new();
 
@@ -45,6 +44,8 @@ namespace SummerJam1
             {
                 Context.CreateEntity(Entity, entity => EncounterSlots.Add(entity.AddComponent<EncounterSlotPile>()));
             }
+
+            Context.CreateEntity(Entity, child => BeatTracker = child.AddComponent<BeatTracker>());
         }
 
         public void MoveToNextFloor()
@@ -110,6 +111,7 @@ namespace SummerJam1
 
             return null;
         }
+
         public IEntity GetSlotToLeft(IEntity slotOrMonster)
         {
             EncounterSlotPile slot = slotOrMonster.GetComponentInSelfOrParent<EncounterSlotPile>();
@@ -254,7 +256,7 @@ namespace SummerJam1
 
             return TryMoveUnit(unit, targetSlot);
         }
-        
+
         public bool TryMoveUnit(IEntity unit, IEntity targetSlot)
         {
             RequestMoveUnitEventArgs tryMoveArgs = new(Entity, false, targetSlot);
@@ -291,11 +293,11 @@ namespace SummerJam1
                          .ThenBy(DungeonOrder)) //fill encounter slots.
             {
                 int i = index % EncounterSlots.Count;
-                
-                lists[i].Add(entity);
-            
 
-                index+=2;
+                lists[i].Add(entity);
+
+
+                index += 2;
             }
 
             for (int i = 0; i < lists.Length; i++)
@@ -315,7 +317,6 @@ namespace SummerJam1
             {
                 encounterSlot.SetAllButTopFaceDown();
             }
-     
         }
 
         private int DungeonOrder(IEntity _)

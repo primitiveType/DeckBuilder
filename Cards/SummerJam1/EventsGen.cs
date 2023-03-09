@@ -1,4 +1,4 @@
-﻿
+
 
 // ReSharper disable RedundantUsingDirective
 // ReSharper disable PossibleNullReferenceException
@@ -166,6 +166,20 @@ public EventHandle<UnitMovedEventArgs> SubscribeToUnitMoved(EventHandleDelegate<
     return handler;
 } 
     #endregion Code for event UnitMoved
+    #region Code for event BeatOverloaded
+private event EventHandleDelegate<BeatOverloadedEventArgs> BeatOverloaded;
+public virtual void OnBeatOverloaded(BeatOverloadedEventArgs args)
+{
+    BeatOverloaded?.Invoke(this, args);
+}
+
+public EventHandle<BeatOverloadedEventArgs> SubscribeToBeatOverloaded(EventHandleDelegate<BeatOverloadedEventArgs> action)
+{
+    var handler = new EventHandle<BeatOverloadedEventArgs>(action, () => BeatOverloaded -= action);
+    BeatOverloaded += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event BeatOverloaded
     #region Code for event RequestRemoveCard
 private event EventHandleDelegate<RequestRemoveCardEventArgs> RequestRemoveCard;
 public virtual void OnRequestRemoveCard(RequestRemoveCardEventArgs args)
@@ -271,6 +285,7 @@ public EventHandle<RelicCreatedEventArgs> SubscribeToRelicCreated(EventHandleDel
 public class OnUnitCreatedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -322,6 +337,7 @@ public class OnUnitCreatedAttribute : EventsBaseAttribute {
 public class OnIntentStartedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -373,6 +389,7 @@ public class OnIntentStartedAttribute : EventsBaseAttribute {
 public class OnUnitTransformedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -424,6 +441,7 @@ public class OnUnitTransformedAttribute : EventsBaseAttribute {
 public class OnBattleEndedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -475,6 +493,7 @@ public class OnBattleEndedAttribute : EventsBaseAttribute {
 public class OnGameEndedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -526,6 +545,7 @@ public class OnGameEndedAttribute : EventsBaseAttribute {
 public class OnGameStartedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -572,6 +592,7 @@ public class OnGameStartedAttribute : EventsBaseAttribute {
 public class OnBattleStartedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -618,6 +639,7 @@ public class OnBattleStartedAttribute : EventsBaseAttribute {
 public class OnSomeTwitterEventAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -664,6 +686,7 @@ public class OnSomeTwitterEventAttribute : EventsBaseAttribute {
 public class OnLeaveBattleAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -710,6 +733,7 @@ public class OnLeaveBattleAttribute : EventsBaseAttribute {
 public class OnRequestMoveUnitAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -766,6 +790,7 @@ public class OnRequestMoveUnitAttribute : EventsBaseAttribute {
 public class OnUnitMovedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -816,11 +841,64 @@ public class OnUnitMovedAttribute : EventsBaseAttribute {
 }
 
         }/// <summary>
+/// (object sender, BeatOverloadedEventArgs) args)
+/// </summary>
+public class OnBeatOverloadedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
+    {
+        instance.EventEntrance.Add(Id, 0);
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToBeatOverloaded(delegate
+            {
+                if(!instance.Enabled){
+                    return;
+                }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
+                attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(BeatOverloadedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, BeatOverloadedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToBeatOverloaded(delegate(object sender, BeatOverloadedEventArgs args)
+        {
+            if(!instance.Enabled){
+                return;
+            }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
+            attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
+        });
+    }
+
+
+}
+    //public delegate void BeatOverloadedEvent (object sender, BeatOverloadedEventArgs args);
+
+    public class BeatOverloadedEventArgs {        public  int Amount { get; }
+        public  BeatOverloadedEventArgs (int Amount   ){
+                  this.Amount = Amount; 
+}
+
+        }/// <summary>
 /// (object sender, RequestRemoveCardEventArgs) args)
 /// </summary>
 public class OnRequestRemoveCardAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -867,6 +945,7 @@ public class OnRequestRemoveCardAttribute : EventsBaseAttribute {
 public class OnAttackPhaseStartedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -913,6 +992,7 @@ public class OnAttackPhaseStartedAttribute : EventsBaseAttribute {
 public class OnAttackPhaseEndedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -959,6 +1039,7 @@ public class OnAttackPhaseEndedAttribute : EventsBaseAttribute {
 public class OnDungeonPhaseStartedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -1005,6 +1086,7 @@ public class OnDungeonPhaseStartedAttribute : EventsBaseAttribute {
 public class OnDungeonPhaseEndedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -1051,6 +1133,7 @@ public class OnDungeonPhaseEndedAttribute : EventsBaseAttribute {
 public class OnMovementPhaseBeganAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
@@ -1097,6 +1180,7 @@ public class OnMovementPhaseBeganAttribute : EventsBaseAttribute {
 public class OnRelicCreatedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
+        instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {

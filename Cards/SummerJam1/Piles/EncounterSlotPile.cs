@@ -7,6 +7,8 @@ namespace SummerJam1.Piles
 {
     public class EncounterSlotPile : DefaultPile
     {
+        protected override int MaxChildren => 1;
+
         protected override void Initialize()
         {
             base.Initialize();

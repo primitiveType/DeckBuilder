@@ -6,7 +6,7 @@ namespace SummerJam1
     {
         public void StartBattle(Game game, int difficulty)
         {
-            List<string> monsters = game.GetBattlePrefabs(10 + difficulty, 15 + difficulty);
+            List<string> monsters = game.GetBattlePrefabs(5, 5);
         }
     }
 }
