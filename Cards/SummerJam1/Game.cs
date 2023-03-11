@@ -177,7 +177,8 @@ namespace SummerJam1
             // Context.Root.AddComponent<MovedUnitMustHaveLessHealthThanUnitUnderneath>();
             Context.Root.AddComponent<DiscardHandOnDiscardPhase>();
             // Context.Root.AddComponent<FillSlotsOnBattleStarted>();
-            Context.Root.AddComponent<DrawHandOnBattleBegin>();
+            Context.Root.AddComponent<DrawHandOnTurnBegin>();
+            Context.Root.AddComponent<EndTurnOnBeatOverload>();
             // Context.Root.AddComponent<DrawEncounterHandOnTurnBegin>();
             // Context.Root.AddComponent<DrawEncounterHandWhenEmpty>();
         }
@@ -186,9 +187,9 @@ namespace SummerJam1
         public void EndTurn()
         {
             Events.OnTurnEnded(new TurnEndedEventArgs());
-            Events.OnAttackPhaseStarted(new AttackPhaseStartedEventArgs());
-            Events.OnAttackPhaseEnded(new AttackPhaseEndedEventArgs());
-            Events.OnMovementPhaseBegan(new MovementPhaseBeganEventArgs());
+            // Events.OnAttackPhaseStarted(new AttackPhaseStartedEventArgs());
+            // Events.OnAttackPhaseEnded(new AttackPhaseEndedEventArgs());
+            // Events.OnMovementPhaseBegan(new MovementPhaseBeganEventArgs());
 
             // Events.OnDungeonPhaseStarted(new DungeonPhaseStartedEventArgs());
             Events.OnDiscardPhaseBegan(new DiscardPhaseBeganEventArgs());

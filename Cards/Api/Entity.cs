@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Api
 {
     [JsonObject(MemberSerialization.OptIn)]
-    [DebuggerDisplay("{GetComponent<IComponent>()?.GetType()?.Name ?? 'Entity'}")]
+    [DebuggerDisplay("{GetComponent<IComponent>()?.GetType()?.Name ?? \"Entity\"}")]
     internal class Entity : IEntity
     {
         [JsonProperty] private ChildrenCollection<IEntity> _children = new();

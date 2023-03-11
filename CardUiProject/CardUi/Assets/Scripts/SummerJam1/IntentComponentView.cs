@@ -1,5 +1,3 @@
-using System.Data;
-using Api;
 using App;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,10 +14,19 @@ namespace SummerJam1
         // [SerializeField] private GameObject HideIfSleeping;
         [SerializeField] private GameObject ShowIfSleeping;
 
+        private BeatTrackerView BeatTrackerView { get; set; }
+        protected override void Start()
+        {
+            base.Start();
+            // var btGo = Entity.Context.Root.GetComponent<Game>().Battle.BeatTracker.Entity.GetComponent<IGameObject>().gameObject;
+            // Debug.Log($"Beat tracker go = {btGo}.");
+            // BeatTrackerView = btGo.GetComponent<BeatTrackerView>();//the beattracker view, hopefully?
+        }
 
         protected override void ComponentOnPropertyChanged()
         {
             UpdateIntentImage();
+            Debug.Log($"Intent changed. Beat tracker {BeatTrackerView?.name}.");
         }
 
         private void UpdateIntentImage()

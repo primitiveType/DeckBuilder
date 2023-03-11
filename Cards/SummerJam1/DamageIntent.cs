@@ -10,8 +10,9 @@ namespace SummerJam1
         [JsonIgnore] public int Amount => 0;
         [JsonIgnore] private int Attacks => 1 + (Entity.GetComponent<MultiAttack>()?.Amount ?? 0);
 
+        
 
-        public override void DoIntent()
+        protected override void OnTrigger()
         {
             if (!Enabled)
             {
@@ -34,6 +35,7 @@ namespace SummerJam1
                     componentsInChild.TryDealDamage(Amount, Entity);
                 }
             }
+            
         }
     }
 }

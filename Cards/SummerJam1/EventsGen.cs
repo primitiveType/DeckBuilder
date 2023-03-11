@@ -166,20 +166,20 @@ public EventHandle<UnitMovedEventArgs> SubscribeToUnitMoved(EventHandleDelegate<
     return handler;
 } 
     #endregion Code for event UnitMoved
-    #region Code for event BeatOverloaded
-private event EventHandleDelegate<BeatOverloadedEventArgs> BeatOverloaded;
-public virtual void OnBeatOverloaded(BeatOverloadedEventArgs args)
+    #region Code for event BeatMoved
+private event EventHandleDelegate<BeatMovedEventArgs> BeatMoved;
+public virtual void OnBeatMoved(BeatMovedEventArgs args)
 {
-    BeatOverloaded?.Invoke(this, args);
+    BeatMoved?.Invoke(this, args);
 }
 
-public EventHandle<BeatOverloadedEventArgs> SubscribeToBeatOverloaded(EventHandleDelegate<BeatOverloadedEventArgs> action)
+public EventHandle<BeatMovedEventArgs> SubscribeToBeatMoved(EventHandleDelegate<BeatMovedEventArgs> action)
 {
-    var handler = new EventHandle<BeatOverloadedEventArgs>(action, () => BeatOverloaded -= action);
-    BeatOverloaded += handler.Invoke;
+    var handler = new EventHandle<BeatMovedEventArgs>(action, () => BeatMoved -= action);
+    BeatMoved += handler.Invoke;
     return handler;
 } 
-    #endregion Code for event BeatOverloaded
+    #endregion Code for event BeatMoved
     #region Code for event RequestRemoveCard
 private event EventHandleDelegate<RequestRemoveCardEventArgs> RequestRemoveCard;
 public virtual void OnRequestRemoveCard(RequestRemoveCardEventArgs args)
@@ -841,16 +841,16 @@ public class OnUnitMovedAttribute : EventsBaseAttribute {
 }
 
         }/// <summary>
-/// (object sender, BeatOverloadedEventArgs) args)
+/// (object sender, BeatMovedEventArgs) args)
 /// </summary>
-public class OnBeatOverloadedAttribute : EventsBaseAttribute {
+public class OnBeatMovedAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
-            return ((SummerJam1EventsBase)events).SubscribeToBeatOverloaded(delegate
+            return ((SummerJam1EventsBase)events).SubscribeToBeatMoved(delegate
             {
                 if(!instance.Enabled){
                     return;
@@ -865,10 +865,10 @@ public class OnBeatOverloadedAttribute : EventsBaseAttribute {
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
-        parameters[1].ParameterType != typeof(BeatOverloadedEventArgs)){
-            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, BeatOverloadedEventArgs) args)");
+        parameters[1].ParameterType != typeof(BeatMovedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, BeatMovedEventArgs) args)");
         }
-        return ((SummerJam1EventsBase)events).SubscribeToBeatOverloaded(delegate(object sender, BeatOverloadedEventArgs args)
+        return ((SummerJam1EventsBase)events).SubscribeToBeatMoved(delegate(object sender, BeatMovedEventArgs args)
         {
             if(!instance.Enabled){
                 return;
@@ -885,11 +885,17 @@ public class OnBeatOverloadedAttribute : EventsBaseAttribute {
 
 
 }
-    //public delegate void BeatOverloadedEvent (object sender, BeatOverloadedEventArgs args);
+    //public delegate void BeatMovedEvent (object sender, BeatMovedEventArgs args);
 
-    public class BeatOverloadedEventArgs {        public  int Amount { get; }
-        public  BeatOverloadedEventArgs (int Amount   ){
-                  this.Amount = Amount; 
+    public class BeatMovedEventArgs {        public  int Previous { get; }
+        public  int Current { get; }
+        public  bool DidOverload { get; }
+        public  int OverloadAmount { get; }
+        public  BeatMovedEventArgs (int Previous, int Current, bool DidOverload, int OverloadAmount   ){
+                  this.Previous = Previous; 
+              this.Current = Current; 
+              this.DidOverload = DidOverload; 
+              this.OverloadAmount = OverloadAmount; 
 }
 
         }/// <summary>
