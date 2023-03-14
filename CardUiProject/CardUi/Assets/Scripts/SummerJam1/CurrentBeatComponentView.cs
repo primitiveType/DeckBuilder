@@ -10,7 +10,7 @@ namespace SummerJam1
 
         protected override void ComponentOnPropertyChanged()
         {
-            m_Text.text = Component.CurrentBeat.ToString();
+            m_Text.text = $"{Component.CurrentBeat+1}/{Component.MaxBeatsToThreshold}";
         }
     }
 }

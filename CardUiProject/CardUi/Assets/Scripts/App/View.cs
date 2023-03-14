@@ -142,7 +142,7 @@ namespace App
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError($"Caught exception executing event! {e.Message}", this);
+                        Debug.LogError($"Caught exception executing event! {e.Message} : {e.InnerException.StackTrace}", this);
                     }
                 };
                 ((INotifyPropertyChanged)Model).PropertyChanged += action;

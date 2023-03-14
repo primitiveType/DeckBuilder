@@ -193,6 +193,7 @@
 
     <Target Name="PostPublish" AfterTargets="Publish">
         <Exec Command="del &quot;$(SolutionDir)..\CardUiProject\CardUi\Assets\External\Library\Jetbrains.Annotations.dll&quot;" ContinueOnError="true" />
+        <Exec Command="del &quot;$(SolutionDir)..\CardUiProject\CardUi\Assets\External\Library\Newtonsoft.Json.dll&quot;" ContinueOnError="true" />
         <Exec Command="del &quot;$(SolutionDir)..\CardUiProject\CardUi\Assets\External\Library\System.Reflection.TypeExtensions.dll&quot;" ContinueOnError="true" />
     </Target>
 

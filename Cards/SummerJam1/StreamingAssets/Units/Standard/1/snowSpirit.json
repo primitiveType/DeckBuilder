@@ -34,9 +34,7 @@
       "$type": "SummerJam1.Units.Effects.FreezeOnAttack, SummerJam1",
       "Amount" : 1
     },
-    {
-      "$type": "SummerJam1.DamageIntent, SummerJam1"
-    },
+    
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 6,

@@ -5,12 +5,16 @@ using SummerJam1.Units.Effects;
 
 namespace SummerJam1
 {
-    public class DamageIntent : Intent
+    public class DamageIntent : Intent, IAmount
     {
-        [JsonIgnore] public int Amount => 0;
+        [JsonIgnore] public int Amount { get; set; }
+
         [JsonIgnore] private int Attacks => 1 + (Entity.GetComponent<MultiAttack>()?.Amount ?? 0);
 
-        
+        protected override void Initialize()
+        {
+            base.Initialize();
+        }
 
         protected override void OnTrigger()
         {
@@ -35,7 +39,6 @@ namespace SummerJam1
                     componentsInChild.TryDealDamage(Amount, Entity);
                 }
             }
-            
         }
     }
 }

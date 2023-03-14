@@ -21,6 +21,10 @@ namespace App
 
         protected GameObject VisibilityObject => m_VisibilityObject ? m_VisibilityObject : gameObject;
 
+        protected virtual void Awake()
+        {
+            
+        }
         protected virtual void Start()
         {
             View = GetComponentInParent<IView>();

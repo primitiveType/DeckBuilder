@@ -47,8 +47,13 @@ namespace SummerJam1
         private void CreateViewsForExistingModels()
         {
             List<IVisual> existing = GameContext.Instance.Context.Root.GetComponentsInChildren<IVisual>();
+           
             foreach (IVisual child in existing)
             {
+                if (((IComponent)child).Entity.Parent == GameContext.Instance.Context.Root.GetComponentInChildren<Game>().PrefabsContainer)
+                {
+                    Debug.Log("made prefab prefab..");
+                }
                 GameObject prefab = GetPrefab(child);
                 if (prefab != null)
                 {

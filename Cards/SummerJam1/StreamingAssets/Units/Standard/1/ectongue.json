@@ -31,10 +31,6 @@
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.DamageIntent, SummerJam1",
-      "Enabled": true
-    },
-    {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 6,
       "Amount": 6,

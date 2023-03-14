@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.ComponentModel;
+using Api;
 using App;
 using App.Utility;
 using UnityEngine;
@@ -17,20 +19,28 @@ namespace SummerJam1
         [SerializeField] private RectTransform m_CurrentBeatSlideArea;
         [SerializeField] private Transform NotchParent;
         [SerializeField] private GameObject NotchPrefab;
+        [SerializeField] private IntentBeatTrackerView IntentPrefab;
+
+        private Dictionary<int, GameObject> TickTransforms { get; } = new();
 
         protected void Awake()
         {
             if (!Debug)
             {
                 Game game = GameContext.Instance.Context.Root.GetComponent<Game>();
+                Disposables.Add(GameContext.Instance.Context.Events.SubscribeToEntityCreated(OnEntityCreated));
+
+
                 BeatTracker beatTracker = game.Battle.BeatTracker;
                 SetModel(beatTracker.Entity);
                 BeatTracker = beatTracker;
             }
             else
             {
-                var beatTracker = new MockBeatTracker();
-                beatTracker.MaxBeatsToThreshold = 10;
+                MockBeatTracker beatTracker = new()
+                {
+                    MaxBeatsToThreshold = 10
+                };
                 BeatTracker = beatTracker;
                 UpdateDebugBeatTracker();
             }
@@ -38,6 +48,13 @@ namespace SummerJam1
             BeatTracker.PropertyChanged += BeatTrackerOnPropertyChanged;
             UpdateSliderArea();
             UpdateNotches();
+            if (!Debug)
+            {
+                foreach (Intent intent in GameContext.Instance.Context.Root.GetComponentsInChildren<Intent>())
+                { //it's smelly in here.
+                    CreateViewForIntent(intent);
+                }
+            }
         }
 
         protected override void Start()
@@ -46,6 +63,36 @@ namespace SummerJam1
             {
                 base.Start();
             }
+        }
+
+        private void Update()
+        {
+            if (Debug)
+            {
+                UpdateDebugBeatTracker();
+            }
+
+            UpdateSliderValue();
+        }
+
+        public IBeatTracker BeatTracker { get; private set; }
+
+        private void OnEntityCreated(object sender, EntityCreatedEventArgs item)
+        {
+            Intent intent = item.Entity.GetComponent<Intent>();
+            if (intent == null)
+            {
+                return;
+            }
+
+            CreateViewForIntent(intent);
+        }
+
+        private void CreateViewForIntent(Intent intent)
+        {
+            IntentBeatTrackerView go = Instantiate(IntentPrefab);
+            go.SetBeatTracker(this);
+            go.SetModel(intent.Entity);
         }
 
         private void BeatTrackerOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -64,15 +111,16 @@ namespace SummerJam1
                 Destroy(child.gameObject);
             }
 
+            TickTransforms.Clear();
             for (int i = 0; i < BeatTracker.MaxBeatsToThreshold; i++)
             {
-                Instantiate(NotchPrefab, NotchParent);
+                TickTransforms.Add(i, Instantiate(NotchPrefab, NotchParent));
             }
         }
 
         private void UpdateSliderArea()
         {
-            float halfOneStep = .5f / (BeatTracker.MaxBeatsToThreshold);
+            float halfOneStep = .5f / BeatTracker.MaxBeatsToThreshold;
 
             m_CurrentBeatSlideArea.anchoredPosition = new Vector2();
             m_CurrentBeatSlideArea.sizeDelta = new Vector2(1, 1);
@@ -81,16 +129,6 @@ namespace SummerJam1
             m_CurrentBeatSlideArea.offsetMin = new Vector2(0, 0);
             m_CurrentBeatSlideArea.offsetMax = new Vector2(1, 1);
             m_CurrentBeatSlideArea.anchoredPosition = new Vector2();
-        }
-
-        private void Update()
-        {
-            if (Debug)
-            {
-                UpdateDebugBeatTracker();
-            }
-
-            UpdateSliderValue();
         }
 
         private void UpdateSliderValue()
@@ -103,10 +141,12 @@ namespace SummerJam1
         {
             ((MockBeatTracker)BeatTracker).CurrentBeat = DebugCurrentBeat;
             ((MockBeatTracker)BeatTracker).MaxBeatsToThreshold = DebugMaxBeats;
-           
         }
 
-        public IBeatTracker BeatTracker { get; private set; }
+        public Transform GetTickTransform(int modelTargetBeat)
+        {
+            return TickTransforms[modelTargetBeat].transform;
+        }
     }
 
     public interface IBeatTrackerProvider

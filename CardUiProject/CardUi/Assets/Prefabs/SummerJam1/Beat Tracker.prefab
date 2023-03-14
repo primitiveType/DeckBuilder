@@ -61,6 +61,7 @@ MonoBehaviour:
   m_CurrentBeatSlideArea: {fileID: 8507233947727871011}
   NotchParent: {fileID: 3561884189793202803}
   NotchPrefab: {fileID: 6385568776477352639, guid: f94ac9bad542f9246b5ffab5f3f4e03a, type: 3}
+  IntentPrefab: {fileID: 1405733358122883792, guid: c0f0c8b0d5bdbae4d8f864f86ed8a304, type: 3}
 --- !u!1 &1705030491058449346
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,11 +172,11 @@ RectTransform:
   m_Father: {fileID: 5251482056013663778}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -122}
+  m_SizeDelta: {x: 0, y: 395.4264}
+  m_Pivot: {x: 0, y: 0}
 --- !u!222 &1925324465707149547
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -231,8 +232,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 126.17
+  m_fontSizeBase: 126.17
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -267,7 +268,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 275.88287, z: -275.88293, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -625,7 +626,7 @@ MonoBehaviour:
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
-  m_ChildControlHeight: 0
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0

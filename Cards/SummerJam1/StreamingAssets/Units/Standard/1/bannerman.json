@@ -25,9 +25,7 @@
       "$type": "SummerJam1.Strength, SummerJam1",
       "Enabled": true
     },
-    {
-      "$type": "SummerJam1.DamageIntent, SummerJam1"
-    },
+    
     {
       "$type": "SummerJam1.Units.Effects.GrantsMultiAttackToAdjacent, SummerJam1",
       "Name": "Multi-Attack",

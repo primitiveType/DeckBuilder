@@ -26,6 +26,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 361068661515552168}
   m_Father: {fileID: 2985283561128097419}
@@ -64,6 +65,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6529249287252675898}
   m_RootOrder: 0
@@ -138,6 +140,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 444599144139054249}
   m_RootOrder: 3
@@ -202,12 +205,13 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1467729054224587063}
   - {fileID: 5428790286940209981}
   - {fileID: 444599144139054249}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -221,10 +225,21 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2256049955563789828}
-  serializedVersion: 2
+  serializedVersion: 4
   m_Mass: 0.0000001
   m_Drag: 0
   m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
@@ -238,9 +253,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2256049955563789828}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 2.955813, y: 4.9377213, z: 0.1}
   m_Center: {x: 0.00683856, y: -0.023209572, z: 0}
 --- !u!114 &1412583572
@@ -255,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b0780088f1e455f91b9756fcc08c0d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpriteRenderer: {fileID: 0}
+  m_Canvas: {fileID: 0}
 --- !u!114 &-5216169211596750571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,6 +291,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af152c3cd9b24de98472281083e9e974, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEBUG_entity: 0
+  IntentRoot: {fileID: 0}
+  IntentViewPrefab: {fileID: 0}
 --- !u!223 &8163466487095116258
 Canvas:
   m_ObjectHideFlags: 0
@@ -286,6 +312,7 @@ Canvas:
   m_OverridePixelPerfect: 1
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -311,7 +338,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1000
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &3539690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,10 +351,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b62ed85b14194a6b9b2cdeb40eac10e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEBUG_entity: 0
   m_Animator: {fileID: 3539689}
 --- !u!95 &3539689
 Animator:
-  serializedVersion: 3
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -340,10 +368,12 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &3328101404263508465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,6 +386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 091386d0106740669267f2eb4a01f2cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEBUG_entity: 0
 --- !u!1 &3772668335421422698
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,6 +416,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 444599144139054249}
   m_RootOrder: 2
@@ -484,6 +516,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2628662775259989639}
   - {fileID: 6529249287252675898}
@@ -509,8 +542,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3506de418374688af4acb35b11231e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HideIfNull: 0
+  m_VisibilityObject: {fileID: 0}
   IntentImage: {fileID: 4812961522056803549}
+  SleepingImage: {fileID: 0}
   DamageIntentImage: {fileID: 21300000, guid: 5cee480e01c13ee4e8c05f89f1ba8bd7, type: 3}
+  ShowIfSleeping: {fileID: 0}
 --- !u!114 &1411173302479044197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,6 +601,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6445573858976071917}
   m_Father: {fileID: 444599144139054249}
@@ -621,6 +659,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5379892336237036573}
   m_Father: {fileID: 2985283561128097419}
@@ -643,6 +682,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e05b55730f4a06b18ac7a10e4ed0b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HideIfNull: 0
+  m_VisibilityObject: {fileID: 0}
   HealthText: {fileID: 5379892336228291687}
 --- !u!1 &6965375454293535764
 GameObject:
@@ -671,6 +712,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 444599144139054249}
   m_RootOrder: 0
@@ -728,6 +770,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5379892336237036573}
   m_RootOrder: 1
@@ -807,6 +850,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 5, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1467729054224587063}
   m_RootOrder: 0
@@ -822,6 +866,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -865,6 +910,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 5428790286940209981}
     m_Modifications:
     - target: {fileID: 109282, guid: 60da1df1f7edb3747bea8f735b2768d1, type: 3}
@@ -1108,6 +1154,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 22403254, guid: 60da1df1f7edb3747bea8f735b2768d1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 501011970730970118}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60da1df1f7edb3747bea8f735b2768d1, type: 3}
 --- !u!114 &5379892336228291687 stripped
 MonoBehaviour:

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Api;
 using SummerJam1.Statuses;
 
 namespace SummerJam1
@@ -7,19 +8,23 @@ namespace SummerJam1
     //they also need to be associated with a target beat, to show the intent in the beat tracker.
     //we basically need to create two views for the same component.
     //worse, we can have multiple intents, and on the enemy itself we only show the next upcoming intent.
-    public abstract class Intent : SummerJam1Component
+    public abstract class Intent : SummerJam1Component, IVisual
     {
         public int TargetBeat { get; set; }
 
         protected override void Initialize()
         {
             base.Initialize();
-            Game.Battle.BeatTracker.RegisterIntent();
         }
 
         [OnBeatMoved]
         private void OnBeatMoved(object sender, BeatMovedEventArgs args)
         {
+            if (TargetBeat > Game.Battle.BeatTracker.MaxBeatsToThreshold)
+            {
+                //the threshold dropped below our target, so we are destroyed.
+                Entity.Destroy();
+            }
             if (args.DidOverload || args.Current >= TargetBeat)
             {
                 DoIntent();
@@ -30,7 +35,7 @@ namespace SummerJam1
         public void DoIntent()
         {
             OnTrigger();
-            Entity.RemoveComponent(this);
+            Entity.Destroy();
         }
 
         protected abstract void OnTrigger();

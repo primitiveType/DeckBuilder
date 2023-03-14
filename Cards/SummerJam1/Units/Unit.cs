@@ -8,10 +8,15 @@ namespace SummerJam1.Units
         protected override void Initialize()
         {
             base.Initialize();
-            CreateIntents();
             ((SummerJam1Events)Context.Events).OnUnitCreated(new UnitCreatedEventArgs(Entity));
         }
 
+
+        [OnBattleStarted]
+        private void OnBattleStarted(object sender, BattleStartedEventArgs args)
+        {
+            CreateIntents();
+        }
 
         [OnEntityKilled]
         private void OnEntityKilled(object sender, EntityKilledEventArgs args)
@@ -21,7 +26,7 @@ namespace SummerJam1.Units
                 Entity.TrySetParent(null);
             }
         }
-        
+
         //TODO: move this into a different component, probably
 
         [OnBeatMoved]
@@ -39,8 +44,11 @@ namespace SummerJam1.Units
             for (int i = 0; i < 3; i++)
             {
                 //this is arbitrary right now. Need to somehow make it data driven...
-                DamageIntent intent = Entity.AddComponent<DamageIntent>();
-                intent.TargetBeat = 3 * (i + 1); //damn shes fine
+                Context.CreateEntity(Entity, child =>
+                {
+                    var intent = child.AddComponent<DamageIntent>();
+                    intent.TargetBeat = 3 * (i + 1); //damn shes fine
+                });
             }
         }
     }

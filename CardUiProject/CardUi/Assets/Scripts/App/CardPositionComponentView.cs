@@ -11,8 +11,9 @@ namespace App
 
         private IPileItemView PileItemView { get; set; }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             PileItemView = GetComponent<IPileItemView>();
         }
 

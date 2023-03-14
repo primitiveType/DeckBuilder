@@ -12,6 +12,7 @@ namespace SummerJam1
         public int CurrentBeat { get; set; }
         public int MaxBeatsToThreshold { get; set; }
     }
+
     public interface IBeatTracker : INotifyPropertyChanged
     {
         int CurrentBeat { get; }
@@ -23,7 +24,7 @@ namespace SummerJam1
     {
         public int CurrentBeat { get; private set; }
         public int MaxBeatsToThreshold { get; private set; } = 10;
-        
+
 
         [OnCardPlayed]
         private void OnCardPlayed(object sender, CardPlayedEventArgs args)
@@ -31,8 +32,17 @@ namespace SummerJam1
             BeatCost BeatCost = args.CardId.GetComponent<BeatCost>();
             int previousBeat = CurrentBeat;
             bool didOverload = previousBeat + BeatCost.Amount >= MaxBeatsToThreshold;
-            CurrentBeat = (previousBeat + BeatCost.Amount) % MaxBeatsToThreshold;
+            var currentBeat = (previousBeat + BeatCost.Amount) % MaxBeatsToThreshold;
             int overload = previousBeat + BeatCost.Amount - MaxBeatsToThreshold;
+
+            if (didOverload)
+            {
+                CurrentBeat = 0;
+            }
+            else
+            {
+                CurrentBeat = currentBeat;
+            }
 
             Events.OnBeatMoved(new BeatMovedEventArgs(previousBeat, CurrentBeat, didOverload, overload));
         }

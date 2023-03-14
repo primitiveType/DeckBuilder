@@ -27,9 +27,6 @@
       "Amount": 5
     },
     {
-      "$type": "SummerJam1.DamageIntent, SummerJam1"
-    },
-    {
       "$type": "SummerJam1.Health, SummerJam1",
       "Amount": 15,
       "Max": 15
