@@ -11,7 +11,7 @@ using Api;
 
 
 namespace Api{
-public abstract class EventsBase : Object{
+public abstract class eEventsBase : Object{
     #region Code for event EntityCreated
 private event EventHandleDelegate<EntityCreatedEventArgs> EntityCreated;
 public virtual void OnEntityCreated(EntityCreatedEventArgs args)
