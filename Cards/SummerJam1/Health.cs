@@ -36,6 +36,13 @@ namespace SummerJam1
 
         public int TryDealDamage(int damage, IEntity source)
         {
+            int amount = GetEffectiveDamage(damage, source);
+            DealDamage(amount, source);
+            return amount;
+        }
+
+        public int GetEffectiveDamage(int damage, IEntity source)
+        {
             RequestDamageMultipliersEventArgs multipliersEventArgs = new(damage, source, Entity);
             Events.OnRequestDamageMultipliers(multipliersEventArgs);
             List<float> multipliers = multipliersEventArgs.Multiplier;
@@ -44,12 +51,7 @@ namespace SummerJam1
             Events.OnRequestDamageModifiers(modifiersEventArgrs);
 
             List<int> modifiers = modifiersEventArgrs.Modifiers;
-            // Events.OnRequestDealDamage(argrs); multipliers
-            // Events.OnRequestDealDamage(argrs); clamps
-            // Events.OnRequestDealDamage(argrs); reduction
             int amount = CalculateDamage(multipliersEventArgs.Amount, multipliers, modifiers);
-            DealDamage(amount, multipliersEventArgs.Source);
-
             return amount;
         }
 

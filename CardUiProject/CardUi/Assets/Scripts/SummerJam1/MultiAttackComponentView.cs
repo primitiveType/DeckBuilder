@@ -1,55 +1,18 @@
-﻿using System;
-using System.Threading.Tasks;
-using App;
+﻿using App;
 using SummerJam1.Units.Effects;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
 
 namespace SummerJam1
 {
-    public class MultiAttackComponentView : ComponentView<MultiAttack>
+    public class MultiAttackComponentView : AmountComponentView<MultiAttack>
     {
-        [SerializeField] private TMP_Text AmountText;
-
-        protected override void ComponentOnPropertyChanged()
+        protected override string GetStringForAmount(int? amount)
         {
-            string amount = null;
-            if (Component != null)
+            if (amount == null)
             {
-                amount = " X " + (1 + Component.Amount);
-                gameObject.SetActive(Component.Amount > 0);
+                return "";
             }
 
-
-            AnimationQueue.Instance.Enqueue(() => UpdateText(amount));
-        }
-
-        private async Task UpdateText(string text)
-        {
-            if (this == null)
-            {
-                return;
-            }
-
-            if (text == null)
-            {
-                enabled = false;
-                return;
-            }
-
-            enabled = true;
-            AmountText.text = text;
-        }
-
-        private void OnDisable()
-        {
-            AmountText.gameObject.SetActive(false);
-        }
-
-        private void OnEnable()
-        {
-            AmountText.gameObject.SetActive(true);
+            return $" X {amount.Value}";
         }
     }
 }

@@ -32,13 +32,20 @@ namespace SummerJam1
 
             Events.OnIntentStarted(new IntentStartedEventArgs(Entity));
 
-            for (int i = 0; i < Attacks; i++)
+
+            foreach (ITakesDamage componentsInChild in targetSlot.GetComponentsInChildren<ITakesDamage>())
             {
-                foreach (ITakesDamage componentsInChild in targetSlot.GetComponentsInChildren<ITakesDamage>())
+                for (int i = 0; i < Attacks; i++)
                 {
-                    componentsInChild.TryDealDamage(Amount, Entity);
+                    componentsInChild.TryDealDamage(Amount, Entity.Parent);
                 }
             }
+        }
+
+        public int GetEffectiveDamage(IEntity targetEntity)
+        {
+            ITakesDamage component = targetEntity.GetComponentInChildren<ITakesDamage>();
+            return component.GetEffectiveDamage(Amount, Entity.Parent);
         }
     }
 }

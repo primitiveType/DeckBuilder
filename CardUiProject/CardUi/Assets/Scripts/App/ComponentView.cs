@@ -4,15 +4,30 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Api;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace App
 {
-    public abstract class ComponentView<T> : MonoBehaviour
+    public abstract class ComponentViewBase : MonoBehaviour
     {
-        protected IEntity Entity { get; private set; }
-        protected T Component { get; private set; }
+        [SerializeField] private IView _view;
+        public IEntity Entity { get; protected set; }
+        public abstract object ComponentObject { get; }
+
+        
+        public IView View
+        {
+            get => _view;
+            protected set => _view = value;
+        }
+    }
+
+    public abstract class ComponentView<T> : ComponentViewBase
+    {
+        protected T Component { get; set; }
+
+        public override object ComponentObject => Component;
         protected readonly List<IDisposable> Disposables = new List<IDisposable>(2);
-        protected IView View { get; private set; }
         protected virtual bool SearchParents => false;
 
         [SerializeField] protected bool m_HideIfNull = false;
@@ -21,10 +36,8 @@ namespace App
 
         protected GameObject VisibilityObject => m_VisibilityObject ? m_VisibilityObject : gameObject;
 
-        protected virtual void Awake()
-        {
-            
-        }
+        protected virtual void Awake() { }
+
         protected virtual void Start()
         {
             View = GetComponentInParent<IView>();

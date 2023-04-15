@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace App.Editor
 {
     [CustomPropertyDrawer(typeof(PileView))]
-    public class PileView : PropertyDrawer 
+    public class PileView : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {

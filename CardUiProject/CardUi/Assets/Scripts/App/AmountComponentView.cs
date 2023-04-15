@@ -23,14 +23,17 @@ namespace App
             bool hide = (m_HideIfNull && amount == null) || (m_HideIfZero && amount is 0);
             VisibilityObject.SetActive(!hide);
 
+            _text.text = GetStringForAmount(amount);
+        }
+
+        protected virtual string GetStringForAmount(int? amount)
+        {
             if (amount == null)
             {
-                _text.text = "";
-                return;
+                return "";
             }
 
-
-            _text.text = amount.Value.ToString();
+            return amount.Value.ToString();
         }
     }
 }

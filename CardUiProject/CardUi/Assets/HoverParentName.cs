@@ -4,7 +4,7 @@ using CardsAndPiles.Components;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class HoverParentName : ComponentView<IEntity>, IPointerEnterHandler
+public class HoverParentName : ComponentView<IEntity>, IPointerEnterHandler, IPointerExitHandler
 {
 
     // Update is called once per frame
@@ -15,11 +15,16 @@ public class HoverParentName : ComponentView<IEntity>, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log(Entity.Parent.GetComponent<NameComponent>().Value);
+        Entity.Parent.GetOrAddComponent<Focused>();
     }
 
     protected override void ComponentOnPropertyChanged()
     {
         
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Entity.Parent.RemoveComponent<Focused>();
     }
 }
