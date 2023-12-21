@@ -11,6 +11,11 @@
       "$type": "SummerJam1.PrefabReference, SummerJam1",
       "Prefab": "Units\\Standard\\1\\cavalry.json",
       "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.PrefabReference, SummerJam1",
+      "Prefab": "Units\\Standard\\1\\cavalry.json",
+      "Enabled": true
     }
   ],
   "Id": 116

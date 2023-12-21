@@ -1,4 +1,6 @@
-﻿using Api;
+﻿using System;
+using System.Security.Cryptography;
+using Api;
 using CardsAndPiles;
 
 namespace SummerJam1.Units
@@ -41,14 +43,22 @@ namespace SummerJam1.Units
         private void CreateIntents()
         { //all previous intents should have removed themselves already.
             //lets add new ones.
-            for (int i = 0; i < 3; i++)
+            var random = Game.Random;
+
+            int beat = random.SystemRandom.Next(1, 5);
+            while (beat < Game.Battle.BeatTracker.MaxBeatsToThreshold)
             {
+                var nextBeat = random.SystemRandom.Next(beat + 1, beat + 5);
+
                 //this is arbitrary right now. Need to somehow make it data driven...
                 Context.CreateEntity(Entity, child =>
                 {
                     var intent = child.AddComponent<DamageIntent>();
-                    intent.TargetBeat = 3 * (i + 1); //damn shes fine
+                    intent.TargetBeat = beat; //damn shes fine
+                    intent.Amount = Math.Max(0, (beat - nextBeat) / 2);
                 });
+
+                beat = nextBeat;
             }
         }
     }

@@ -9,8 +9,6 @@
     {
       "$type": "SummerJam1.Cards.Effects.GrantArmorToPlayer, SummerJam1",
       "BlockAmount": 4,
-      "Description": "Gain 4 block.",
-      "Tooltip": "Block - Receives damage before HP. Expires every turn.",
       "Enabled": true
     },
     {
@@ -29,7 +27,7 @@
     },
     {
       "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
-      "Amount": 4,
+      "Amount": 1,
       "Enabled": true
     },
     {

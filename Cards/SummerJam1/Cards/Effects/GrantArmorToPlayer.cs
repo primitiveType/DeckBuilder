@@ -8,7 +8,7 @@ namespace SummerJam1.Cards.Effects
     {
         [JsonProperty] public int BlockAmount { get; private set; }
 
-        public string Description => $"Gain {BlockAmount} block.";
+        [JsonIgnore] public string Description => $"Gain {BlockAmount} block.";
 
 
         public bool DoEffect(IEntity target)
@@ -18,6 +18,22 @@ namespace SummerJam1.Cards.Effects
             return true;
         }
 
-        public string Tooltip => Tooltips.ARMOR_TOOLTIP;
+        [JsonIgnore] public string Tooltip => Tooltips.ARMOR_TOOLTIP;
+    }
+    public class GrantStrengthToPlayer : SummerJam1Component, IEffect, IDescription, ITooltip, IAmount
+    {
+        [JsonProperty] public int Amount { get; set; }
+
+        [JsonIgnore] public string Description => $"Gain {Amount} strength.";
+
+
+        public bool DoEffect(IEntity target)
+        {
+            Armor armor = Game.Player.Entity.GetOrAddComponent<Armor>();
+            armor.Amount += Amount;
+            return true;
+        }
+
+        [JsonIgnore] public string Tooltip => Tooltips.ARMOR_TOOLTIP;
     }
 }

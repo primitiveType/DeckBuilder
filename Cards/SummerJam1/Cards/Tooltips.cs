@@ -2,6 +2,6 @@
 {
     public class Tooltips
     {
-        public const string ARMOR_TOOLTIP = "Block - Receives damage before HP. Expires every turn.";
+        public const string ARMOR_TOOLTIP = "Block - Receives damage before HP. Expires after every beat.";
     }
 }

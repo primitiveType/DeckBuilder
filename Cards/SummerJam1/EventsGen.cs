@@ -180,6 +180,20 @@ public EventHandle<BeatMovedEventArgs> SubscribeToBeatMoved(EventHandleDelegate<
     return handler;
 } 
     #endregion Code for event BeatMoved
+    #region Code for event AfterBeatMoved
+private event EventHandleDelegate<AfterBeatMovedEventArgs> AfterBeatMoved;
+public virtual void OnAfterBeatMoved(AfterBeatMovedEventArgs args)
+{
+    AfterBeatMoved?.Invoke(this, args);
+}
+
+public EventHandle<AfterBeatMovedEventArgs> SubscribeToAfterBeatMoved(EventHandleDelegate<AfterBeatMovedEventArgs> action)
+{
+    var handler = new EventHandle<AfterBeatMovedEventArgs>(action, () => AfterBeatMoved -= action);
+    AfterBeatMoved += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event AfterBeatMoved
     #region Code for event RequestRemoveCard
 private event EventHandleDelegate<RequestRemoveCardEventArgs> RequestRemoveCard;
 public virtual void OnRequestRemoveCard(RequestRemoveCardEventArgs args)
@@ -892,6 +906,64 @@ public class OnBeatMovedAttribute : EventsBaseAttribute {
         public  bool DidOverload { get; }
         public  int OverloadAmount { get; }
         public  BeatMovedEventArgs (int Previous, int Current, bool DidOverload, int OverloadAmount   ){
+                  this.Previous = Previous; 
+              this.Current = Current; 
+              this.DidOverload = DidOverload; 
+              this.OverloadAmount = OverloadAmount; 
+}
+
+        }/// <summary>
+/// (object sender, AfterBeatMovedEventArgs) args)
+/// </summary>
+public class OnAfterBeatMovedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
+    {
+        instance.EventEntrance.Add(Id, 0);
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToAfterBeatMoved(delegate
+            {
+                if(!instance.Enabled){
+                    return;
+                }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
+                attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(AfterBeatMovedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, AfterBeatMovedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToAfterBeatMoved(delegate(object sender, AfterBeatMovedEventArgs args)
+        {
+            if(!instance.Enabled){
+                return;
+            }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
+            attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
+        });
+    }
+
+
+}
+    //public delegate void AfterBeatMovedEvent (object sender, AfterBeatMovedEventArgs args);
+
+    public class AfterBeatMovedEventArgs {        public  int Previous { get; }
+        public  int Current { get; }
+        public  bool DidOverload { get; }
+        public  int OverloadAmount { get; }
+        public  AfterBeatMovedEventArgs (int Previous, int Current, bool DidOverload, int OverloadAmount   ){
                   this.Previous = Previous; 
               this.Current = Current; 
               this.DidOverload = DidOverload; 

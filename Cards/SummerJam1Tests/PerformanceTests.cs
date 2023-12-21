@@ -2,12 +2,23 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace SummerJam1Tests
 {
     public class PerformanceTests
     {
+
+        [Test]
+        public void Exceptions()
+        {
+            Task.Run(() =>
+            {
+                throw new NotSupportedException();
+            });
+        }
+        
         [Test]
         public void TestMemoryAllocationOfLinq()
         {

@@ -30,6 +30,10 @@ namespace SummerJam1
         private void OnCardPlayed(object sender, CardPlayedEventArgs args)
         {
             BeatCost BeatCost = args.CardId.GetComponent<BeatCost>();
+            if (BeatCost.Amount == 0)
+            {
+                return;
+            }
             int previousBeat = CurrentBeat;
             bool didOverload = previousBeat + BeatCost.Amount >= MaxBeatsToThreshold;
             var currentBeat = (previousBeat + BeatCost.Amount) % MaxBeatsToThreshold;
@@ -45,6 +49,7 @@ namespace SummerJam1
             }
 
             Events.OnBeatMoved(new BeatMovedEventArgs(previousBeat, CurrentBeat, didOverload, overload));
+            Events.OnAfterBeatMoved(new AfterBeatMovedEventArgs(previousBeat, CurrentBeat, didOverload, overload));
         }
 
         public void RegisterIntent(Intent intent)

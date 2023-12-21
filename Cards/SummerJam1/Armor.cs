@@ -14,6 +14,7 @@ namespace SummerJam1
 
         [OnBattleEnded]
         [OnAttackPhaseEnded]
+        [OnAfterBeatMoved]
         private void OnBattleEnded()
         {
             Amount = 0;
