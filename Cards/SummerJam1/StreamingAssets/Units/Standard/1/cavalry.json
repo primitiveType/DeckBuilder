@@ -42,9 +42,6 @@
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Units.Effects.MoveEachTurn, SummerJam1"
-    },
-    {
       "$type": "SummerJam1.Units.Effects.GainStrengthWhenMoving, SummerJam1",
       "Amount": 1
     }

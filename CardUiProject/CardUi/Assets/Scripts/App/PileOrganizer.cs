@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Api;
+using CardsAndPiles;
 using External.UnityAsync.UnityAsync.Assets.UnityAsync;
 using UnityEngine;
 
@@ -87,7 +88,7 @@ namespace App
             Disposables.Add(AnimationQueue.Instance.Enqueue(async () => { await OnItemAddedQueued(added, view); }));
         }
 
-        private static async Task<IGameObject> WaitForGameObject(IEntity added)
+        private async Task<IGameObject> WaitForGameObject(IEntity added)
         {
             IGameObject view = added.GetComponent<IGameObject>();
 
@@ -100,7 +101,7 @@ namespace App
                     view = added.GetComponent<IGameObject>();
                     if (tries++ > 100)
                     {
-                        Debug.Log("Gave up Waiting for view to be populated.");
+                        Debug.Log($"{name} Gave up Waiting for view to be populated. {added.GetDebugString()}");
                         return true;
                     }
 

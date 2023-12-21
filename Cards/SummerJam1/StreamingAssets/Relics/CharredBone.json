@@ -4,11 +4,6 @@
   "Id": 12,
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Relics.DealDamageEveryTurn, SummerJam1",
-      "PlayerDamage": 1,
-      "EnemyDamage": 2
-    },
-    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Charred Bone"
     },

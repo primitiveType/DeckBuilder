@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Api;
+using CardsAndPiles;
 using UnityEngine;
 
 namespace App
@@ -14,9 +15,9 @@ namespace App
 
             if (view?.gameObject == null)
             {
-                Debug.LogError($"Added game object was null. Entity {added.Id}.", this);
+                Debug.LogError($"Added game object was null. {added.GetDebugString()}.", this);
             }
-            
+
             IPileItemView pileItemView = view.gameObject.GetComponentInChildren<IPileItemView>();
 
             if (SetPosition)
