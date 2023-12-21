@@ -3,7 +3,7 @@ using SummerJam1.Units.Effects;
 
 namespace SummerJam1
 {
-    public abstract class GrantsAmount<T> : EffectsAdjacentCreatures, IAmount where T : Component, IAmount, new()
+    public abstract class GrantsAmount<T> : EffectsOtherCreatures, IAmount where T : Component, IAmount, new()
     {
         public override string Description
         {
@@ -21,14 +21,6 @@ namespace SummerJam1
         public abstract string Name { get; }
 
         public int Amount { get; set; }
-
-        protected override void ProcessAdjacentRemoved(IEntity eOldItem)
-        {
-            if (eOldItem.GetComponent<IMonster>() != null)
-            {
-                eOldItem.GetComponent<T>().Amount -= Amount;
-            }
-        }
 
         protected override void ProcessAdjacentAdded(IEntity newItem)
         {

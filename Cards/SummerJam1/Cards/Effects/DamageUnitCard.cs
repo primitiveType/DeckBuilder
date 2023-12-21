@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using Api;
 using CardsAndPiles.Components;
@@ -69,11 +70,12 @@ namespace SummerJam1.Cards.Effects
 
                 if (Aoe)
                 {
-                    foreach (IEntity entitiesInAdjacentSlot in Game.Battle.GetTopEntitiesInAdjacentSlots(slot.Entity).ToList())//create snapshot.
-                    {
-                        ITakesDamage health = entitiesInAdjacentSlot.GetComponent<ITakesDamage>();
-                        health.TryDealDamage(DamageAmount, Game.Player.Entity);
-                    }
+                    throw new NotSupportedException();
+                    // foreach (IEntity entitiesInAdjacentSlot in Game.Battle.GetTopEntitiesInAdjacentSlots(slot.Entity).ToList())//create snapshot.
+                    // {
+                    //     ITakesDamage health = entitiesInAdjacentSlot.GetComponent<ITakesDamage>();
+                    //     health.TryDealDamage(DamageAmount, Game.Player.Entity);
+                    // }
                 }
 
                 if (!Pierce)

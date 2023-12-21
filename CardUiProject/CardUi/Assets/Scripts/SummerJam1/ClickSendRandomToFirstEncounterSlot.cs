@@ -24,7 +24,7 @@ namespace App
             if (PileView.Entity.Children.Count > 0)
             {
                 IPileItem card = PileView.Entity.Children.GetRandom().GetComponent<IPileItem>();
-                Pile pileViewToSendTo = GameContext.Instance.Game.Battle.EncounterSlots.FirstOrDefault();
+                Pile pileViewToSendTo = GameContext.Instance.Game.Battle.EncounterSlots;
                 if (pileViewToSendTo != null)
                 {
                     card.Entity.TrySetParent(pileViewToSendTo.Entity);

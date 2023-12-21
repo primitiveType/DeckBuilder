@@ -90,57 +90,9 @@ namespace SummerJam1Tests
             }
         }
 
-        [Test]
-        public void TestAdjacencyEffectsWhenAddedLast()
-        {
-            // Context.CreateEntity(Game.Entity, entity => battle = entity.AddComponent<BattleContainer>());
+        
 
-
-            Game.StartBattle(new BountyDungeonPile());
-            BattleContainer battle = Game.Battle;
-
-            foreach (Pile battleEncounterSlot in battle.EncounterSlots)
-            {
-                battleEncounterSlot.Entity.Children.First().Destroy();
-            }
-
-            Context.CreateEntity(battle.EncounterSlots[0].Entity, "Units/standard/1/sadRalph.json");
-            Context.CreateEntity(battle.EncounterSlots[1].Entity, "Units/standard/1/sadRalph.json");
-            Context.CreateEntity(battle.EncounterSlots[3].Entity, "Units/standard/1/sadRalph.json");
-            Context.CreateEntity(battle.EncounterSlots[4].Entity, "Units/standard/1/sadRalph.json");
-
-            Context.CreateEntity(battle.EncounterSlots[2].Entity, "Units/standard/1/notGengar.json");
-
-
-            Assert.That(battle.EncounterSlots[1].Entity.Children.First().GetComponent<MultiAttack>() != null);
-            Assert.That(battle.EncounterSlots[3].Entity.Children.First().GetComponent<MultiAttack>() != null);
-        }
-
-        [Test]
-        public void TestAdjacencyEffectsWhenAddedFirst()
-        {
-            // Context.CreateEntity(Game.Entity, entity => battle = entity.AddComponent<BattleContainer>());
-            Game.StartBattle(Game.Dungeons.GetComponentInChildren<DungeonPile>());
-
-
-            BattleContainer battle = Game.Battle;
-
-            foreach (Pile battleEncounterSlot in battle.EncounterSlots)
-            {
-                battleEncounterSlot.Entity.Children.First().Destroy();
-            }
-
-            Context.CreateEntity(battle.EncounterSlots[2].Entity, "Units/standard/1/notGengar.json");
-
-            Context.CreateEntity(battle.EncounterSlots[0].Entity, "Units/standard/1/sadRalph.json");
-            Context.CreateEntity(battle.EncounterSlots[1].Entity, "Units/standard/1/sadRalph.json");
-            Context.CreateEntity(battle.EncounterSlots[3].Entity, "Units/standard/1/sadRalph.json");
-            Context.CreateEntity(battle.EncounterSlots[4].Entity, "Units/standard/1/sadRalph.json");
-
-
-            Assert.That(battle.EncounterSlots[3].Entity.Children.First().GetComponent<MultiAttack>() != null);
-            Assert.That(battle.EncounterSlots[1].Entity.Children.First().GetComponent<MultiAttack>() != null);
-        }
+       
 
         [Test]
         public void TryLoadAllPrefabs()

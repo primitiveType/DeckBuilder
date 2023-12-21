@@ -39,16 +39,5 @@ namespace SummerJam1
             });
         }
         
-        public void EndDungeonPhase()
-        {
-            if (!InputStateManager.Instance.StateMachine.CanFire(InputAction.EndDungeonPhase))
-            {
-                return;
-            }
-        
-            InputStateManager.Instance.StateMachine.Fire(InputAction.EndDungeonPhase);
-            Game.Battle.EndDungeonPhase();
-            AnimationQueue.Instance.Enqueue(() => { InputStateManager.Instance.StateMachine.Fire(InputAction.BeginTurn); });
-        }
     }
 }

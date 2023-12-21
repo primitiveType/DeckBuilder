@@ -34,7 +34,8 @@ namespace SummerJam1.Statuses
                 Enabled = false;
             }
 
-            Enabled = Game.Battle != null && Game.Battle.EncounterSlots.Contains(component);
+            
+            Enabled = Game.Battle != null && Entity.Parent.GetComponent<EncounterSlotPile>() != null;
         }
 
         public override void Terminate()

@@ -178,6 +178,7 @@ namespace SummerJam1
         {
             // Context.Root.AddComponent<MovedUnitMustHaveLessHealthThanUnitUnderneath>();
             Context.Root.AddComponent<DiscardHandOnDiscardPhase>();
+            Context.Root.AddComponent<BattleEndsWhenAllEnemiesDefeated>();
             // Context.Root.AddComponent<FillSlotsOnBattleStarted>();
             Context.Root.AddComponent<DrawHandOnTurnBegin>();
             Context.Root.AddComponent<WaitForCardCostsBeats>();
@@ -236,7 +237,6 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity =>
             {
                 Battle = entity.AddComponent<BattleContainer>();
-                entity.AddComponent<HandleAttackPhase>();
             });
 
 

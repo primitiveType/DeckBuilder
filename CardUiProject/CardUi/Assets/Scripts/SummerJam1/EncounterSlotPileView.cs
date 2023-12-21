@@ -13,7 +13,7 @@ namespace SummerJam1
         {
             base.Start();
 
-            SetModel(GameContext.Instance.Game.Battle.EncounterSlots[SlotNum]);
+            SetModel(GameContext.Instance.Game.Battle.EncounterSlots);
         }
     }
 }

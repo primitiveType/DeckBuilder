@@ -1,4 +1,5 @@
-﻿using CardsAndPiles;
+﻿using System.Linq;
+using CardsAndPiles;
 using SummerJam1.Piles;
 
 namespace SummerJam1.Cards.Effects
@@ -15,7 +16,7 @@ namespace SummerJam1.Cards.Effects
 
             EncounterSlotPile target = args.Target.GetComponentInChildren<EncounterSlotPile>();
 
-            if (target == null || !Game.Battle.EncounterSlots.Contains(target))
+            if (target == null || Game.Battle.EncounterSlots != target)
             {
                 args.Blockers.Add(CardBlockers.INVALID_TARGET);
             }
