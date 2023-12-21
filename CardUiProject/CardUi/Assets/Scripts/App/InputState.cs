@@ -17,6 +17,7 @@ namespace App
         EndHover,
         ChooseDiscard,
         EndChooseDiscard,
+        WaitForCard,
         EndTurn,
         BeginTurn,
         EndDungeonPhase,

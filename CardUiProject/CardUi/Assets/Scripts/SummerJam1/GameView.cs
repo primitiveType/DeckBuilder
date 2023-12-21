@@ -20,7 +20,7 @@ namespace SummerJam1
         {
             if (e.PropertyName == nameof(Game.Battle))
             {
-                if (Model.Battle != null)
+                if (Model.Battle != null && m_ObjectiveViewPrefab != null)
                 {
                     Instantiate(m_ObjectiveViewPrefab, m_ObjectiveViewParent);
                 }

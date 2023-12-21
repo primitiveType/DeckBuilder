@@ -2,6 +2,17 @@
 
 namespace SummerJam1.Rules
 {
+    public class WaitForCardCostsBeats : SummerJam1Component
+    {
+        public int BeatCost => 1;
+
+        [OnWaitForCard]
+        private void OnWaitForCard(object sender, WaitForCardEventArgs args)
+        {
+            Game.Battle.BeatTracker.AdvanceBeats(BeatCost);
+        }
+    }
+    
     public class DrawHandOnTurnBegin : SummerJam1Component
     {
         private int CardDraw => 5;

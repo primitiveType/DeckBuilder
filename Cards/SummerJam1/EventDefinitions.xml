@@ -19,7 +19,7 @@
     </event>
     <event id="BattleStarted">
     </event>
-    <event id="SomeTwitterEvent">
+    <event id="WaitForCard">
     </event>
     <event id="LeaveBattle">
     </event>

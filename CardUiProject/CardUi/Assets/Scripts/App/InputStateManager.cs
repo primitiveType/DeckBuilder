@@ -22,6 +22,7 @@ namespace App
                 .Permit(InputAction.Hover, InputState.Hovering)
                 .Permit(InputAction.ChooseDiscard, InputState.ChoosingDiscard)
                 .Permit(InputAction.EndTurn, InputState.EnemyTurn)
+                .PermitReentry(InputAction.WaitForCard)
                 .PermitReentry(InputAction.EndDungeonPhase)
                 .Ignore(InputAction.EndHover)
                 .Ignore(InputAction.EndDrag)

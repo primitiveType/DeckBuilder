@@ -1,15 +1,16 @@
 using System;
 using App;
-using SummerJam1.Cards;
-using UnityEngine;
+using SummerJam1.Rules;
 using UnityEngine.EventSystems;
 
 namespace SummerJam1
 {
-    public class BeatCostComponentView : AmountComponentView<BeatCost>, IPointerEnterHandler, IPointerExitHandler
+    public class MockBeatCostComponentView : ComponentView<WaitForCardCostsBeats>, IPointerEnterHandler, IPointerExitHandler
     {
         private BeatTracker Tracker { get; set; }
         private IDisposable hoverDispose { get; set; }
+
+        protected override bool SearchParents => true;
         
         protected override void Start()
         {
@@ -20,8 +21,7 @@ namespace SummerJam1
         public void OnPointerEnter(PointerEventData eventData)
         {
             hoverDispose?.Dispose();
-
-            hoverDispose = Tracker.GetPreview(Component.Amount);
+            hoverDispose = Tracker.GetPreview(Component.BeatCost);
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -35,6 +35,11 @@ namespace SummerJam1
             hoverDispose = null;
         }
 
+        protected override void ComponentOnPropertyChanged()
+        {
+            DisposeHover();
+        }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -43,7 +48,6 @@ namespace SummerJam1
 
         private void OnDisable()
         {
-            Debug.Log("Disabling it!");
             DisposeHover();
         }
     }

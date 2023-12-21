@@ -81,7 +81,8 @@ namespace SummerJam1
                 {
                     try
                     {
-                        IEntity entity = Context.CreateEntity(PrefabsContainer, fileInfo.FullName.Replace(fullPrefabsPath, "").Substring(1));
+                        IEntity entity = Context.CreateEntity(PrefabsContainer,
+                            fileInfo.FullName.Replace(fullPrefabsPath, "").Substring(1));
                         foreach (Component entityComponent in entity.Components)
                         {
                             entityComponent.Enabled = false;
@@ -143,7 +144,8 @@ namespace SummerJam1
         private List<string> GetRelicInfos()
         {
             DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Relics"));
-            List<string> files = info.GetFiles().Where(file => file.Extension == ".json").Select(file => $"Relics/{file.Name}").ToList();
+            List<string> files = info.GetFiles().Where(file => file.Extension == ".json")
+                .Select(file => $"Relics/{file.Name}").ToList();
             return files;
         }
 
@@ -178,11 +180,18 @@ namespace SummerJam1
             Context.Root.AddComponent<DiscardHandOnDiscardPhase>();
             // Context.Root.AddComponent<FillSlotsOnBattleStarted>();
             Context.Root.AddComponent<DrawHandOnTurnBegin>();
+            Context.Root.AddComponent<WaitForCardCostsBeats>();
             Context.Root.AddComponent<EndTurnOnBeatOverload>();
             // Context.Root.AddComponent<DrawEncounterHandOnTurnBegin>();
             // Context.Root.AddComponent<DrawEncounterHandWhenEmpty>();
         }
 
+
+        public void WaitForCard()
+        {
+            Events.OnWaitForCard(new WaitForCardEventArgs());
+            Battle.BattleDeck.DrawCard();
+        }
 
         public void EndTurn()
         {
@@ -241,7 +250,8 @@ namespace SummerJam1
             int count = Random.SystemRandom.Next(min, max);
             for (int i = 0; i < count; i++)
             {
-                prefabs.Add(BattleContainer.GetRandomMonsterPrefab(1, Game.CurrentLevel, Entity.GetComponent<Random>()));
+                prefabs.Add(
+                    BattleContainer.GetRandomMonsterPrefab(1, Game.CurrentLevel, Entity.GetComponent<Random>()));
             }
 
             return prefabs;

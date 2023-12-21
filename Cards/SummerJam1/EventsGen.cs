@@ -110,20 +110,20 @@ public EventHandle<BattleStartedEventArgs> SubscribeToBattleStarted(EventHandleD
     return handler;
 } 
     #endregion Code for event BattleStarted
-    #region Code for event SomeTwitterEvent
-private event EventHandleDelegate<SomeTwitterEventEventArgs> SomeTwitterEvent;
-public virtual void OnSomeTwitterEvent(SomeTwitterEventEventArgs args)
+    #region Code for event WaitForCard
+private event EventHandleDelegate<WaitForCardEventArgs> WaitForCard;
+public virtual void OnWaitForCard(WaitForCardEventArgs args)
 {
-    SomeTwitterEvent?.Invoke(this, args);
+    WaitForCard?.Invoke(this, args);
 }
 
-public EventHandle<SomeTwitterEventEventArgs> SubscribeToSomeTwitterEvent(EventHandleDelegate<SomeTwitterEventEventArgs> action)
+public EventHandle<WaitForCardEventArgs> SubscribeToWaitForCard(EventHandleDelegate<WaitForCardEventArgs> action)
 {
-    var handler = new EventHandle<SomeTwitterEventEventArgs>(action, () => SomeTwitterEvent -= action);
-    SomeTwitterEvent += handler.Invoke;
+    var handler = new EventHandle<WaitForCardEventArgs>(action, () => WaitForCard -= action);
+    WaitForCard += handler.Invoke;
     return handler;
 } 
-    #endregion Code for event SomeTwitterEvent
+    #endregion Code for event WaitForCard
     #region Code for event LeaveBattle
 private event EventHandleDelegate<LeaveBattleEventArgs> LeaveBattle;
 public virtual void OnLeaveBattle(LeaveBattleEventArgs args)
@@ -648,16 +648,16 @@ public class OnBattleStartedAttribute : EventsBaseAttribute {
     //public delegate void BattleStartedEvent (object sender, BattleStartedEventArgs args);
 
     public class BattleStartedEventArgs {        }/// <summary>
-/// (object sender, SomeTwitterEventEventArgs) args)
+/// (object sender, WaitForCardEventArgs) args)
 /// </summary>
-public class OnSomeTwitterEventAttribute : EventsBaseAttribute {
+public class OnWaitForCardAttribute : EventsBaseAttribute {
     public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
     {
         instance.EventEntrance.Add(Id, 0);
         var parameters = attached.GetParameters();
         if (parameters.Length == 0)
         {
-            return ((SummerJam1EventsBase)events).SubscribeToSomeTwitterEvent(delegate
+            return ((SummerJam1EventsBase)events).SubscribeToWaitForCard(delegate
             {
                 if(!instance.Enabled){
                     return;
@@ -672,10 +672,10 @@ public class OnSomeTwitterEventAttribute : EventsBaseAttribute {
             });
         }
         if(parameters[0].ParameterType != typeof(object) ||
-        parameters[1].ParameterType != typeof(SomeTwitterEventEventArgs)){
-            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, SomeTwitterEventEventArgs) args)");
+        parameters[1].ParameterType != typeof(WaitForCardEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, WaitForCardEventArgs) args)");
         }
-        return ((SummerJam1EventsBase)events).SubscribeToSomeTwitterEvent(delegate(object sender, SomeTwitterEventEventArgs args)
+        return ((SummerJam1EventsBase)events).SubscribeToWaitForCard(delegate(object sender, WaitForCardEventArgs args)
         {
             if(!instance.Enabled){
                 return;
@@ -692,9 +692,9 @@ public class OnSomeTwitterEventAttribute : EventsBaseAttribute {
 
 
 }
-    //public delegate void SomeTwitterEventEvent (object sender, SomeTwitterEventEventArgs args);
+    //public delegate void WaitForCardEvent (object sender, WaitForCardEventArgs args);
 
-    public class SomeTwitterEventEventArgs {        }/// <summary>
+    public class WaitForCardEventArgs {        }/// <summary>
 /// (object sender, LeaveBattleEventArgs) args)
 /// </summary>
 public class OnLeaveBattleAttribute : EventsBaseAttribute {

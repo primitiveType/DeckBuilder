@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using Api;
 using CardsAndPiles;
@@ -10,12 +11,14 @@ namespace SummerJam1
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public int CurrentBeat { get; set; }
+        public int CurrentBeatPreview { get; set; }
         public int MaxBeatsToThreshold { get; set; }
     }
 
     public interface IBeatTracker : INotifyPropertyChanged
     {
         int CurrentBeat { get; }
+        int CurrentBeatPreview { get; }
         int MaxBeatsToThreshold { get; }
     }
 
@@ -23,21 +26,15 @@ namespace SummerJam1
     public class BeatTracker : SummerJam1Component, IBeatTracker
     {
         public int CurrentBeat { get; private set; }
+        public int CurrentBeatPreview { get; private set; }
         public int MaxBeatsToThreshold { get; private set; } = 10;
-
-
-        [OnCardPlayed]
-        private void OnCardPlayed(object sender, CardPlayedEventArgs args)
+        
+        public void AdvanceBeats(int BeatCost)
         {
-            BeatCost BeatCost = args.CardId.GetComponent<BeatCost>();
-            if (BeatCost.Amount == 0)
-            {
-                return;
-            }
             int previousBeat = CurrentBeat;
-            bool didOverload = previousBeat + BeatCost.Amount >= MaxBeatsToThreshold;
-            var currentBeat = (previousBeat + BeatCost.Amount) % MaxBeatsToThreshold;
-            int overload = previousBeat + BeatCost.Amount - MaxBeatsToThreshold;
+            bool didOverload = previousBeat + BeatCost >= MaxBeatsToThreshold;
+            var currentBeat = (previousBeat + BeatCost) % MaxBeatsToThreshold;
+            int overload = previousBeat + BeatCost - MaxBeatsToThreshold;
 
             if (didOverload)
             {
@@ -70,6 +67,36 @@ namespace SummerJam1
             {
                 //doing it this way probably doesn't make sense.
                 //instead, just have the intent itself keep track of where it should be.
+            }
+        }
+        
+        public IDisposable GetPreview(int beatCost)
+        {
+            CurrentBeatPreview += beatCost;
+            return new PreviewHandle(beatCost, this);
+        }
+
+        private void DisposePreview(PreviewHandle handle)
+        {
+            CurrentBeatPreview -= handle.BeatCost;
+        }
+
+
+        private class PreviewHandle : IDisposable
+        {
+            public BeatTracker Model { get; }
+            public int BeatCost { get; }
+
+            public PreviewHandle(int beatCost, BeatTracker model)
+            {
+                Model = model;
+                BeatCost = beatCost;
+            }
+
+            public void Dispose()
+            {
+                // TODO release managed resources here
+                Model.DisposePreview(this);
             }
         }
     }

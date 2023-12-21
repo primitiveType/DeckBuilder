@@ -7,6 +7,18 @@ namespace SummerJam1
     {
         private Game Game => GameContext.Instance.Game;
 
+        public void WaitForCard()
+        {
+            if (!InputStateManager.Instance.StateMachine.CanFire(InputAction.WaitForCard))
+            {
+                return;
+            }
+
+            InputStateManager.Instance.StateMachine.Fire(InputAction.WaitForCard);
+            Debug.Log("Getting card.");
+
+            Game.WaitForCard();
+        }
 
         public void EndTurn()
         {
