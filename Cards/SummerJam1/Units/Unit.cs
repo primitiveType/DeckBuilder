@@ -55,7 +55,7 @@ namespace SummerJam1.Units
                 {
                     var intent = child.AddComponent<DamageIntent>();
                     intent.TargetBeat = beat; //damn shes fine
-                    intent.Amount = Math.Max(0, (beat - nextBeat) / 2);
+                    intent.Amount = Math.Max(0, (beat - nextBeat));
                 });
 
                 beat = nextBeat;

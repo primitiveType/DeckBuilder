@@ -1,9 +1,7 @@
 using System;
 using System.ComponentModel;
 using Api;
-using CardsAndPiles;
 using JetBrains.Annotations;
-using SummerJam1.Cards;
 
 namespace SummerJam1
 {
@@ -27,7 +25,7 @@ namespace SummerJam1
     {
         public int CurrentBeat { get; private set; }
         public int CurrentBeatPreview { get; private set; }
-        public int MaxBeatsToThreshold { get; private set; } = 10;
+        public int MaxBeatsToThreshold { get; private set; } = 8;
         
         public void AdvanceBeats(int BeatCost)
         {

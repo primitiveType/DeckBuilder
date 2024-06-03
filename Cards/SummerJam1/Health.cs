@@ -84,7 +84,7 @@ namespace SummerJam1
         {
             string sourceName = source.GetComponent<NameComponent>()?.Value ?? source.Id.ToString();
             string myName = Entity.GetComponent<NameComponent>()?.Value ?? Entity.Id.ToString();
-            Logging.Log($"{myName} damaged for {damage} by {sourceName}.");
+            Logging.Log($"{myName} {Entity.Id} damaged for {damage} by {sourceName}.");
 
             Armor armor = Entity.GetComponent<Armor>();
 

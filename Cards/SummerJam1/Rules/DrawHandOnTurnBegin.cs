@@ -21,15 +21,11 @@ namespace SummerJam1.Rules
         {
             var slot = Game.Battle.EncounterSlots;
 
-            if (slot.Entity.Children.Count > 0)
+            if (slot.Entity.Children.Count == 0 ||
+                (slot.Entity.Children.Count == 1 && slot.Entity.Children.First().Id == args.Entity.Id))
             {
-                if (slot.Entity.Children.First().Id != args.Entity.Id)
-                {
-                    return;
-                }
+                Events.OnBattleEnded(new BattleEndedEventArgs(true));
             }
-
-            Events.OnBattleEnded(new BattleEndedEventArgs(true));
         }
     }
 

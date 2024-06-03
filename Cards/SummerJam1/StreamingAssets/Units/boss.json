@@ -36,15 +36,11 @@
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Amount": 10,
-      "Max": 10
+      "Amount": 25,
+      "Max": 25
     },
     {
-      "$type": "SummerJam1.Statuses.PlayerHealingHealsMe, SummerJam1"
-    },
-    {
-      "$type": "SummerJam1.Statuses.GainHealthWhenDrawn, SummerJam1",
-      "Amount": 2
+      "$type": "SummerJam1.Statuses.InvulnerableOnEvenBeats, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.BattleEndsWhenDefeated, SummerJam1"

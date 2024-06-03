@@ -9,7 +9,7 @@ using SummerJam1.Piles;
 
 namespace SummerJam1.Cards.Effects
 {
-    public class DamageUnitCard : TargetSlotComponent, IEffect, IDescription, ITooltip
+    public class DamageUnitCard : SummerJam1Component, IEffect, IDescription, ITooltip
     {
         [JsonProperty] public int DamageAmount { get; private set; }
         protected virtual int FinalDamage => DamageAmount + Strength;
@@ -47,43 +47,13 @@ namespace SummerJam1.Cards.Effects
 
         public virtual bool DoEffect(IEntity target)
         {
-            EncounterSlotPile slot = target.GetComponentInSelfOrParent<EncounterSlotPile>();
-
-            for (int i = 0; i < Attacks; i++)
+            ITakesDamage backUnit = target?.GetComponentInChildren<ITakesDamage>();
+            if (backUnit == null)
             {
-                ITakesDamage unit = slot.Entity.Children.LastOrDefault()?.GetComponentInChildren<ITakesDamage>();
-
-                if (unit == null)
-                {
-                    return false;
-                }
-
-                if (Pierce)
-                {
-                    foreach (IEntity entity in slot.Entity.Children.Where(card => card.GetComponent<FaceDown>() == null).ToList())//create snapshot
-                    {
-                        ITakesDamage backUnit = entity.GetComponentInChildren<ITakesDamage>();
-                        backUnit.TryDealDamage(DamageAmount, Game.Player.Entity);
-                    }
-                }
-
-
-                if (Aoe)
-                {
-                    throw new NotSupportedException();
-                    // foreach (IEntity entitiesInAdjacentSlot in Game.Battle.GetTopEntitiesInAdjacentSlots(slot.Entity).ToList())//create snapshot.
-                    // {
-                    //     ITakesDamage health = entitiesInAdjacentSlot.GetComponent<ITakesDamage>();
-                    //     health.TryDealDamage(DamageAmount, Game.Player.Entity);
-                    // }
-                }
-
-                if (!Pierce)
-                {
-                    unit.TryDealDamage(DamageAmount, Game.Player.Entity);
-                }
+                return false;
             }
 
+            backUnit.TryDealDamage(DamageAmount, Game.Player.Entity);
             return true;
         }
 

@@ -29,11 +29,11 @@ namespace SummerJam1.Cards.Effects
 
         public bool DoEffect(IEntity target)
         {
-            Armor armor = Game.Player.Entity.GetOrAddComponent<Armor>();
-            armor.Amount += Amount;
+            Strength strength = Game.Player.Entity.GetOrAddComponent<Strength>();
+            strength.Amount += Amount;
             return true;
         }
 
-        [JsonIgnore] public string Tooltip => Tooltips.ARMOR_TOOLTIP;
+        [JsonIgnore] public string Tooltip => Tooltips.STRENGTH_TOOLTIP;
     }
 }
