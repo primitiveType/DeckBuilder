@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<catalog name="CardEventsBase" inherits="EventsBase" namespace="CardsAndPiles">
+    <event id="RequestPlayCard">
+        <arg name="CardId" type="IEntity"/>
+        <arg name="Target" type="IEntity"/>
+        <member name="Blockers" type="List&lt;string&gt;" value="new List&lt;string&gt;()"/>
+    </event>
+    <event id="CardPlayed">
+        <arg name="CardId" type="IEntity"/>
+        <arg name="Target" type="IEntity"/>
+        <arg name="IsFree" type="bool"/>
+    </event>
+    <event id="CardCreated">
+        <arg name="CardId" type="IEntity"/>
+    </event>
+    <event id="CardDiscarded">
+        <arg name="CardId" type="IEntity"/>
+    </event>
+    <event id="CardExhausted">
+        <arg name="CardId" type="IEntity"/>
+    </event>
+    <event id="RequestDamageMultipliers">
+        <arg name="Amount" type="int"/>
+        <arg name="Source" type="IEntity"/>
+        <arg name="Target" type="IEntity"/>
+        <member name="Multiplier" type="List&lt;float&gt;" value="new List&lt;float&gt;()"/>
+    </event>
+    <event id="RequestDamageModifiers">
+        <arg name="Amount" type="int"/>
+        <arg name="Source" type="IEntity"/>
+        <arg name="Target" type="IEntity"/>
+        <member name="Modifiers" type="List&lt;int&gt;" value="new List&lt;int&gt;()"/>
+    </event>
+    <event id="CardPlayFailed">
+        <arg name="Reasons" type="List&lt;string&gt;" value="new List&lt;string&gt;()"/>
+    </event>
+    <event id="RequestHeal">
+        <arg name="Amount" type="int"/>
+        <arg name="Source" type="IEntity"/>
+        <arg name="Target" type="IEntity"/>
+        <member name="Multiplier" type="List&lt;float&gt;" value="new List&lt;float&gt;()"/>
+        <member name="Clamps" type="List&lt;int&gt;" value="new List&lt;int&gt;()"/>
+    </event>
+    <event id="ChooseCardsToDiscard">
+        <arg name="Amount" type="int"/>
+        <arg name="Source" type="IEntity"/>
+    </event>
+    <event id="EntityKilled">
+        <arg name="Entity" type="IEntity"/>
+        <arg name="Source" type="IEntity"/>
+    </event>
+    <event id="DamageDealt">
+        <arg name="EntityId" type="IEntity"/>
+        <arg name="SourceEntityId" type="IEntity"/>
+        <arg name="Amount" type="int"/>
+    </event>
+    <event id="HealDealt">
+        <arg name="EntityId" type="IEntity"/>
+        <arg name="SourceEntityId" type="IEntity"/>
+        <arg name="Amount" type="int"/>
+    </event>
+    <event id="TurnEnded">
+    </event>
+    <event id="TurnBegan">
+    </event>
+    <event id="DiscardPhaseBegan">
+    </event>
+    <event id="DrawPhaseBegan">
+    </event>
+    <event id="CardDrawn">
+        <arg name="IsHandDraw" type="bool"/>
+        <arg name="DrawnCard" type="IEntity"/>
+    </event>
+</catalog>

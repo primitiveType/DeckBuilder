@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net471</TargetFramework>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="nunit" Version="3.13.3" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0-preview-20221221-03" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Api\Api.csproj" />
+        <ProjectReference Include="..\CardsAndPiles\CardsAndPiles.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325" CopyToPublishDirectory="Never">
+            <HintPath>..\..\..\..\..\..\..\Program Files\JetBrains\JetBrains Rider 2020.1.4\lib\ReSharperHost\TestRunner\net461\JetBrains.Annotations.dll</HintPath>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </Reference>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,1 @@
+<#@ include file="..\Api\EventsBase.tt" #><#@ import namespace="System.Xml" #><#@ import namespace="System.IO" #>

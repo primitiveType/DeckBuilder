@@ -1,0 +1,18 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 12,
+  "ComponentsInternal": [
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Imp Familiar"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "impFamiliar"
+    },
+    {
+      "$type": "SummerJam1.RelicComponent, SummerJam1"
+    }
+  ]
+}

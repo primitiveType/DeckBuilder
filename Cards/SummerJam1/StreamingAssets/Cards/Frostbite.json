@@ -1,0 +1,29 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 30,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.FreezeCardsInHandAndDealDamageForEachCard, SummerJam1",
+      "DamageAmount": 1
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "poisonedConduit"
+    },
+    {
+      "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Frostbite"
+    },
+    {
+      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
+      "Amount": 2
+    }
+  ]
+}

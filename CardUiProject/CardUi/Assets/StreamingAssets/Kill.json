@@ -1,0 +1,48 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
+      "DamageAmount": 999,
+      "Attacks": 1,
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.TargetHealthComponent, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "earthPulse",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Kill",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "Api.SourcePrefab, Api",
+      "Prefab": "Kill.json",
+      "Enabled": true
+    }
+  ],
+  "Id": 161
+}

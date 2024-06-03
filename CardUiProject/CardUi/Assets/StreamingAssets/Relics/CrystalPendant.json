@@ -1,0 +1,23 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 12,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Relics.NoiseCardsAddPrefabToHand, SummerJam1",
+      "Prefab": "Cards/Spike.json",
+      "PrefabPrettyName": "Spike"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Crystal Pendant"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "crystalPendant"
+    },
+    {
+      "$type": "SummerJam1.RelicComponent, SummerJam1"
+    }
+  ]
+}

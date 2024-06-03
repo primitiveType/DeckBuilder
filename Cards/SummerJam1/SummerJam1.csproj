@@ -1,0 +1,201 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Api\Api.csproj" />
+        <ProjectReference Include="..\CardsAndPiles\CardsAndPiles.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="EventsGen.ttinclude">
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>EventsGen.cs</LastGenOutput>
+        </None>
+        <None Update="StreamingAssets\**\*.*">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Grease.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Chocolate.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Maple.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Sugar.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Applesauce.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Ginger.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Capsaicin.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Parmesan.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Recipe.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\HoldTheLine.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\DeepFry.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Sautee.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Torch.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\JunkDrawer.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\1\snail.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\1\icecream.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\1\sandwich.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\3\headcheese.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\3\noodles.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\3\ant.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\UnitMeatloaf.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\UnitDonut.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\UnitKebab.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\UnitNachos.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Starting\Butter.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Starting\SpicyPepper.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Starting\Honey.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Starting\UnitStarter.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Starting\UnitPie.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\boss.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Relics\RaiseHp.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Relics\DrawExtraCardsOnFirstTurn.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\Standard\1\orbWisp.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\Standard\2\portOrb.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\Standard\3\orbEye.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\Standard\1\sadRalph.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\Standard\3\boogerball.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\Standard\3\hairGhost.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\Standard\1\notGengar.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Relics\RaiseHpMore.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Relics\CrookedHalo.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Relics\CharredBone.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Relics\ImpFamiliar.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\treasureChest.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\mcguffin.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\Standard\1\boneBoy.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\Standard\1\ectongue.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Frostbite.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\Standard\1\headCheese.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Units\shop.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Cards\Kill.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="EventsGen.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>EventsGen.ttinclude</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="StreamingAssets\Units\Special" />
+    </ItemGroup>
+
+    <Target Name="PostPublish" AfterTargets="Publish">
+        <Exec Command="del &quot;$(SolutionDir)..\CardUiProject\CardUi\Assets\External\Library\Jetbrains.Annotations.dll&quot;" ContinueOnError="true" />
+        <Exec Command="del &quot;$(SolutionDir)..\CardUiProject\CardUi\Assets\External\Library\Newtonsoft.Json.dll&quot;" ContinueOnError="true" />
+        <Exec Command="del &quot;$(SolutionDir)..\CardUiProject\CardUi\Assets\External\Library\System.Reflection.TypeExtensions.dll&quot;" ContinueOnError="true" />
+    </Target>
+
+
+</Project>

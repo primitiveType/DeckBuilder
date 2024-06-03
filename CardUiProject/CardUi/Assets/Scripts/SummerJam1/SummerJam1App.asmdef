@@ -1,0 +1,29 @@
+{
+    "name": "SummerJam1App",
+    "rootNamespace": "",
+    "references": [
+        "App",
+        "UnityAsync",
+        "SimpleHealthBar",
+        "Unity.TextMeshPro",
+        "Cinemachine",
+        "UTD"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "SummerJam1.dll",
+        "Api.dll",
+        "CardsAndPiles.dll",
+        "Newtonsoft.Json.dll",
+        "RogueMaps.dll",
+        "RogueSharp.dll",
+        "Stateless.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

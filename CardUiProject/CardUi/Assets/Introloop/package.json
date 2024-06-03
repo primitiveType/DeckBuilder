@@ -1,0 +1,21 @@
+{
+    "name": "com.e7.introloop",
+    "author": "Sirawat Pitaksarit (5argon) - Exceed7 Experiments",
+    "displayName": "Introloop",
+    "version": "5.0.0",
+    "unity": "2017.4",
+    "description": "Easily play looping music with intro section.",
+    "keywords": [
+        "scripting",
+        "audio",
+        "loop",
+        "seamless"
+    ],
+    "samples": [
+        {
+            "displayName": "Introloop Samples",
+            "description": "Three samples scenes : a jukebox, a subclassed IntroloopPlayer<T> singleton, and a local/positional IntroloopPlayer without singleton.",
+            "path": "Samples~/IntroloopSamples"
+        }
+    ]
+}

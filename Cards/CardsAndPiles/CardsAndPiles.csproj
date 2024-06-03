@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Api\Api.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="EventsGen.ttinclude">
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>EventsGen.cs</LastGenOutput>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
+            <HintPath>..\..\..\..\..\..\..\Program Files\JetBrains\JetBrains Rider 2020.1.4\lib\ReSharperHost\TestRunner\net461\JetBrains.Annotations.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="EventsGen.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>EventsGen.ttinclude</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+</Project>

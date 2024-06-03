@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<catalog name="EventsBase" inherits="Object" namespace="Api">
+    <event id="EntityCreated">
+        <arg name="Entity" type="IEntity"/>
+    </event>
+</catalog>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<catalog name="SummerJam1EventsBase" inherits="CardsAndPiles.CardEvents" namespace="SummerJam1">
+    <event id="UnitCreated">
+        <arg name="Entity" type="IEntity"/>
+    </event>
+    <event id="IntentStarted">
+        <arg name="Entity" type="IEntity"/>
+    </event>
+    <event id="UnitTransformed">
+        <arg name="Entity" type="IEntity"/>
+    </event>
+    <event id="BattleEnded">
+        <arg name="Victory" type="bool"/>
+    </event>
+    <event id="GameEnded">
+        <arg name="Victory" type="bool"/>
+    </event>
+    <event id="GameStarted">
+    </event>
+    <event id="BattleStarted">
+    </event>
+    <event id="WaitForCard">
+    </event>
+    <event id="LeaveBattle">
+    </event>
+    <event id="RequestMoveUnit">
+        <arg name="CardId" type="IEntity"/>
+        <arg name="UsesMovement" type="bool"/>
+        <arg name="Target" type="IEntity"/>
+        <member name="Blockers" type="List&lt;string&gt;" value="new List&lt;string&gt;()"/>
+    </event>
+    <event id="UnitMoved">
+        <arg name="CardId" type="IEntity"/>
+        <arg name="UsesMovement" type="bool"/>
+        <arg name="Target" type="IEntity"/>
+    </event>
+    <event id="BeatMoved">
+        <arg name="Previous" type="int"/>
+        <arg name="Current" type="int"/>
+        <arg name="DidOverload" type="bool"/>
+        <arg name="OverloadAmount" type="int"/>
+    </event>
+    <event id="AfterBeatMoved">
+        <arg name="Previous" type="int"/>
+        <arg name="Current" type="int"/>
+        <arg name="DidOverload" type="bool"/>
+        <arg name="OverloadAmount" type="int"/>
+    </event>
+    <event id="RequestRemoveCard">
+    </event>
+    <event id="AttackPhaseStarted">
+    </event>
+    <event id="AttackPhaseEnded">
+    </event>
+    <event id="DungeonPhaseStarted">
+    </event>
+    <event id="DungeonPhaseEnded">
+    </event>
+    <event id="MovementPhaseBegan">
+    </event>
+    <event id="RelicCreated">
+        <arg name="Relic" type="IEntity"/>
+    </event>
+</catalog>

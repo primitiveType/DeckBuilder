@@ -1,0 +1,50 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
+      "DamageAmount": 3,
+      "Attacks": 1,
+      "Aoe": false,
+      "Pierce": true,
+      "Description": "Deal 3 damage. Pierce.",
+      "Tooltip": "Pierce - Hit all face-up enemies in the stack.",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "piercingStrike",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Piercing Strike",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Amount": 1,
+      "Enabled": true
+    },
+    {
+      "$type": "Api.SourcePrefab, Api",
+      "Prefab": "Cards\\PiercingStrike.json",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
+      "Amount": 1,
+      "Enabled": true
+    }
+  ],
+  "Id": 168
+}

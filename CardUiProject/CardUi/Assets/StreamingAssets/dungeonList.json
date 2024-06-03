@@ -1,0 +1,17 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "Api.SourcePrefab, Api",
+      "Prefab": "dungeonList.json",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.PrefabReference, SummerJam1",
+      "Prefab": "Units\\Standard\\1\\cavalry.json",
+      "Enabled": true
+    }
+  ],
+  "Id": 116
+}
