@@ -7,11 +7,6 @@ using Newtonsoft.Json;
 
 namespace Api
 {
-    public class NonSerializableComponentAttribute : Attribute
-    {
-    }
-    [NonSerializableComponent]
-    public class UnknownComponent : Component{}
     public abstract class Component : IEventfulComponent
     {
         protected Component()
