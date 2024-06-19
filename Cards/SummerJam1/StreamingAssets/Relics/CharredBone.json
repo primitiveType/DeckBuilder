@@ -1,18 +1,21 @@
 {
   "$type": "Api.Entity, Api",
-  "m_Children": [],
-  "Id": 12,
+  "_children": [],
   "ComponentsInternal": [
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Charred Bone"
+      "Value": "Charred Bone",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "charredBone"
+      "AssetName": "charredBone",
+      "Enabled": true
     },
     {
-      "$type": "SummerJam1.RelicComponent, SummerJam1"
+      "$type": "SummerJam1.RelicComponent, SummerJam1",
+      "Enabled": true
     }
-  ]
+  ],
+  "Id": 139
 }

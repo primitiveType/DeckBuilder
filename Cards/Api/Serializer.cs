@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using JsonNet.ContractResolvers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -14,7 +16,7 @@ namespace Api
             TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
             ContractResolver = new PrivateSetterContractResolver(),
             DefaultValueHandling = DefaultValueHandling.Ignore,
-            // Converters = { new DefaultToUnknownConverter(), new EntityConverter() },
+            Converters = { new DefaultToUnknownConverter(), new ComponentConverter() },
             Formatting = Formatting.Indented
         };
 
@@ -29,7 +31,7 @@ namespace Api
         }
     }
 
-    public class EntityConverter : JsonConverter
+    public class ComponentConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
@@ -48,6 +50,12 @@ namespace Api
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             Console.WriteLine("Writing !");
+            serializer.Serialize(writer, ((IChildrenCollection<Component>)value).Where(ShouldSerialize).ToArray());
+        }
+
+        private bool ShouldSerialize(Component arg)
+        {
+            return !arg.GetType().GetCustomAttributes<NonSerializableComponentAttribute>().Any();
         }
     }
 

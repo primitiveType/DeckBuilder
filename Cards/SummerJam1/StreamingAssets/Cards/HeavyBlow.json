@@ -10,8 +10,6 @@
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
       "DamageAmount": 8,
       "Attacks": 1,
-      "Aoe": false,
-      "Pierce": false,
       "Enabled": true
     },
     {
@@ -29,20 +27,10 @@
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
-      "Amount": 3,
-      "Enabled": true
-    },
-    {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "Cards\\HeavyBlow.json",
-      "Enabled": true
-    },
-    {
       "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
       "Amount": 1,
       "Enabled": true
     }
   ],
-  "Id": 162
+  "Id": 121
 }

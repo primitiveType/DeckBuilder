@@ -7,10 +7,10 @@ using Newtonsoft.Json;
 
 namespace Api
 {
-    public class DontSerializeAttribute : Attribute
+    public class NonSerializableComponentAttribute : Attribute
     {
     }
-    [DontSerialize]
+    [NonSerializableComponent]
     public class UnknownComponent : Component{}
     public abstract class Component : IEventfulComponent
     {

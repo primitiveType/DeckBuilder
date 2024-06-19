@@ -26,12 +26,7 @@
       "Max": 10,
       "Amount": 10,
       "Enabled": true
-    },
-    {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "Units\\Standard\\1\\ectongue.json",
-      "Enabled": true
     }
   ],
-  "Id": 127
+  "Id": 150
 }

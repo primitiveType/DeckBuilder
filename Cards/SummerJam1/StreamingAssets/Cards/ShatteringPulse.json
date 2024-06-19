@@ -1,29 +1,31 @@
 {
   "$type": "Api.Entity, Api",
-  "m_Children": [],
-  "Id": 30,
+  "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "shatteringPulse"
+      "AssetName": "shatteringPulse",
+      "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+      "$type": "SummerJam1.Cards.Discard, SummerJam1",
+      "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Shattering Pulse"
+      "Value": "Shattering Pulse",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 6
-    },
-    {
-      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
-      "Amount": 1
+      "DamageAmount": 6,
+      "Attacks": 1,
+      "Enabled": true
     }
-  ]
+  ],
+  "Id": 129
 }

@@ -1,1 +1,16 @@
-{"$type":"Api.Entity, Api","_children":[],"ComponentsInternal":[{"$type":"SummerJam1.Units.StarterUnit, SummerJam1","Enabled":true},{"$type":"CardsAndPiles.Components.NameComponent, CardsAndPiles","Value":"Tomato","Enabled":true},{"$type":"Api.SourcePrefab, Api","Prefab":"tomato.json","Enabled":true}],"Id":161}
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Tomato",
+      "Enabled": true
+    }
+  ],
+  "Id": 176
+}

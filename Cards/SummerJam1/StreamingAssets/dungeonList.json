@@ -3,15 +3,10 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "dungeonList.json",
-      "Enabled": true
-    },
-    {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
       "Prefab": "Units\\boss.json",
       "Enabled": true
     }
   ],
-  "Id": 116
+  "Id": 172
 }

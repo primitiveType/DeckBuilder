@@ -3,11 +3,6 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "dungeonList.json",
-      "Enabled": true
-    },
-    {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
       "Prefab": "Units\\Standard\\1\\snowSpirit.json",
       "Enabled": true
@@ -82,7 +77,6 @@
       "Prefab": "Units\\Standard\\1\\winterWizard.json",
       "Enabled": true
     },
-
     {
       "$type": "SummerJam1.PrefabReference, SummerJam1",
       "Prefab": "Units\\Standard\\1\\frigidImp.json",
@@ -144,5 +138,5 @@
       "Enabled": true
     }
   ],
-  "Id": 116
+  "Id": 173
 }

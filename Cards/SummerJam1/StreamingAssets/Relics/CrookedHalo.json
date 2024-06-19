@@ -1,23 +1,28 @@
 {
   "$type": "Api.Entity, Api",
-  "m_Children": [],
-  "Id": 12,
+  "_children": [],
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Relics.ReachingXHealthHealsForY, SummerJam1",
       "TargetHealth": 10,
-      "HealAmount": 3
+      "HealAmount": 3,
+      "Tooltip": "When your health reaches exactly 10, heal for 3.",
+      "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Crooked Halo"
+      "Value": "Crooked Halo",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "crookedHalo"
+      "AssetName": "crookedHalo",
+      "Enabled": true
     },
     {
-      "$type": "SummerJam1.RelicComponent, SummerJam1"
+      "$type": "SummerJam1.RelicComponent, SummerJam1",
+      "Enabled": true
     }
-  ]
+  ],
+  "Id": 140
 }

@@ -1,29 +1,36 @@
 {
   "$type": "Api.Entity, Api",
-  "m_Children": [],
-  "Id": 30,
+  "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Cards.Effects.HealPlayer, SummerJam1",
-      "HealAmount": 3
+      "HealAmount": 3,
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "leyline"
+      "AssetName": "leyline",
+      "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
+      "$type": "SummerJam1.Cards.Exhaust, SummerJam1",
+      "Tooltip": "Consume- This card can only be played once per battle.",
+      "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Leyline"
+      "Value": "Leyline",
+      "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
-      "Amount": 1
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "_description": "Heal for 3.",
+      "Enabled": true
     }
-  ]
+  ],
+  "Id": 124
 }

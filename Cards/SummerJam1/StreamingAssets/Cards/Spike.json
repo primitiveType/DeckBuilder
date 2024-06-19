@@ -1,30 +1,34 @@
 {
   "$type": "Api.Entity, Api",
-  "m_Children": [],
-  "Id": 30,
+  "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
       "DamageAmount": 2,
-      "Pierce": true
+      "Attacks": 1,
+      "Pierce": true,
+      "Tooltip": "Pierce - Hit all face-up enemies in the stack.",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "spike"
+      "AssetName": "spike",
+      "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
+      "$type": "SummerJam1.Cards.Exhaust, SummerJam1",
+      "Tooltip": "Consume- This card can only be played once per battle.",
+      "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Spike"
-    },
-    {
-      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
-      "Amount": 0
+      "Value": "Spike",
+      "Enabled": true
     }
-  ]
+  ],
+  "Id": 131
 }

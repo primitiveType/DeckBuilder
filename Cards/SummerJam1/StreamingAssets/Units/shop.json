@@ -33,14 +33,9 @@
       "Enabled": true
     },
     {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "Units\\shop.json",
-      "Enabled": true
-    },
-    {
       "$type": "SummerJam1.Units.ShopExit, SummerJam1",
       "Enabled": true
     }
   ],
-  "Id": 124
+  "Id": 170
 }

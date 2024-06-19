@@ -26,20 +26,10 @@
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
-    },
-    {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "Cards\\Block.json",
-      "Enabled": true
-    },
-    {
       "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
       "Amount": 3,
       "Enabled": true
     }
   ],
-  "Id": 160
+  "Id": 112
 }

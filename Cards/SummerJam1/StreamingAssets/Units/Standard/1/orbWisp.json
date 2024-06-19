@@ -1,1 +1,47 @@
-{"$type":"Api.Entity, Api","_children":[],"ComponentsInternal":[{"$type":"SummerJam1.Units.StarterUnit, SummerJam1","Enabled":true},{"$type":"SummerJam1.Units.BloodRequirement, SummerJam1","Enabled":true},{"$type":"SummerJam1.Units.Blood, SummerJam1","Amount":1,"Enabled":true},{"$type":"CardsAndPiles.Components.NameComponent, CardsAndPiles","Value":"Orb Wisp","Enabled":true},{"$type":"SummerJam1.VisualComponent, SummerJam1","AssetName":"orbWisp","Enabled":true},{"$type":"SummerJam1.Strength, SummerJam1","Amount":3,"Enabled":true},{"$type":"SummerJam1.Health, SummerJam1","Max":4,"Amount":4,"Enabled":true},{"$type":"SummerJam1.Statuses.GainArmorEveryTurn, SummerJam1","Amount":2,"Tooltip":"Gains 2 Armor every turn.","Enabled":true},{"$type":"Api.SourcePrefab, Api","Prefab":"Units\\Standard\\1\\orbWisp.json","Enabled":true}],"Id":125}
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Units.Blood, SummerJam1",
+      "Amount": 1,
+      "Enabled": true
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Orb Wisp",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "orbWisp",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Strength, SummerJam1",
+      "Amount": 3,
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Health, SummerJam1",
+      "Max": 4,
+      "Amount": 4,
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Statuses.GainArmorEveryTurn, SummerJam1",
+      "Amount": 2,
+      "Tooltip": "Gains 2 Armor every turn.",
+      "Enabled": true
+    }
+  ],
+  "Id": 156
+}

@@ -9,7 +9,6 @@
     {
       "$type": "SummerJam1.Cards.Effects.GivePlayerStrength, SummerJam1",
       "Amount": 1,
-      "Description": "Gain 1 Strength.",
       "Tooltip": "Strength - Increases damage dealt.",
       "Enabled": true
     },
@@ -20,7 +19,6 @@
     },
     {
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1",
-      "Description": "Consume.",
       "Tooltip": "Consume- This card can only be played once per battle.",
       "Enabled": true
     },
@@ -28,17 +26,7 @@
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Draw Strength",
       "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
-    },
-    {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "Cards\\DrawStrength.json",
-      "Enabled": true
     }
   ],
-  "Id": 165
+  "Id": 117
 }

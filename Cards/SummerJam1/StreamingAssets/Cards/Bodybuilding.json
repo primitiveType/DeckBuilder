@@ -22,16 +22,6 @@
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
-      "Amount": 3,
-      "Enabled": true
-    },
-    {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "Cards\\Bodybuilding.json",
-      "Enabled": true
-    },
-    {
       "$type": "SummerJam1.Cards.Effects.GrantStrengthToPlayer, SummerJam1",
       "Amount": 2,
       "Enabled": true
@@ -42,5 +32,5 @@
       "Enabled": true
     }
   ],
-  "Id": 123
+  "Id": 113
 }

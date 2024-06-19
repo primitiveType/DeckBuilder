@@ -1,34 +1,35 @@
 {
   "$type": "Api.Entity, Api",
-  "m_Children": [],
-  "Id": 30,
+  "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Cards.Effects.AddCardToBattleDeck, SummerJam1",
       "Prefab": "Cards/Spike.json",
-      "Amount": 3
+      "Amount": 3,
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "shivers"
+      "AssetName": "shivers",
+      "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+      "$type": "SummerJam1.Cards.Discard, SummerJam1",
+      "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Preparation"
-    },
-    {
-      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
-      "Amount": 1
+      "Value": "Preparation",
+      "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
-      "Description": "Add 3 Spike cards to your deck."
+      "Enabled": true
     }
-  ]
+  ],
+  "Id": 126
 }

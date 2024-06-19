@@ -1,1 +1,46 @@
-{"$type":"Api.Entity, Api","_children":[],"ComponentsInternal":[{"$type":"SummerJam1.Units.StarterUnit, SummerJam1","Enabled":true},{"$type":"SummerJam1.Units.BloodRequirement, SummerJam1","Enabled":true},{"$type":"SummerJam1.Units.Blood, SummerJam1","Amount":1,"Enabled":true},{"$type":"CardsAndPiles.Components.NameComponent, CardsAndPiles","Value":"Bone Boy","Enabled":true},{"$type":"SummerJam1.VisualComponent, SummerJam1","AssetName":"boneBoy","Enabled":true},{"$type":"SummerJam1.Strength, SummerJam1","Amount":1,"Enabled":true},{"$type":"SummerJam1.Units.Effects.GainStrengthWhenMoving, SummerJam1","Amount":3,"Enabled":true},{"$type":"SummerJam1.Health, SummerJam1","Max":8,"Amount":8,"Enabled":true},{"$type":"Api.SourcePrefab, Api","Prefab":"Units\\Standard\\1\\boneBoy.json","Enabled":true}],"Id":120}
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Units.Blood, SummerJam1",
+      "Amount": 1,
+      "Enabled": true
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Bone Boy",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "boneBoy",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Strength, SummerJam1",
+      "Amount": 1,
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Units.Effects.GainStrengthWhenMoving, SummerJam1",
+      "Amount": 3,
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Health, SummerJam1",
+      "Max": 8,
+      "Amount": 8,
+      "Enabled": true
+    }
+  ],
+  "Id": 147
+}

@@ -6,8 +6,7 @@
       "$type": "SummerJam1.Player, SummerJam1",
       "MaxEnergy": 3,
       "Tooltip": "Energy - Cards require energy to be played.",
-      "Enabled": true,
-      "MovementsPerTurn" : 0
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Money, SummerJam1",
@@ -24,12 +23,7 @@
       "Max": 50,
       "Amount": 50,
       "Enabled": true
-    },
-    {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "player.json",
-      "Enabled": true
     }
   ],
-  "Id": 117
+  "Id": 175
 }

@@ -1,35 +1,41 @@
 {
   "$type": "Api.Entity, Api",
-  "m_Children": [],
-  "Id": 30,
+  "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Amount": 0
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1
+      "Amount": 1,
+      "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Hair Ghost"
+      "Value": "Hair Ghost",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "hairGhost"
+      "AssetName": "hairGhost",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 5
+      "Amount": 5,
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
+      "Max": 15,
       "Amount": 15,
-      "Max": 15
+      "Enabled": true
     }
-  ]
+  ],
+  "Id": 165
 }

@@ -1,49 +1,55 @@
 {
   "$type": "Api.Entity, Api",
-  "m_Children": [],
-  "Id": 30,
+  "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Amount": 2
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 3
+      "Amount": 3,
+      "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Boss"
+      "Value": "Boss",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "boss"
+      "AssetName": "boss",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 5
+      "Amount": 5,
+      "Enabled": true
     },
-    
     {
       "$type": "SummerJam1.Money, SummerJam1",
-      "Amount": 1
+      "Amount": 1,
+      "Enabled": true
     },
     {
-      "$type": "SummerJam1.Units.Effects.DeathAddsMoneyToPlayer, SummerJam1"
+      "$type": "SummerJam1.Units.Effects.DeathAddsMoneyToPlayer, SummerJam1",
+      "Tooltip": "Drops money when destroyed.",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
+      "Max": 25,
       "Amount": 25,
-      "Max": 25
+      "Enabled": true
     },
     {
-      "$type": "SummerJam1.Statuses.InvulnerableOnEvenBeats, SummerJam1"
-    },
-    {
-      "$type": "SummerJam1.Units.BattleEndsWhenDefeated, SummerJam1"
+      "$type": "SummerJam1.Units.BattleEndsWhenDefeated, SummerJam1",
+      "Enabled": true
     }
-  ]
+  ],
+  "Id": 167
 }

@@ -1,33 +1,36 @@
 {
   "$type": "Api.Entity, Api",
-  "m_Children": [],
-  "Id": 30,
+  "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 6
+      "DamageAmount": 6,
+      "Attacks": 1,
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Cards.Effects.ChooseDiscards, SummerJam1",
-      "Amount": 1
+      "Amount": 1,
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "earthPulse"
+      "AssetName": "earthPulse",
+      "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+      "$type": "SummerJam1.Cards.Discard, SummerJam1",
+      "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Reckless Attack"
-    },
-    {
-      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
-      "Amount": 1
+      "Value": "Reckless Attack",
+      "Enabled": true
     }
-  ]
+  ],
+  "Id": 127
 }

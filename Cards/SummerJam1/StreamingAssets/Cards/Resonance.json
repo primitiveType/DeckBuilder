@@ -1,33 +1,35 @@
 {
   "$type": "Api.Entity, Api",
-  "m_Children": [],
-  "Id": 30,
+  "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Cards.Effects.DealDamageForEachCardDrawnThisTurn, SummerJam1",
-      "Multiplier": 3
+      "Multiplier": 3,
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "resonance"
+      "AssetName": "resonance",
+      "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+      "$type": "SummerJam1.Cards.Discard, SummerJam1",
+      "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Resonance"
-    },
-    {
-      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
-      "Amount": 1
+      "Value": "Resonance",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
-      "Amount": 1
+      "Amount": 1,
+      "Enabled": true
     }
-  ]
+  ],
+  "Id": 128
 }

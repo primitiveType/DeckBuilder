@@ -1,22 +1,26 @@
 {
   "$type": "Api.Entity, Api",
-  "m_Children": [],
-  "Id": 12,
+  "_children": [],
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Relics.RaiseMaxHp, SummerJam1",
-      "Amount": 5
+      "Amount": 5,
+      "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Bone Familiar"
+      "Value": "Bone Familiar",
+      "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "boneFamiliar"
+      "AssetName": "boneFamiliar",
+      "Enabled": true
     },
     {
-      "$type": "SummerJam1.RelicComponent, SummerJam1"
+      "$type": "SummerJam1.RelicComponent, SummerJam1",
+      "Enabled": true
     }
-  ]
+  ],
+  "Id": 143
 }

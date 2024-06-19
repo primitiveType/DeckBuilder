@@ -31,18 +31,9 @@
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
-      "Enabled": true
-    },
-    {
       "$type": "SummerJam1.Cards.HealthCost, SummerJam1",
-      "Enabled": true
-    },
-    {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "Cards\\Kill.json",
       "Enabled": true
     }
   ],
-  "Id": 161
+  "Id": 122
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace Api
 {
-    [DontSerialize]
+    [NonSerializableComponent]
     public class SourcePrefab : Component
     {
         public string Prefab { get; set; }
