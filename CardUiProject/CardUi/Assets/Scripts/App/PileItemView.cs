@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Api;
 using App.Utility;
 using CardsAndPiles;
 using Cinemachine;
@@ -9,6 +10,7 @@ using UnityEngine.UI;
 
 namespace App
 {
+    
     [RequireComponent(typeof(ISortHandler))]
     public class PileItemView<T> : View<T>, IEndDragHandler, IPileItemView, IDragHandler, IGameObject,
         IBeginDragHandler
@@ -113,9 +115,9 @@ namespace App
                 return;
             }
 
-            if (!TrySendToPile(TargetPileView))
+            if (!TrySendToPile(TargetPileView.Entity))
             {
-                Debug.Log($"Failed to add {name} to {TargetPileView.name}.");
+                Debug.Log($"Failed to add {name} to {TargetPileView}.");
             }
             else
             {
@@ -162,9 +164,9 @@ namespace App
 
         public bool IsDragging { get; private set; }
 
-        public virtual bool TrySendToPile(IPileView pileView)
+        public virtual bool TrySendToPile(IEntity pileView)
         {
-            bool success = Entity.TrySetParent(pileView.Entity);
+            bool success = Entity.TrySetParent(pileView);
 
 
             return success;
