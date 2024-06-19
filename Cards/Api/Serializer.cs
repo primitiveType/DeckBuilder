@@ -49,7 +49,6 @@ namespace Api
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            Console.WriteLine("Writing !");
             serializer.Serialize(writer, ((IChildrenCollection<Component>)value).Where(ShouldSerialize).ToArray());
         }
 

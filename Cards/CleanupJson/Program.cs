@@ -2,7 +2,7 @@
 
 using Api;
 using SummerJam1;
-
+//load all assets and re-save them. Cleans up missing components before publish.
 Logging.Initialize(new DefaultLogger());
 var context = new Context(new SummerJam1Events());
 IEntity gameEntity = context.Root;
@@ -17,14 +17,11 @@ void TestDirectory(DirectoryInfo dir)
 {
     foreach (DirectoryInfo enumerateDirectory in dir.EnumerateDirectories())
     {
-        Console.WriteLine($"Checking dir {enumerateDirectory}");
-
         TestDirectory(enumerateDirectory);
     }
 
     foreach (FileInfo enumerateFile in dir.EnumerateFiles())
     {
-        Console.WriteLine($"Creating entity {enumerateFile.Name}");
         IEntity entity = context.CreateEntity(null, enumerateFile.FullName);
         entity.RemoveComponent<UnknownComponent>();
         var str = Serializer.Serialize(entity);
