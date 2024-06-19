@@ -85,13 +85,16 @@ namespace SummerJam1
                 Destroy(child.gameObject);
             }
 
-            int currentBeat = battleContainer.BeatTracker.CurrentBeat;
-            Intent nextIntent = Entity.GetComponentsInChildren<Intent>().OrderBy(intent => intent.TargetBeat - currentBeat).FirstOrDefault();
+            Intent nextIntent = Entity.GetComponentInChildren<Intent>();
 
             if (nextIntent != null)
             {
                 IntentView view = Instantiate(IntentViewPrefab, IntentRoot);
                 view.SetModel(nextIntent);
+            }
+            else
+            {
+                Debug.LogError("Entity had null intent?");
             }
         }
     }

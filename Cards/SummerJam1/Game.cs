@@ -181,7 +181,6 @@ namespace SummerJam1
             Context.Root.AddComponent<BattleEndsWhenAllEnemiesDefeated>();
             // Context.Root.AddComponent<FillSlotsOnBattleStarted>();
             Context.Root.AddComponent<DrawHandOnTurnBegin>();
-            Context.Root.AddComponent<WaitForCardCostsBeats>();
             Context.Root.AddComponent<EndTurnOnBeatOverload>();
             // Context.Root.AddComponent<DrawEncounterHandOnTurnBegin>();
             // Context.Root.AddComponent<DrawEncounterHandWhenEmpty>();

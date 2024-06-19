@@ -32,7 +32,7 @@ namespace SummerJam1Tests
 
             card.GetComponent<Card>().TryPlayCard(Game.Entity);
         }
-        
+
         [SetUp]
         public void Setup()
         {
@@ -45,7 +45,8 @@ namespace SummerJam1Tests
             long memoryAfter = GC.GetTotalMemory(false);
             long memoryLast = GC.GetTotalMemory(true);
 
-            Logging.Log($"Memory before : {memoryBefore}. Memory after : {memoryAfter}. Memory after cleanup {memoryLast}.");
+            Logging.Log(
+                $"Memory before : {memoryBefore}. Memory after : {memoryAfter}. Memory after cleanup {memoryLast}.");
         }
 
         [Test]
@@ -82,17 +83,15 @@ namespace SummerJam1Tests
                 foreach (FileInfo enumerateFile in dir.EnumerateFiles())
                 {
                     IEntity entity = Context.CreateEntity(null, Path.Combine(relativePath, enumerateFile.Name));
-                    Assert.NotNull(entity);
+                    Assert.That(entity, Is.Not.Null);
                     Assert.That(entity.Components, Has.Count.GreaterThan(0));
-                    Assert.NotNull(entity.GetComponent<IDescription>(), enumerateFile.Name);
-                    Assert.NotNull(entity.GetComponent<NameComponent>(), enumerateFile.Name);
+                    Assert.That(entity.GetComponent<IDescription>(), Is.Not.Null, enumerateFile.Name);
+                    Assert.That(entity.GetComponent<NameComponent>(), Is.Not.Null, enumerateFile.Name);
                 }
             }
         }
 
-        
 
-       
 
         [Test]
         public void TryLoadAllPrefabs()
@@ -113,7 +112,7 @@ namespace SummerJam1Tests
                 foreach (FileInfo enumerateFile in dir.EnumerateFiles())
                 {
                     IEntity entity = Context.CreateEntity(null, Path.Combine(relativePath, enumerateFile.Name));
-                    Assert.NotNull(entity);
+                    Assert.That(entity, Is.Not.Null);
                     Assert.That(entity.Components, Has.Count.GreaterThan(0));
                 }
             }
@@ -230,8 +229,8 @@ namespace SummerJam1Tests
             };
 
             Game.EndTurn();
-            Assert.IsTrue(didExecute1);
-            Assert.IsFalse(didExecute2);
+            Assert.That(didExecute1, Is.True);
+            Assert.That(didExecute2, Is.False);
         }
 
         private event TesterEvent Tester;
@@ -272,7 +271,7 @@ namespace SummerJam1Tests
 
             child.TrySetParent(entity);
 
-            Assert.IsTrue(isWrapped);
+            Assert.That(isWrapped, Is.True);
 
             void ChildrenOnCollectionChanged1(object sender, NotifyCollectionChangedEventArgs e)
             {
@@ -292,8 +291,6 @@ namespace SummerJam1Tests
             Assert.That(cheese.GetComponent<GainMultiAttackBelowThreshold>(), Is.Not.Null);
         }
 
-
-    
 
         [Test]
         public void TestDealDamage()
@@ -338,18 +335,18 @@ namespace SummerJam1Tests
 
             Health healthCopy = gameCopy.Root.Children.First().GetComponent<Health>();
 
-            Assert.NotNull(healthCopy);
-            Assert.AreEqual(healthCopy.Amount, health.Amount);
+            Assert.That(healthCopy, Is.Not.Null);
+            Assert.That(healthCopy.Amount, Is.EqualTo(health.Amount));
 
             RequestDamageMultipliersEventArgs
                 args2 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
             Events.OnRequestDamageMultipliers(args2);
 
 
-            Assert.NotNull(healthCopy);
-            Assert.AreNotEqual(healthCopy.Amount, health.Amount);
-            Assert.NotNull(healthCopy.Entity);
-            Assert.AreEqual(healthCopy.Entity.Id, health.Entity.Id);
+            Assert.That(healthCopy, Is.Not.Null);
+            Assert.That(healthCopy.Amount, Is.Not.EqualTo(health.Amount));
+            Assert.That(healthCopy.Entity, Is.Not.Null);
+            Assert.That(healthCopy.Entity.Id, Is.EqualTo(health.Entity.Id));
         }
 
         [Test]

@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SummerJam1Tests", "SummerJa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrefabEditor", "PrefabEditor\PrefabEditor.csproj", "{96C5504D-1EA1-446C-8161-DEAB0F7E93D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanupJson", "CleanupJson\CleanupJson.csproj", "{FB859217-B4A9-4492-AA02-5767C8265E97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,5 +66,9 @@ Global
 		{96C5504D-1EA1-446C-8161-DEAB0F7E93D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96C5504D-1EA1-446C-8161-DEAB0F7E93D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96C5504D-1EA1-446C-8161-DEAB0F7E93D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB859217-B4A9-4492-AA02-5767C8265E97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB859217-B4A9-4492-AA02-5767C8265E97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB859217-B4A9-4492-AA02-5767C8265E97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB859217-B4A9-4492-AA02-5767C8265E97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

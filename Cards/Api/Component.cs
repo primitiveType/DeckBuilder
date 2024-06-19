@@ -7,6 +7,11 @@ using Newtonsoft.Json;
 
 namespace Api
 {
+    public class DontSerializeAttribute : Attribute
+    {
+    }
+    [DontSerialize]
+    public class UnknownComponent : Component{}
     public abstract class Component : IEventfulComponent
     {
         protected Component()
@@ -107,6 +112,7 @@ namespace Api
             State = LifecycleState.Destroyed;
         }
 
+        [JsonIgnore]
         public Dictionary<int, int> EventEntrance { get; } = new(0);
     }
 }

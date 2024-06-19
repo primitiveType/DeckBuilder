@@ -41,25 +41,20 @@ namespace SummerJam1.Units
         }
 
         private void CreateIntents()
-        { //all previous intents should have removed themselves already.
+        {
+            //all previous intents should have removed themselves already.
             //lets add new ones.
             var random = Game.Random;
 
             int beat = random.SystemRandom.Next(1, 5);
-            while (beat < Game.Battle.BeatTracker.MaxBeatsToThreshold)
+
+            //this is arbitrary right now. Need to somehow make it data driven...
+            Context.CreateEntity(Entity, child =>
             {
-                var nextBeat = random.SystemRandom.Next(beat + 1, beat + 5);
-
-                //this is arbitrary right now. Need to somehow make it data driven...
-                Context.CreateEntity(Entity, child =>
-                {
-                    var intent = child.AddComponent<DamageIntent>();
-                    intent.TargetBeat = beat; //damn shes fine
-                    intent.Amount = Math.Max(0, (beat - nextBeat));
-                });
-
-                beat = nextBeat;
-            }
+                var intent = child.AddComponent<DamageIntent>();
+                intent.TargetBeat = beat; //damn shes fine
+                intent.Amount = Math.Max(0, beat);
+            });
         }
     }
 }

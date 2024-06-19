@@ -18,7 +18,6 @@ namespace SummerJam1
         public IEntity Exhaust { get; private set; }
         public HandPile Hand { get; private set; }
         public DeckPile BattleDeck { get; private set; }
-        public BeatTracker BeatTracker { get; private set; }
 
         public ObjectivesPile ObjectivesPile { get; private set; }
 
@@ -35,7 +34,6 @@ namespace SummerJam1
         {
             base.Initialize();
 
-            Context.CreateEntity(Entity, child => BeatTracker = child.AddComponent<BeatTracker>());
             Context.CreateEntity(Entity, entity => EncounterSlots = entity.AddComponent<EncounterSlotPile>());
         }
 

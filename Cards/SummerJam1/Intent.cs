@@ -17,18 +17,10 @@ namespace SummerJam1
             base.Initialize();
         }
 
-        [OnBeatMoved]
+        [OnIntentStarted]
         private void OnBeatMoved(object sender, BeatMovedEventArgs args)
         {
-            if (TargetBeat > Game.Battle.BeatTracker.MaxBeatsToThreshold)
-            {
-                //the threshold dropped below our target, so we are destroyed.
-                Entity.Destroy();
-            }
-            if (args.DidOverload || args.Current >= TargetBeat)
-            {
-                DoIntent();
-            }
+            DoIntent();
         }
 
 

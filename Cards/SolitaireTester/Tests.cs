@@ -25,19 +25,19 @@ namespace SolitaireTester
         [Test]
         public void Test1()
         {
-            Assert.NotNull(Root.GetComponent<SolitaireGame>());
+            Assert.That(Root.GetComponent<SolitaireGame>(), Is.Not.Null);
             DeckPile deck = Root.GetComponentInChildren<DeckPile>();
-            Assert.NotNull(deck);
-            Assert.NotNull(Root.GetComponentInChildren<HandPile>());
+            Assert.That(deck, Is.Not.Null);
+            Assert.That(Root.GetComponentInChildren<HandPile>(), Is.Not.Null);
             Assert.That(deck.Entity.Children, Has.Count.EqualTo(52));
         }
 
         [Test]
         public void PropertyChangesGeneratedForSolitaire()
         {
-            Assert.NotNull(Root.GetComponent<SolitaireGame>());
+            Assert.That(Root.GetComponent<SolitaireGame>(), Is.Not.Null);
             StandardDeckCard card = Root.GetComponentInChildren<StandardDeckCard>();
-            Assert.NotNull(card);
+            Assert.That(card, Is.Not.Null);
 
             bool fired = false;
             card.PropertyChanged += CardOnPropertyChanged;
@@ -49,7 +49,7 @@ namespace SolitaireTester
 
             card.IsFaceDown = true;
 
-            Assert.IsTrue(fired);
+            Assert.That(fired, Is.True);
         }
     }
 }

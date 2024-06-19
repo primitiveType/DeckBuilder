@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using JetBrains.Annotations;
 using SummerJam1.Statuses;
 using Component = Api.Component;
 
@@ -20,7 +21,7 @@ namespace SummerJam1
             }
         }
 
-        private void OnEnabledChanged(object sender, PropertyChangedEventArgs e)
+        private void OnEnabledChanged([CanBeNull] object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(Enabled))
             {

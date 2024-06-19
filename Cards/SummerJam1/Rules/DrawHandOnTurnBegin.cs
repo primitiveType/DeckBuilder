@@ -3,16 +3,6 @@ using CardsAndPiles;
 
 namespace SummerJam1.Rules
 {
-    public class WaitForCardCostsBeats : SummerJam1Component
-    {
-        public int BeatCost => 1;
-
-        [OnWaitForCard]
-        private void OnWaitForCard(object sender, WaitForCardEventArgs args)
-        {
-            Game.Battle.BeatTracker.AdvanceBeats(BeatCost);
-        }
-    }
 
     public class BattleEndsWhenAllEnemiesDefeated : SummerJam1Component
     {
