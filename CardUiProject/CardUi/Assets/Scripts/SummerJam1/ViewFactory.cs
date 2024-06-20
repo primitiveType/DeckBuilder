@@ -52,7 +52,7 @@ namespace SummerJam1
             {
                 if (((IComponent)child).Entity.Parent == GameContext.Instance.Context.Root.GetComponentInChildren<Game>().PrefabsContainer)
                 {
-                    Debug.Log("made prefab prefab..");
+                    // Debug.Log("made prefab prefab..");
                 }
                 GameObject prefab = GetPrefab(child);
                 if (prefab != null)
@@ -84,6 +84,10 @@ namespace SummerJam1
         public GameObject CreateGameObjectForModel(IEntity entity)
         {
             IVisual visual = entity.GetComponent<IVisual>();
+            if (visual == null)
+            {
+                Debug.LogWarning($"No visual component found for entity {entity.GetDebugString()}");
+            }
             GameObject prefab = GetPrefab(visual);
             return prefab != null ? CreateView(entity, prefab) : null;
         }
@@ -109,7 +113,7 @@ namespace SummerJam1
                     return m_PrefabReference;
                 default:
                     // throw new ArgumentOutOfRangeException(nameof(visual));
-                    Debug.LogWarning("No prefab visual found.");
+                    Debug.LogWarning($"No prefab visual found for {visual.GetType().Name}.");
                     return null;
             }
 

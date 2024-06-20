@@ -1,1 +1,1 @@
-<#@ include file="..\Api\EventsBase.tt" #><#@ import namespace="System.IO" #><#@ import namespace="System.Xml" #>
+<#@ include file="..\Api\EventsBase.tt" #>

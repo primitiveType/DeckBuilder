@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Api;
-using SummerJam1.Statuses;
+﻿using Api;
 
 namespace SummerJam1
 {

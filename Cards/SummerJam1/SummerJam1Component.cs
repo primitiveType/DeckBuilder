@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using JetBrains.Annotations;
-using SummerJam1.Statuses;
 using Component = Api.Component;
 
 namespace SummerJam1

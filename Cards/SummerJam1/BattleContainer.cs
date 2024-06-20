@@ -21,9 +21,6 @@ namespace SummerJam1
 
         public ObjectivesPile ObjectivesPile { get; private set; }
 
-        public DeckPile EncounterDrawPile { get; private set; }
-        public PlayerDiscard EncounterDiscardPile { get; private set; }
-
         public EncounterSlotPile EncounterSlots { get; set; }
 
         public bool BattleStarted { get; private set; }
@@ -79,8 +76,6 @@ namespace SummerJam1
             SetupBattleDeck();
 
             Context.CreateEntity(Entity, entity => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
-            Context.CreateEntity(Entity, entity => EncounterDrawPile = entity.AddComponent<DeckPile>());
-            Context.CreateEntity(Entity, entity => EncounterDiscardPile = entity.AddComponent<PlayerDiscard>());
 
 
             PopulateEncounterPiles(pile);

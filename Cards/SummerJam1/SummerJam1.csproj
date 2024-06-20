@@ -188,6 +188,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Piles\" />
         <Folder Include="StreamingAssets\Units\Special" />
     </ItemGroup>
 

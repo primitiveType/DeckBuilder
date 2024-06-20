@@ -7151,11 +7151,11 @@ PrefabInstance:
     - target: {fileID: 114600978523305578, guid: 73ade234de8d92445a7756cd400e2fd3, type: 3}
       propertyPath: textTypes.Array.data[1].prefab
       value: 
-      objectReference: {fileID: 114685088414384168, guid: 734e22202dead2040a50b8d51fa6c931, type: 3}
+      objectReference: {fileID: 114865973802963578, guid: a1457d4bbab3cfc4fa6dfa1370075b29, type: 3}
     - target: {fileID: 114600978523305578, guid: 73ade234de8d92445a7756cd400e2fd3, type: 3}
       propertyPath: textTypes.Array.data[2].prefab
       value: 
-      objectReference: {fileID: 114685088414384168, guid: 2f42b8089ec6c0c4195967047e8d55b6, type: 3}
+      objectReference: {fileID: 114865973802963578, guid: 83fa703350ed4ba4a92dd1391bc4e442, type: 3}
     - target: {fileID: 114600978523305578, guid: 73ade234de8d92445a7756cd400e2fd3, type: 3}
       propertyPath: textTypes.Array.data[0].keyType
       value: damage
@@ -8933,7 +8933,7 @@ PrefabInstance:
     - target: {fileID: 114600978523305578, guid: 73ade234de8d92445a7756cd400e2fd3, type: 3}
       propertyPath: textTypes.Array.data[1].prefab
       value: 
-      objectReference: {fileID: 114685088414384168, guid: 734e22202dead2040a50b8d51fa6c931, type: 3}
+      objectReference: {fileID: 114865973802963578, guid: a1457d4bbab3cfc4fa6dfa1370075b29, type: 3}
     - target: {fileID: 114600978523305578, guid: 73ade234de8d92445a7756cd400e2fd3, type: 3}
       propertyPath: textTypes.Array.data[2].prefab
       value: 

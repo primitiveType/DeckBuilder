@@ -1,11 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using Api;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
 using PropertyChanged;
-using SummerJam1.Piles;
 
 namespace SummerJam1.Cards.Effects
 {

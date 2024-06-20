@@ -35,7 +35,6 @@ namespace App
         {
             // PileView = GetComponentsInParent<IPileView>(true).First();
             Entity.Children.CollectionChanged += OnPileChanged;
-            Debug.Log($"Creating {Entity.Children} children for {gameObject.name}.");
             foreach (IEntity child in Entity.Children)
             {
                 FireItemAddedImmediateWhenReady(child);
@@ -97,9 +96,9 @@ namespace App
                 int tries = 0;
                 await new WaitUntil(() =>
                 {
-                    Debug.Log("Waiting for view to be populated.");
+                    // Debug.Log($"Waiting for view to be populated {tries}.");
                     view = added.GetComponent<IGameObject>();
-                    if (tries++ > 100)
+                    if (tries++ > 2)//should never take two frames for this to happen!
                     {
                         Debug.Log($"{name} Gave up Waiting for view to be populated. {added.GetDebugString()}");
                         return true;
@@ -124,11 +123,11 @@ namespace App
         {
         }
 
-        protected virtual async Task OnItemAddedQueued(IEntity added, IGameObject view)
+        protected virtual Task OnItemAddedQueued(IEntity added, IGameObject view)
         {
             if (view == null)
             {
-                return;
+                return Task.CompletedTask;
             }
             Vector3 scale = view.gameObject.transform.localScale;
 
@@ -142,6 +141,7 @@ namespace App
             // view.gameObject.transform.localPosition = Vector3.zero;
             view.gameObject.transform.localScale = Vector3.one;
             view.gameObject.transform.rotation = Quaternion.identity;
+            return Task.CompletedTask;
         }
     }
 }

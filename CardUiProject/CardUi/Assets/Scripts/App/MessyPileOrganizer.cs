@@ -14,12 +14,13 @@ namespace App
             }
         }
 
-        protected override async Task OnItemAddedQueued(IEntity added, IGameObject view1)
+        protected override Task OnItemAddedQueued(IEntity added, IGameObject view1)
         {
             IGameObject view = added.GetComponent<IGameObject>();
             view.gameObject.transform.SetParent(transform);
             IPileItemView pileItemView = view.gameObject.GetComponentInChildren<IPileItemView>();
             pileItemView.SetTargetPosition(view.gameObject.transform.localPosition, Vector3.zero);
+            return Task.CompletedTask;
         }
     }
 }

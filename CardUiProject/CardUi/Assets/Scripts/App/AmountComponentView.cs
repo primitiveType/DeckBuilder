@@ -18,12 +18,13 @@ namespace App
             Disposables.Add(AnimationQueue.Instance.Enqueue((() => ValueChanged(amount))));
         }
 
-        protected virtual async Task ValueChanged(int? amount)
+        protected virtual Task ValueChanged(int? amount)
         {
             bool hide = (m_HideIfNull && amount == null) || (m_HideIfZero && amount is 0);
             VisibilityObject.SetActive(!hide);
 
             _text.text = GetStringForAmount(amount);
+            return Task.CompletedTask;
         }
 
         protected virtual string GetStringForAmount(int? amount)

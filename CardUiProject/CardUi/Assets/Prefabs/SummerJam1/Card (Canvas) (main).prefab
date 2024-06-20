@@ -5775,7 +5775,6 @@ GameObject:
   - component: {fileID: 2927448722488216988}
   - component: {fileID: 1665066439749963234}
   - component: {fileID: 8875041854177728580}
-  - component: {fileID: 8864970798434199865}
   m_Layer: 0
   m_Name: Card (Canvas) (main)
   m_TagString: Untagged
@@ -5969,22 +5968,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HideIfNull: 0
   m_VisibilityObject: {fileID: 0}
---- !u!114 &8864970798434199865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8432613368176806903}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85ca2ef430454c9b8429c9bf7c9f6257, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HideIfNull: 0
-  m_VisibilityObject: {fileID: 3016334000936274664}
-  m_HideIfZero: 0
-  _text: {fileID: 835500366298989763}
 --- !u!1 &8465753026025527381
 GameObject:
   m_ObjectHideFlags: 0

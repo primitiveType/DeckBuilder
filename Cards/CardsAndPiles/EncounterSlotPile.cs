@@ -10,7 +10,5 @@ namespace CardsAndPiles
              return base.AcceptsChild(child) && !Entity.Children.Any();
         }
     }
-    public class UpcomingEncounterSlotPile : DefaultPile
-    {
-    }
+
 }
