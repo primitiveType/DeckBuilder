@@ -70,10 +70,10 @@ namespace SummerJam1
             SubscribeToEvents();
 
 #if UNITY_EDITOR
-            Debug.Log("We are in editor.");
+            Logging.Log("We are in editor.");
             Context.SetPrefabsDirectory(Path.Combine("Assets", "External", "Library", "StreamingAssets"));
 #else
-            Debug.Log($"We are in a build. {Application.streamingAssetsPath}");
+            Logging.Log($"We are in a build. {Application.streamingAssetsPath}");
             Context.SetPrefabsDirectory(Application.streamingAssetsPath);
 #endif
             IEntity game = Context.Root;
@@ -92,12 +92,12 @@ namespace SummerJam1
 
         private void OnBattleEnded(object sender, BattleEndedEventArgs item)
         {
-            Debug.Log($"Battle ended. {item.Victory}.");
+            Logging.Log($"Battle ended. {item.Victory}.");
         }
 
         private void OnEntityKilled(object sender, EntityKilledEventArgs item)
         {
-            Debug.Log($"Entity : {item.Entity.Id} killed by {item.Source.Id}");
+            Logging.Log($"Entity : {item.Entity.Id} killed by {item.Source.Id}");
         }
 
         private void OnBattleStarted(object sender, BattleStartedEventArgs item)
@@ -109,7 +109,7 @@ namespace SummerJam1
         {
             foreach (string itemReason in item.Reasons)
             {
-                Debug.LogWarning(itemReason);
+                Logging.LogWarning(itemReason);
             }
         }
 

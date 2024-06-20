@@ -33,7 +33,7 @@ public class ComponentService : MonoBehaviour
             {
                 if (typeof(IComponent).IsAssignableFrom(type))
                 {
-                    Debug.Log(type.FullName);
+                    Logging.Log(type.FullName);
                 }
             }
         }
@@ -68,11 +68,11 @@ public class ComponentService : MonoBehaviour
 
     private void LoadPrefab(string fileName)
     {
-        Debug.Log($"Loading file {fileName}.");
+        Logging.Log($"Loading file {fileName}.");
 
         CurrentEntity = Context.CreateEntity(EditRoot, fileName);
 
-        Debug.Log($"Loaded {CurrentEntity.GetComponent<NameComponent>().Value}.");
+        Logging.Log($"Loaded {CurrentEntity.GetComponent<NameComponent>().Value}.");
     }
 
     // Update is called once per frame

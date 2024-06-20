@@ -94,7 +94,7 @@ namespace App
 
             if (Component != null && component != null)
             {
-                Debug.LogWarning($"Replacing Component reference in {nameof(ComponentView<T>)}.");
+                Logging.LogWarning($"Replacing Component reference in {nameof(ComponentView<T>)}.");
             }
 
             if (Component != null)
@@ -194,7 +194,7 @@ namespace App
     //
     //         if (Component != null && component != null)
     //         {
-    //             Debug.LogWarning($"Replacing Component reference in {nameof(ComponentView<T>)}.");
+    //             Logging.LogWarning($"Replacing Component reference in {nameof(ComponentView<T>)}.");
     //         }
     //
     //         if (Component != null)

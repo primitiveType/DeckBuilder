@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Api;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 [DisallowMultipleComponent]
@@ -25,8 +26,8 @@ public class SimpleTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
         if (!tooltipController)
         {
-            Debug.LogWarning("Could not find the Tooltip prefab");
-            Debug.LogWarning("Make sure you don't have any other prefabs named `SimpleTooltip`");
+            Logging.LogWarning("Could not find the Tooltip prefab");
+            Logging.LogWarning("Make sure you don't have any other prefabs named `SimpleTooltip`");
         }
 
         if (GetComponent<RectTransform>())

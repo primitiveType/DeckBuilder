@@ -41,7 +41,7 @@ namespace App
             if (Entity != null)
             {
                 Entity.PropertyChanged -= OnEntityDestroyed;
-                Debug.LogWarning("SetModel called on view that already had been populated.");
+                Logging.LogWarning("SetModel called on view that already had been populated.");
             }
             Entity = entity;
             Model = entity.GetComponent<T>();

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Api;
 using App;
 using SummerJam1;
 using UnityEngine;
@@ -14,7 +15,7 @@ public abstract class SetSpriteFromAssetName : View<VisualComponent>
         Sprite tex = Resources.Load<Sprite>(Model.AssetName);
         if (tex == null)
         {
-            Debug.LogWarning($"No texture found for : {Model.AssetName}!");
+            Logging.LogWarning($"No texture found for : {Model.AssetName}!");
         }
 
         SetSprite(tex);

@@ -2,8 +2,10 @@
 /* PlayerHealth.cs */
 
 using System.Collections;
+using Api;
 using Simple_Health_Bar.Scripts;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Simple_Health_Bar._Asteroids_Example.Scripts
 {
@@ -32,7 +34,7 @@ namespace Simple_Health_Bar._Asteroids_Example.Scripts
 		{
 			// If the instance variable is already assigned, then there are multiple player health scripts in the scene. Inform the user.
 			if( instance != null )
-				Debug.LogError( "There are multiple instances of the Player Health script. Assigning the most recent one to Instance." );
+				Logging.LogError( "There are multiple instances of the Player Health script. Assigning the most recent one to Instance." );
 			
 			// Assign the instance variable as the Player Health script on this object.
 			instance = GetComponent<PlayerHealth>();

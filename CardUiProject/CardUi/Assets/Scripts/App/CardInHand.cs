@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Api;
+using UnityEngine;
 
 namespace App
 {
@@ -17,7 +18,7 @@ namespace App
             GetComponent<RectTransform>().sizeDelta = new Vector2(3, 5);
             if (PileItemView == null)
             {
-                Debug.LogError("Pile item not found when adding card to hand!");
+                Logging.LogError("Pile item not found when adding card to hand!");
             }
         }
 

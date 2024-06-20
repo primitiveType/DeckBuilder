@@ -1,3 +1,4 @@
+using Api;
 using App;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ namespace SummerJam1
             }
 
             InputStateManager.Instance.StateMachine.Fire(InputAction.WaitForCard);
-            Debug.Log("Getting card.");
+            Logging.Log("Getting card.");
 
             Game.WaitForCard();
         }
@@ -28,13 +29,13 @@ namespace SummerJam1
             }
 
             InputStateManager.Instance.StateMachine.Fire(InputAction.EndTurn);
-            Debug.Log("Ending turn.");
+            Logging.Log("Ending turn.");
 
             Game.EndTurn();
-            Debug.Log("Queueing turn start.");
+            Logging.Log("Queueing turn start.");
             AnimationQueue.Instance.Enqueue(() =>
             {
-                Debug.Log("Starting next turn.");
+                Logging.Log("Starting next turn.");
                 InputStateManager.Instance.StateMachine.Fire(InputAction.BeginTurn);
             });
         }

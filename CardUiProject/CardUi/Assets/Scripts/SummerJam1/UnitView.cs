@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using Api;
 using App;
 using SummerJam1.Units;
 using UnityEngine;
@@ -94,7 +95,7 @@ namespace SummerJam1
             }
             else
             {
-                Debug.LogError("Entity had null intent?");
+                Logging.LogError("Entity had null intent?");
             }
         }
     }

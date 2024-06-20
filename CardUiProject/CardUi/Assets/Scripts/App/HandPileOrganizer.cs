@@ -194,7 +194,7 @@ namespace App
             GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
             if (entityGO != null && entityGO.GetComponent<CardInHand>() != null)
             {
-//                Debug.LogError($"{entityGO.name} was already in hand!?");
+//                Logging.LogError($"{entityGO.name} was already in hand!?");
             }
 
             if (entityGO != null)

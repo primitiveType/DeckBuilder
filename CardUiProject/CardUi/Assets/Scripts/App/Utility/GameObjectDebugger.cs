@@ -7,12 +7,12 @@ namespace App.Utility
     {
         private void Awake()
         {
-            // Debug.Log($"Gameobject created with hashcode {GetHashCode()}", gameObject);
+            // Logging.Log($"Gameobject created with hashcode {GetHashCode()}", gameObject);
         }
 
         private void OnDestroy()
         {
-            // Debug.Log($"Gameobject destroyed with hashcode {GetHashCode()}", gameObject);
+            // Logging.Log($"Gameobject destroyed with hashcode {GetHashCode()}", gameObject);
         }
     }
 }

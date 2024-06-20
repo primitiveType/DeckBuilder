@@ -96,11 +96,11 @@ namespace App
                 int tries = 0;
                 await new WaitUntil(() =>
                 {
-                    // Debug.Log($"Waiting for view to be populated {tries}.");
+                    // Logging.Log($"Waiting for view to be populated {tries}.");
                     view = added.GetComponent<IGameObject>();
                     if (tries++ > 2)//should never take two frames for this to happen!
                     {
-                        Debug.Log($"{name} Gave up Waiting for view to be populated. {added.GetDebugString()}");
+                        Logging.Log($"{name} Gave up Waiting for view to be populated. {added.GetDebugString()}");
                         return true;
                     }
 
@@ -133,7 +133,7 @@ namespace App
 
             if (scale == Vector3.zero)
             {
-                Debug.LogError("Scale was zero!");
+                Logging.LogError("Scale was zero!");
             }
 
             view.gameObject.transform.SetParent(Parent, true);

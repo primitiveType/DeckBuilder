@@ -85,7 +85,6 @@ namespace App
             Ray ray = eventData.pressEventCamera.ScreenPointToRay(Input.mousePosition);
             
             RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
-            Debug.Log($"{results.Count()} items hovered.");
 
             PileView target = null;
             foreach (var result in results)
@@ -94,7 +93,7 @@ namespace App
                 if (pileView != null && pileView != CurrentPileView)
                 {
                     target = pileView;
-                    Debug.Log("Found target pile view : " + pileView.name);
+                    Logging.Log("Found target pile view : " + pileView.name);
                 }
             }
 
@@ -117,7 +116,7 @@ namespace App
 
             if (!TrySendToPile(TargetPileView.Entity))
             {
-                Debug.Log($"Failed to add {name} to {TargetPileView}.");
+                Logging.Log($"Failed to add {name} to {TargetPileView}.");
             }
             else
             {

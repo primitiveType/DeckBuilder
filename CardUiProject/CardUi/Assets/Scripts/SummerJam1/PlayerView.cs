@@ -1,4 +1,5 @@
 using System;
+using Api;
 using App;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ namespace SummerJam1
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            Debug.LogWarning("Player destroyed!");
+            Logging.LogWarning("Player destroyed!");
         }
     }
 }

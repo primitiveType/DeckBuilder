@@ -2,6 +2,7 @@
 /* PlayerController.cs */
 
 using System.Collections;
+using Api;
 using Simple_Health_Bar.Scripts;
 using UnityEngine;
 
@@ -59,7 +60,7 @@ namespace Simple_Health_Bar._Asteroids_Example.Scripts
 		{
 			// If the instance variable is already assigned, then there are multiple of this component in the scene. Inform the user.
 			if( instance != null )
-				Debug.LogError( "There are multiple instances of the Player Controller script. Assigning the most recent one to Instance." );
+				Logging.LogError( "There are multiple instances of the Player Controller script. Assigning the most recent one to Instance." );
 			
 			// Assign the instance variable as the Player Controller script on this object.
 			instance = GetComponent<PlayerController>();

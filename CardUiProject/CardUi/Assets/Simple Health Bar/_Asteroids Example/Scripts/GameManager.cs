@@ -2,8 +2,10 @@
 /* GameManager.cs */
 
 using System.Collections;
+using Api;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Simple_Health_Bar._Asteroids_Example.Scripts
 {
@@ -57,7 +59,7 @@ namespace Simple_Health_Bar._Asteroids_Example.Scripts
 				if( instance.gameObject.activeInHierarchy == true )
 				{
 					// Warn the user that there are multiple Game Managers within the scene and destroy the old manager.
-					Debug.LogWarning( "There are multiple instances of the Game Manager script. Removing the old manager from the scene." );
+					Logging.LogWarning( "There are multiple instances of the Game Manager script. Removing the old manager from the scene." );
 					Destroy( instance.gameObject );
 				}
 				
