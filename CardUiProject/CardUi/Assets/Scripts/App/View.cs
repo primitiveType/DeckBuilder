@@ -13,6 +13,7 @@ namespace App
     public class View<T> : MonoBehaviour, IView<T>
     {
         [SerializeField] private int DEBUG_entity; 
+        [SerializeField] private bool required = true; 
         public IEntity Entity
         {
             get => _entity;
@@ -45,9 +46,9 @@ namespace App
             }
             Entity = entity;
             Model = entity.GetComponent<T>();
-            if (Model == null)
+            if (required && Model == null)
             {
-                Debug.LogWarning($"Failed to find model {typeof(T).Name} on Entity Component.", gameObject);
+                Debug.LogError($"Failed to find model {typeof(T).Name} on Entity Component.", gameObject);
                 enabled = false;
                 return;
             }

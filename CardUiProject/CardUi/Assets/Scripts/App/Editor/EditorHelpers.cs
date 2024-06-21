@@ -2,7 +2,6 @@
 using UnityEditor;
 using UnityEngine;
 using System.Linq;
-using Api;
 
 public class EditorHelpers : Editor
 {
@@ -26,7 +25,7 @@ public class EditorHelpers : Editor
         // list missing on this object
         if (GameObjectUtility.RemoveMonoBehavioursWithMissingScript(obj) != 0)
         {
-            Logging.Log($"REMOVED: Missing Scripts on object '{obj.name}'");
+            Debug.Log($"REMOVED: Missing Scripts on object '{obj.name}'");
         }
  
         // scan childeren
@@ -56,7 +55,7 @@ public class EditorHelpers : Editor
         // list missing on this object
         if (GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(obj) != 0)
         {
-            Logging.Log($"Missing Script on object '{obj.name}'");
+            Debug.Log($"Missing Script on object '{obj.name}'");
         }
  
         // scan childeren

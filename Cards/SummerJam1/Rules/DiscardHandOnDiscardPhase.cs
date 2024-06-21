@@ -20,17 +20,6 @@ namespace SummerJam1.Rules
         }
     }
 
-    public class EndTurnOnBeatOverload : SummerJam1Component
-    {
-        [OnBeatMoved]
-        private void OnBeatMoved(object sender, BeatMovedEventArgs args)
-        {
-            if (args.DidOverload)
-            {
-                Game.EndTurn();
-            }
-        }
-    }
 
     // public class DiscardDungeonHandOnTurnEnd : SummerJam1Component
     // {

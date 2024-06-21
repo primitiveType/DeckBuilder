@@ -47,13 +47,15 @@ namespace SummerJam1
         private void CreateViewsForExistingModels()
         {
             List<IVisual> existing = GameContext.Instance.Context.Root.GetComponentsInChildren<IVisual>();
-           
+
             foreach (IVisual child in existing)
             {
-                if (((IComponent)child).Entity.Parent == GameContext.Instance.Context.Root.GetComponentInChildren<Game>().PrefabsContainer)
+                if (((IComponent)child).Entity.Parent ==
+                    GameContext.Instance.Context.Root.GetComponentInChildren<Game>().PrefabsContainer)
                 {
                     // Logging.Log("made prefab prefab..");
                 }
+
                 GameObject prefab = GetPrefab(child);
                 if (prefab != null)
                 {
@@ -86,8 +88,10 @@ namespace SummerJam1
             IVisual visual = entity.GetComponent<IVisual>();
             if (visual == null)
             {
-                Logging.LogWarning($"No visual component found for entity {entity.GetDebugString()}");
+                // Logging.LogWarning($"No visual component found for entity {entity.GetDebugString()}");
+                return null;
             }
+
             GameObject prefab = GetPrefab(visual);
             return prefab != null ? CreateView(entity, prefab) : null;
         }
@@ -112,9 +116,7 @@ namespace SummerJam1
                 case PrefabReference prefabReference:
                     return m_PrefabReference;
                 default:
-                    // throw new ArgumentOutOfRangeException(nameof(visual));
-                    Logging.LogWarning($"No prefab visual found for {visual.GetType().Name}.");
-                    return null;
+                    throw new ArgumentOutOfRangeException(nameof(visual), $"No prefab visual found for {visual?.GetType().Name}.");
             }
 
 

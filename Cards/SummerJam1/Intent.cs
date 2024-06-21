@@ -16,7 +16,7 @@ namespace SummerJam1
         }
 
         [OnIntentStarted]
-        private void OnBeatMoved(object sender, BeatMovedEventArgs args)
+        private void OnBeatMoved(object sender, IntentStartedEventArgs args)
         {
             DoIntent();
         }
