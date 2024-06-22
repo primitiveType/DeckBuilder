@@ -71,11 +71,19 @@ namespace SummerJam1
 
         public void StartBattle()
         {
-           
             SetupBattleDeck();
+            if (EncounterSlots.Entity.Children.Count != 0)
+            {
+                Logging.LogError("Units already existed in encounter slot!");
+            }
+
+            var list = Game.GetBattlePrefabs(1, 3);
+            foreach (var unit in list)
+            {
+                Context.CreateEntity(EncounterSlots.Entity, unit);
+            }
 
             Context.CreateEntity(Entity, entity => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
-
 
 
             Exhaust = Context.CreateEntity(Entity, entity =>
@@ -132,7 +140,7 @@ namespace SummerJam1
 
             return false;
         }
-        
+
 
         private int DungeonOrder(IEntity _)
         {
