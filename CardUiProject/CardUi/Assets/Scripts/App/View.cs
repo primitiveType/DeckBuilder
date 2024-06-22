@@ -12,8 +12,9 @@ namespace App
 {
     public class View<T> : MonoBehaviour, IView<T>
     {
-        [SerializeField] private int DEBUG_entity; 
-        [SerializeField] private bool required = true; 
+        [SerializeField] private int DEBUG_entity;
+        [SerializeField] private bool required = true;
+
         public IEntity Entity
         {
             get => _entity;
@@ -44,6 +45,7 @@ namespace App
                 Entity.PropertyChanged -= OnEntityDestroyed;
                 Logging.LogWarning("SetModel called on view that already had been populated.");
             }
+
             Entity = entity;
             Model = entity.GetComponent<T>();
             if (required && Model == null)
@@ -88,23 +90,30 @@ namespace App
         {
             if (Entity == null)
             {
-                ParentView = GetComponentsInParent<IView>().FirstOrDefault(item => !ReferenceEquals(item, this) && item.Entity != null);
-                if (ParentView == null)
+                var entity = GetEntityForView();
+                if (entity != null)
                 {
-                    Debug.LogWarning($"Failed to find Parent View for component.", gameObject);
-                    enabled = false;
-                    return;
-                }
-
-                if (ParentView?.Entity != null)
-                {
-                    SetModel(ParentView.Entity);
+                    SetModel(entity);
                 }
                 else
                 {
                     ParentView.PropertyChanged += ParentViewOnPropertyChanged;
                 }
             }
+        }
+
+        protected virtual IEntity GetEntityForView()
+        {
+            ParentView = GetComponentsInParent<IView>()
+                .FirstOrDefault(item => !ReferenceEquals(item, this) && item.Entity != null);
+            if (ParentView == null)
+            {
+                Debug.LogWarning($"Failed to find Parent View for component.", gameObject);
+                enabled = false;
+                return null;
+            }
+
+            return ParentView?.Entity;
         }
 
         private void ParentViewOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -143,14 +152,15 @@ namespace App
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError($"Caught exception executing event! {e.Message} : {e.InnerException.StackTrace}", this);
+                        Debug.LogError($"Caught exception executing event! {e.Message} : {e.InnerException.StackTrace}",
+                            this);
                     }
                 };
                 ((INotifyPropertyChanged)Model).PropertyChanged += action;
                 EventHandlers.Add(action);
                 try
                 {
-                    action.Invoke(this,  new PropertyChangedEventArgs(method.Filter) );
+                    action.Invoke(this, new PropertyChangedEventArgs(method.Filter));
                 }
                 catch (Exception e)
                 {

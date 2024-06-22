@@ -16,7 +16,7 @@ namespace SummerJam1.Units
         [OnBattleStarted]
         private void OnBattleStarted(object sender, BattleStartedEventArgs args)
         {
-            CreateIntents();
+            CreateIntent();
         }
 
         [OnEntityKilled]
@@ -30,30 +30,20 @@ namespace SummerJam1.Units
 
         //TODO: move this into a different component, probably
 
-        [OnBeatMoved]
-        private void OnBeatMoved(object sender, BeatMovedEventArgs args)
+        [OnTurnBegan]
+        private void OnTurnBegan(object sender, TurnBeganEventArgs args)
         {
-            if (args.DidOverload)
-            {
-                CreateIntents();
-            }
+            CreateIntent();
         }
 
-        private void CreateIntents()
+        private void CreateIntent()
         {
             //all previous intents should have removed themselves already.
             //lets add new ones.
             var random = Game.Random;
-
-            int beat = random.SystemRandom.Next(1, 5);
-
-            //this is arbitrary right now. Need to somehow make it data driven...
-            Context.CreateEntity(Entity, child =>
-            {
-                var intent = child.AddComponent<DamageIntent>();
-                intent.TargetBeat = beat; //damn shes fine
-                intent.Amount = Math.Max(0, beat);
-            });
+            int dmg = random.SystemRandom.Next(1, 5);
+            var intent = Entity.AddComponent<DamageIntent>();
+            intent.Amount = Math.Max(0, dmg);
         }
     }
 }

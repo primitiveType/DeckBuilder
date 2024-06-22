@@ -3,20 +3,10 @@
 namespace SummerJam1
 {
     //intents need to be associated with an enemy to show the intent above that enemy.
-    //they also need to be associated with a target beat, to show the intent in the beat tracker.
-    //we basically need to create two views for the same component.
-    //worse, we can have multiple intents, and on the enemy itself we only show the next upcoming intent.
     public abstract class Intent : SummerJam1Component, IVisual
     {
-        public int TargetBeat { get; set; }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-        }
-
         [OnIntentStarted]
-        private void OnBeatMoved(object sender, IntentStartedEventArgs args)
+        private void OnIntentStarted(object sender, IntentStartedEventArgs args)
         {
             DoIntent();
         }
@@ -25,7 +15,7 @@ namespace SummerJam1
         public void DoIntent()
         {
             OnTrigger();
-            Entity.Destroy();
+            Entity.RemoveComponent<Intent>();
         }
 
         protected abstract void OnTrigger();

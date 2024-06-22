@@ -93,7 +93,7 @@ namespace App
                 if (pileView != null && pileView != CurrentPileView)
                 {
                     target = pileView;
-                    Logging.Log("Found target pile view : " + pileView.name);
+                    // Logging.Log("Found target pile view : " + pileView.name);
                 }
             }
 

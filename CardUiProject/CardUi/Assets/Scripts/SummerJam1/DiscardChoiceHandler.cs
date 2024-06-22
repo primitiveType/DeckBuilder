@@ -19,10 +19,14 @@ public class DiscardChoiceHandler : PileView, IPileView
 
     private int AmountExpected { get; set; }
 
-    protected void Awake()
+    protected override IEntity GetEntityForView()
+    {
+        return GameContext.Instance.Game.DiscardStagingPile.Entity;
+    }
+
+    protected void Start()
     {
         base.Start();
-        SetModel(GameContext.Instance.Game.DiscardStagingPile.Entity);
         Disposables.Add(GameContext.Instance.Events.SubscribeToChooseCardsToDiscard(OnChooseCardsToDiscard));
         gameObject.SetActive(false);
         Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;

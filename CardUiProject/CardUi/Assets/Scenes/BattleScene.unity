@@ -2437,7 +2437,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5577214584957558075, guid: 5b88c42eddee2ec4a84093a255791b46, type: 3}
       propertyPath: m_Name
-      value: Encounter Deck
+      value: Encounter Deck - [OBSOLETE]
+      objectReference: {fileID: 0}
+    - target: {fileID: 5577214584957558075, guid: 5b88c42eddee2ec4a84093a255791b46, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5577214584957558078, guid: 5b88c42eddee2ec4a84093a255791b46, type: 3}
       propertyPath: m_RootOrder
@@ -4451,7 +4455,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 979276594072225724, guid: 712256dcd6e935045b2e5144c1f7002a, type: 3}
       propertyPath: m_Name
-      value: Encounter Hand
+      value: Encounter Hand - [OBSOLETE]
+      objectReference: {fileID: 0}
+    - target: {fileID: 979276594072225724, guid: 712256dcd6e935045b2e5144c1f7002a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 979276594072225725, guid: 712256dcd6e935045b2e5144c1f7002a, type: 3}
       propertyPath: m_RootOrder
@@ -8877,7 +8885,7 @@ PrefabInstance:
     - target: {fileID: 114600978523305578, guid: 73ade234de8d92445a7756cd400e2fd3, type: 3}
       propertyPath: textTypes.Array.data[2].prefab
       value: 
-      objectReference: {fileID: 114685088414384168, guid: 2f42b8089ec6c0c4195967047e8d55b6, type: 3}
+      objectReference: {fileID: 114315480412742854, guid: 39a06454ef741d84fb81422ced7e4e56, type: 3}
     - target: {fileID: 114600978523305578, guid: 73ade234de8d92445a7756cd400e2fd3, type: 3}
       propertyPath: textTypes.Array.data[0].keyType
       value: damage
@@ -9383,20 +9391,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3220906636253467417}
   m_CullTransparentMesh: 1
---- !u!114 &5577214584772295061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5577214584772295063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cdb30ad5d6af004aafa74108c3d62bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DEBUG_entity: 0
-  required: 1
 --- !u!1 &5577214584772295063
 GameObject:
   m_ObjectHideFlags: 0
@@ -9406,7 +9400,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5577214584772295064}
-  - component: {fileID: 5577214584772295061}
+  - component: {fileID: 5577214584772295065}
   m_Layer: 0
   m_Name: battle Deck
   m_TagString: Untagged
@@ -9436,6 +9430,20 @@ RectTransform:
   m_AnchoredPosition: {x: 15, y: 150}
   m_SizeDelta: {x: 215.47, y: 100}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &5577214584772295065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577214584772295063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5643e7e0f8cb498682792ffaf5475dcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DEBUG_entity: 0
+  required: 1
 --- !u!114 &5577214585114726759
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Api;
 using App;
 using UnityEngine;
@@ -9,38 +8,37 @@ namespace SummerJam1
     {
         [SerializeField] private GameObject m_Prefab;
         [SerializeField] private Transform m_Parent;
+
         protected override void Start()
         {
             base.Start();
-            Setup();
-            GameContext.Instance.Game.PropertyChanged += GameOnPropertyChanged;
+            // GameContext.Instance.Game.PropertyChanged += GameOnPropertyChanged;
         }
 
-        private void GameOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Game.Battle))
-            {
-                Setup();
-            }
-        }
+        // private void GameOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        // {
+        //     if (e.PropertyName == nameof(Game.Battle))
+        //     {
+        //         Setup();
+        //     }
+        // }
 
-        private void Setup()
+        protected override IEntity GetEntityForView()
         {
-            if (GameContext.Instance.Game.Battle?.ObjectivesPile?.Entity != null)
+            var entity = GameContext.Instance.Game.Battle.ObjectivesPile.Entity;
+            foreach (IEntity entityChild in entity.Children)
             {
-                SetModel(GameContext.Instance.Game.Battle.ObjectivesPile.Entity);
-                foreach (IEntity entityChild in Model.Entity.Children)
-                {
-                    var go = Instantiate(m_Prefab, m_Parent);
-                    go.GetComponent<ISetModel>().SetModel(entityChild);
-                }
+                var go = Instantiate(m_Prefab, m_Parent);
+                go.GetComponent<ISetModel>().SetModel(entityChild);
             }
+
+            return entity;
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            GameContext.Instance.Game.PropertyChanged -= GameOnPropertyChanged;
+            // GameContext.Instance.Game.PropertyChanged -= GameOnPropertyChanged;
         }
     }
 }

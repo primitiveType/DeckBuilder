@@ -34,18 +34,6 @@
         <arg name="UsesMovement" type="bool"/>
         <arg name="Target" type="IEntity"/>
     </event>
-    <event id="BeatMoved">
-        <arg name="Previous" type="int"/>
-        <arg name="Current" type="int"/>
-        <arg name="DidOverload" type="bool"/>
-        <arg name="OverloadAmount" type="int"/>
-    </event>
-    <event id="AfterBeatMoved">
-        <arg name="Previous" type="int"/>
-        <arg name="Current" type="int"/>
-        <arg name="DidOverload" type="bool"/>
-        <arg name="OverloadAmount" type="int"/>
-    </event>
     <event id="RequestRemoveCard">
     </event>
     <event id="AttackPhaseStarted">

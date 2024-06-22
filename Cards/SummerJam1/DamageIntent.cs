@@ -11,11 +11,7 @@ namespace SummerJam1
 
         [JsonIgnore] private int Attacks => 1 + (Entity.GetComponent<MultiAttack>()?.Amount ?? 0);
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-        }
-
+       
         protected override void OnTrigger()
         {
             if (!Enabled)
