@@ -1,3 +1,4 @@
+using Api;
 using App;
 using TMPro;
 using UnityEngine;
@@ -13,11 +14,15 @@ namespace SummerJam1
         protected override void Start()
         {
             base.Start();
-            SetModel(GameContext.Instance.Game.Entity);
             Disposables.Add(GameContext.Instance.Events.SubscribeToBattleEnded(OnBattleEnd));
             gameObject.SetActive(false);
         }
-        
+
+        protected override IEntity GetEntityForView()
+        {
+            return GameContext.Instance.Game.Entity;
+        }
+
         private void OnBattleEnd(object sender, BattleEndedEventArgs item)
         {
             AnimationQueue.Instance.Enqueue(() =>

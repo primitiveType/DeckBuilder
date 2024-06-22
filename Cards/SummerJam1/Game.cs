@@ -29,7 +29,6 @@ namespace SummerJam1
 
         public int CurrentLevel { get; private set; } = 1;
 
-        public IEntity Dungeons { get; private set; }
 
         protected override void Initialize()
         {
@@ -45,7 +44,6 @@ namespace SummerJam1
 
             CreatePrefabPile();
             PopulatePlayerDeck();
-            PrepareNextDungeon(Context.CreateEntity(null, entity => entity.AddComponent<FirstDungeonPile>()));
             Events.OnGameStarted(new GameStartedEventArgs());
         }
 
@@ -206,29 +204,8 @@ namespace SummerJam1
         }
 
 
-        public void PrepareNextDungeon(IEntity dungeon)
-        {
-            if (Dungeons == null)
-            {
-                Context.CreateEntity(Entity,
-                    entity =>
-                    {
-                        Dungeons = entity;
-                        Dungeons.AddComponent<DungeonParent>();
-                    });
-            }
 
-            int numDungeons = 5;
-
-            foreach (IEntity child in Dungeons.Children.ToList())
-            {
-                child.Destroy();
-            }
-
-            dungeon.TrySetParent(Dungeons);
-        }
-
-        public void StartBattle(DungeonPile pile)
+        public void StartBattle()
         {
             Battle?.Entity.Destroy();
 
@@ -238,7 +215,7 @@ namespace SummerJam1
             });
 
 
-            Battle.StartBattle(Dungeons.GetComponentInChildren<DungeonPile>());
+            Battle.StartBattle();
         }
 
 

@@ -88,6 +88,8 @@ namespace App
 
         protected virtual void Start()
         {
+            ParentView = GetComponentsInParent<IView>()
+                .FirstOrDefault(item => !ReferenceEquals(item, this));
             if (Entity == null)
             {
                 var entity = GetEntityForView();
@@ -97,6 +99,7 @@ namespace App
                 }
                 else
                 {
+                    // Debug.LogWarning("Parent view has no entity. Listening for it to be populated...", gameObject);
                     ParentView.PropertyChanged += ParentViewOnPropertyChanged;
                 }
             }
@@ -104,11 +107,9 @@ namespace App
 
         protected virtual IEntity GetEntityForView()
         {
-            ParentView = GetComponentsInParent<IView>()
-                .FirstOrDefault(item => !ReferenceEquals(item, this) && item.Entity != null);
             if (ParentView == null)
             {
-                Debug.LogWarning($"Failed to find Parent View for component.", gameObject);
+                Debug.LogWarning($"Failed to find Parent View for component. {this.GetType().Name}", gameObject);
                 enabled = false;
                 return null;
             }
@@ -120,15 +121,18 @@ namespace App
         {
             if (e.PropertyName == nameof(IView.Entity))
             {
+                // Debug.Log("Parent view populated entity.");
                 ParentView.PropertyChanged -= ParentViewOnPropertyChanged;
                 SetModel(ParentView.Entity);
             }
         }
 
-        private List<PropertyChangedEventHandler> EventHandlers = new List<PropertyChangedEventHandler>();
+        private List<PropertyChangedEventHandler> EventHandlers = new();
         private IEntity _entity;
         private T _model;
         private IView ParentView { get; set; }
+
+    
 
         private void AttachListeners()
         {

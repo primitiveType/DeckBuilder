@@ -20,11 +20,5 @@ namespace SummerJam1
                 throw new NullReferenceException($"Player GO null somehow. {component.GetType()}.");
             }
         }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            Logging.LogWarning("Player destroyed!");
-        }
     }
 }

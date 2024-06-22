@@ -1,12 +1,13 @@
+using Api;
 using App;
 
 namespace SummerJam1
 {
     public class DiscardPileView : PileView
     {
-        protected virtual void Awake()
+        protected override IEntity GetEntityForView()
         {
-            SetModel(GameContext.Instance.Game.Battle.Discard);
+            return GameContext.Instance.Game.Battle.Discard;
         }
     }
 }

@@ -31,11 +31,7 @@
       "DontDie": true,
       "Amount": 600,
       "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.Units.FirstDungeonExit, SummerJam1",
-      "Enabled": true
     }
   ],
-  "Id": 168
+  "Id": 164
 }

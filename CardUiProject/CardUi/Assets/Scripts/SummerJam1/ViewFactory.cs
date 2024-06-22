@@ -111,8 +111,6 @@ namespace SummerJam1
                     return UnitPrefab;
                 case Card card:
                     return CardPrefab;
-                case DungeonPile dungeonPile:
-                    return m_DungeonPrefab;
                 case PrefabReference prefabReference:
                     return m_PrefabReference;
                 default:

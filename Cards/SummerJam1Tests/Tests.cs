@@ -97,7 +97,7 @@ namespace SummerJam1Tests
         public void TryLoadAllPrefabs()
         {
             DirectoryInfo info = new DirectoryInfo(Context.PrefabsPath);
-            Game.StartBattle(Game.Dungeons.GetComponentInChildren<DungeonPile>());
+            Game.StartBattle();
 
 
             TestDirectory(info, "");
@@ -210,7 +210,7 @@ namespace SummerJam1Tests
         {
             IEntity test1 = Context.CreateEntity();
             IEntity test2 = Context.CreateEntity();
-            Game.StartBattle(new BountyDungeonPile());
+            Game.StartBattle();
             TestEvents events1 = test1.AddComponent<TestEvents>();
             TestEvents events2 = test2.AddComponent<TestEvents>();
 

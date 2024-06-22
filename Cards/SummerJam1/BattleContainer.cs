@@ -69,16 +69,14 @@ namespace SummerJam1
             return name;
         }
 
-        public void StartBattle(DungeonPile pile)
+        public void StartBattle()
         {
-            pile.Entity.TrySetParent(Entity);
-
+           
             SetupBattleDeck();
 
             Context.CreateEntity(Entity, entity => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
 
 
-            PopulateEncounterPiles(pile);
 
             Exhaust = Context.CreateEntity(Entity, entity =>
             {
@@ -134,22 +132,7 @@ namespace SummerJam1
 
             return false;
         }
-
-        private void PopulateEncounterPiles(DungeonPile pile)
-        {
-            Logging.Log($"Starting battle with {pile.Entity.Children.Count} encounters.");
-
-            foreach (IEntity entity in pile.Entity.Children
-                         .OrderByDescending(entity => entity.HasComponent<IBottomCard>())
-                         .ThenBy(DungeonOrder)) //fill encounter slots.
-            {
-                if (!entity.TrySetParent(EncounterSlots.Entity))
-                {
-                    Logging.LogError(
-                        $"Failed to parent encounter card! : {entity.GetComponent<NameComponent>().Value}.");
-                }
-            }
-        }
+        
 
         private int DungeonOrder(IEntity _)
         {

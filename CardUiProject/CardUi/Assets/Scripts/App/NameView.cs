@@ -5,14 +5,13 @@ using UnityEngine;
 
 namespace App
 {
-    public class NameView : View<NameComponent>
+    public class NameView : ComponentView<NameComponent>
     {
         [SerializeField] private TMP_Text Text;
         
-        [PropertyListener]
-        private void OnNameChanged(object sender, PropertyChangedEventArgs args)
+        protected override void ComponentOnPropertyChanged()
         {
-            Text.text = Model.Value;
+            Text.text = Component.Value;
         }
     }
     

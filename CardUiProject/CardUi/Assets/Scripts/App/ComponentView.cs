@@ -40,7 +40,7 @@ namespace App
 
         protected virtual void Start()
         {
-            View = GetComponentInParent<IView>();
+            View = GetComponentInParent<IView>(true);
             UpdateVisibility(true);
             if (View.Entity == null)
             {
