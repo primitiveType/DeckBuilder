@@ -28,8 +28,9 @@
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Amount": 1,
       "Enabled": true
     }
   ],
-  "Id": 150
+  "Id": 126
 }

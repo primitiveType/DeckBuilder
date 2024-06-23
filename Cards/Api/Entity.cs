@@ -80,10 +80,20 @@ namespace Api
         {
             return GetComponents<T>().FirstOrDefault();
         }
+        
+        public object GetComponent(Type type)
+        {
+            return Components.FirstOrDefault(c => c.GetType().IsAssignableFrom(type));
+        }
 
         public bool HasComponent<T>()
         {
             return Components.OfType<T>().Any();
+        }
+        
+        public bool HasComponent(Type type)
+        {
+            return Components.Any(c => c.GetType().IsAssignableFrom(type));
         }
 
 

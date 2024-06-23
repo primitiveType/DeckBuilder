@@ -28,5 +28,7 @@ namespace Api
         bool RemoveComponent<TType>() where TType : Component;
         T GetComponentInSelfOrParent<T>();
         bool CanSetParent(IEntity parent);
+        bool HasComponent(Type type);
+        object GetComponent(Type type);
     }
 }

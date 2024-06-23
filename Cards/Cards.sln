@@ -18,8 +18,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrefabEditor", "PrefabEdito
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanupJson", "CleanupJson\CleanupJson.csproj", "{FB859217-B4A9-4492-AA02-5767C8265E97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrefabEditorWPF", "PrefabEditorWPF\PrefabEditorWPF.csproj", "{4299EC52-3423-4C6A-83E1-E0684501E476}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,9 +70,5 @@ Global
 		{FB859217-B4A9-4492-AA02-5767C8265E97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB859217-B4A9-4492-AA02-5767C8265E97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB859217-B4A9-4492-AA02-5767C8265E97}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4299EC52-3423-4C6A-83E1-E0684501E476}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4299EC52-3423-4C6A-83E1-E0684501E476}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4299EC52-3423-4C6A-83E1-E0684501E476}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4299EC52-3423-4C6A-83E1-E0684501E476}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -15,7 +16,7 @@ namespace PrefabEditor
     {
         public ComponentService Service { get; private set; }
         public CommonOpenFileDialog openFileDialog1;
-        private Proxy CurrentProxy;
+        private List<Proxy> CurrentProxy = new List<Proxy>();
         private PrefabEditorSettings Settings { get; set; }
         private class PrefabEditorSettings
         {
@@ -58,7 +59,7 @@ namespace PrefabEditor
 
         private void PropertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
-            CurrentProxy.SetProperty(e.ChangedItem.PropertyDescriptor, e.ChangedItem.Value);
+            CurrentProxy.ForEach(proxy => proxy.SetProperty(e.ChangedItem.PropertyDescriptor, e.ChangedItem.Value));
         }
 
         private void UpdateAddComponentListBox()
@@ -173,18 +174,26 @@ namespace PrefabEditor
                 return;
             }
 
-            if(Service.MultiMode || !Service.CurrentEntity.Any())
+            if (!Service.CurrentEntity.Any())
             {
                 return;
             }
+
+            List<Type> components = new List<Type>();
             foreach (var component in Service.CurrentEntity.First().Components)
             {
-                string name = component.GetType().FullName;
-                if (regex.IsMatch(name))
-                {
-                    componentsListBox.Items.Add(component);
-                }
+                
+                    components.Add(component.GetType());
+                
             }
+
+            components = components.Where(c => regex.IsMatch(c.Name) && Service.CurrentEntity.All(e => e.HasComponent(c))).ToList();
+
+            foreach (var component in components)
+            {
+                componentsListBox.Items.Add(component);
+            }
+
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -206,32 +215,34 @@ namespace PrefabEditor
 
         private void UpdatePropertyGrid()
         {
-            object[] selected = new object[Service.CurrentEntity.Count];
-                
-            if (componentsListBox.SelectedItems != null)
+            object selected = componentsListBox.SelectedItem;
+            CurrentProxy.Clear(); 
+            if (componentsListBox.SelectedItem != null)
             {
-                for (int i = 0; i < Service.CurrentEntity.Count;)
+                try
                 {
-                    try
+                    foreach (var entity in Service.CurrentEntity)
+                {
+                    var component = entity.GetComponent((Type)selected);
+                    if(component != null)
                     {
-                        CurrentProxy = new Proxy(componentsListBox.SelectedItem);
-                        selected[i] = CurrentProxy;
+                        Console.WriteLine("added component");
+                        CurrentProxy.Add(new Proxy(component));
                     }
-                    catch (Exception e)
+
+                }
+
+                }catch(Exception e)
+                {
+                    selected = new ErrorObject
                     {
-                        selected[i] = new ErrorObject
-                        {
-                            Exception = e.Message
-                        };
-                    }
+                        Exception = e.Message
+                    };
+                    propertyGrid1.SelectedObject = selected;
                 }
             }
-            else
-            {
-                CurrentProxy = null;
-            }
 
-            propertyGrid1.SelectedObjects = selected;
+            propertyGrid1.SelectedObjects = CurrentProxy.ToArray();
         }
 
         private void prefabsListBox_SelectedIndexChanged(object sender, EventArgs e)
