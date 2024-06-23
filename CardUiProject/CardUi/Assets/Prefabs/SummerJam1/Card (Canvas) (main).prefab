@@ -82,8 +82,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0790d0fa7dd4aac80e3c2cba8c07baa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DEBUG_entity: 0
-  required: 1
+  m_HideIfNull: 0
+  m_VisibilityObject: {fileID: 0}
   Text: {fileID: 796927174}
 --- !u!114 &4271301284184665493
 MonoBehaviour:
@@ -3947,7 +3947,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 1
-  m_CellSize: {x: 59.66, y: 13.3}
+  m_CellSize: {x: 2, y: 2}
   m_Spacing: {x: 0.05, y: 0.05}
   m_Constraint: 2
   m_ConstraintCount: 4

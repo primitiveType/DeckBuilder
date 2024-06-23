@@ -79,6 +79,7 @@
             this.prefabsListBox.FormattingEnabled = true;
             this.prefabsListBox.Location = new System.Drawing.Point(29, 41);
             this.prefabsListBox.Name = "prefabsListBox";
+            this.prefabsListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.prefabsListBox.Size = new System.Drawing.Size(292, 290);
             this.prefabsListBox.TabIndex = 3;
             this.prefabsListBox.SelectedIndexChanged += new System.EventHandler(this.prefabsListBox_SelectedIndexChanged);

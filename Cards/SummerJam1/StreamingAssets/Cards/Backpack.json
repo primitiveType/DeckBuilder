@@ -24,7 +24,11 @@
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Backpack",
       "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Enabled": true
     }
   ],
-  "Id": 107
+  "Id": 132
 }

@@ -26,7 +26,11 @@
       "Attacks": 1,
       "Aoe": true,
       "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Enabled": true
     }
   ],
-  "Id": 111
+  "Id": 136
 }

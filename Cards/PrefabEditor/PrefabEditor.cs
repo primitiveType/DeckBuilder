@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -49,6 +51,7 @@ namespace PrefabEditor
             Service.PropertyChanged += Service_PropertyChanged;
             buttonPrefabDirectory.Click += buttonPrefabDirectory_Click;
             addComponentListBox.DoubleClick += AddComponentListBox_DoubleClick;
+            prefabsListBox.DoubleClick += PrefabListBox_DoubleClick;
             UpdateAddComponentListBox();
             OpenPrefabsDirectory();
         }
@@ -73,11 +76,18 @@ namespace PrefabEditor
                 
             }
         }
+        private void PrefabListBox_DoubleClick(object sender, EventArgs e)
+        {
+            LoadSelectedItems();
+        }
 
         private void AddComponentListBox_DoubleClick(object sender, EventArgs e)
         {
-            Service.CurrentEntity.AddComponent((Type)addComponentListBox.SelectedItem);
-            UpdateComponentList();  
+            foreach (var entity in Service.CurrentEntity)
+            {
+                entity.AddComponent((Type)addComponentListBox.SelectedItem);
+            }
+            UpdateComponentList();
         }
 
         private void Service_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -162,7 +172,12 @@ namespace PrefabEditor
             {
                 return;
             }
-            foreach (var component in Service.CurrentEntity.Components)
+
+            if(Service.MultiMode || !Service.CurrentEntity.Any())
+            {
+                return;
+            }
+            foreach (var component in Service.CurrentEntity.First().Components)
             {
                 string name = component.GetType().FullName;
                 if (regex.IsMatch(name))
@@ -191,19 +206,24 @@ namespace PrefabEditor
 
         private void UpdatePropertyGrid()
         {
-            object selected = componentsListBox.SelectedItem;
-            if (componentsListBox.SelectedItem != null)
+            object[] selected = new object[Service.CurrentEntity.Count];
+                
+            if (componentsListBox.SelectedItems != null)
             {
-                try
+                for (int i = 0; i < Service.CurrentEntity.Count;)
                 {
-                    CurrentProxy = new Proxy(componentsListBox.SelectedItem);
-                    selected = CurrentProxy;
-                }catch(Exception e)
-                {
-                    selected = new ErrorObject
+                    try
                     {
-                        Exception = e.Message
-                    };
+                        CurrentProxy = new Proxy(componentsListBox.SelectedItem);
+                        selected[i] = CurrentProxy;
+                    }
+                    catch (Exception e)
+                    {
+                        selected[i] = new ErrorObject
+                        {
+                            Exception = e.Message
+                        };
+                    }
                 }
             }
             else
@@ -211,7 +231,7 @@ namespace PrefabEditor
                 CurrentProxy = null;
             }
 
-            propertyGrid1.SelectedObject = selected;
+            propertyGrid1.SelectedObjects = selected;
         }
 
         private void prefabsListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -221,7 +241,12 @@ namespace PrefabEditor
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Service.LoadPrefab(prefabsListBox.SelectedItem.ToString());
+            LoadSelectedItems();
+        }
+
+        private void LoadSelectedItems()
+        {
+            Service.LoadPrefab(prefabsListBox.SelectedItems);
             UpdateComponentList();
         }
 
@@ -239,7 +264,7 @@ namespace PrefabEditor
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            Service.CurrentEntity.RemoveComponent((Component)componentsListBox.SelectedItem);
+            Service.CurrentEntity.First().RemoveComponent((Component)componentsListBox.SelectedItem);
             UpdateComponentList();
         }
 
@@ -272,9 +297,4 @@ namespace PrefabEditor
         }
     }
 
-    public class TestClass
-    {
-        public int Tester { get; set; }
-        public string Test2 { get; set; }
-    }
 }

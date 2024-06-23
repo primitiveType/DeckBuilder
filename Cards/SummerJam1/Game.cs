@@ -193,8 +193,8 @@ namespace SummerJam1
         public void EndTurn()
         {
             Events.OnTurnEnded(new TurnEndedEventArgs());
-            // Events.OnAttackPhaseStarted(new AttackPhaseStartedEventArgs());
-            // Events.OnAttackPhaseEnded(new AttackPhaseEndedEventArgs());
+            Events.OnAttackPhaseStarted(new AttackPhaseStartedEventArgs());
+            Events.OnAttackPhaseEnded(new AttackPhaseEndedEventArgs());
             // Events.OnMovementPhaseBegan(new MovementPhaseBeganEventArgs());
 
             // Events.OnDungeonPhaseStarted(new DungeonPhaseStartedEventArgs());

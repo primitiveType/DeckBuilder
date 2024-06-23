@@ -27,7 +27,11 @@
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1",
       "Tooltip": "Consume- This card can only be played once per battle.",
       "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Enabled": true
     }
   ],
-  "Id": 110
+  "Id": 135
 }

@@ -30,12 +30,6 @@ namespace SummerJam1
         }
 
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            Entity.Children.CollectionChanged -= ChildrenOnCollectionChanged;
-        }
-
         public void SetLocalPosition(Vector3 transformPosition, Vector3 transformRotation)
         {
             transform.localPosition = transformPosition;
@@ -64,39 +58,6 @@ namespace SummerJam1
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
-            UpdateCurrentIntent();
-        }
-
-        private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            UpdateCurrentIntent();
-        }
-
-        private void UpdateCurrentIntent()
-        {
-            BattleContainer battleContainer = Entity.Context.Root.GetComponent<Game>().Battle;
-            if (battleContainer == null)
-            {
-                return;
-            }
-
-            foreach (Transform child in IntentRoot)
-            {
-                Destroy(child.gameObject);
-            }
-
-            Intent nextIntent = Entity.GetComponentInChildren<Intent>();
-
-            if (nextIntent != null)
-            {
-                IntentView view = Instantiate(IntentViewPrefab, IntentRoot);
-                view.SetModel(nextIntent);
-            }
-            else
-            {
-                Logging.LogError("Entity had null intent?");
-            }
         }
     }
 }

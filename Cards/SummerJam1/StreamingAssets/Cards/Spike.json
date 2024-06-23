@@ -28,7 +28,11 @@
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Spike",
       "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Enabled": true
     }
   ],
-  "Id": 127
+  "Id": 152
 }

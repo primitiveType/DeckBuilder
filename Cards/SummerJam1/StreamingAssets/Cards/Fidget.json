@@ -29,7 +29,15 @@
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Fidget",
       "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Enabled": true
     }
   ],
-  "Id": 115
+  "Id": 140
 }

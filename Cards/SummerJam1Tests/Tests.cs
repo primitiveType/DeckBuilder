@@ -52,6 +52,8 @@ namespace SummerJam1Tests
         [Test]
         public void TestSaveLoad()
         {
+            //this test fails because I have many places where there are things being created in Initialized.
+            //Either initialize shouldn't be called during deserialize, or I need two different "Versions" of initialize.
             string contextStr = Serializer.Serialize(Context);
             Context copy = Serializer.Deserialize<Context>(contextStr);
 

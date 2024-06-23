@@ -1359,6 +1359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DEBUG_entity: 0
+  required: 1
   IntentRoot: {fileID: 7219459492116511871}
   IntentViewPrefab: {fileID: 1806968274309032879, guid: 3ec538762feb6dd47b8471d11ee869a0, type: 3}
 --- !u!223 &8163466487095116258
@@ -1419,6 +1420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DEBUG_entity: 0
+  required: 1
   m_Animator: {fileID: 3539689}
 --- !u!95 &3539689
 Animator:
@@ -1454,6 +1456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DEBUG_entity: 0
+  required: 0
 --- !u!114 &4524808897941927841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1494,6 +1497,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DEBUG_entity: 0
+  required: 1
   TooltipPrefab: {fileID: 2896613350107740405, guid: ab20e02f93444b74ab376706f8d61df2, type: 3}
   TooltipParent: {fileID: 359313611638177351}
   TooltipBounds: {fileID: 175342229684373062}
@@ -2923,6 +2927,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DEBUG_entity: 0
+  required: 1
 --- !u!1 &6051878539783263009
 GameObject:
   m_ObjectHideFlags: 0
@@ -3488,11 +3493,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 1
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 0
-    m_MaxSize: 40
+    m_MinSize: 40
+    m_MaxSize: 300
     m_Alignment: 4
     m_AlignByGeometry: 1
     m_RichText: 1

@@ -11,13 +11,7 @@ namespace SummerJam1.Units
             base.Initialize();
             ((SummerJam1Events)Context.Events).OnUnitCreated(new UnitCreatedEventArgs(Entity));
         }
-
-
-        [OnBattleStarted]
-        private void OnBattleStarted(object sender, BattleStartedEventArgs args)
-        {
-            CreateIntent();
-        }
+        
 
         [OnEntityKilled]
         private void OnEntityKilled(object sender, EntityKilledEventArgs args)

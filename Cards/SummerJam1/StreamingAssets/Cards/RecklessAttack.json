@@ -30,7 +30,11 @@
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Reckless Attack",
       "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Enabled": true
     }
   ],
-  "Id": 123
+  "Id": 148
 }

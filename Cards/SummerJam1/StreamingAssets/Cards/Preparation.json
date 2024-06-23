@@ -29,7 +29,11 @@
     {
       "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
       "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Enabled": true
     }
   ],
-  "Id": 122
+  "Id": 147
 }

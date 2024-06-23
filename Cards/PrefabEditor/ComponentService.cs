@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Security.AccessControl;
+using System.Windows.Forms;
 using IComponent = Api.IComponent;
 
 namespace PrefabEditor
@@ -18,7 +19,8 @@ namespace PrefabEditor
         private Game Game { get; set; }
 
         private IEntity EditRoot { get; set; }
-        public IEntity CurrentEntity { get; set; }
+        public List<IEntity> CurrentEntity { get; set; } = new List<IEntity>();
+        public bool MultiMode => CurrentEntity.Count > 1;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -78,28 +80,38 @@ namespace PrefabEditor
             return files;
         }
 
-        public void LoadPrefab(string fileName)
+        public void LoadPrefab(ListBox.SelectedObjectCollection fileName)
         {
             Logging.Log($"Loading file {fileName}.");
 
-            CurrentEntity = Context.CreateEntity(null, fileName);
-            CurrentEntity.GetOrAddComponent<SourcePrefab>().Prefab = fileName;
-            Logging.Log($"Loaded {CurrentEntity.GetComponent<NameComponent>()?.Value}.");
+            CurrentEntity.Clear();
+            foreach (var entityPrefab in fileName)
+            {
+                var tempEntity = Context.CreateEntity(null, entityPrefab.ToString());
+                CurrentEntity.Add(tempEntity);
+                tempEntity.GetOrAddComponent<SourcePrefab>().Prefab = entityPrefab.ToString();
+                Logging.Log($"Loaded {tempEntity.GetComponent<NameComponent>()?.Value}.");
+            }
+        
         }
 
   
 
         internal void SaveCurrentPrefab()
         {
-            var source = CurrentEntity.GetComponent<SourcePrefab>();
-            var json = Serializer.Serialize(CurrentEntity);
-            string path = Path.Combine(Context.PrefabsPath, source.Prefab);
-            var info = new FileInfo(path);
-            if (!Directory.Exists(info.Directory.FullName))
+            foreach (var entity in CurrentEntity)
             {
-                Directory.CreateDirectory(path);
+                var source = entity.GetComponent<SourcePrefab>();
+                var json = Serializer.Serialize(entity);
+                string path = Path.Combine(Context.PrefabsPath, source.Prefab);
+                var info = new FileInfo(path);
+                if (!Directory.Exists(info.Directory.FullName))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                File.WriteAllText(path, json);
             }
-            File.WriteAllText(path, json);
+            
         }
     }
 
