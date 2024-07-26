@@ -120,6 +120,8 @@ namespace App
             }
             else
             {
+                Logging.Log($"Adding {name} to {TargetPileView}.");
+
                 CurrentPileView = TargetPileView;
             }
         }
