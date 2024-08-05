@@ -1,6 +1,7 @@
 ﻿using Api;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
+using SummerJam1.Units;
 using SummerJam1.Units.Effects;
 
 namespace SummerJam1
@@ -19,7 +20,7 @@ namespace SummerJam1
                 return;
             }
 
-            IEntity targetSlot = Game.Player.Entity;
+            IEntity targetSlot = Game.Player.Entity.GetComponentInChildren<Unit>().Entity;
 
             if (targetSlot == null)
             {

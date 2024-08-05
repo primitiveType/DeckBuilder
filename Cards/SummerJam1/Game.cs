@@ -6,6 +6,7 @@ using Api;
 using Api.Extensions;
 using CardsAndPiles;
 using SummerJam1.Cards;
+using SummerJam1.Piles;
 using SummerJam1.Rules;
 using Random = Api.Random;
 
@@ -20,6 +21,7 @@ namespace SummerJam1
 
         public BattleContainer Battle { get; private set; }
         public Player Player { get; private set; }
+        public Pile PlayerUnits { get; private set; }
 
         public Random Random { get; private set; }
 
@@ -40,8 +42,13 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity => RelicPrizePile = entity.AddComponent<RelicPrizePile>());
             Context.CreateEntity(Entity, entity => RelicPile = entity.AddComponent<RelicPile>());
             Context.CreateEntity(Entity, entity => DiscardStagingPile = entity.AddComponent<DiscardStagingPile>());
+            Context.CreateEntity(Entity, entity => PlayerUnits = entity.AddComponent<EncounterSlotPile>());
             Player = Context.CreateEntity(Entity, "player").GetComponent<Player>();
-
+            //temp code
+            var unit = Context.CreateEntity(PlayerUnits.Entity, "Units/Player/Knight");
+            
+            
+            Logging.Log($"Unit created : {unit}");
             CreatePrefabPile();
             PopulatePlayerDeck();
             Events.OnGameStarted(new GameStartedEventArgs());

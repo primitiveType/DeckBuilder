@@ -21,23 +21,23 @@ namespace SummerJam1.Units
                 Entity.TrySetParent(null);
             }
         }
+        
+    }
 
-        //TODO: move this into a different component, probably
-
-        [OnTurnBegan]
-        private void OnTurnBegan(object sender, TurnBeganEventArgs args)
+    public class PlayerUnit : Unit
+    {
+        public PlayerUnit()
         {
-            CreateIntent();
+            Logging.Log("Created player unit.");
         }
-
-        private void CreateIntent()
+        protected override void Initialize()
         {
-            //all previous intents should have removed themselves already.
-            //lets add new ones.
-            var random = Game.Random;
-            int dmg = random.SystemRandom.Next(1, 5);
-            var intent = Entity.AddComponent<DamageIntent>();
-            intent.Amount = Math.Max(0, dmg);
+            base.Initialize();
         }
+    }
+
+    public class CharacterClass : SummerJam1Component
+    {
+        
     }
 }

@@ -1,18 +1,23 @@
-﻿using CardsAndPiles;
+﻿using System.Collections.Generic;
+using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Cards;
+using SummerJam1.Units;
 
 namespace SummerJam1
 {
     public class Player : SummerJam1Component, ITooltip
     {
-        public int Movements { get; private set; }
-        public int MovementsPerTurn { get; private set; }
         public int CurrentEnergy { get; set; }
         public int MaxEnergy { get; } = 3;
 
         public string Tooltip => "Energy - Cards require energy to be played.";
 
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+        }
 
         public bool TryUseEnergy(int amount)
         {
@@ -32,7 +37,6 @@ namespace SummerJam1
         private void OnTurnBegan()
         {
             CurrentEnergy = MaxEnergy;
-            Movements = MovementsPerTurn;
         }
 
         [OnEntityKilled]
@@ -43,28 +47,6 @@ namespace SummerJam1
                 Events.OnBattleEnded(new BattleEndedEventArgs(false));
             }
         }
-
-        [OnRequestMoveUnit]
-        private void OnRequestMoveUnit(object sender, RequestMoveUnitEventArgs args)
-        {
-            if (!args.UsesMovement)
-            {
-                return;
-            }
-
-            if (Movements == 0)
-            {
-                args.Blockers.Add(CardBlockers.NOT_ENOUGH_MOVEMENT);
-            }
-        }
-
-        [OnUnitMoved]
-        private void OnUnitMoved(object sender, UnitMovedEventArgs args)
-        {
-            if (args.UsesMovement)
-            {
-                Movements--;
-            }
-        }
+        
     }
 }

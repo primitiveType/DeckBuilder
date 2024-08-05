@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
@@ -66,6 +67,24 @@ namespace SummerJam1.Units
                 EncounterSlotPile slot = Entity.GetComponentInParent<EncounterSlotPile>();
                 slot.Entity.GetOrAddComponent<Blood>().Amount += blood.Amount;
             }
+        }
+        
+        //TODO: move this into a different component, probably
+
+        [OnTurnBegan]
+        private void OnTurnBegan(object sender, TurnBeganEventArgs args)
+        {
+            CreateIntent();
+        }
+
+        private void CreateIntent()
+        {
+            //all previous intents should have removed themselves already.
+            //lets add new ones.
+            var random = Game.Random;
+            int dmg = random.SystemRandom.Next(1, 5);
+            var intent = Entity.AddComponent<DamageIntent>();
+            intent.Amount = Math.Max(0, dmg);
         }
     }
 }

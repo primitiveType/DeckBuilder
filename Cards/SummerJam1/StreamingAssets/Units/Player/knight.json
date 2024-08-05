@@ -3,27 +3,29 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
+      "$type": "SummerJam1.Units.PlayerUnit, SummerJam1",
       "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Artifact fragment",
+      "Value": "Knight",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "artifact",
+      "AssetName": "bannerman",
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Units.CollectableIntoDeck, SummerJam1",
+      "$type": "SummerJam1.Strength, SummerJam1",
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Units.VictoryWhenNoneOfThisTypeExistsInBattle, SummerJam1",
+      "$type": "SummerJam1.Health, SummerJam1",
+      "Max": 7,
+      "Amount": 7,
       "Enabled": true
     }
   ],
-  "Id": 169
+  "Id": 144
 }
