@@ -14,6 +14,7 @@ namespace Api
     internal class Entity : IEntity
     {
         [JsonProperty] private ChildrenCollection<IEntity> _children = new();
+        private string _name;
 
         [JsonProperty] private ChildrenCollection<Component> ComponentsInternal { get; set; } = new();
         public Context Context { get; private set; }
@@ -26,6 +27,12 @@ namespace Api
         public IEntity Parent { get; private set; }
 
         public IChildrenCollection<IEntity> Children => _children;
+
+        public string Name
+        {
+            get => _name ?? $"Entity {Id}";
+            set => _name = value;
+        }
 
         public void Destroy()
         {

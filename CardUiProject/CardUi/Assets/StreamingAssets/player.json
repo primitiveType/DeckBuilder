@@ -19,17 +19,6 @@
       "AssetName": "Player",
       "Enabled": true
     },
-    {
-      "$type": "SummerJam1.Health, SummerJam1",
-      "Max": 50,
-      "Amount": 50,
-      "Enabled": true
-    },
-    {
-      "$type": "Api.SourcePrefab, Api",
-      "Prefab": "player.json",
-      "Enabled": true
-    }
   ],
   "Id": 117
 }

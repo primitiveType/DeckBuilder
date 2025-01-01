@@ -82,11 +82,12 @@ namespace App
 
         public void OnDrag(PointerEventData eventData)
         {
-            Ray ray = eventData.pressEventCamera.ScreenPointToRay(Input.mousePosition);
-            
-            RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
-
+            // Ray ray = eventData.pressEventCamera.ScreenPointToRay(Input.mousePosition);
+            //
+            // RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
+            //
             PileView target = null;
+            var results = eventData.hovered;
             foreach (var result in results)
             {
                 PileView pileView = result.transform.GetComponentInParent<PileView>();

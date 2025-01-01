@@ -55,7 +55,11 @@ namespace App
                 return;
             }
 
-            AttachListeners();
+            if (Model != null)
+            {
+                AttachListeners();
+            }
+
             OnInitialized();
             Entity.PropertyChanged += OnEntityDestroyed;
         }
