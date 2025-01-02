@@ -5,9 +5,11 @@ using System.Linq;
 using Api;
 using Api.Extensions;
 using CardsAndPiles;
+using CardsAndPiles.Components;
 using SummerJam1.Cards;
 using SummerJam1.Piles;
 using SummerJam1.Rules;
+using SummerJam1.Units;
 using Random = Api.Random;
 
 namespace SummerJam1
@@ -59,11 +61,21 @@ namespace SummerJam1
             //create an example deck.
             Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
 
+            Dictionary<string, bool> units = new Dictionary<string, bool>();
+            foreach (var child in PlayerUnits.Entity.GetComponentsInChildren<PlayerUnit>())
+            {
+                Logging.Log(child.Entity.GetComponent<NameComponent>().Value);
+                units.Add(child.UnitName, true);
+            }
             foreach (StartingCard prefabsContainerChild in PrefabsContainer.GetComponentsInChildren<StartingCard>())
             {
-                for (int i = 0; i < prefabsContainerChild.Amount; i++)
+                if (prefabsContainerChild.Character == "None" || units.ContainsKey(prefabsContainerChild.Character))
                 {
-                    Context.CreateEntity(Deck.Entity, prefabsContainerChild.Entity.GetComponent<SourcePrefab>().Prefab);
+                    for (int i = 0; i < prefabsContainerChild.Amount; i++)
+                    {
+                        Context.CreateEntity(Deck.Entity,
+                            prefabsContainerChild.Entity.GetComponent<SourcePrefab>().Prefab);
+                    }
                 }
             }
         }

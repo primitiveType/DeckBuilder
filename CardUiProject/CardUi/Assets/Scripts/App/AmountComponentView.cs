@@ -2,10 +2,11 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Api;
 using UnityEngine;
+using IComponent = Api.IComponent;
 
 namespace App
 {
-    public class AmountComponentView<T> : ComponentView<T> where T : IAmount, INotifyPropertyChanged
+    public class AmountComponentView<T> : ComponentView<T> where T : IAmount, INotifyPropertyChanged, IComponent
     {
         [SerializeField] private bool m_HideIfZero = true;
         [SerializeField] private TMPro.TMP_Text _text;

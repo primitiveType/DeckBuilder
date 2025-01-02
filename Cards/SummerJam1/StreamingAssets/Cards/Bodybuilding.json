@@ -29,6 +29,7 @@
     {
       "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
       "Amount": 1,
+      "Character": "Berserker",
       "Enabled": true
     },
     {
@@ -37,5 +38,5 @@
       "Enabled": true
     }
   ],
-  "Id": 112
+  "Id": 111
 }

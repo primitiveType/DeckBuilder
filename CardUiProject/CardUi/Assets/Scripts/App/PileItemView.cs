@@ -18,7 +18,7 @@ namespace App
         public bool IsInLayoutGroup; //feels a bit hacky, but hopefully reliable?
 
         private readonly float lerpRate = 8;
-        private PileView TargetPileView { get; set; }
+        private IEntity TargetDrag { get; set; }
 
         private Vector3 BoundsSize { get; set; }
 
@@ -28,7 +28,7 @@ namespace App
         private Vector3 TargetPosition { get; set; }
         private Vector3 TargetRotation { get; set; }
 
-        public IPileView CurrentPileView { get; set; }
+        public IPile CurrentPile { get; set; }
 
         private void Awake()
         {
@@ -56,7 +56,7 @@ namespace App
 
         private void Update()
         {
-            IsInLayoutGroup = transform.parent?.GetComponentInParent<LayoutGroup>() != null;
+            IsInLayoutGroup = (transform.parent != null ? transform.parent.GetComponentInParent<LayoutGroup>() : null) != null;
 
             if (!IsDragging && !IsInLayoutGroup)
             {
@@ -70,14 +70,14 @@ namespace App
 
         public void OnTriggerEnter(Collider other)
         {
-            TargetPileView = other.gameObject.GetComponentInParent<PileView>();
+            TargetDrag = other.gameObject.GetComponentInParent<IView>().Entity;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
             IsDragging = true;
             transform.localRotation = Quaternion.identity;
-            CurrentPileView = transform.GetComponentInParent<IPileView>();
+            CurrentPile = transform.GetComponentInParent<IPileView>().Entity.GetComponent<IPile>();
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -86,19 +86,19 @@ namespace App
             //
             // RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
             //
-            PileView target = null;
+            IEntity target = null;
             var results = eventData.hovered;
             foreach (var result in results)
             {
-                PileView pileView = result.transform.GetComponentInParent<PileView>();
-                if (pileView != null && pileView != CurrentPileView)
+                IView pileView = result.transform.GetComponentInParent<IView>();
+                if (pileView != null && pileView.Entity.GetComponent<IPile>() != CurrentPile)
                 {
-                    target = pileView;
+                    target = pileView.Entity;
                     // Logging.Log("Found target pile view : " + pileView.name);
                 }
             }
 
-            TargetPileView = target;
+            TargetDrag = target;
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -110,20 +110,21 @@ namespace App
                 return;
             }
 
-            if (TargetPileView == null || TargetPileView == GetComponentInParent<PileView>())
+            if (TargetDrag == null || TargetDrag == GetComponentInParent<PileView>())
             {
                 return;
             }
 
-            if (!TrySendToPile(TargetPileView.Entity))
+            if (!TrySendToPile(TargetDrag))
             {
-                Logging.Log($"Failed to add {name} to {TargetPileView}.");
+                Logging.Log($"Failed to add {name} to {TargetDrag}.");
             }
             else
             {
-                Logging.Log($"Adding {name} to {TargetPileView}.");
+                Logging.Log($"Adding {name} to {TargetDrag}.");
 
-                CurrentPileView = TargetPileView;
+                //We should maybe instead just navigate the model hierarchy...
+                // CurrentPile = TargetDrag.GetComponentInParent<PileView>().Model;
             }
         }
 

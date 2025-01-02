@@ -5,6 +5,7 @@ using System.ComponentModel;
 using Api;
 using UnityEngine;
 using UnityEngine.Serialization;
+using IComponent = Api.IComponent;
 
 namespace App
 {
@@ -22,7 +23,7 @@ namespace App
         }
     }
 
-    public abstract class ComponentView<T> : ComponentViewBase
+    public abstract class ComponentView<T> : ComponentViewBase where T : IComponent 
     {
         protected T Component { get; set; }
 
@@ -117,7 +118,7 @@ namespace App
 
         private void ComponentOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (this == null)
+            if (this == null || Component.State == LifecycleState.Destroyed)
             {
                 return;
             }

@@ -41,6 +41,10 @@ namespace SummerJam1
 
         public int GetEffectiveDamage(IEntity targetEntity)
         {
+            if (State == LifecycleState.Destroyed)
+            {
+                return 0;
+            }
             ITakesDamage component = targetEntity.GetComponentInChildren<ITakesDamage>();
             return component.GetEffectiveDamage(Amount, Entity.Parent);
         }

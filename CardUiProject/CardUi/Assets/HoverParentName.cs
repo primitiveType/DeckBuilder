@@ -4,7 +4,7 @@ using CardsAndPiles.Components;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class HoverParentName : ComponentView<IEntity>, IPointerEnterHandler, IPointerExitHandler
+public class HoverParentName : ComponentView<NameComponent>, IPointerEnterHandler, IPointerExitHandler
 {
 
     // Update is called once per frame

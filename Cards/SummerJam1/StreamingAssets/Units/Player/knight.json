@@ -4,6 +4,7 @@
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Units.PlayerUnit, SummerJam1",
+      "UnitName": "Knight",
       "Enabled": true
     },
     {
@@ -27,5 +28,5 @@
       "Enabled": true
     }
   ],
-  "Id": 144
+  "Id": 143
 }

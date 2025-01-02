@@ -1,6 +1,7 @@
 ﻿using System;
 using Api;
 using CardsAndPiles;
+using Newtonsoft.Json;
 
 namespace SummerJam1.Units
 {
@@ -26,6 +27,9 @@ namespace SummerJam1.Units
 
     public class PlayerUnit : Unit
     {
+        [JsonProperty]
+        public string UnitName { get; private set; }
+
         public PlayerUnit()
         {
             Logging.Log("Created player unit.");

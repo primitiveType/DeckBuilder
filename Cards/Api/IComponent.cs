@@ -7,6 +7,7 @@ namespace Api
     {
         IEntity Entity { get; }
         bool Enabled { get; set; }
+        LifecycleState State { get; }
     }
 
     public interface IEventfulComponent : IComponent
