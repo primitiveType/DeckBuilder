@@ -101,6 +101,8 @@ namespace SummerJam1
         private void SetupBattleDeck()
         {
             BattleDeck = Context.DuplicateEntity(Game.Deck.Entity).GetComponent<DeckPile>();
+            BattleDeck.Entity.AddComponent<NameComponent>().Value = "Battle Deck";
+
             BattleDeck.Entity.AddComponent<PlayerControl>();
 
             BattleDeck.Entity.TrySetParent(Entity);
@@ -108,11 +110,13 @@ namespace SummerJam1
             {
                 Hand = entity.AddComponent<HandPile>();
                 entity.AddComponent<PlayerControl>();
+                entity.AddComponent<NameComponent>().Value = "Hand";
             });
             Discard = Context.CreateEntity(Entity, entity =>
             {
                 entity.AddComponent<PlayerDiscard>();
                 entity.AddComponent<PlayerControl>();
+                entity.AddComponent<NameComponent>().Value = "Discard";
             });
 
             BattleDeck.SetHandAndDiscard(Hand.Entity, Discard);

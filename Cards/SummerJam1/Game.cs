@@ -23,7 +23,7 @@ namespace SummerJam1
 
         public BattleContainer Battle { get; private set; }
         public Player Player { get; private set; }
-        public Pile PlayerUnits { get; private set; }
+        // public Pile PlayerUnits { get; private set; }
 
         public Random Random { get; private set; }
 
@@ -44,13 +44,13 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity => RelicPrizePile = entity.AddComponent<RelicPrizePile>());
             Context.CreateEntity(Entity, entity => RelicPile = entity.AddComponent<RelicPile>());
             Context.CreateEntity(Entity, entity => DiscardStagingPile = entity.AddComponent<DiscardStagingPile>());
-            Context.CreateEntity(Entity, entity => PlayerUnits = entity.AddComponent<EncounterSlotPile>());
+            // Context.CreateEntity(Entity, entity => PlayerUnits = entity.AddComponent<EncounterSlotPile>());
             Player = Context.CreateEntity(Entity, "player").GetComponent<Player>();
             //temp code
-            var unit = Context.CreateEntity(PlayerUnits.Entity, "Units/Player/Knight");
-            
-            
-            Logging.Log($"Unit created : {unit}");
+            // var unit = Context.CreateEntity(PlayerUnits.Entity, "Units/Player/Knight");
+
+
+            // Logging.Log($"Unit created : {unit}");
             CreatePrefabPile();
             PopulatePlayerDeck();
             Events.OnGameStarted(new GameStartedEventArgs());
@@ -59,23 +59,25 @@ namespace SummerJam1
         private void PopulatePlayerDeck()
         {
             //create an example deck.
-            Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
+            Context.CreateEntity(Entity, entity =>
+            {
+                Deck = entity.AddComponent<DeckPile>();
+
+                entity.AddComponent<NameComponent>().Value = "Deck";
+            });
 
             Dictionary<string, bool> units = new Dictionary<string, bool>();
-            foreach (var child in PlayerUnits.Entity.GetComponentsInChildren<PlayerUnit>())
-            {
-                Logging.Log(child.Entity.GetComponent<NameComponent>().Value);
-                units.Add(child.UnitName, true);
-            }
+            // foreach (var child in PlayerUnits.Entity.GetComponentsInChildren<PlayerUnit>())
+            // {
+            //     Logging.Log(child.Entity.GetComponent<NameComponent>().Value);
+            //     units.Add(child.UnitName, true);
+            // }
             foreach (StartingCard prefabsContainerChild in PrefabsContainer.GetComponentsInChildren<StartingCard>())
             {
-                if (prefabsContainerChild.Character == "None" || units.ContainsKey(prefabsContainerChild.Character))
+                for (int i = 0; i < prefabsContainerChild.Amount; i++)
                 {
-                    for (int i = 0; i < prefabsContainerChild.Amount; i++)
-                    {
-                        Context.CreateEntity(Deck.Entity,
-                            prefabsContainerChild.Entity.GetComponent<SourcePrefab>().Prefab);
-                    }
+                    Context.CreateEntity(Deck.Entity,
+                        prefabsContainerChild.Entity.GetComponent<SourcePrefab>().Prefab);
                 }
             }
         }
@@ -223,15 +225,11 @@ namespace SummerJam1
         }
 
 
-
         public void StartBattle()
         {
             Battle?.Entity.Destroy();
 
-            Context.CreateEntity(Entity, entity =>
-            {
-                Battle = entity.AddComponent<BattleContainer>();
-            });
+            Context.CreateEntity(Entity, entity => { Battle = entity.AddComponent<BattleContainer>(); });
 
 
             Battle.StartBattle();

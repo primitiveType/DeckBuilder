@@ -20,7 +20,7 @@ namespace SummerJam1
                 return;
             }
 
-            IEntity targetSlot = Game.PlayerUnits.GetRandom();
+            IEntity targetSlot = Game.Player.Entity;
 
             if (targetSlot == null)
             {

@@ -17,7 +17,13 @@
       "$type": "SummerJam1.VisualComponent, SummerJam1",
       "AssetName": "Player",
       "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Health, SummerJam1",
+      "Max": 50,
+      "Amount": 50,
+      "Enabled": true
     }
   ],
-  "Id": 174
+  "Id": 173
 }

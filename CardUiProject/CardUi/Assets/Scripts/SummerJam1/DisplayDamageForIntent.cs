@@ -21,7 +21,7 @@ namespace App
 
         public void UpdateDisplay()
         {
-            ValueChanged(Component?.GetEffectiveDamage(GameContext.Instance.Game.PlayerUnits.GetRandom()));
+            ValueChanged(Component?.GetEffectiveDamage(GameContext.Instance.Game.Player.Entity));
         }
     }
 }

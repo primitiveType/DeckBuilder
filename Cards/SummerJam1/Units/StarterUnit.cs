@@ -63,9 +63,7 @@ namespace SummerJam1.Units
         {
             if (args.Entity == Entity)
             {
-                Blood blood = Entity.GetComponent<Blood>();
-                EncounterSlotPile slot = Entity.GetComponentInParent<EncounterSlotPile>();
-                slot.Entity.GetOrAddComponent<Blood>().Amount += blood.Amount;
+                Entity.TrySetParent(null);
             }
         }
         
@@ -86,5 +84,7 @@ namespace SummerJam1.Units
             var intent = Entity.AddComponent<DamageIntent>();
             intent.Amount = Math.Max(0, dmg);
         }
+        
+       
     }
 }
