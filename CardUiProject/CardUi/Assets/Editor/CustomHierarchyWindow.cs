@@ -105,11 +105,13 @@ public class CustomHierarchyWindow : EditorWindow
         string name = entity.GetComponent<NameComponent>()?.Value ?? $"Entity {entity.Id}";
         if (entity.Children.Count > 0)
         {
-            entityFoldoutStates[entityId] = EditorGUILayout.Foldout(entityFoldoutStates[entityId], name);
+            var style = new GUIStyle(EditorStyles.foldout);
+            entityFoldoutStates[entityId] = EditorGUILayout.Foldout(entityFoldoutStates[entityId], "", style);
         }
         else
         {
             entityFoldoutStates[entityId] = false;
+            
         }
 
         if (GUILayout.Button(name, isSelected ? EditorStyles.boldLabel : EditorStyles.label))
@@ -175,10 +177,14 @@ public class CustomHierarchyWindow : EditorWindow
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(property.Name, GUILayout.Width(150));
-            string newVal = EditorGUILayout.TextField(fieldValue != null ? fieldValue.ToString() : "null");
             if (property.SetMethod != null)
             {
+                string newVal = EditorGUILayout.TextField(fieldValue != null ? fieldValue.ToString() : "null");
                 TrySetPropertyFromString(property, component, newVal);
+            }
+            else
+            {
+                EditorGUILayout.LabelField(fieldValue != null ? fieldValue.ToString() : "null");
             }
 
             EditorGUILayout.EndHorizontal();
