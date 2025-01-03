@@ -8,6 +8,7 @@ using System.Reflection;
 using Api;
 using CardsAndPiles.Components;
 using SummerJam1;
+using UnityEditor.Rendering;
 
 public class CustomHierarchyWindow : EditorWindow
 {
@@ -18,11 +19,13 @@ public class CustomHierarchyWindow : EditorWindow
     private string[] Prefabs = { };
 
     private Dictionary<string, bool> entityFoldoutStates = new();
+    private float inspectorPaneWidth = 300f; // Initial width for the inspector pane
+    private bool isResizing = false;
 
     [MenuItem("Window/Custom Hierarchy")]
     public static void ShowWindow()
     {
-        GetWindow<CustomHierarchyWindow>("Custom Hierarchy");
+        GetWindow<CustomHierarchyWindow>("Model Hierarchy");
     }
 
     private bool Initialize()
@@ -63,7 +66,11 @@ public class CustomHierarchyWindow : EditorWindow
             return;
         }
 
-        EditorGUILayout.LabelField("Custom Hierarchy", EditorStyles.boldLabel);
+        EditorGUILayout.BeginHorizontal();
+
+        // Draw hierarchy pane
+        EditorGUILayout.BeginVertical(GUILayout.Width(position.width - inspectorPaneWidth - 5));
+        EditorGUILayout.LabelField("Model Hierarchy", EditorStyles.boldLabel);
 
         // Scrollable area for the hierarchy
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
@@ -74,8 +81,33 @@ public class CustomHierarchyWindow : EditorWindow
         }
 
         EditorGUILayout.EndScrollView();
+        EditorGUILayout.EndVertical();
 
-        EditorGUILayout.Space();
+        // Separator
+        Rect separatorRect = new Rect(position.width - inspectorPaneWidth - 6, 0, 1, position.height);
+        EditorGUI.DrawRect(separatorRect, Color.gray);
+
+        // Resize handle
+        var resizeRect = new Rect(position.width - inspectorPaneWidth - 5, 0, 5, position.height);
+        EditorGUIUtility.AddCursorRect(resizeRect, MouseCursor.ResizeHorizontal);
+
+        if (Event.current.type == EventType.MouseDown && resizeRect.Contains(Event.current.mousePosition))
+        {
+            isResizing = true;
+        }
+        else if (Event.current.type == EventType.MouseUp)
+        {
+            isResizing = false;
+        }
+
+        if (isResizing)
+        {
+            inspectorPaneWidth = Mathf.Clamp(position.width - Event.current.mousePosition.x, 200, position.width - 100);
+            Repaint();
+        }
+
+        // Draw inspector pane
+        EditorGUILayout.BeginVertical(GUILayout.Width(inspectorPaneWidth));
         EditorGUILayout.LabelField("Inspector", EditorStyles.boldLabel);
 
         if (selectedEntity != null)
@@ -86,6 +118,9 @@ public class CustomHierarchyWindow : EditorWindow
         {
             EditorGUILayout.LabelField("Select an entity to view its details.");
         }
+
+        EditorGUILayout.EndVertical();
+        EditorGUILayout.EndHorizontal();
     }
 
     private void DrawEntity(IEntity entity, int indentLevel)
@@ -98,27 +133,27 @@ public class CustomHierarchyWindow : EditorWindow
 
         EditorGUILayout.BeginHorizontal();
 
-        GUILayout.Space(indentLevel * 15); // Indentation
-
-        bool isSelected = selectedEntity == entity;
-
-        string name = entity.GetComponent<NameComponent>()?.Value ?? $"Entity {entity.Id}";
+        // Draw foldout with indentation
+        GUILayout.Space(indentLevel * 15);
         if (entity.Children.Count > 0)
         {
-            var style = new GUIStyle(EditorStyles.foldout);
-            entityFoldoutStates[entityId] = EditorGUILayout.Foldout(entityFoldoutStates[entityId], "", style);
-        }
-        else
-        {
-            entityFoldoutStates[entityId] = false;
-            
+            var style = EditorStyles.foldout;
+            style.stretchWidth = false;
+            style.border = new RectOffset();
+            style.margin = new RectOffset();
+            entityFoldoutStates[entityId] =
+                EditorGUILayout.Foldout(entityFoldoutStates[entityId], GUIContent.none, false, style);
+            GUILayout.Space(-40);
         }
 
-        if (GUILayout.Button(name, isSelected ? EditorStyles.boldLabel : EditorStyles.label))
+        // Draw button next to the foldout
+        bool isSelected = selectedEntity == entity;
+        string name = entity.GetComponent<NameComponent>()?.Value ?? $"Entity {entity.Id}";
+
+        if (GUILayout.Button(name, isSelected ? EditorStyles.boldLabel : EditorStyles.label, GUILayout.ExpandWidth(true)))
         {
             selectedEntity = entity;
         }
-
 
         EditorGUILayout.EndHorizontal();
 
@@ -131,7 +166,6 @@ public class CustomHierarchyWindow : EditorWindow
             }
         }
     }
-
     private void DrawInspector(IEntity entity)
     {
         Type entityType = entity.GetType();
@@ -160,7 +194,7 @@ public class CustomHierarchyWindow : EditorWindow
             }
 
             entityFoldoutStates[key] = EditorGUILayout.Foldout(entityFoldoutStates[key], compName);
-            if(entityFoldoutStates[key])
+            if (entityFoldoutStates[key])
             {
                 DrawComponent(component, component.GetType());
             }
@@ -176,18 +210,48 @@ public class CustomHierarchyWindow : EditorWindow
             var fieldValue = property.GetValue(component);
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(property.Name, GUILayout.Width(150));
-            if (property.SetMethod != null)
-            {
-                string newVal = EditorGUILayout.TextField(fieldValue != null ? fieldValue.ToString() : "null");
-                TrySetPropertyFromString(property, component, newVal);
-            }
-            else
-            {
-                EditorGUILayout.LabelField(fieldValue != null ? fieldValue.ToString() : "null");
-            }
+            DrawProperty(component, property, fieldValue);
 
             EditorGUILayout.EndHorizontal();
+        }
+    }
+
+    private static void DrawProperty(object component, PropertyInfo property, object fieldValue)
+    {
+        if (property.PropertyType == typeof(bool))
+        {
+            DrawBool(component, property, fieldValue);
+        }
+        else
+        {
+            DrawString(component, property, fieldValue);
+        }
+    }
+
+    private static void DrawString(object component, PropertyInfo property, object fieldValue)
+    {
+        EditorGUILayout.LabelField(property.Name, GUILayout.Width(150));
+        if (property.SetMethod != null)
+        {
+            string newVal = EditorGUILayout.TextField(fieldValue != null ? fieldValue.ToString() : "null");
+            TrySetPropertyFromString(property, component, newVal);
+        }
+        else
+        {
+            EditorGUILayout.LabelField(fieldValue != null ? fieldValue.ToString() : "null");
+        }
+    }
+
+    private static void DrawBool(object component, PropertyInfo property, object fieldValue)
+    {
+        if (property.SetMethod != null)
+        {
+            var value = EditorGUILayout.Toggle(property.Name, (bool)fieldValue);
+            property.SetValue(component, value);
+        }
+        else
+        {
+            EditorGUILayout.LabelField(fieldValue != null ? fieldValue.ToString() : "null");
         }
     }
 
