@@ -26,6 +26,11 @@ namespace CardsAndPiles
             entity.GetOrAddComponent<NameComponent>().Value = name;
             return entity;
         }
+        public static string GetName(this IEntity entity)
+        {
+            string myName = entity.GetComponent<NameComponent>()?.Value ?? $"Entity ({entity.Id.ToString()})";
+            return myName;
+        }
         
         public static TComponent WithName<TComponent>(this TComponent component, string name) where TComponent: IComponent
         {

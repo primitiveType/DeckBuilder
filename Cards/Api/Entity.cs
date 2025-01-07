@@ -20,6 +20,10 @@ namespace Api
         public Context Context { get; private set; }
         [JsonProperty] public int Id { get; private set; } = -1;
 
+        public bool ShouldSerializeId()
+        {
+            return true;
+        }
         public IChildrenCollection<Component> Components => ComponentsInternal;
 
         public LifecycleState State { get; private set; }
@@ -38,11 +42,7 @@ namespace Api
         {
             Terminate();
             SetParent(null);
-            foreach (IEntity child in Children.ToList())
-            {
-                child.Destroy();
-            }
-
+            Children.DestroyRecursive();
             State = LifecycleState.Destroyed;
         }
 
@@ -62,6 +62,12 @@ namespace Api
         {
             if (parent != null) //setting null is always valid.... ?
             {
+                if (parent.State == LifecycleState.Destroyed)
+                {
+                    Logging.Log("Failed to set parent that was destroyed.");
+                    return false;
+                }
+                
                 foreach (IParentConstraint component in GetComponents<IParentConstraint>())
                 {
                     if (!component.AcceptsParent(parent))

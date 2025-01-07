@@ -179,6 +179,9 @@
         <None Update="StreamingAssets\Units\Player\knight.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="StreamingAssets\Cards\Treasure\Diamond.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
 
     </ItemGroup>
 

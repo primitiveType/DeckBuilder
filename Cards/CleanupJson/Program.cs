@@ -24,7 +24,7 @@ void TestDirectory(DirectoryInfo dir)
     {
         IEntity entity = context.CreateEntity(null, enumerateFile.FullName);
         entity.RemoveComponent<UnknownComponent>();
-        var str = Serializer.Serialize(entity);
+        var str = Serializer.SerializeWithoutIds(entity);
         File.WriteAllText(enumerateFile.FullName, str);
     }
 }

@@ -41,6 +41,5 @@
       "Tooltip": "Whenever the player heals, this unit heals for the same amount.",
       "Enabled": true
     }
-  ],
-  "Id": 165
+  ]
 }

@@ -7,34 +7,26 @@
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 5,
-      "Attacks": 1,
-      "Enabled": true
-    },
-    {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "pulse",
+      "AssetName": "bloodDraw",
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1",
+      "$type": "SummerJam1.Cards.Unplayable, SummerJam1",
       "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Strike",
+      "Value": "Diamond",
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
-      "Amount": 3,
-      "Character": "None",
+      "$type": "SummerJam1.Cards.Treasure, SummerJam1",
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Amount": 1,
+      "$type": "SummerJam1.Money, SummerJam1",
+      "Amount": 100,
       "Enabled": true
     }
   ]

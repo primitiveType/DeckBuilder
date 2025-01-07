@@ -1,13 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using JsonNet.ContractResolvers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace Api
 {
+    public class NoIdContractResolver : PrivateSetterContractResolver
+    {
+        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        {
+            var property = base.CreateProperty(member, memberSerialization);
+            if (property.PropertyName == nameof(Entity.Id))
+            {
+                property.ShouldSerialize = (_) => false;
+            }
+
+            return property;
+        }
+    }
+
     public static class Serializer
     {
         private static readonly JsonSerializerSettings Settings = new()
@@ -20,9 +34,24 @@ namespace Api
             Formatting = Formatting.Indented
         };
 
+        private static readonly JsonSerializerSettings NoIdSettings = new()
+        {
+            TypeNameHandling = TypeNameHandling.Objects,
+            TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
+            ContractResolver = new NoIdContractResolver(),
+            DefaultValueHandling = DefaultValueHandling.Ignore,
+            Converters = { new DefaultToUnknownConverter(), new ComponentConverter() },
+            Formatting = Formatting.Indented
+        };
+
         public static string Serialize(object o)
         {
             return JsonConvert.SerializeObject(o, Settings);
+        }
+        
+        public static string SerializeWithoutIds(object o)
+        {
+            return JsonConvert.SerializeObject(o, NoIdSettings);
         }
 
         public static T Deserialize<T>(string str)
@@ -35,7 +64,7 @@ namespace Api
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(IChildrenCollection<Component> ).IsAssignableFrom(objectType);
+            return typeof(IChildrenCollection<Component>).IsAssignableFrom(objectType);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,

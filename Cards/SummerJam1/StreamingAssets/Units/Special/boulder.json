@@ -35,6 +35,5 @@
       "$type": "SummerJam1.Units.Effects.DiesAtBeginningOfTurn, SummerJam1",
       "Enabled": true
     }
-  ],
-  "Id": 146
+  ]
 }

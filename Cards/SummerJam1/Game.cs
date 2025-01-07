@@ -23,7 +23,10 @@ namespace SummerJam1
             base.Initialize();
             for (int i = 0; i < 3; i++)
             {
-                Game.CreateRandomCard().TrySetParent(Entity);
+                var card = Game.CreateRandomCard();
+                    card.TrySetParent(Entity);
+                    var cost = card.AddComponent<BuyableCard>();
+                    cost.Cost = 60;//TODO: add rarities, base cost on that. Add OnSale component
             }
         }
     }
@@ -216,6 +219,8 @@ namespace SummerJam1
             {
                 CurrentLevel++;
             }
+            
+            Battle.Entity.Destroy();
         }
 
         // ReSharper disable once UnusedMember.Local
@@ -298,9 +303,7 @@ namespace SummerJam1
         {
             Battle?.Entity.Destroy();
 
-            Context.CreateEntity(Entity, entity => { Battle = entity.AddComponent<BattleContainer>(); });
-
-
+            Battle = Context.CreateEntity<BattleContainer>(Entity).WithName("BattleContainer");
             Battle.StartBattle();
         }
 
@@ -327,6 +330,15 @@ namespace SummerJam1
             int index = Random.SystemRandom.Next(files.Count);
 
             return Context.CreateEntity(null, Path.Combine("Cards", files[index].Name));
+        }
+        public IEntity CreateRandomTreasureCard()
+        {
+            DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Cards/Treasure"));
+            List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
+
+            int index = Random.SystemRandom.Next(files.Count);
+
+            return Context.CreateEntity(null, Path.Combine("Cards/Treasure", files[index].Name));
         }
 
         public IEntity CreateRandomRelic()

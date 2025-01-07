@@ -1,4 +1,6 @@
-﻿namespace SummerJam1
+﻿using SummerJam1.Units;
+
+namespace SummerJam1
 {
     public class CardReward : Reward
     {
@@ -7,6 +9,7 @@
         public override void TriggerReward()
         {
             Game.PrizePile.SetupRandomPrizePile();
+            Entity.Destroy();
         }
     }
 }

@@ -19,10 +19,13 @@ namespace SummerJam1
         public void SetupRandomPrizePile()
         {
             Clear();
-            for (int i = 0; i < 3; i++)
+            var game = Entity.GetComponentInParent<Game>();
+            for (int i = 0; i < 2; i++)
             {
-                Entity.GetComponentInParent<Game>().CreateRandomCard().TrySetParent(Entity);
+                game.CreateRandomCard().TrySetParent(Entity);
             }
+
+            game.CreateRandomTreasureCard().TrySetParent(Entity);
         }
 
         public void AddPrefab(string prefab)
@@ -50,7 +53,7 @@ namespace SummerJam1
 
                 Context.CreateEntity(game.Deck.Entity, prefab);
 
-                if (game.Battle != null)
+                if (game.Battle != null && game.Battle.State != LifecycleState.Destroyed)
                 {
                     Context.CreateEntity(game.Battle.Hand.Entity, prefab);
                 }

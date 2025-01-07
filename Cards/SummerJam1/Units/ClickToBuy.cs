@@ -4,6 +4,7 @@ using SummerJam1.Cards;
 
 namespace SummerJam1.Units
 {
+
     public class ClickToBuy : PlayerCard, IClickable
     {
         public bool AllowMultiple { get; set; }
