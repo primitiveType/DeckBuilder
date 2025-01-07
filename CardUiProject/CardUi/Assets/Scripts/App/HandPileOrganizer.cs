@@ -6,6 +6,7 @@ using Api;
 using App.Utility;
 using CardsAndPiles;
 using CardsAndPiles.Components;
+using External.UnityAsync.UnityAsync.Assets.UnityAsync;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -184,7 +185,7 @@ namespace App
             {
                 CardInHand card = entityGO.GetComponent<CardInHand>();
                 CardsInHand.Remove(card);
-                Destroy(card);
+                DestroyImmediate(card);
             }
         }
 

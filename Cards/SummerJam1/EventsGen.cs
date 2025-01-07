@@ -110,6 +110,34 @@ public EventHandle<BattleStartedEventArgs> SubscribeToBattleStarted(EventHandleD
     return handler;
 } 
     #endregion Code for event BattleStarted
+    #region Code for event ShopStarted
+private event EventHandleDelegate<ShopStartedEventArgs> ShopStarted;
+public virtual void OnShopStarted(ShopStartedEventArgs args)
+{
+    ShopStarted?.Invoke(this, args);
+}
+
+public EventHandle<ShopStartedEventArgs> SubscribeToShopStarted(EventHandleDelegate<ShopStartedEventArgs> action)
+{
+    var handler = new EventHandle<ShopStartedEventArgs>(action, () => ShopStarted -= action);
+    ShopStarted += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event ShopStarted
+    #region Code for event ShopEnded
+private event EventHandleDelegate<ShopEndedEventArgs> ShopEnded;
+public virtual void OnShopEnded(ShopEndedEventArgs args)
+{
+    ShopEnded?.Invoke(this, args);
+}
+
+public EventHandle<ShopEndedEventArgs> SubscribeToShopEnded(EventHandleDelegate<ShopEndedEventArgs> action)
+{
+    var handler = new EventHandle<ShopEndedEventArgs>(action, () => ShopEnded -= action);
+    ShopEnded += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event ShopEnded
     #region Code for event WaitForCard
 private event EventHandleDelegate<WaitForCardEventArgs> WaitForCard;
 public virtual void OnWaitForCard(WaitForCardEventArgs args)
@@ -620,6 +648,100 @@ public class OnBattleStartedAttribute : EventsBaseAttribute {
     //public delegate void BattleStartedEvent (object sender, BattleStartedEventArgs args);
 
     public class BattleStartedEventArgs {        }/// <summary>
+/// (object sender, ShopStartedEventArgs) args)
+/// </summary>
+public class OnShopStartedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
+    {
+        instance.EventEntrance.Add(Id, 0);
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToShopStarted(delegate
+            {
+                if(!instance.Enabled){
+                    return;
+                }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
+                attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(ShopStartedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, ShopStartedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToShopStarted(delegate(object sender, ShopStartedEventArgs args)
+        {
+            if(!instance.Enabled){
+                return;
+            }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
+            attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
+        });
+    }
+
+
+}
+    //public delegate void ShopStartedEvent (object sender, ShopStartedEventArgs args);
+
+    public class ShopStartedEventArgs {        }/// <summary>
+/// (object sender, ShopEndedEventArgs) args)
+/// </summary>
+public class OnShopEndedAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
+    {
+        instance.EventEntrance.Add(Id, 0);
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((SummerJam1EventsBase)events).SubscribeToShopEnded(delegate
+            {
+                if(!instance.Enabled){
+                    return;
+                }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
+                attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(ShopEndedEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, ShopEndedEventArgs) args)");
+        }
+        return ((SummerJam1EventsBase)events).SubscribeToShopEnded(delegate(object sender, ShopEndedEventArgs args)
+        {
+            if(!instance.Enabled){
+                return;
+            }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
+            attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
+        });
+    }
+
+
+}
+    //public delegate void ShopEndedEvent (object sender, ShopEndedEventArgs args);
+
+    public class ShopEndedEventArgs {        }/// <summary>
 /// (object sender, WaitForCardEventArgs) args)
 /// </summary>
 public class OnWaitForCardAttribute : EventsBaseAttribute {

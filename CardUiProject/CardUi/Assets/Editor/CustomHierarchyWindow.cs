@@ -1,14 +1,12 @@
 using UnityEditor;
 using UnityEngine;
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Api;
 using CardsAndPiles.Components;
 using SummerJam1;
-using UnityEditor.Rendering;
 
 public class CustomHierarchyWindow : EditorWindow
 {
@@ -148,9 +146,11 @@ public class CustomHierarchyWindow : EditorWindow
 
         // Draw button next to the foldout
         bool isSelected = selectedEntity == entity;
-        string name = entity.GetComponent<NameComponent>()?.Value ?? $"Entity {entity.Id}";
+        string name = entity.GetComponent<NameComponent>()?.Value ?? "Entity";
+        name += $"({entity.Id})";
 
-        if (GUILayout.Button(name, isSelected ? EditorStyles.boldLabel : EditorStyles.label, GUILayout.ExpandWidth(true)))
+        if (GUILayout.Button(name, isSelected ? EditorStyles.boldLabel : EditorStyles.label,
+                GUILayout.ExpandWidth(true)))
         {
             selectedEntity = entity;
         }
@@ -166,6 +166,7 @@ public class CustomHierarchyWindow : EditorWindow
             }
         }
     }
+
     private void DrawInspector(IEntity entity)
     {
         Type entityType = entity.GetType();

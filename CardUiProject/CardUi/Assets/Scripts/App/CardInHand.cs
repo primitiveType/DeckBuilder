@@ -1,4 +1,5 @@
 ﻿using Api;
+using App.Utility;
 using UnityEngine;
 
 namespace App
@@ -11,9 +12,10 @@ namespace App
         
         private HoverExpand HoverExpand { get; set; }
 
-        private void Awake()
+        private void OnEnable()
         {
-            HoverExpand = gameObject.AddComponent<HoverExpand>();
+            HoverExpand = gameObject.GetOrAddComponent<HoverExpand>();
+         
             PileItemView = GetComponentInChildren<IPileItemView>();
             GetComponent<RectTransform>().sizeDelta = new Vector2(3, 5);
             if (PileItemView == null)
@@ -24,7 +26,7 @@ namespace App
 
         private void OnDestroy()
         {
-            Destroy(HoverExpand);
+            DestroyImmediate(HoverExpand);
         }
     }
 }

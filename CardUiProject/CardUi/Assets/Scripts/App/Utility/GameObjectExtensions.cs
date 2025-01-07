@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SummerJam1;
+using UnityEngine;
 
 namespace App.Utility
 {
@@ -20,6 +21,16 @@ namespace App.Utility
                     SetLayerRecursively(child.transform, newLayer);
                 }
             }
+        }
+
+        public static T GetOrAddComponent<T>(this GameObject go) where T : Component
+        {
+            if (!go.TryGetComponent(out T comp))
+            {
+                return go.AddComponent<T>();
+            }
+
+            return comp;
         }
     }
 }

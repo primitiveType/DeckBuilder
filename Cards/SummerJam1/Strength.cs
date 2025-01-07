@@ -9,7 +9,7 @@ namespace SummerJam1
         [JsonProperty] public int Amount { get; set; }
 
         [OnRequestDamageModifiers]
-        private void OnTryDealDamage(object sender, RequestDamageModifiersEventArgs args)
+        private void OnRequestDamageModifiers(object sender, RequestDamageModifiersEventArgs args)
         {
             if (args.Source == Entity)
             {

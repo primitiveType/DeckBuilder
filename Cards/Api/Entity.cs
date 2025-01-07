@@ -13,7 +13,7 @@ namespace Api
     [DebuggerDisplay("{GetComponent<IComponent>()?.GetType()?.Name ?? \"Entity\"}")]
     internal class Entity : IEntity
     {
-        [JsonProperty] private ChildrenCollection<IEntity> _children = new();
+        [JsonProperty] private EntityCollection _children = new();
         private string _name;
 
         [JsonProperty] private ChildrenCollection<Component> ComponentsInternal { get; set; } = new();
@@ -26,7 +26,7 @@ namespace Api
 
         public IEntity Parent { get; private set; }
 
-        public IChildrenCollection<IEntity> Children => _children;
+        public EntityCollection Children => _children;
 
         public string Name
         {

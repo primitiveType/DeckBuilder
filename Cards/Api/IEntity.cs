@@ -10,7 +10,7 @@ namespace Api
         Context Context { get; }
         int Id { get; }
         IEntity Parent { get; }
-        IChildrenCollection<IEntity> Children { get; }
+        EntityCollection Children { get; }
         IChildrenCollection<Component> Components { get; }
         LifecycleState State { get; }
         bool TrySetParent(IEntity parent);

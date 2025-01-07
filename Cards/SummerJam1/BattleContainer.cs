@@ -92,6 +92,7 @@ namespace SummerJam1
                 entity.AddComponent<PlayerControl>();
             });
 
+            Context.CreateEntity<CardReward>(Entity).WithName("Card Reward");
             BattleStarted = true;
             Events.OnBattleStarted(new BattleStartedEventArgs());
             Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());

@@ -1,4 +1,5 @@
 using Api;
+using CardsAndPiles.Components;
 
 namespace CardsAndPiles
 {
@@ -19,5 +20,18 @@ namespace CardsAndPiles
 
             return $"Entity {entity.Id} {components}.";
         }
+
+        public static IEntity WithName(this IEntity entity, string name)
+        {
+            entity.GetOrAddComponent<NameComponent>().Value = name;
+            return entity;
+        }
+        
+        public static TComponent WithName<TComponent>(this TComponent component, string name) where TComponent: IComponent
+        {
+            component.Entity.GetOrAddComponent<NameComponent>().Value = name;
+            return component;
+        }
+
     }
 }

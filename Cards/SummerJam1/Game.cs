@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using Api;
@@ -10,10 +11,74 @@ using SummerJam1.Cards;
 using SummerJam1.Piles;
 using SummerJam1.Rules;
 using SummerJam1.Units;
+using Component = Api.Component;
 using Random = Api.Random;
 
 namespace SummerJam1
 {
+    public class ShopContainer : SummerJam1Component
+    {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            for (int i = 0; i < 3; i++)
+            {
+                Game.CreateRandomCard().TrySetParent(Entity);
+            }
+        }
+    }
+    public class MapChoicesContainer : SummerJam1Component
+    {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Game.PropertyChanged += GameOnPropertyChanged;
+            PopulateMapChoices();
+        }
+
+        private void GameOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Game.CurrentLevel))
+            {
+                PopulateMapChoices();
+            }
+        }
+
+        private void PopulateMapChoices()
+        {
+            Entity.Children.DestroyRecursive();
+            
+            Context.CreateEntity<BattleChoice>(Entity);
+            Context.CreateEntity<ShopChoice>(Entity);
+        }
+    }
+
+    public abstract class EncounterChoice : SummerJam1Component, IDescription, IClickable, IVisual
+    {
+        public abstract string Description { get; }
+        public abstract void Click();
+    }
+
+    public class BattleChoice : EncounterChoice
+    {
+        public override string Description { get; } = "A battle, with a booster pack as reward.";
+
+        public override void Click()
+        {
+            Game.StartBattle();
+        }
+    }
+
+    public class ShopChoice : EncounterChoice
+    {
+        public override string Description { get; } = "Shop where you can cash in treasures and spend gold.";
+
+        public override void Click()
+        {
+            Game.StartShop(); 
+        }
+    }
+
     public class Game : SummerJam1Component
     {
         public DeckPile Deck { get; private set; }
@@ -22,6 +87,7 @@ namespace SummerJam1
         public Pile RelicPile { get; private set; }
 
         public BattleContainer Battle { get; private set; }
+        public ShopContainer Shop { get; private set; }
         public Player Player { get; private set; }
         // public Pile PlayerUnits { get; private set; }
 
@@ -33,6 +99,8 @@ namespace SummerJam1
 
         public int CurrentLevel { get; private set; } = 1;
 
+        public IEntity MapChoicesContainer { get; private set; }
+
 
         protected override void Initialize()
         {
@@ -40,12 +108,14 @@ namespace SummerJam1
             Logging.Log("Game Initialized.");
             AddRules();
             Random = Entity.AddComponent<Random>();
-            Context.CreateEntity(Entity, entity => PrizePile = entity.AddComponent<CardPrizePile>());
-            Context.CreateEntity(Entity, entity => RelicPrizePile = entity.AddComponent<RelicPrizePile>());
-            Context.CreateEntity(Entity, entity => RelicPile = entity.AddComponent<RelicPile>());
-            Context.CreateEntity(Entity, entity => DiscardStagingPile = entity.AddComponent<DiscardStagingPile>());
+            PrizePile = Context.CreateEntity<CardPrizePile>(Entity).WithName("PrizePile");
+            RelicPrizePile = Context.CreateEntity<RelicPrizePile>(Entity).WithName("RelicPrizePile");
+            RelicPile = Context.CreateEntity<RelicPile>(Entity).WithName("PlayerRelicPile");
+            DiscardStagingPile = Context.CreateEntity<DiscardStagingPile>(Entity).WithName("DiscardStaging");
             // Context.CreateEntity(Entity, entity => PlayerUnits = entity.AddComponent<EncounterSlotPile>());
-            Player = Context.CreateEntity(Entity, "player").GetComponent<Player>();
+            Player = Context.CreateEntity(Entity, "player").GetComponent<Player>().WithName("Player");
+            MapChoicesContainer =
+                Context.CreateEntity<MapChoicesContainer>(Entity).WithName("MapChoicesContainer").Entity;
             //temp code
             // var unit = Context.CreateEntity(PlayerUnits.Entity, "Units/Player/Knight");
 
@@ -62,7 +132,6 @@ namespace SummerJam1
             Context.CreateEntity(Entity, entity =>
             {
                 Deck = entity.AddComponent<DeckPile>();
-
                 entity.AddComponent<NameComponent>().Value = "Deck";
             });
 
@@ -245,7 +314,7 @@ namespace SummerJam1
                 prefabs.Add(
                     BattleContainer.GetRandomMonsterPrefab(1, Game.CurrentLevel, Entity.GetComponent<Random>()));
             }
-
+            
             return prefabs;
         }
 
@@ -268,6 +337,19 @@ namespace SummerJam1
             int index = Random.SystemRandom.Next(files.Count);
 
             return Context.CreateEntity(null, Path.Combine("Relics", files[index].Name));
+        }
+
+        public void StartShop()
+        {
+            Shop?.Entity.Destroy();
+            Shop = Context.CreateEntity<ShopContainer>();
+            Events.OnShopStarted(new ShopStartedEventArgs());
+        }
+
+        public void EndShop()
+        {
+            Shop?.Entity.Destroy();
+            Events.OnShopEnded(new ShopEndedEventArgs());
         }
     }
 }

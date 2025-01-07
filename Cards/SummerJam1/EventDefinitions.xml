@@ -19,6 +19,10 @@
     </event>
     <event id="BattleStarted">
     </event>
+    <event id="ShopStarted">
+    </event>
+    <event id="ShopEnded">
+    </event>
     <event id="WaitForCard">
     </event>
     <event id="LeaveBattle">

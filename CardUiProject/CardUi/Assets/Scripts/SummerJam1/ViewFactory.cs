@@ -6,7 +6,6 @@ using App.Utility;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Units;
-using TMPro;
 using UnityEngine;
 
 namespace SummerJam1
@@ -20,9 +19,7 @@ namespace SummerJam1
         [SerializeField] private GameObject m_WalkablePrefab;
         [SerializeField] private GameObject m_PrefabReference;
         [SerializeField] private GameObject m_WallPrefab;
-        [SerializeField] private GameObject m_DungeonPrefab;
-        [SerializeField] private GameObject m_HatchEncounterPrefab;
-        [SerializeField] private GameObject m_PlayerPrefab;
+        [SerializeField] private GameObject m_EncounterChoicePrefab;
 
         public GameObject m_DefaultParent;
 
@@ -100,19 +97,16 @@ namespace SummerJam1
         {
             switch (visual)
             {
-                case RelicEncounter relicEncounter:
-                    break;
-                case ShrineEncounter shrineEncounter:
-                    Logging.Log("Found shrine encounter.");
-                    break;
-                case RelicComponent relic:
+                case RelicComponent:
                     return RelicPrefab;
-                case Unit unit:
+                case Unit:
                     return UnitPrefab;
-                case Card card:
+                case Card:
                     return CardPrefab;
-                case PrefabReference prefabReference:
+                case PrefabReference:
                     return m_PrefabReference;
+                case EncounterChoice:
+                    return m_EncounterChoicePrefab;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(visual), $"No prefab visual found for {visual?.GetType().Name}.");
             }
@@ -123,11 +117,10 @@ namespace SummerJam1
 
         public static GameObject CreateView(IEntity entity, GameObject prefab)
         {
-            GameObject unitView = Instantiate(prefab);
+            GameObject unitView = Instantiate(prefab, Instance.m_DefaultParent.transform, true);
             // unitView.transform.localPosition = Vector3.one * 10_000;
             unitView.GetComponent<ISetModel>().SetModel(entity);
             entity.GetOrAddComponent<SummerJam1ModelViewBridge>().gameObject = unitView;
-            unitView.transform.SetParent(Instance.m_DefaultParent.transform);
             return unitView;
         }
     }

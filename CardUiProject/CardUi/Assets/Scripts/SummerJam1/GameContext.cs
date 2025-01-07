@@ -88,6 +88,8 @@ namespace SummerJam1
             Disposables.Add(Events.SubscribeToBattleStarted(OnBattleStarted));
             Disposables.Add(Events.SubscribeToBattleEnded(OnBattleEnded));
             Disposables.Add(Events.SubscribeToEntityKilled(OnEntityKilled));
+            Disposables.Add(Events.SubscribeToShopStarted(OnShopStarted));
+
         }
 
         private void OnBattleEnded(object sender, BattleEndedEventArgs item)
@@ -103,6 +105,10 @@ namespace SummerJam1
         private void OnBattleStarted(object sender, BattleStartedEventArgs item)
         {
             SceneManager.LoadScene("BattleScene");
+        }
+        private void OnShopStarted(object sender, ShopStartedEventArgs item)
+        {
+            SceneManager.LoadScene("ShopScene");
         }
 
         private void OnCardPlayFailed(object sender, CardPlayFailedEventArgs item)

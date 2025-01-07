@@ -20,7 +20,7 @@ namespace App
         private readonly float lerpRate = 8;
         private IEntity TargetDrag { get; set; }
 
-        private Vector3 BoundsSize { get; set; }
+        private Vector3 BoundsSize { get; set; } 
 
         //during turn, setting a new target should interrupt.
         //during combat, setting a new target should wait until old lerp is finished.
@@ -34,18 +34,8 @@ namespace App
         {
             SortHandler = GetComponent<ISortHandler>();
             SortHandler.SetDepth((int)Sorting.PileItem);
-
-            List<Collider> colliders = GetComponentsInChildren<Collider>().ToList();
-            if (colliders.Count > 0)
-            {
-                Bounds bounds = colliders[0].bounds;
-                foreach (Collider renderer1 in colliders)
-                {
-                    bounds.Encapsulate(renderer1.bounds);
-                }
-
-                BoundsSize = bounds.size;
-            }
+            BoxCollider colliders = GetComponentInChildren<BoxCollider>(true);
+            BoundsSize = colliders.size;
         }
 
         protected override void Start()

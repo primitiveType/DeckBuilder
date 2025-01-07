@@ -8,10 +8,23 @@ using Newtonsoft.Json;
 
 namespace Api
 {
+    public class EntityCollection : ChildrenCollection<IEntity>
+    {
+        public void DestroyRecursive()
+        {
+            List<IEntity> oldItems = CollectionImplementation.ToList();
+            foreach (var child in oldItems)
+            {
+                child.Children.DestroyRecursive();
+                child.Destroy();
+            }
+            CollectionImplementation.Clear();
+        }
+    }
     [Serializable]
     public class ChildrenCollection<T> : IChildrenCollection<T>, IList<T>
     {
-        [ItemNotNull] [JsonProperty] private List<T> CollectionImplementation { get; set; } = new();
+        [ItemNotNull] [JsonProperty] protected List<T> CollectionImplementation { get; set; } = new();
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
 
@@ -39,7 +52,7 @@ namespace Api
         }
 
 
-        public void Clear()
+        public virtual void Clear()
         {
             List<T> oldItems = CollectionImplementation.ToList();
             CollectionImplementation.Clear();
