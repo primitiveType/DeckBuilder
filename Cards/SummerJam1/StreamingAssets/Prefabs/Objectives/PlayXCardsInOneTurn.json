@@ -4,12 +4,10 @@
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Objectives.PlayXCardsInOneTurn, SummerJam1",
-      "Required": 4,
-      "Enabled": true
+      "Required": 4
     },
     {
-      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
-      "Enabled": true
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles"
     }
   ]
 }

@@ -3,33 +3,27 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "bodyBuilding",
-      "Enabled": true
+      "AssetName": "bodyBuilding"
     },
     {
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1",
-      "Tooltip": "Consume- This card can only be played once per battle.",
-      "Enabled": true
+      "Tooltip": "Consume- This card can only be played once per battle."
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "BodyBuilding",
-      "Enabled": true
+      "Value": "BodyBuilding"
     },
     {
       "$type": "SummerJam1.Cards.Effects.GrantStrengthToPlayer, SummerJam1",
-      "Amount": 2,
-      "Enabled": true
+      "Amount": 2
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     }
   ]
 }

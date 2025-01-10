@@ -4,17 +4,14 @@
   "ComponentsInternal": [
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Imp Familiar",
-      "Enabled": true
+      "Value": "Imp Familiar"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "impFamiliar",
-      "Enabled": true
+      "AssetName": "impFamiliar"
     },
     {
-      "$type": "SummerJam1.RelicComponent, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.RelicComponent, SummerJam1"
     }
   ]
 }

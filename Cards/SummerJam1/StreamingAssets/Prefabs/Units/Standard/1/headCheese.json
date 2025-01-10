@@ -3,48 +3,39 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Head Cheese",
-      "Enabled": true
+      "Value": "Head Cheese"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "headCheese",
-      "Enabled": true
+      "AssetName": "headCheese"
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 3,
-      "Enabled": true
+      "Amount": 3
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 9,
-      "Amount": 9,
-      "Enabled": true
+      "Amount": 9
     },
     {
       "$type": "SummerJam1.Units.Effects.GainStrengthWhenMoving, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.Units.Effects.CreaturesMovedOnTopAreGivenStrength, SummerJam1",
-      "Amount": 2,
-      "Enabled": true
+      "Amount": 2
     }
   ]
 }

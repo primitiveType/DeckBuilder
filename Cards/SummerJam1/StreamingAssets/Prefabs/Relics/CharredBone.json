@@ -4,17 +4,14 @@
   "ComponentsInternal": [
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Charred Bone",
-      "Enabled": true
+      "Value": "Charred Bone"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "charredBone",
-      "Enabled": true
+      "AssetName": "charredBone"
     },
     {
-      "$type": "SummerJam1.RelicComponent, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.RelicComponent, SummerJam1"
     }
   ]
 }

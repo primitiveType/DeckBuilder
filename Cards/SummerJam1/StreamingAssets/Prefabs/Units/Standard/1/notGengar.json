@@ -3,44 +3,36 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Not Gengar",
-      "Enabled": true
+      "Value": "Not Gengar"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "notGengar",
-      "Enabled": true
+      "AssetName": "notGengar"
     },
     {
-      "$type": "SummerJam1.Strength, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Strength, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Effects.GrantsMultiAttackToAdjacent, SummerJam1",
       "Name": "Multi-Attack",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 7,
-      "Amount": 7,
-      "Enabled": true
+      "Amount": 7
     },
     {
       "$type": "SummerJam1.Units.Effects.AfterMoveCardBelowIsGivenStrength, SummerJam1",
-      "Amount": 2,
-      "Enabled": true
+      "Amount": 2
     }
   ]
 }

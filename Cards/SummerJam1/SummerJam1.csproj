@@ -164,7 +164,10 @@
         <None Update="StreamingAssets\Prefabs\Relics\Starter\Quartermaster.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Starter\Strike.json">
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Starter\Dagger.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Uncommon\IronSkin.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
 
@@ -183,7 +186,6 @@
         <Folder Include="Piles\" />
         <Folder Include="StreamingAssets\Prefabs\Cards\Quartermaster\Common\" />
         <Folder Include="StreamingAssets\Prefabs\Cards\Quartermaster\Rare\" />
-        <Folder Include="StreamingAssets\Prefabs\Cards\Quartermaster\Uncommon\" />
         <Folder Include="StreamingAssets\Resources\" />
     </ItemGroup>
 

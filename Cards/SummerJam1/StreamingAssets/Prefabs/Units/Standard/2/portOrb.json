@@ -3,44 +3,36 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Port-Orb",
-      "Enabled": true
+      "Value": "Port-Orb"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "portOrb",
-      "Enabled": true
+      "AssetName": "portOrb"
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 5,
-      "Enabled": true
+      "Amount": 5
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 5,
-      "Amount": 5,
-      "Enabled": true
+      "Amount": 5
     },
     {
       "$type": "SummerJam1.Statuses.GainArmorEveryTurn, SummerJam1",
       "Amount": 4,
-      "Tooltip": "Gains 4 Armor every turn.",
-      "Enabled": true
+      "Tooltip": "Gains 4 Armor every turn."
     }
   ]
 }

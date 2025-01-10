@@ -3,37 +3,30 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Boulder",
-      "Enabled": true
+      "Value": "Boulder"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "boulder",
-      "Enabled": true
+      "AssetName": "boulder"
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 5,
-      "Amount": 5,
-      "Enabled": true
+      "Amount": 5
     },
     {
-      "$type": "SummerJam1.Units.Effects.DiesAtBeginningOfTurn, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.Effects.DiesAtBeginningOfTurn, SummerJam1"
     }
   ]
 }

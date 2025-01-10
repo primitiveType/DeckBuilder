@@ -4,22 +4,18 @@
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Relics.RaiseMaxHp, SummerJam1",
-      "Amount": 5,
-      "Enabled": true
+      "Amount": 5
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Bone Familiar",
-      "Enabled": true
+      "Value": "Bone Familiar"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "boneFamiliar",
-      "Enabled": true
+      "AssetName": "boneFamiliar"
     },
     {
-      "$type": "SummerJam1.RelicComponent, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.RelicComponent, SummerJam1"
     }
   ]
 }

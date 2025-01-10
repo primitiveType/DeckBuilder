@@ -3,34 +3,28 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Shop",
-      "Enabled": true
+      "Value": "Shop"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "shop",
-      "Enabled": true
+      "AssetName": "shop"
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 600,
       "DontDie": true,
-      "Amount": 600,
-      "Enabled": true
+      "Amount": 600
     }
   ]
 }

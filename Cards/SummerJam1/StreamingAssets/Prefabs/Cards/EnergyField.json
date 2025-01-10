@@ -3,32 +3,26 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
     },
     {
       "$type": "SummerJam1.Cards.Effects.GrantArmorToPlayer, SummerJam1",
-      "BlockAmount": 5,
-      "Enabled": true
+      "BlockAmount": 5
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "energyField",
-      "Enabled": true
+      "AssetName": "energyField"
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Energy Field",
-      "Enabled": true
+      "Value": "Energy Field"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     }
   ]
 }

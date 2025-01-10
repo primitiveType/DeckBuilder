@@ -3,49 +3,40 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Sad Ralph",
-      "Enabled": true
+      "Value": "Sad Ralph"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "sadRalph",
-      "Enabled": true
+      "AssetName": "sadRalph"
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 6,
-      "Amount": 6,
-      "Enabled": true
+      "Amount": 6
     },
     {
       "$type": "SummerJam1.Lifesteal, SummerJam1",
-      "Tooltip": "Lifesteal - when this deals damage, it heals for the same amount.",
-      "Enabled": true
+      "Tooltip": "Lifesteal - when this deals damage, it heals for the same amount."
     },
     {
       "$type": "SummerJam1.Units.Effects.GainBlockWhenMoving, SummerJam1",
       "Amount": 2,
-      "AnyMovementCounts": true,
-      "Enabled": true
+      "AnyMovementCounts": true
     }
   ]
 }

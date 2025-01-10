@@ -3,38 +3,31 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
     },
     {
       "$type": "SummerJam1.Cards.Effects.FreezeCardsInHandAndDealDamageForEachCard, SummerJam1",
       "DamageAmount": 1,
-      "Attacks": 1,
-      "Enabled": true
+      "Attacks": 1
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "poisonedConduit",
-      "Enabled": true
+      "AssetName": "poisonedConduit"
     },
     {
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1",
-      "Tooltip": "Consume- This card can only be played once per battle.",
-      "Enabled": true
+      "Tooltip": "Consume- This card can only be played once per battle."
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Frostbite",
-      "Enabled": true
+      "Value": "Frostbite"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
-      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1"
     }
   ]
 }

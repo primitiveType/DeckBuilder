@@ -3,33 +3,27 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "shatteringPulse",
-      "Enabled": true
+      "AssetName": "shatteringPulse"
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Shattering Pulse",
-      "Enabled": true
+      "Value": "Shattering Pulse"
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
       "DamageAmount": 6,
-      "Attacks": 1,
-      "Enabled": true
+      "Attacks": 1
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     }
   ]
 }

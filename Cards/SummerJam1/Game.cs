@@ -325,12 +325,20 @@ namespace SummerJam1
 
         public IEntity CreateRandomCard()
         {
-            DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Cards"));
-            List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
-
-            int index = Random.SystemRandom.Next(files.Count);
-
-            return Context.CreateEntity(null, Path.Combine("Cards", files[index].Name));
+            string character = Player.Entity.GetComponent<ICharacterClass>().Name;
+            var cards = GetCardPrefabs((card)=>
+            {
+                var constraint = card.GetComponent<CharacterConstraint>();
+                return constraint != null && constraint.Character == character;
+            });
+            var card = cards.Random(Random);
+            var prefab = card.GetComponent<SourcePrefab>().Prefab;
+            // DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Cards"));
+            // List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
+            //
+            // int index = Random.SystemRandom.Next(files.Count);
+            //
+            return Context.CreateEntity(null, prefab);
         }
 
         public IEntity CreateRandomTreasureCard()

@@ -3,35 +3,29 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
       "DamageAmount": 3,
       "Attacks": 1,
-      "Aoe": true,
-      "Enabled": true
+      "Aoe": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "cacophony",
-      "Enabled": true
+      "AssetName": "cacophony"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Cacophony",
-      "Enabled": true
+      "Value": "Cacophony"
     },
     {
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1",
-      "Tooltip": "Consume- This card can only be played once per battle.",
-      "Enabled": true
+      "Tooltip": "Consume- This card can only be played once per battle."
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     }
   ]
 }

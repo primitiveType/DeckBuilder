@@ -3,34 +3,28 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "concussivePulse",
-      "Enabled": true
+      "AssetName": "concussivePulse"
     },
     {
-      "$type": "SummerJam1.Cards.Discard, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Concussive Pulse",
-      "Enabled": true
+      "Value": "Concussive Pulse"
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
       "DamageAmount": 3,
       "Attacks": 1,
-      "Aoe": true,
-      "Enabled": true
+      "Aoe": true
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     }
   ]
 }

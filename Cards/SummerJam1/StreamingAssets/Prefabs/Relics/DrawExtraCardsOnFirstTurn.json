@@ -4,22 +4,18 @@
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Relics.DrawExtraCardsOnFirstTurn, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Sticky Glove",
-      "Enabled": true
+      "Value": "Sticky Glove"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "stickyGlove",
-      "Enabled": true
+      "AssetName": "stickyGlove"
     },
     {
-      "$type": "SummerJam1.RelicComponent, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.RelicComponent, SummerJam1"
     }
   ]
 }

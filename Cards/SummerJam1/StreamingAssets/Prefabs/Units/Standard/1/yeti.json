@@ -3,38 +3,31 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Yeti",
-      "Enabled": true
+      "Value": "Yeti"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "yeti",
-      "Enabled": true
+      "AssetName": "yeti"
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 5,
-      "Enabled": true
+      "Amount": 5
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 11,
-      "Amount": 11,
-      "Enabled": true
+      "Amount": 11
     }
   ]
 }

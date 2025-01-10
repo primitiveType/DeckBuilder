@@ -4,17 +4,14 @@
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Objectives.DealXDamageInOneTurn, SummerJam1",
-      "Required": 15,
-      "Enabled": true
+      "Required": 15
     },
     {
-      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
-      "Enabled": true
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "0",
-      "Enabled": true
+      "AssetName": "0"
     }
   ]
 }

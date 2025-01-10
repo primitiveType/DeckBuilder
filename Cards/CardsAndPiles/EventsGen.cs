@@ -40,6 +40,20 @@ public EventHandle<CardPlayedEventArgs> SubscribeToCardPlayed(EventHandleDelegat
     return handler;
 } 
     #endregion Code for event CardPlayed
+    #region Code for event CardGainedStatus
+private event EventHandleDelegate<CardGainedStatusEventArgs> CardGainedStatus;
+public virtual void OnCardGainedStatus(CardGainedStatusEventArgs args)
+{
+    CardGainedStatus?.Invoke(this, args);
+}
+
+public EventHandle<CardGainedStatusEventArgs> SubscribeToCardGainedStatus(EventHandleDelegate<CardGainedStatusEventArgs> action)
+{
+    var handler = new EventHandle<CardGainedStatusEventArgs>(action, () => CardGainedStatus -= action);
+    CardGainedStatus += handler.Invoke;
+    return handler;
+} 
+    #endregion Code for event CardGainedStatus
     #region Code for event CardCreated
 private event EventHandleDelegate<CardCreatedEventArgs> CardCreated;
 public virtual void OnCardCreated(CardCreatedEventArgs args)
@@ -374,6 +388,60 @@ public class OnCardPlayedAttribute : EventsBaseAttribute {
                   this.CardId = CardId; 
               this.Target = Target; 
               this.IsFree = IsFree; 
+}
+
+        }/// <summary>
+/// (object sender, CardGainedStatusEventArgs) args)
+/// </summary>
+public class OnCardGainedStatusAttribute : EventsBaseAttribute {
+    public override IDisposable GetEventHandle(MethodInfo attached, IEventfulComponent instance, EventsBase events)
+    {
+        instance.EventEntrance.Add(Id, 0);
+        var parameters = attached.GetParameters();
+        if (parameters.Length == 0)
+        {
+            return ((CardEventsBase)events).SubscribeToCardGainedStatus(delegate
+            {
+                if(!instance.Enabled){
+                    return;
+                }
+                if(instance.EventEntrance[Id] > 0){
+                    Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                    return;
+                }
+                instance.EventEntrance[Id]++;
+                attached.Invoke(instance, Array.Empty<object>());
+                instance.EventEntrance[Id]--;
+            });
+        }
+        if(parameters[0].ParameterType != typeof(object) ||
+        parameters[1].ParameterType != typeof(CardGainedStatusEventArgs)){
+            throw new NotSupportedException("Wrong parameters for attribute usage! must match signature (object sender, CardGainedStatusEventArgs) args)");
+        }
+        return ((CardEventsBase)events).SubscribeToCardGainedStatus(delegate(object sender, CardGainedStatusEventArgs args)
+        {
+            if(!instance.Enabled){
+                return;
+            }
+            if(instance.EventEntrance[Id] > 0){
+                Logging.Log($"Preventing re-entrancy on event {Id} for component {instance.GetType()}.");
+                return;
+            }
+            instance.EventEntrance[Id]++;
+            attached.Invoke(instance, new[] { sender, args });
+            instance.EventEntrance[Id]--;
+        });
+    }
+
+
+}
+    //public delegate void CardGainedStatusEvent (object sender, CardGainedStatusEventArgs args);
+
+    public class CardGainedStatusEventArgs {        public  IEntity CardId { get; }
+        public  string Status { get; }
+        public  CardGainedStatusEventArgs (IEntity CardId, string Status   ){
+                  this.CardId = CardId; 
+              this.Status = Status; 
 }
 
         }/// <summary>

@@ -3,34 +3,28 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
       "DamageAmount": 10,
-      "Attacks": 1,
-      "Enabled": true
+      "Attacks": 1
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "smother",
-      "Enabled": true
+      "AssetName": "smother"
     },
     {
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1",
-      "Tooltip": "Consume- This card can only be played once per battle.",
-      "Enabled": true
+      "Tooltip": "Consume- This card can only be played once per battle."
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Smother",
-      "Enabled": true
+      "Value": "Smother"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     }
   ]
 }

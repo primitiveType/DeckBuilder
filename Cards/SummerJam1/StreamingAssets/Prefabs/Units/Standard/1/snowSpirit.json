@@ -3,44 +3,36 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Snow Spirit",
-      "Enabled": true
+      "Value": "Snow Spirit"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "snowSpirit",
-      "Enabled": true
+      "AssetName": "snowSpirit"
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.Units.Effects.FreezeOnAttack, SummerJam1",
       "Amount": 1,
-      "Tooltip": "Ice Breath - when attacking, freezes a random card in your hand.",
-      "Enabled": true
+      "Tooltip": "Ice Breath - when attacking, freezes a random card in your hand."
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 6,
-      "Amount": 6,
-      "Enabled": true
+      "Amount": 6
     }
   ]
 }

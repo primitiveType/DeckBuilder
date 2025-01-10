@@ -3,38 +3,31 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Frigid Imp",
-      "Enabled": true
+      "Value": "Frigid Imp"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "frigidImp",
-      "Enabled": true
+      "AssetName": "frigidImp"
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 3,
-      "Enabled": true
+      "Amount": 3
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 4,
-      "Amount": 4,
-      "Enabled": true
+      "Amount": 4
     }
   ]
 }

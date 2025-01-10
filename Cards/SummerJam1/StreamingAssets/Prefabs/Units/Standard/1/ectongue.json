@@ -3,29 +3,24 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Ectongue",
-      "Enabled": true
+      "Value": "Ectongue"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "ectongue",
-      "Enabled": true
+      "AssetName": "ectongue"
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 10,
-      "Amount": 10,
-      "Enabled": true
+      "Amount": 10
     }
   ]
 }

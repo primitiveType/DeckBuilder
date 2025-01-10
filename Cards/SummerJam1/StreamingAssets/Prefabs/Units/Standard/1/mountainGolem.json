@@ -3,42 +3,34 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Mountain Golem",
-      "Enabled": true
+      "Value": "Mountain Golem"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "mountainGolem",
-      "Enabled": true
+      "AssetName": "mountainGolem"
     },
     {
-      "$type": "SummerJam1.Strength, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Strength, SummerJam1"
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 14,
-      "Amount": 14,
-      "Enabled": true
+      "Amount": 14
     },
     {
       "$type": "SummerJam1.Units.Effects.StrengthEqualsCardsInHand, SummerJam1",
-      "Tooltip": "Aggressive equals the number of cards in your hand.",
-      "Enabled": true
+      "Tooltip": "Aggressive equals the number of cards in your hand."
     }
   ]
 }

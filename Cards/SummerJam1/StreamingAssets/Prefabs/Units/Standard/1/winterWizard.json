@@ -3,44 +3,36 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Winter Wizard",
-      "Enabled": true
+      "Value": "Winter Wizard"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "winterWizard",
-      "Enabled": true
+      "AssetName": "winterWizard"
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 2,
-      "Enabled": true
+      "Amount": 2
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 8,
-      "Amount": 8,
-      "Enabled": true
+      "Amount": 8
     },
     {
       "$type": "SummerJam1.Units.Effects.FreezeOnAttack, SummerJam1",
       "Amount": 3,
-      "Tooltip": "Ice Breath - when attacking, freezes 3 random cards in your hand.",
-      "Enabled": true
+      "Tooltip": "Ice Breath - when attacking, freezes 3 random cards in your hand."
     }
   ]
 }

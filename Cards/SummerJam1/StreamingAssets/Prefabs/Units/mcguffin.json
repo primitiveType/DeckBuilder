@@ -3,26 +3,21 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Artifact fragment",
-      "Enabled": true
+      "Value": "Artifact fragment"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "artifact",
-      "Enabled": true
+      "AssetName": "artifact"
     },
     {
-      "$type": "SummerJam1.Units.CollectableIntoDeck, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.CollectableIntoDeck, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Units.VictoryWhenNoneOfThisTypeExistsInBattle, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.VictoryWhenNoneOfThisTypeExistsInBattle, SummerJam1"
     }
   ]
 }

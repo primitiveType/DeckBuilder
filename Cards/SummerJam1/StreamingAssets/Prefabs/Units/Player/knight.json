@@ -4,28 +4,23 @@
   "ComponentsInternal": [
     {
       "$type": "SummerJam1.Units.PlayerUnit, SummerJam1",
-      "UnitName": "Knight",
-      "Enabled": true
+      "UnitName": "Knight"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Knight",
-      "Enabled": true
+      "Value": "Knight"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "bannerman",
-      "Enabled": true
+      "AssetName": "bannerman"
     },
     {
-      "$type": "SummerJam1.Strength, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Strength, SummerJam1"
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 7,
-      "Amount": 7,
-      "Enabled": true
+      "Amount": 7
     }
   ]
 }

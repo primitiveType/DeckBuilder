@@ -3,43 +3,35 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1",
-      "Enabled": true
+      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1"
     },
     {
       "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1,
-      "Enabled": true
+      "Amount": 1
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Boogerball",
-      "Enabled": true
+      "Value": "Boogerball"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "boogerball",
-      "Enabled": true
+      "AssetName": "boogerball"
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1",
-      "Amount": 8,
-      "Enabled": true
+      "Amount": 8
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
       "Max": 12,
-      "Amount": 12,
-      "Enabled": true
+      "Amount": 12
     },
     {
       "$type": "SummerJam1.Statuses.PlayerHealingHealsMe, SummerJam1",
-      "Tooltip": "Whenever the player heals, this unit heals for the same amount.",
-      "Enabled": true
+      "Tooltip": "Whenever the player heals, this unit heals for the same amount."
     }
   ]
 }
