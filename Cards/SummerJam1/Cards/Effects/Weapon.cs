@@ -6,12 +6,18 @@ namespace SummerJam1.Cards.Effects
 {
     public class Weapon : SummerJam1Component, ITooltip
     {
-        public string Tooltip { get; } = "Becomes bloodied when Played.";
+        public string Tooltip => "Becomes bloodied when dealing damage.";
 
         [OnCardPlayed]
         private void OnCardPlayed(object sender, CardPlayedEventArgs args)
         {
-            if (args.CardId == Entity)
+        
+        }
+
+        [OnDamageDealt]
+        private void OnDamageDealt(object sender, DamageDealtEventArgs args)
+        {
+            if (args.SourceEntityId == Entity)
             {
                 if (!Entity.HasComponent<Bloodied>())
                 {

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using Api;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
@@ -44,13 +46,20 @@ namespace SummerJam1.Cards.Effects
 
         public virtual bool DoEffect(IEntity target)
         {
-            ITakesDamage backUnit = target?.GetComponentInChildren<ITakesDamage>();
-            if (backUnit == null)
+            List<ITakesDamage> units = Game.Battle.EncounterSlots.Entity.GetComponentsInChildren<ITakesDamage>();
+            if (!units.Any())
             {
                 return false;
             }
 
-            backUnit.TryDealDamage(DamageAmount, Game.Player.Entity);
+            for (int i = 0; i < Attacks; i++)
+            {
+                foreach (var unit in units)
+                {
+                    unit.TryDealDamage(DamageAmount, Entity);
+                }
+            }
+            
             return true;
         }
 

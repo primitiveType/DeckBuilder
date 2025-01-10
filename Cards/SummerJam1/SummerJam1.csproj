@@ -170,6 +170,42 @@
         <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Uncommon\IronSkin.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\WildAxe.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\Repeater.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Starter\Block.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\Cestus.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\Buckler.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\Maul.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\Stiletto.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Starter\Warhammer.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Starter\SpikeShield.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\Halberd.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\Spear.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\Longbow.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
 
     </ItemGroup>
 
@@ -184,7 +220,6 @@
     <ItemGroup>
         <Folder Include="Cards\Quartermaster\" />
         <Folder Include="Piles\" />
-        <Folder Include="StreamingAssets\Prefabs\Cards\Quartermaster\Common\" />
         <Folder Include="StreamingAssets\Prefabs\Cards\Quartermaster\Rare\" />
         <Folder Include="StreamingAssets\Resources\" />
     </ItemGroup>

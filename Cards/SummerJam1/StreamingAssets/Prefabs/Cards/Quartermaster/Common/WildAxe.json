@@ -11,8 +11,9 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 5,
-      "Attacks": 1
+      "DamageAmount": 8,
+      "Attacks": 1,
+      "Aoe": true
     },
     
     {
@@ -21,22 +22,17 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.Weapon, SummerJam1",
-      "Tooltip": "Becomes bloodied when Played."
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Dagger"
-    },
-    {
-      "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
-      "Amount": 3
+      "Value": "Wild Axe"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
-      "Amount": 1
+      "Amount": 2
     }
   ]
 }
