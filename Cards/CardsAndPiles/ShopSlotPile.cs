@@ -7,7 +7,7 @@ namespace CardsAndPiles
     {
         public override bool AcceptsChild(IEntity child)
         {
-             return base.AcceptsChild(child) && !Entity.Children.Any();
+             return base.AcceptsChild(child);
         }
     }
 

@@ -10,7 +10,8 @@ using UnityEngine.UI;
 
 public class ComponentService : MonoBehaviour
 {
-    public string m_PrefabsPath = "Assets/StreamingAssets";
+    public string m_PrefabsPath = "Assets/StreamingAssets/Prefabs";
+    public string m_ResourcesPath = "Assets/StreamingAssets/Resources";
     private Context Context { get; set; }
     private Game Game { get; set; }
 
@@ -44,7 +45,7 @@ public class ComponentService : MonoBehaviour
         SummerJam1Events events = new SummerJam1Events();
         Context = new Context(events);
 
-        Context.SetPrefabsDirectory(m_PrefabsPath);
+        Context.SetPrefabsDirectory(m_PrefabsPath, m_ResourcesPath);
         IEntity game = Context.Root;
 
 

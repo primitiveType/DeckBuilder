@@ -113,12 +113,6 @@
         <None Update="StreamingAssets\Units\boss.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="StreamingAssets\Relics\RaiseHp.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="StreamingAssets\Relics\DrawExtraCardsOnFirstTurn.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="StreamingAssets\Units\Standard\1\orbWisp.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
@@ -140,18 +134,6 @@
         <None Update="StreamingAssets\Units\Standard\1\notGengar.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="StreamingAssets\Relics\RaiseHpMore.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="StreamingAssets\Relics\CrookedHalo.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="StreamingAssets\Relics\CharredBone.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="StreamingAssets\Relics\ImpFamiliar.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="StreamingAssets\Units\treasureChest.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
@@ -164,22 +146,25 @@
         <None Update="StreamingAssets\Units\Standard\1\ectongue.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="StreamingAssets\Cards\Frostbite.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="StreamingAssets\Units\Standard\1\headCheese.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Units\shop.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="StreamingAssets\Cards\Kill.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="StreamingAssets\Units\Player\knight.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="StreamingAssets\Cards\Treasure\Diamond.json">
+        <None Update="StreamingAssets\Battles\1\battle1.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\player.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Relics\Starter\Quartermaster.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Starter\Strike.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
 
@@ -194,8 +179,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Cards\Quartermaster\" />
         <Folder Include="Piles\" />
-        <Folder Include="StreamingAssets\Units\Special" />
+        <Folder Include="StreamingAssets\Prefabs\Cards\Quartermaster\Common\" />
+        <Folder Include="StreamingAssets\Prefabs\Cards\Quartermaster\Rare\" />
+        <Folder Include="StreamingAssets\Prefabs\Cards\Quartermaster\Uncommon\" />
+        <Folder Include="StreamingAssets\Resources\" />
     </ItemGroup>
 
     <Target Name="PostPublish" AfterTargets="Publish">

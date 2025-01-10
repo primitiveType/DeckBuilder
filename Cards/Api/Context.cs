@@ -30,11 +30,13 @@ namespace Api
         [JsonProperty] public EventsBase Events { get; private set; }
 
         public static string PrefabsPath { get; private set; }
+        public static string ResourcesPath { get; private set; }
 
 
-        public void SetPrefabsDirectory(string path)
+        public void SetPrefabsDirectory(string path, string resourcesPath)
         {
             PrefabsPath = path;
+            ResourcesPath = resourcesPath;
         }
 
         public TComponent CreateEntity<TComponent>(IEntity parent = null) where TComponent : Component, new()

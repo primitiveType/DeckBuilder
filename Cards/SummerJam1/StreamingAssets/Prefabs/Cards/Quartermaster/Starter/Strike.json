@@ -3,33 +3,37 @@
   "_children": [],
   "ComponentsInternal": [
     {
+      "$type": "SummerJam1.Cards.CharacterConstraint, SummerJam1",
+      "Character": "Quartermaster",
+      "Enabled": true
+    },
+    {
       "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "bodyBuilding",
+      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
+      "DamageAmount": 5,
+      "Attacks": 1,
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.Exhaust, SummerJam1",
-      "Tooltip": "Consume- This card can only be played once per battle.",
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "pulse",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1",
       "Enabled": true
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "BodyBuilding",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.Cards.Effects.GrantStrengthToPlayer, SummerJam1",
-      "Amount": 2,
+      "Value": "Strike",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
-      "Amount": 1,
-      "Character": "Berserker",
+      "Amount": 3,
       "Enabled": true
     },
     {

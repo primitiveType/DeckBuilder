@@ -8,7 +8,7 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 8,
+      "DamageAmount": 5,
       "Attacks": 1,
       "Enabled": true
     },
@@ -23,22 +23,12 @@
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "HeavyBlow",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
-      "Amount": 1,
-      "Character": "Knight",
+      "Value": "Strike",
       "Enabled": true
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
       "Amount": 1,
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
       "Enabled": true
     }
   ]

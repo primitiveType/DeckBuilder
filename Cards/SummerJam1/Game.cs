@@ -8,6 +8,7 @@ using Api.Extensions;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Cards;
+using SummerJam1.Characters;
 using SummerJam1.Piles;
 using SummerJam1.Rules;
 using SummerJam1.Units;
@@ -16,20 +17,30 @@ using Random = Api.Random;
 
 namespace SummerJam1
 {
-    public class ShopContainer : SummerJam1Component
+    public class ShopContainer : ShopSlotPile
     {
+        private Game Game { get; set; }
+
+
         protected override void Initialize()
         {
             base.Initialize();
+            Game = Context.Root.GetComponent<Game>();
+
+            Logging.Log("Setting up shop...");
             for (int i = 0; i < 3; i++)
             {
                 var card = Game.CreateRandomCard();
-                    card.TrySetParent(Entity);
-                    var cost = card.AddComponent<BuyableCard>();
-                    cost.Cost = 60;//TODO: add rarities, base cost on that. Add OnSale component
+                Logging.Log($"Created card: {card.GetName()}");
+                var success = card.TrySetParent(Entity);
+                Logging.Log($"Added Card ? {success}");
+                card.AddComponent<ClickToBuy>();
+                var cost = card.AddComponent<Money>();
+                cost.Amount = 40; //TODO: add rarities, base cost on that. Add OnSale component
             }
         }
     }
+
     public class MapChoicesContainer : SummerJam1Component
     {
         protected override void Initialize()
@@ -50,7 +61,7 @@ namespace SummerJam1
         private void PopulateMapChoices()
         {
             Entity.Children.DestroyRecursive();
-            
+
             Context.CreateEntity<BattleChoice>(Entity);
             Context.CreateEntity<ShopChoice>(Entity);
         }
@@ -78,7 +89,7 @@ namespace SummerJam1
 
         public override void Click()
         {
-            Game.StartShop(); 
+            Game.StartShop();
         }
     }
 
@@ -115,8 +126,16 @@ namespace SummerJam1
             RelicPrizePile = Context.CreateEntity<RelicPrizePile>(Entity).WithName("RelicPrizePile");
             RelicPile = Context.CreateEntity<RelicPile>(Entity).WithName("PlayerRelicPile");
             DiscardStagingPile = Context.CreateEntity<DiscardStagingPile>(Entity).WithName("DiscardStaging");
+            //create an example deck.
+            Context.CreateEntity(Entity, entity =>
+            {
+                Deck = entity.AddComponent<DeckPile>();
+                entity.AddComponent<NameComponent>().Value = "Deck";
+            });
             // Context.CreateEntity(Entity, entity => PlayerUnits = entity.AddComponent<EncounterSlotPile>());
             Player = Context.CreateEntity(Entity, "player").GetComponent<Player>().WithName("Player");
+          
+            
             MapChoicesContainer =
                 Context.CreateEntity<MapChoicesContainer>(Entity).WithName("MapChoicesContainer").Entity;
             //temp code
@@ -125,34 +144,12 @@ namespace SummerJam1
 
             // Logging.Log($"Unit created : {unit}");
             CreatePrefabPile();
-            PopulatePlayerDeck();
+            
+            //choose player class...
+            Player.Entity.AddComponent<Quartermaster>();
             Events.OnGameStarted(new GameStartedEventArgs());
         }
 
-        private void PopulatePlayerDeck()
-        {
-            //create an example deck.
-            Context.CreateEntity(Entity, entity =>
-            {
-                Deck = entity.AddComponent<DeckPile>();
-                entity.AddComponent<NameComponent>().Value = "Deck";
-            });
-
-            Dictionary<string, bool> units = new Dictionary<string, bool>();
-            // foreach (var child in PlayerUnits.Entity.GetComponentsInChildren<PlayerUnit>())
-            // {
-            //     Logging.Log(child.Entity.GetComponent<NameComponent>().Value);
-            //     units.Add(child.UnitName, true);
-            // }
-            foreach (StartingCard prefabsContainerChild in PrefabsContainer.GetComponentsInChildren<StartingCard>())
-            {
-                for (int i = 0; i < prefabsContainerChild.Amount; i++)
-                {
-                    Context.CreateEntity(Deck.Entity,
-                        prefabsContainerChild.Entity.GetComponent<SourcePrefab>().Prefab);
-                }
-            }
-        }
 
         private void CreatePrefabPile()
         {
@@ -219,7 +216,7 @@ namespace SummerJam1
             {
                 CurrentLevel++;
             }
-            
+
             Battle.Entity.Destroy();
         }
 
@@ -310,17 +307,21 @@ namespace SummerJam1
 
         public List<string> GetBattlePrefabs(int min, int max)
         {
-            List<string> prefabs = new();
-            int count = Random.SystemRandom.Next(min, max);
-            for (int i = 0; i < count; i++)
-            {
-                prefabs.Add(
-                    BattleContainer.GetRandomMonsterPrefab(1, Game.CurrentLevel, Entity.GetComponent<Random>()));
-            }
-            
-            return prefabs;
+            string infoPath = GetRandomBattleInfo(Game.CurrentLevel, Entity.GetComponent<Random>());
+            var infoStr = File.ReadAllText(Path.Combine(infoPath));
+            var info = Serializer.Deserialize<BattleInfo>(infoStr);
+            return info.Prefabs;
         }
+        
+        public static string GetRandomBattleInfo(int difficulty, Random random)
+        {
+            DirectoryInfo info = new(Path.Combine(Context.ResourcesPath, "Battles", $"{difficulty}"));
+            List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
 
+            int index = random.SystemRandom.Next(files.Count);
+            string name = Path.Combine(Context.ResourcesPath, "Battles", $"{difficulty}", files[index].Name);
+            return name;
+        }
 
         public IEntity CreateRandomCard()
         {
@@ -331,6 +332,7 @@ namespace SummerJam1
 
             return Context.CreateEntity(null, Path.Combine("Cards", files[index].Name));
         }
+
         public IEntity CreateRandomTreasureCard()
         {
             DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Cards/Treasure"));
@@ -354,7 +356,7 @@ namespace SummerJam1
         public void StartShop()
         {
             Shop?.Entity.Destroy();
-            Shop = Context.CreateEntity<ShopContainer>();
+            Shop = Context.CreateEntity<ShopContainer>(Entity).WithName("Shop");
             Events.OnShopStarted(new ShopStartedEventArgs());
         }
 

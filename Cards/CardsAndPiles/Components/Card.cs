@@ -4,6 +4,9 @@ using Api;
 
 namespace CardsAndPiles.Components
 {
+    public interface IFreePlayCard
+    {
+    }
     public abstract class Card : Component, IPileItem, IVisual
     {
         public virtual bool AcceptsParent(IEntity parent)
@@ -41,7 +44,7 @@ namespace CardsAndPiles.Components
             }
 
             Entity.TrySetParent(null); //it should not be in hand while the play effects occur...
-            ((CardEvents)Context.Events).OnCardPlayed(new CardPlayedEventArgs(Entity, target, false));
+            ((CardEvents)Context.Events).OnCardPlayed(new CardPlayedEventArgs(Entity, target, Entity.HasComponent<IFreePlayCard>()));
             return true;
         }
 

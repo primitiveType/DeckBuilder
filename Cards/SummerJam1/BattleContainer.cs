@@ -68,6 +68,8 @@ namespace SummerJam1
             string name = Path.Combine("Units", "Standard", $"{difficulty}", files[index].Name);
             return name;
         }
+        
+
 
         public void StartBattle()
         {

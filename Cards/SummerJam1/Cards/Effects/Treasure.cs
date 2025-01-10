@@ -9,7 +9,6 @@ namespace SummerJam1.Cards
         protected override void Initialize()
         {
             base.Initialize();
-            Logging.Log($"Treasure init {Entity.Id}.");
             var parent = Entity.Parent;
             while (parent != null)
             {
@@ -24,7 +23,6 @@ namespace SummerJam1.Cards
             Money wallet = Game.Player.Entity.GetComponent<Money>();
             Money reward = Entity.GetComponent<Money>();
             wallet.Amount += reward.Amount;
-            Logging.Log($"{Entity.Id} giving {reward.Amount} money.");
             var parent = Entity.Parent;
             while (parent != null)
             {
@@ -36,11 +34,5 @@ namespace SummerJam1.Cards
 
         public string Description { get; } = "Treasure. Redeemed at Shops.";
 
-        public override void Terminate()
-        {
-            base.Terminate();
-            Logging.Log($"Treasure terminate {Entity.Id}.");
-
-        }
     }
 }

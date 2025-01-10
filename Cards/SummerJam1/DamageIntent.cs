@@ -34,7 +34,7 @@ namespace SummerJam1
             {
                 for (int i = 0; i < Attacks; i++)
                 {
-                    componentsInChild.TryDealDamage(Amount, Entity.Parent);
+                    componentsInChild.TryDealDamage(Amount, Entity);
                 }
             }
         }
@@ -46,7 +46,7 @@ namespace SummerJam1
                 return 0;
             }
             ITakesDamage component = targetEntity.GetComponentInChildren<ITakesDamage>();
-            return component.GetEffectiveDamage(Amount, Entity.Parent);
+            return component.GetEffectiveDamage(Amount, Entity);
         }
     }
 }

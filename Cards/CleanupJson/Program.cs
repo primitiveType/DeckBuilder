@@ -6,7 +6,7 @@ using SummerJam1;
 Logging.Initialize(new DefaultLogger());
 var context = new Context(new SummerJam1Events());
 IEntity gameEntity = context.Root;
-context.SetPrefabsDirectory("../../../../SummerJam1/StreamingAssets");
+context.SetPrefabsDirectory("../../../../SummerJam1/StreamingAssets/Prefabs","../../../../SummerJam1/StreamingAssets/Resources" );
 var game = gameEntity.AddComponent<Game>();
 
 DirectoryInfo info = new DirectoryInfo(Path.Combine(Context.PrefabsPath));
@@ -17,6 +17,10 @@ void TestDirectory(DirectoryInfo dir)
 {
     foreach (DirectoryInfo enumerateDirectory in dir.EnumerateDirectories())
     {
+        if (enumerateDirectory.Name == "Battles")
+        {
+            return;//battle infos are not entities.
+        }
         TestDirectory(enumerateDirectory);
     }
 

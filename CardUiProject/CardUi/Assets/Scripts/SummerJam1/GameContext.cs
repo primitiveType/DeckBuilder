@@ -71,7 +71,9 @@ namespace SummerJam1
 
 #if UNITY_EDITOR
             Logging.Log("We are in editor.");
-            Context.SetPrefabsDirectory(Path.Combine("Assets", "External", "Library", "StreamingAssets"));
+            string prefabs = Path.Combine("Assets", "External", "Library", "StreamingAssets", "Prefabs");
+            string resources = Path.Combine("Assets", "External", "Library", "StreamingAssets", "Resources");
+            Context.SetPrefabsDirectory(prefabs, resources);
 #else
             Logging.Log($"We are in a build. {Application.streamingAssetsPath}");
             Context.SetPrefabsDirectory(Application.streamingAssetsPath);
@@ -89,7 +91,6 @@ namespace SummerJam1
             Disposables.Add(Events.SubscribeToBattleEnded(OnBattleEnded));
             Disposables.Add(Events.SubscribeToEntityKilled(OnEntityKilled));
             Disposables.Add(Events.SubscribeToShopStarted(OnShopStarted));
-
         }
 
         private void OnBattleEnded(object sender, BattleEndedEventArgs item)
@@ -106,6 +107,7 @@ namespace SummerJam1
         {
             SceneManager.LoadScene("BattleScene");
         }
+
         private void OnShopStarted(object sender, ShopStartedEventArgs item)
         {
             SceneManager.LoadScene("ShopScene");
@@ -145,7 +147,5 @@ namespace SummerJam1
             SceneManager.LoadScene("Scenes/MapScene");
             // MusicAudo.Play();
         }
-
-      
     }
 }

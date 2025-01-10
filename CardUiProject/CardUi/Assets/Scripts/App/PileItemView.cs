@@ -107,11 +107,11 @@ namespace App
 
             if (!TrySendToPile(TargetDrag))
             {
-                Logging.Log($"Failed to add {name} to {TargetDrag}.");
+                Logging.Log($"Failed to add {name} to {TargetDrag.GetName()}.");
             }
             else
             {
-                Logging.Log($"Adding {name} to {TargetDrag}.");
+                Logging.Log($"Adding {name} to {TargetDrag.GetName()}.");
 
                 //We should maybe instead just navigate the model hierarchy...
                 // CurrentPile = TargetDrag.GetComponentInParent<PileView>().Model;
@@ -157,9 +157,9 @@ namespace App
 
         public bool IsDragging { get; private set; }
 
-        public virtual bool TrySendToPile(IEntity pileView)
+        public virtual bool TrySendToPile(IEntity target)
         {
-            bool success = Entity.TrySetParent(pileView);
+            bool success = Entity.TrySetParent(target);
 
 
             return success;

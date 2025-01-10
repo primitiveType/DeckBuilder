@@ -1,8 +1,8 @@
 ﻿using Api;
 using CardsAndPiles.Components;
-using SummerJam1.Cards;
+using SummerJam1.Units;
 
-namespace SummerJam1.Units
+namespace SummerJam1.Cards
 {
 
     public class ClickToBuy : PlayerCard, IClickable

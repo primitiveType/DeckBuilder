@@ -1,0 +1,20 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Bag of Holding",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "bag",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.RelicComponent, SummerJam1",
+      "Enabled": true
+    }
+  ]
+}

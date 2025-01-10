@@ -7,14 +7,13 @@
       "Enabled": true
     },
     {
-      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 5,
-      "Attacks": 1,
+      "$type": "SummerJam1.Cards.Effects.GrantArmorToPlayer, SummerJam1",
+      "BlockAmount": 4,
       "Enabled": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "pulse",
+      "AssetName": "ectohelm",
       "Enabled": true
     },
     {
@@ -23,13 +22,7 @@
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Strike",
-      "Enabled": true
-    },
-    {
-      "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
-      "Amount": 3,
-      "Character": "None",
+      "Value": "Block",
       "Enabled": true
     },
     {

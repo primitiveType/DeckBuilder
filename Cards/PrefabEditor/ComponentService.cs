@@ -14,7 +14,8 @@ namespace PrefabEditor
 {
     public class ComponentService  : INotifyPropertyChanged
     {
-        private string PrefabsPath { get; set; } = "Assets/StreamingAssets";
+        private string PrefabsPath { get; set; } = "Assets/StreamingAssets/Prefabs";
+        private string ResourcesPath { get; set; } = "Assets/StreamingAssets/Resources";
         private Context Context { get; set; }
         private Game Game { get; set; }
 
@@ -57,7 +58,7 @@ namespace PrefabEditor
             SummerJam1Events events = new SummerJam1Events();
             Context = new Context(events);
 
-            Context.SetPrefabsDirectory(PrefabsPath);
+            Context.SetPrefabsDirectory(PrefabsPath, ResourcesPath);
             IEntity game = Context.Root;
 
 

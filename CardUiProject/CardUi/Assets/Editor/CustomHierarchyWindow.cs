@@ -177,10 +177,7 @@ public class CustomHierarchyWindow : EditorWindow
         {
             GameContext.Instance.Context.CreateEntity(selectedEntity, Prefabs[selectedPrefab]);
         }
-
-        Debug.Log($"{Prefabs.Length} prefabs.");
-        Debug.Log($"{Prefabs[0]} .");
-        Debug.Log($"{Prefabs[1]} .");
+        
 
         selectedPrefab = EditorGUILayout.Popup("Choose an option", selectedPrefab, Prefabs);
         EditorGUILayout.EndHorizontal();

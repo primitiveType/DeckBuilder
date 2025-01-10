@@ -40,7 +40,7 @@ namespace SummerJam1Tests
             Logging.Initialize(new DefaultLogger());
             Context = new Context(new SummerJam1Events());
             IEntity gameEntity = Context.Root;
-            Context.SetPrefabsDirectory("StreamingAssets");
+            Context.SetPrefabsDirectory("StreamingAssets/Prefabs", "StreamingAssets/Resources");
             Game = gameEntity.AddComponent<Game>();
             long memoryAfter = GC.GetTotalMemory(false);
             long memoryLast = GC.GetTotalMemory(true);

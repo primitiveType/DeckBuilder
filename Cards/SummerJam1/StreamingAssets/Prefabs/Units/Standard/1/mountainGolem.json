@@ -37,7 +37,7 @@
     },
     {
       "$type": "SummerJam1.Units.Effects.StrengthEqualsCardsInHand, SummerJam1",
-      "Tooltip": "Strength equals the number of cards in your hand.",
+      "Tooltip": "Aggressive equals the number of cards in your hand.",
       "Enabled": true
     }
   ]

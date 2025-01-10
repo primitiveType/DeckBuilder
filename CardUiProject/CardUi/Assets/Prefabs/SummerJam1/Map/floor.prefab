@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6423101376963625199}
   - component: {fileID: 595978945188784101}
-  - component: {fileID: 6284604461005760623}
   m_Layer: 0
   m_Name: floor
   m_TagString: Untagged
@@ -85,19 +84,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6284604461005760623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6423101376963625187}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5414265cb984a8084a4bdf5ae86f23c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HideIfNull: 0
-  m_VisibilityObject: {fileID: 0}
-  m_Interpolate: 0
-  m_Speed: 1

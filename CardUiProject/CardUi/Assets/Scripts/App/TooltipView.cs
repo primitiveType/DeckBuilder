@@ -1,54 +1,43 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using App.Utility;
+﻿using System.Collections.Generic;
 using CardsAndPiles.Components;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Component = Api.Component;
 
 namespace App
 {
-    public class TooltipView : View<Component>, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IEndDragHandler
+    public class TooltipView : View<Component>, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler,
+        IEndDragHandler, ITooltips
     {
-        [SerializeField] private GameObject TooltipPrefab;
-        [SerializeField] private Transform TooltipParent;
-        [SerializeField] private Collider TooltipBounds;
-        [SerializeField] private float m_Delay = 1f;
         private bool Dragging { get; set; }
 
-
-        private Coroutine ShowCoroutine { get; set; }
-
-        private void Update()
-        {
-            if (TooltipParent.gameObject.activeInHierarchy)
-            {
-                if (TooltipBounds != null)
-                {
-                    TooltipParent.transform.localPosition = Vector3.zero;
-
-                    Vector3 position = TooltipParent.transform.position;
-                    Bounds tester = new Bounds(position, TooltipBounds.bounds.size);
-
-                    Vector3 newCenter = tester.ClampToViewport(Camera.main);
-                    position = newCenter.WithZ(position.z);
-                    TooltipParent.transform.position = position;
-                }
-            }
-        }
+        private List<string> tooltips = new();
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            ShowCoroutine = StartCoroutine(Show());
+            TooltipManager.Instance.StartHover(this);
         }
 
-        private IEnumerator Show()
+        public void OnPointerExit(PointerEventData eventData)
         {
-            yield return new WaitForSeconds(m_Delay);
-            TooltipParent.gameObject.SetActive(true);
+            TooltipManager.Instance.StopHover(this);
+        }
 
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            Dragging = true;
+            TooltipManager.Instance.StopHover(this);
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            Dragging = false;
+        }
+
+        public IReadOnlyList<string> GetTooltips()
+        {
             List<ITooltip> components = Entity.GetComponents<ITooltip>();
+            tooltips.Clear();
             foreach (ITooltip component in components)
             {
                 if (component.Tooltip == null)
@@ -56,38 +45,62 @@ namespace App
                     continue;
                 }
 
-                GameObject tooltip = Instantiate(TooltipPrefab, TooltipParent);
-                tooltip.GetComponentInChildren<TMP_Text>().text = component.Tooltip;
+                tooltips.Add(component.Tooltip);
             }
+
+            return tooltips;
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        private Vector3[] corners = new Vector3[4];
+
+        public Bounds GetTooltipBounds()
         {
-            if (ShowCoroutine != null)
-            {
-                StopCoroutine(ShowCoroutine);
-                ShowCoroutine = null;
-            }
+            var rt = GetComponent<RectTransform>();
+            var canvas = GetComponentInParent<Canvas>();
 
-            TooltipParent.gameObject.SetActive(false);
-            foreach (Transform child in TooltipParent)
+            if (canvas == null || canvas.renderMode == RenderMode.WorldSpace)
             {
-                Destroy(child.gameObject);
+                rt.GetWorldCorners(corners);
+                var bounds = new Bounds(Camera.main.WorldToScreenPoint(corners[0]), Vector3.one);
+
+                foreach (var corner in corners)
+                {
+                    bounds.Encapsulate(Camera.main.WorldToScreenPoint(corner));
+                }
+
+                return bounds;
+            }
+            else
+            {
+                rt.GetWorldCorners(corners);
+                var bounds = new Bounds(corners[0], Vector3.one);
+
+                foreach (var corner in corners)
+                {
+                    bounds.Encapsulate(corner);
+                }
+
+                return bounds;
             }
         }
 
-        public void OnBeginDrag(PointerEventData eventData)
+        public Vector3 GetPosition()
         {
-            Dragging = true;
-            if (ShowCoroutine != null)
-            {
-                StopCoroutine(ShowCoroutine);
-            }
+            return transform.position;
         }
 
-        public void OnEndDrag(PointerEventData eventData)
+        protected override void OnDestroy()
         {
-            Dragging = false;
+            base.OnDestroy();
+            TooltipManager.Instance.StopHover(this);
         }
+    }
+
+    public interface ITooltips
+    {
+        IReadOnlyList<string> GetTooltips();
+        Bounds GetTooltipBounds();
+
+        Vector3 GetPosition();
     }
 }
