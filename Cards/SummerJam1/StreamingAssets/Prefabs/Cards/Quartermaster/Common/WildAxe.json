@@ -15,13 +15,13 @@
       "Attacks": 1,
       "Aoe": true
     },
-    
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "pulse"
+      "AssetName": "strategygameicons_windows/strategygameicons/SGI_16"
     },
     {
       "$type": "SummerJam1.Cards.Effects.Weapon, SummerJam1",
+      "Tooltip": "Becomes bloodied when dealing damage."
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"

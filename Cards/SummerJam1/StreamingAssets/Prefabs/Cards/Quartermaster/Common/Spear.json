@@ -11,24 +11,25 @@
     },
     {
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 8,
+      "DamageAmount": 14,
       "Attacks": 1,
-      "Aoe": true
+      "Pierce": true,
+      "Tooltip": "Pierce - Hit all face-up enemies in the stack."
     },
-    
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "pulse"
+      "AssetName": "lootcards_windows/lootcards/LootCards_png/LootCard_09"
     },
     {
       "$type": "SummerJam1.Cards.Effects.Weapon, SummerJam1",
+      "Tooltip": "Becomes bloodied when dealing damage."
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Wild Axe"
+      "Value": "Spear"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",

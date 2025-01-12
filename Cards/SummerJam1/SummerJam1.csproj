@@ -197,7 +197,7 @@
         <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Starter\SpikeShield.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\Halberd.json">
+        <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\TwoEdgeSword.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\Spear.json">

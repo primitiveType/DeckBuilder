@@ -275,7 +275,11 @@ namespace PrefabEditor
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            Service.CurrentEntity.First().RemoveComponent((Component)componentsListBox.SelectedItem);
+            foreach (var entity in Service.CurrentEntity)
+            {
+                var comp = entity.GetComponent((Type)componentsListBox.SelectedItem);
+                entity.RemoveComponent((Component)comp);
+            }
             UpdateComponentList();
         }
 

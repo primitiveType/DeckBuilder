@@ -15,7 +15,7 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "ectohelm"
+      "AssetName": "tabletopbadges_windows/tabletopbadges/TabletopBadges_png/TabletopBadges_36.PNG"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
@@ -27,6 +27,10 @@
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
       "Amount": 1
+    },
+    {
+      "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
+      "Amount": 5
     }
   ]
 }

@@ -87,6 +87,7 @@ namespace App
                     float theta = (Mathf.PI / 2f) + radialOffset + (-xPos / radius);
                     x = radius * Mathf.Cos(theta) + h;
                     y = radius * Mathf.Sin(theta) + k;
+                    y += yPos;
                 }
                 else
                 {
@@ -95,7 +96,7 @@ namespace App
                 }
 
                 Vector3 pileItemPosition = card.PileItemView.GetLocalPosition();
-                Vector3 target = new Vector3(x, y, pileItemPosition.z);
+                Vector3 target = new Vector3(x, y, 0);
 
 
                 if (card.DisplayWholeCard)

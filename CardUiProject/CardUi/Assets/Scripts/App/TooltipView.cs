@@ -92,7 +92,10 @@ namespace App
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            TooltipManager.Instance.StopHover(this);
+            if (TooltipManager.Instance != null)
+            {
+                TooltipManager.Instance.StopHover(this);
+            }
         }
     }
 

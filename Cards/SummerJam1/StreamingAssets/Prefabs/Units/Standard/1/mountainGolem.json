@@ -18,7 +18,7 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "mountainGolem"
+      "AssetName": "mobsavataricons_windows/mobsavataricons/golem_01"
     },
     {
       "$type": "SummerJam1.Strength, SummerJam1"

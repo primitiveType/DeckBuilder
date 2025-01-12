@@ -69,8 +69,13 @@ namespace Api
             {
                 prefabName += ".json";
             }
+            var path = Path.Combine(PrefabsPath, prefabName);
+            //if (!File.Exists(path))
+            //{
+            //    return null;
+            //}
 
-            string prefab = File.ReadAllText(Path.Combine(PrefabsPath, prefabName));
+            string prefab = File.ReadAllText(path);
             Entity entity = Serializer.Deserialize<Entity>(prefab);
             entity.GetOrAddComponent<SourcePrefab>().Prefab = prefabName;
             if (shouldInitialize)

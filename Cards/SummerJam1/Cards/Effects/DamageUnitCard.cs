@@ -29,7 +29,7 @@ namespace SummerJam1.Cards.Effects
                 {
                     if (Aoe)
                     {
-                        return $"Deal {FinalDamage} damage to target and adjacent. {pierceString}";
+                        return $"Deal {FinalDamage} damage to ALL enemies. {pierceString}";
                     }
 
                     return $"Deal {FinalDamage} damage. {pierceString}";
@@ -46,7 +46,19 @@ namespace SummerJam1.Cards.Effects
 
         public virtual bool DoEffect(IEntity target)
         {
-            List<ITakesDamage> units = Game.Battle.EncounterSlots.Entity.GetComponentsInChildren<ITakesDamage>();
+            List<ITakesDamage> units;
+            if (Aoe)
+            {
+                units = Game.Battle.EncounterSlots.Entity.GetComponentsInChildren<ITakesDamage>();
+            }
+            else
+            {
+                units = new List<ITakesDamage>
+                {
+                    target.GetComponent<ITakesDamage>()
+                };
+            }
+
             if (!units.Any())
             {
                 return false;
@@ -59,7 +71,7 @@ namespace SummerJam1.Cards.Effects
                     unit.TryDealDamage(DamageAmount, Entity);
                 }
             }
-            
+
             return true;
         }
 

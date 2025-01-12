@@ -7,21 +7,21 @@
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "bloodDraw"
+      "AssetName": "tcgcardspack_windows/tcgcardspack/coin"
     },
     {
       "$type": "SummerJam1.Cards.Unplayable, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Diamond"
+      "Value": "Coin"
     },
     {
       "$type": "SummerJam1.Cards.Treasure, SummerJam1"
     },
     {
       "$type": "SummerJam1.Money, SummerJam1",
-      "Amount": 100
+      "Amount": 10
     }
   ]
 }

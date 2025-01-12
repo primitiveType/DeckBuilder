@@ -8,7 +8,7 @@ namespace SummerJam1
     public abstract class ShaderPropertyComponentView<T> : ComponentView<T> where T : IComponent
     {
         protected abstract int GetShaderProperty();
-        [SerializeField] private Graphic materialRenderer;
+        [SerializeField] private MaterialInstancer materialRenderer;
         protected override bool m_DisableComponentIfNull => true;
 
         protected override void ComponentOnPropertyChanged()
@@ -17,13 +17,13 @@ namespace SummerJam1
 
         private void OnEnable()
         {
-            Debug.Log($"Setting frozen on {materialRenderer.material.GetInstanceID()}");
-            materialRenderer.material.SetFloat(GetShaderProperty(), 1.0f);
+            Debug.Log($"Setting frozen on {materialRenderer.Material.GetInstanceID()}");
+            materialRenderer.Material.SetFloat(GetShaderProperty(), 1.0f);
         }
 
         private void OnDisable()
         {
-            materialRenderer.material.SetFloat(GetShaderProperty(), 0.0f);
+            materialRenderer.Material.SetFloat(GetShaderProperty(), 0.0f);
         }
     }
 }

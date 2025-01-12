@@ -14,28 +14,27 @@
       "DamageAmount": 5,
       "Attacks": 1
     },
-    
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "pulse"
+      "AssetName": "strategygameicons_windows/strategygameicons/SGI_addons_179"
     },
     {
       "$type": "SummerJam1.Cards.Effects.Weapon, SummerJam1",
-      "Tooltip": "Becomes bloodied when Played."
+      "Tooltip": "Becomes bloodied when dealing damage."
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Dagger"
-    },
-    {
-      "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
-      "Amount": 3
+      "Value": "Spike Shield"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Amount": 1
+    },
+    {
+      "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
       "Amount": 1
     }
   ]

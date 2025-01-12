@@ -72,19 +72,23 @@ namespace App
 
         public void OnDrag(PointerEventData eventData)
         {
-            // Ray ray = eventData.pressEventCamera.ScreenPointToRay(Input.mousePosition);
-            //
-            // RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
-            //
+            Ray ray = eventData.pressEventCamera.ScreenPointToRay(Input.mousePosition);
+            
+            RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
+            
             IEntity target = null;
-            var results = eventData.hovered;
+            // var results = eventData.hovered;
             foreach (var result in results)
             {
                 IView pileView = result.transform.GetComponentInParent<IView>();
+                if (pileView?.Entity == Entity)
+                {
+                    continue;
+                }
                 if (pileView != null && pileView.Entity.GetComponent<IPile>() != CurrentPile)
                 {
                     target = pileView.Entity;
-                    // Logging.Log("Found target pile view : " + pileView.name);
+                    Logging.Log("Found target pile view : " + pileView.Entity.GetName());
                 }
             }
 

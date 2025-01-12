@@ -17,7 +17,7 @@ namespace App
             HoverExpand = gameObject.GetOrAddComponent<HoverExpand>();
          
             PileItemView = GetComponentInChildren<IPileItemView>();
-            GetComponent<RectTransform>().sizeDelta = new Vector2(3, 5);
+            GetComponent<RectTransform>().sizeDelta = new Vector2(300, 500);
             if (PileItemView == null)
             {
                 Logging.LogError("Pile item not found when adding card to hand!");

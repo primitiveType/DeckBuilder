@@ -15,20 +15,20 @@
       "Attacks": 1,
       "Aoe": true
     },
-    
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "pulse"
+      "AssetName": "itemscards_windows/itemscards/ItemsCards_bg/ItemsCards_07_b"
     },
     {
       "$type": "SummerJam1.Cards.Effects.Weapon, SummerJam1",
+      "Tooltip": "Becomes bloodied when dealing damage."
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Wild Axe"
+      "Value": "Two Edge Sword"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
