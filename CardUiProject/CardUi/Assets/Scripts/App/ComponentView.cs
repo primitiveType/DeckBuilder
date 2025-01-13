@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Api;
 using UnityEngine;
-using UnityEngine.Serialization;
 using IComponent = Api.IComponent;
 
 namespace App

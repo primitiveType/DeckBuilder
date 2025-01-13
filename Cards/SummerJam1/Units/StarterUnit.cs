@@ -63,12 +63,18 @@ namespace SummerJam1.Units
         {
             if (args.Entity == Entity)
             {
+                //should I call destroy instead? I'm not sure why this is like this.
                 Entity.TrySetParent(null);
             }
         }
         
-        //TODO: move this into a different component, probably
+       
+        
+       
+    }
 
+    public class RandomIntentHandler : SummerJam1Component
+    {
         [OnTurnBegan]
         private void OnTurnBegan(object sender, TurnBeganEventArgs args)
         {
@@ -79,12 +85,15 @@ namespace SummerJam1.Units
         {
             //all previous intents should have removed themselves already.
             //lets add new ones.
+            var intents = Entity.GetComponents<Intent>();
+            
             var random = Game.Random;
-            int dmg = random.SystemRandom.Next(1, 5);
-            var intent = Entity.AddComponent<DamageIntent>();
-            intent.Amount = Math.Max(0, dmg);
+            int active = random.SystemRandom.Next(0, intents.Count + 1);
+
+            for (int i = 0; i < intents.Count; i++)
+            {
+                intents[i].Enabled = i == active;
+            }
         }
-        
-       
     }
 }

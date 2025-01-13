@@ -98,6 +98,10 @@ namespace Api
         {
             return Components.FirstOrDefault(c => c.GetType().IsAssignableFrom(type));
         }
+        public IEnumerable<object> GetComponents(Type type)
+        {
+            return Components.Where(c => c.GetType().IsAssignableFrom(type));
+        }
 
         public bool HasComponent<T>()
         {

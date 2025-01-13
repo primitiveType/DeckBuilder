@@ -16,7 +16,6 @@ namespace SummerJam1
         public void DoIntent()
         {
             OnTrigger();
-            Entity.RemoveComponent<Intent>();
         }
 
         protected abstract void OnTrigger();

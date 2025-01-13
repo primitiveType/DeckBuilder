@@ -17,10 +17,12 @@ namespace PrefabEditor
         public CommonOpenFileDialog openFileDialog1;
         private List<Proxy> CurrentProxy = new List<Proxy>();
         private PrefabEditorSettings Settings { get; set; }
+
         private class PrefabEditorSettings
         {
             public string PrefabsDirectory { get; set; }
         }
+
         public PrefabEditor()
         {
             openFileDialog1 = new CommonOpenFileDialog();
@@ -39,7 +41,6 @@ namespace PrefabEditor
             {
                 Settings = new PrefabEditorSettings();
             }
-
         }
 
         private void Form1_Load(object sender, System.EventArgs e)
@@ -47,7 +48,7 @@ namespace PrefabEditor
             Service = new ComponentService();
             propertyGrid1.PropertySort = PropertySort.NoSort;
             propertyGrid1.PropertyValueChanged += PropertyGrid1_PropertyValueChanged;
-            
+
             Service.PropertyChanged += Service_PropertyChanged;
             buttonPrefabDirectory.Click += buttonPrefabDirectory_Click;
             addComponentListBox.DoubleClick += AddComponentListBox_DoubleClick;
@@ -66,16 +67,16 @@ namespace PrefabEditor
             addComponentListBox.Items.Clear();
 
             Regex regex = new Regex(textBox1.Text, RegexOptions.IgnoreCase);
-            foreach ( var type in Service.ComponentTypes)
+            foreach (var type in Service.ComponentTypes)
             {
                 string name = type.FullName;
                 if (regex.IsMatch(name))
                 {
                     addComponentListBox.Items.Add(type);
                 }
-                
             }
         }
+
         private void PrefabListBox_DoubleClick(object sender, EventArgs e)
         {
             LoadSelectedItems();
@@ -87,12 +88,13 @@ namespace PrefabEditor
             {
                 entity.AddComponent((Type)addComponentListBox.SelectedItem);
             }
+
             UpdateComponentList();
         }
 
         private void Service_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(Service.CurrentEntity))
+            if (e.PropertyName == nameof(Service.CurrentEntity))
             {
                 UpdateComponentList();
                 UpdatePropertyGrid();
@@ -101,12 +103,10 @@ namespace PrefabEditor
 
         private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
         }
 
         private void buttonPrefabDirectory_Click(object sender, EventArgs e)
         {
-            
             if (openFileDialog1.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 try
@@ -119,7 +119,7 @@ namespace PrefabEditor
                 catch (SecurityException ex)
                 {
                     MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
-                    $"Details:\n\n{ex.StackTrace}");
+                                    $"Details:\n\n{ex.StackTrace}");
                 }
             }
         }
@@ -132,7 +132,7 @@ namespace PrefabEditor
 
         private void OpenPrefabsDirectory()
         {
-            if(Settings?.PrefabsDirectory == null)
+            if (Settings?.PrefabsDirectory == null)
             {
                 return;
             }
@@ -160,15 +160,17 @@ namespace PrefabEditor
                     prefabsListBox.Items.Add(file);
                 }
             }
+        }
 
-            
+        private struct TypeInstances
+        {
         }
 
         private void UpdateComponentList()
         {
             componentsListBox.Items.Clear();
             Regex regex = new Regex(currentComponentsSearch.Text, RegexOptions.IgnoreCase);
-            if(Service?.CurrentEntity == null)
+            if (Service?.CurrentEntity == null)
             {
                 return;
             }
@@ -181,57 +183,70 @@ namespace PrefabEditor
             List<Type> components = new List<Type>();
             foreach (var component in Service.CurrentEntity.First().Components)
             {
-                
-                    components.Add(component.GetType());
-                
+                components.Add(component.GetType());
             }
 
-            components = components.Where(c => regex.IsMatch(c.Name) && Service.CurrentEntity.All(e => e.HasComponent(c))).ToList();
+            components = components
+                .Where(c => regex.IsMatch(c.Name) && Service.CurrentEntity.All(e => e.HasComponent(c))).ToList();
 
             foreach (var component in components)
             {
                 componentsListBox.Items.Add(component);
             }
-
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
-
         }
 
         private void componentsListBox_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             UpdatePropertyGrid();
-
         }
 
         private class ErrorObject
         {
-           public string Error = "There was an error trying to display the selected component.";
-           public string Exception { get; set; }
+            public string Error = "There was an error trying to display the selected component.";
+            public string Exception { get; set; }
         }
 
         private void UpdatePropertyGrid()
         {
             object selected = componentsListBox.SelectedItem;
-            CurrentProxy.Clear(); 
+            int indexOfThisParticularComponent = 0;
+            int currentIndex = 0;
+            foreach (var components in componentsListBox.Items)
+            {
+                //will be true for any items of the same Type.
+                if(currentIndex == componentsListBox.SelectedIndex)
+                {
+                    break;
+                }
+                if (components == componentsListBox.SelectedItem)
+                {
+                    indexOfThisParticularComponent++;
+                }
+                currentIndex++;
+            }
+
+            CurrentProxy.Clear();
             if (componentsListBox.SelectedItem != null)
             {
                 try
                 {
                     foreach (var entity in Service.CurrentEntity)
-                {
-                    var component = entity.GetComponent((Type)selected);
-                    if(component != null)
                     {
-                        Console.WriteLine("added component");
-                        CurrentProxy.Add(new Proxy(component));
+                        //there could be more than one component of a given type.
+                        //we infer which one is selected above, and select it here.
+                        var components = entity.GetComponents((Type)selected);
+                        var component = components.ElementAt(indexOfThisParticularComponent); 
+                        if (component != null)
+                        {
+                            CurrentProxy.Add(new Proxy(component));
+                        }
                     }
-
                 }
-
-                }catch(Exception e)
+                catch (Exception e)
                 {
                     selected = new ErrorObject
                     {
@@ -246,7 +261,6 @@ namespace PrefabEditor
 
         private void prefabsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -269,7 +283,6 @@ namespace PrefabEditor
 
         private void addComponentListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -279,6 +292,7 @@ namespace PrefabEditor
                 var comp = entity.GetComponent((Type)componentsListBox.SelectedItem);
                 entity.RemoveComponent((Component)comp);
             }
+
             UpdateComponentList();
         }
 
@@ -299,7 +313,7 @@ namespace PrefabEditor
 
         private void OnMouseDown(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right)
             {
                 Clipboard.SetText(prefabsListBox.SelectedItem.ToString());
             }
@@ -307,8 +321,6 @@ namespace PrefabEditor
 
         private void label5_Click(object sender, EventArgs e)
         {
-
         }
     }
-
 }

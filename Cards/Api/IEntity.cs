@@ -29,5 +29,6 @@ namespace Api
         bool CanSetParent(IEntity parent);
         bool HasComponent(Type type);
         object GetComponent(Type type);
+        IEnumerable<object> GetComponents(Type type);
     }
 }

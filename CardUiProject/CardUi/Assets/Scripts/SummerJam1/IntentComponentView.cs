@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace SummerJam1
 {
-    public class IntentComponentView : ComponentView<Intent>
+    public class IntentComponentView : View<Intent>
     {
         // [SerializeField] private Text AmountText;
         [SerializeField] private Image IntentImage;
@@ -17,18 +17,15 @@ namespace SummerJam1
         [SerializeField] private GameObject ShowIfSleeping;
 
 
-        protected override void ComponentOnPropertyChanged()
-        {
-            UpdateIntentImage();
-        }
-
+        [PropertyListener]
         private void UpdateIntentImage()
         {
+            gameObject.SetActive(Model.Enabled);
             IntentImage.gameObject.SetActive(true);
             // HideIfSleeping.SetActive(Component.Enabled);
             // ShowIfSleeping.SetActive(!Component.Enabled);
 
-            switch (Component)
+            switch (Model)
             {
                 case DamageIntent _:
                     IntentImage.sprite = DamageIntentImage;

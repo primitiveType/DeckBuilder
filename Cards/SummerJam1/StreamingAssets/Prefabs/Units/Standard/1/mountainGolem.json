@@ -30,6 +30,17 @@
     },
     {
       "$type": "SummerJam1.Units.Effects.StrengthEqualsCardsInHand, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Units.RandomIntentHandler, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.DamageIntent, SummerJam1",
+      "Attacks": 1
+    },
+    {
+      "$type": "SummerJam1.DamageIntent, SummerJam1",
+      "Attacks": 1
     }
   ]
 }

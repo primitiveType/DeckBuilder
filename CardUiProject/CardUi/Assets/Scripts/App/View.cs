@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Api;
 using JetBrains.Annotations;
+using TMPro;
 using UnityEngine;
 using IComponent = Api.IComponent;
 
@@ -13,6 +14,7 @@ namespace App
     public class View<T> : MonoBehaviour, IView<T>
     {
         [SerializeField] private int DEBUG_entity;
+        [SerializeField] private int DEBUG_component;
         [SerializeField] private bool required = true;
 
         public IEntity Entity
@@ -31,7 +33,20 @@ namespace App
             get => _model;
             private set
             {
+                if (_model != null)
+                {
+                    Debug.LogWarning($"Model changing from {_model.GetHashCode()} to {value.GetHashCode()}");
+                }
+                else
+                {
+                    Debug.LogWarning($"Model set to {value.GetHashCode()}");
+                }
+
                 _model = value;
+
+                DEBUG_component = value != null ? value.GetHashCode() : -1;
+
+
                 OnPropertyChanged();
             }
         }
@@ -40,6 +55,13 @@ namespace App
 
         public void SetModel(IEntity entity)
         {
+            InternalSetEntity(entity);
+            var model = entity.GetComponent<T>();
+            InternalSetModel(model);
+        }
+
+        private void InternalSetEntity(IEntity entity)
+        {
             if (Entity != null)
             {
                 Entity.PropertyChanged -= OnEntityDestroyed;
@@ -47,7 +69,12 @@ namespace App
             }
 
             Entity = entity;
-            Model = entity.GetComponent<T>();
+            Entity.PropertyChanged += OnEntityDestroyed;
+        }
+
+        private void InternalSetModel(T model)
+        {
+            Model = model;
             if (required && Model == null)
             {
                 Debug.LogError($"Failed to find model {typeof(T).Name} on Entity Component.", gameObject);
@@ -61,12 +88,12 @@ namespace App
             }
 
             OnInitialized();
-            Entity.PropertyChanged += OnEntityDestroyed;
         }
 
         public void SetModel(IComponent component)
         {
-            SetModel(component.Entity);
+            InternalSetEntity(component.Entity);
+            InternalSetModel((T)component);
         }
 
         private void OnEntityDestroyed(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -136,7 +163,6 @@ namespace App
         private T _model;
         private IView ParentView { get; set; }
 
-    
 
         private void AttachListeners()
         {

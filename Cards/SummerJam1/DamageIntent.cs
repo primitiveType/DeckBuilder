@@ -7,9 +7,9 @@ namespace SummerJam1
 {
     public class DamageIntent : Intent, IAmount
     {
-        [JsonIgnore] public int Amount { get; set; }
+        public int Amount { get; set; }
 
-        [JsonIgnore] private int Attacks => 1 + (Entity.GetComponent<MultiAttack>()?.Amount ?? 0);
+        public int Attacks { get; set; } = 1;
 
        
         protected override void OnTrigger()
