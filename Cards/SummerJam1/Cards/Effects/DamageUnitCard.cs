@@ -8,18 +8,37 @@ using PropertyChanged;
 
 namespace SummerJam1.Cards.Effects
 {
+    public class Targeting : SummerJam1Component
+    {
+        [JsonProperty] public bool Aoe { get; set; }
+
+        public List<ITakesDamage> GetTargets(ITakesDamage baseTarget)
+        {
+            if (Aoe)
+            {
+                return Game.Battle.EncounterSlots.Entity.GetComponentsInChildren<ITakesDamage>()
+                    .ToList();
+            }
+
+            return new List<ITakesDamage>
+            {
+                baseTarget
+            };
+        }
+    }
+
     public class DamageUnitCard : SummerJam1Component, IEffect, IDescription, ITooltip
     {
         [JsonProperty] public int DamageAmount { get; private set; }
         protected virtual int FinalDamage => DamageAmount + Strength;
         [JsonProperty] public int Attacks { get; set; } = 1;
-        [JsonProperty] public bool Aoe { get; set; }
         [JsonProperty] public bool Pierce { get; set; }
 
         protected int Strength { get; set; }
 
+        protected Targeting Targeting => Entity.GetComponent<Targeting>();
 
-        [DependsOn(nameof(Strength), nameof(DamageAmount), nameof(Attacks), nameof(Aoe))]
+        [DependsOn(nameof(Strength), nameof(DamageAmount), nameof(Attacks))]
         public virtual string Description
         {
             get
@@ -27,7 +46,7 @@ namespace SummerJam1.Cards.Effects
                 string pierceString = Pierce ? "Pierce." : "";
                 if (Attacks == 1)
                 {
-                    if (Aoe)
+                    if (Targeting is { Aoe: true })
                     {
                         return $"Deal {FinalDamage} damage to ALL enemies. {pierceString}";
                     }
@@ -35,7 +54,7 @@ namespace SummerJam1.Cards.Effects
                     return $"Deal {FinalDamage} damage. {pierceString}";
                 }
 
-                if (Aoe)
+                if (Targeting is { Aoe: true })
                 {
                     return $"Deal {FinalDamage} damage to target and adjacent, {Attacks} times. {pierceString}";
                 }
@@ -47,7 +66,7 @@ namespace SummerJam1.Cards.Effects
         public virtual bool DoEffect(IEntity target)
         {
             List<ITakesDamage> units;
-            if (Aoe)
+            if (Targeting is { Aoe: true })
             {
                 units = Game.Battle.EncounterSlots.Entity.GetComponentsInChildren<ITakesDamage>();
             }

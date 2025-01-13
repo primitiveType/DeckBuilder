@@ -3,7 +3,7 @@ using CardsAndPiles.Components;
 
 namespace SummerJam1.Statuses
 {
-    public class PlayerHealingHealsMe : EnabledWhenAtTopOfEncounterSlot, IStatusEffect, ITooltip
+    public class PlayerHealingHealsMe : SummerJam1Component, IStatusEffect, ITooltip
     {
         public string Tooltip => "Whenever the player heals, this unit heals for the same amount.";
 

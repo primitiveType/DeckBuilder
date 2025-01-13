@@ -1,11 +1,10 @@
 ﻿using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
-using SummerJam1.Statuses;
 
 namespace SummerJam1.Units.Effects
 {
-    public abstract class EffectsOtherCreatures : EnabledWhenAtTopOfEncounterSlot, IDescription
+    public abstract class EffectsOtherCreatures : SummerJam1Component, IDescription
     {
         public abstract bool EveryTurn { get; }
 

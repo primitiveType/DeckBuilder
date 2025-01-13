@@ -2,11 +2,10 @@
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
-using SummerJam1.Statuses;
 
 namespace SummerJam1.Units
 {
-    public class DestroyAfterTurns : EnabledWhenAtTopOfEncounterSlot, IDescription, IAmount
+    public class DestroyAfterTurns : SummerJam1Component, IDescription, IAmount
     {
         [JsonProperty] public int Amount { get; set; } = 1;
 

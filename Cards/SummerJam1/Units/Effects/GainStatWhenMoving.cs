@@ -1,11 +1,10 @@
 ﻿using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
-using SummerJam1.Statuses;
 
 namespace SummerJam1.Units.Effects
 {
-    public abstract class GainStatWhenMoving<T> : EnabledWhenAtTopOfEncounterSlot, IAmount, IDescription where T : Component, IAmount, new()
+    public abstract class GainStatWhenMoving<T> : SummerJam1Component, IAmount, IDescription where T : Component, IAmount, new()
     {
         protected abstract string StatName { get; }
         public int Amount { get; set; }

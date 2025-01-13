@@ -11,7 +11,7 @@ namespace SummerJam1
         [OnRequestDamageModifiers]
         private void OnRequestDamageModifiers(object sender, RequestDamageModifiersEventArgs args)
         {
-            if (args.Source == Entity)
+            if (args.Source.GetOwner() == Entity)
             {
                 args.Modifiers.Add(Amount);
             }
