@@ -19,8 +19,7 @@
       "AssetName": "lootcards_windows/lootcards/LootCards_png/LootCard_110"
     },
     {
-      "$type": "SummerJam1.Cards.Effects.Weapon, SummerJam1",
-      "Tooltip": "Becomes bloodied when dealing damage."
+      "$type": "SummerJam1.Cards.Effects.Weapon, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
@@ -30,8 +29,7 @@
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Cards.Exhaust, SummerJam1",
-      "Tooltip": "Consume- This card can only be played once per battle."
+      "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
     }
   ]
 }

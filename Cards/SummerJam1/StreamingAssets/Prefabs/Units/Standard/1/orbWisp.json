@@ -31,8 +31,7 @@
     },
     {
       "$type": "SummerJam1.Statuses.GainArmorEveryTurn, SummerJam1",
-      "Amount": 2,
-      "Tooltip": "Gains 2 Armor every turn."
+      "Amount": 2
     }
   ]
 }

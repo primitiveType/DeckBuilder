@@ -31,8 +31,7 @@
     },
     {
       "$type": "SummerJam1.Units.Effects.FreezeOnAttack, SummerJam1",
-      "Amount": 3,
-      "Tooltip": "Ice Breath - when attacking, freezes 3 random cards in your hand."
+      "Amount": 3
     }
   ]
 }

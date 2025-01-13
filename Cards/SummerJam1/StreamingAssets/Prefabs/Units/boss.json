@@ -29,8 +29,7 @@
       "Amount": 1
     },
     {
-      "$type": "SummerJam1.Units.Effects.DeathAddsMoneyToPlayer, SummerJam1",
-      "Tooltip": "Drops money when destroyed."
+      "$type": "SummerJam1.Units.Effects.DeathAddsMoneyToPlayer, SummerJam1"
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",

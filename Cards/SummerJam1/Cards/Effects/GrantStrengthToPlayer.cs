@@ -8,7 +8,7 @@ namespace SummerJam1.Cards.Effects
     {
         [JsonProperty] public int Amount { get; set; }
 
-        [JsonIgnore] public string Description => $"Gain {Amount} strength.";
+        public string Description => $"Gain {Amount} strength.";
 
 
         public bool DoEffect(IEntity target)
@@ -18,6 +18,6 @@ namespace SummerJam1.Cards.Effects
             return true;
         }
 
-        [JsonIgnore] public string Tooltip => Tooltips.STRENGTH_TOOLTIP;
+        public string Tooltip => Tooltips.STRENGTH_TOOLTIP;
     }
 }

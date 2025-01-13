@@ -22,7 +22,6 @@
     },
     {
       "$type": "SummerJam1.Units.Effects.GrantsMultiAttackToAdjacent, SummerJam1",
-      "Name": "Multi-Attack",
       "Amount": 1
     },
     {

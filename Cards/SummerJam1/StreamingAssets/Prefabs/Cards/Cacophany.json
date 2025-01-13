@@ -19,8 +19,7 @@
       "Value": "Cacophony"
     },
     {
-      "$type": "SummerJam1.Cards.Exhaust, SummerJam1",
-      "Tooltip": "Consume- This card can only be played once per battle."
+      "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
     },
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",

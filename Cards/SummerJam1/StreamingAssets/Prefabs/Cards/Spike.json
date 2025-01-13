@@ -9,16 +9,14 @@
       "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
       "DamageAmount": 2,
       "Attacks": 1,
-      "Pierce": true,
-      "Tooltip": "Pierce - Hit all face-up enemies in the stack."
+      "Pierce": true
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
       "AssetName": "spike"
     },
     {
-      "$type": "SummerJam1.Cards.Exhaust, SummerJam1",
-      "Tooltip": "Consume- This card can only be played once per battle."
+      "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",

@@ -1,11 +1,13 @@
 ﻿using CardsAndPiles;
 using CardsAndPiles.Components;
+using Newtonsoft.Json;
 using SummerJam1.Statuses;
 
 namespace SummerJam1.Cards.Effects
 {
     public class Weapon : SummerJam1Component, ITooltip
     {
+        [JsonIgnore]
         public string Tooltip => "Becomes bloodied when dealing damage.";
 
         [OnCardPlayed]

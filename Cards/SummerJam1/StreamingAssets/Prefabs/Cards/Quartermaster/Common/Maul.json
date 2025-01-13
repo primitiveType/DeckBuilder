@@ -19,8 +19,7 @@
       "AssetName": "strategygameicons_windows/strategygameicons/SGI_128"
     },
     {
-      "$type": "SummerJam1.Cards.Effects.Weapon, SummerJam1",
-      "Tooltip": "Becomes bloodied when dealing damage."
+      "$type": "SummerJam1.Cards.Effects.Weapon, SummerJam1"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"
@@ -39,7 +38,6 @@
     },
     {
       "$type": "SummerJam1.Statuses.AddsVulnerableOnHit, SummerJam1",
-      "Tooltip": "Vulnerable - Receives 50% more damage",
       "Amount": 1
     },
     {

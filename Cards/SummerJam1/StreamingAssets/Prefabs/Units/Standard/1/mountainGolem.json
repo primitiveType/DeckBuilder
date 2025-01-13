@@ -29,8 +29,7 @@
       "Amount": 14
     },
     {
-      "$type": "SummerJam1.Units.Effects.StrengthEqualsCardsInHand, SummerJam1",
-      "Tooltip": "Aggressive equals the number of cards in your hand."
+      "$type": "SummerJam1.Units.Effects.StrengthEqualsCardsInHand, SummerJam1"
     }
   ]
 }

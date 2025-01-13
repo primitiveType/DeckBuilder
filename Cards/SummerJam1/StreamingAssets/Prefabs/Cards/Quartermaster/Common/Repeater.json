@@ -19,8 +19,7 @@
       "AssetName": "Sprites/Component/Icon_ItemIcons_(Original)/icon_itemicon_arrows"
     },
     {
-      "$type": "SummerJam1.Cards.Effects.Weapon, SummerJam1",
-      "Tooltip": "Becomes bloodied when dealing damage."
+      "$type": "SummerJam1.Cards.Effects.Weapon, SummerJam1"
     },
     {
       "$type": "SummerJam1.Cards.Discard, SummerJam1"

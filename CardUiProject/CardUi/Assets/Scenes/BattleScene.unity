@@ -725,7 +725,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1078ca398daae845ad2c77d5bb85cd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slideVector: {x: 0, y: -10, z: 0}
+  _slideVector: {x: 0, y: -1000, z: 0}
   lerpRate: 5
   active: 1
 --- !u!1 &249616843
@@ -1642,7 +1642,7 @@ GameObject:
   - component: {fileID: 480717349}
   - component: {fileID: 480717348}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Special Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1655,19 +1655,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 480717346}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1959768999}
-  m_Father: {fileID: 812605827}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 20, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &480717348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1694,7 +1694,7 @@ Canvas:
   m_GameObject: {fileID: 480717346}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 2
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -3206,7 +3206,6 @@ Transform:
   - {fileID: 1230968313}
   - {fileID: 1357300422}
   - {fileID: 96308163}
-  - {fileID: 480717347}
   - {fileID: 614170589}
   - {fileID: 3259926125301993999}
   - {fileID: 541446193}
@@ -4428,7 +4427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1078ca398daae845ad2c77d5bb85cd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slideVector: {x: 0, y: -10, z: 0}
+  _slideVector: {x: 0, y: -1000, z: 0}
   lerpRate: 5
   active: 0
 --- !u!114 &1116875669
@@ -8751,7 +8750,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 100, y: 100, z: 1}
-  m_Center: {x: 50, y: 0, z: 0}
+  m_Center: {x: 50, y: 0, z: 1}
 --- !u!1 &1973614124
 GameObject:
   m_ObjectHideFlags: 0
@@ -10745,6 +10744,7 @@ SceneRoots:
   - {fileID: 1740071810}
   - {fileID: 866531448}
   - {fileID: 6402997776667861381}
+  - {fileID: 480717347}
   - {fileID: 2708719220500503206}
   - {fileID: 812605827}
   - {fileID: 2077352459}

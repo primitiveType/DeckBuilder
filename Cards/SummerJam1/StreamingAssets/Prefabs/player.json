@@ -3,9 +3,7 @@
   "_children": [],
   "ComponentsInternal": [
     {
-      "$type": "SummerJam1.Player, SummerJam1",
-      "MaxEnergy": 3,
-      "Tooltip": "Energy - Cards require energy to be played."
+      "$type": "SummerJam1.Player, SummerJam1"
     },
     {
       "$type": "SummerJam1.Money, SummerJam1",

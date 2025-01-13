@@ -9,7 +9,7 @@ namespace Api
         {
             TypeNameHandling = TypeNameHandling.Objects,
             TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
-            ContractResolver = new PrivateSetterContractResolver(),
+            ContractResolver = new IgnoreNoSetContractResolver(),
             DefaultValueHandling = DefaultValueHandling.Ignore,
             Converters = { new DefaultToUnknownConverter(), new ComponentConverter() },
             Formatting = Formatting.Indented

@@ -30,8 +30,7 @@
       "Amount": 12
     },
     {
-      "$type": "SummerJam1.Statuses.PlayerHealingHealsMe, SummerJam1",
-      "Tooltip": "Whenever the player heals, this unit heals for the same amount."
+      "$type": "SummerJam1.Statuses.PlayerHealingHealsMe, SummerJam1"
     }
   ]
 }
