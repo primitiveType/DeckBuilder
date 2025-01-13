@@ -1,5 +1,4 @@
-﻿using System;
-using Api;
+﻿using Api;
 
 namespace SummerJam1.Units
 {

@@ -1,10 +1,8 @@
-﻿using System;
-using Api;
+﻿using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1;
 using SummerJam1.Cards.Effects;
-using SummerJam1.Units;
 
 namespace SummerJam1Tests
 {

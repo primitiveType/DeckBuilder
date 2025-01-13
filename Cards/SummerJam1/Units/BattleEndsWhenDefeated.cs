@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using CardsAndPiles;
+﻿using CardsAndPiles;
 
 namespace SummerJam1.Units
 {

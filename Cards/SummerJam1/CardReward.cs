@@ -1,6 +1,4 @@
-﻿using SummerJam1.Units;
-
-namespace SummerJam1
+﻿namespace SummerJam1
 {
     public class CardReward : Reward
     {

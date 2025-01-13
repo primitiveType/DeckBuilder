@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Api;
+﻿using Api;
 
 namespace CardsAndPiles
 {

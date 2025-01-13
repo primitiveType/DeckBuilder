@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
-using System.Security.AccessControl;
 using System.Windows.Forms;
 using IComponent = Api.IComponent;
 

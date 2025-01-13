@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using CardsAndPiles;
+﻿using CardsAndPiles;
 using CardsAndPiles.Components;
-using SummerJam1.Cards;
-using SummerJam1.Units;
 
 namespace SummerJam1
 {

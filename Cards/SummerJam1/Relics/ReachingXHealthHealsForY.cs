@@ -1,5 +1,4 @@
-﻿using CardsAndPiles;
-using CardsAndPiles.Components;
+﻿using CardsAndPiles.Components;
 
 namespace SummerJam1.Relics
 {
