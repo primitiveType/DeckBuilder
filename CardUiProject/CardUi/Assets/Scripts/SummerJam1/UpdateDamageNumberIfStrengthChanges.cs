@@ -15,7 +15,7 @@ namespace App
 
         protected override void ComponentOnPropertyChanged()
         {
-            Display.UpdateDisplay();
+            AnimationQueue.Instance.Enqueue(()=>Display.UpdateDisplay());
         }
     }
 }

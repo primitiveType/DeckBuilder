@@ -33,14 +33,6 @@ namespace App
             get => _model;
             private set
             {
-                if (_model != null)
-                {
-                    Debug.LogWarning($"Model changing from {_model.GetHashCode()} to {value.GetHashCode()}");
-                }
-                else
-                {
-                    Debug.LogWarning($"Model set to {value.GetHashCode()}");
-                }
 
                 _model = value;
 

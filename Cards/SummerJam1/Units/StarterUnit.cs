@@ -75,6 +75,12 @@ namespace SummerJam1.Units
 
     public class RandomIntentHandler : SummerJam1Component
     {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            CreateIntent();
+        }
+
         [OnTurnBegan]
         private void OnTurnBegan(object sender, TurnBeganEventArgs args)
         {
@@ -88,7 +94,7 @@ namespace SummerJam1.Units
             var intents = Entity.GetComponents<Intent>();
             
             var random = Game.Random;
-            int active = random.SystemRandom.Next(0, intents.Count + 1);
+            int active = random.SystemRandom.Next(0, intents.Count);
 
             for (int i = 0; i < intents.Count; i++)
             {

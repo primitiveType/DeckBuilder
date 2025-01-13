@@ -13,17 +13,17 @@ namespace SummerJam1
         [SerializeField] private Sprite SleepingImage;
 
         [SerializeField] private Sprite DamageIntentImage;
-        // [SerializeField] private GameObject HideIfSleeping;
         [SerializeField] private GameObject ShowIfSleeping;
 
 
         [PropertyListener]
         private void UpdateIntentImage()
         {
-            gameObject.SetActive(Model.Enabled);
+            var enabled = Model.Enabled;
+            Disposables.Add(AnimationQueue.Instance.Enqueue(() => gameObject.SetActive(enabled)));
+
+            
             IntentImage.gameObject.SetActive(true);
-            // HideIfSleeping.SetActive(Component.Enabled);
-            // ShowIfSleeping.SetActive(!Component.Enabled);
 
             switch (Model)
             {

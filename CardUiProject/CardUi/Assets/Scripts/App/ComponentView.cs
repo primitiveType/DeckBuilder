@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using Api;
 using UnityEngine;
 using IComponent = Api.IComponent;
@@ -85,6 +86,10 @@ namespace App
         /// <returns></returns>
         private bool UpdateComponentReference()
         {
+            if (Entity.Components.Contains<IComponent>(Component))
+            {
+                return false;
+            }
             var component = Entity.GetComponent<T>();
             if (Equals(component, Component))
             {
@@ -128,8 +133,23 @@ namespace App
 
         private void UpdateVisibility(bool immediate)
         {
-            bool visible = Component != null || !m_HideIfNull;
-            bool disabled = Component == null && m_DisableComponentIfNull;
+            if (!m_HideIfNull && !m_DisableComponentIfNull)
+            {
+                return;
+            }
+            
+            bool visible = VisibilityObject.activeSelf;
+            if (m_HideIfNull)
+            {
+                visible = Component != null;
+            }
+
+            bool disabled = !enabled;
+            if (m_DisableComponentIfNull)
+            {
+                disabled |= Component == null;
+            }
+
             if (immediate)
             {
                 VisibilityObject.SetActive(visible);
