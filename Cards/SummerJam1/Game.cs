@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using Api;
@@ -11,103 +10,11 @@ using SummerJam1.Cards;
 using SummerJam1.Characters;
 using SummerJam1.Piles;
 using SummerJam1.Rules;
-using SummerJam1.Units;
 using Component = Api.Component;
 using Random = Api.Random;
 
 namespace SummerJam1
 {
-    public static class GameExtensions
-    {
-        //When a player plays a card, the card deals the damage. 
-        //but sometimes we want some effects to refer to the player, not the card.
-        public static IEntity GetOwner(this IEntity entity)
-        {
-            var card = entity.GetComponent<PlayerCard>();
-            if (card != null)
-            {
-                return entity.Context.Root.GetComponent<Game>().Player.Entity;
-            }
-
-            return entity;
-        }
-    }
-    public class ShopContainer : ShopSlotPile
-    {
-        private Game Game { get; set; }
-
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Game = Context.Root.GetComponent<Game>();
-
-            Logging.Log("Setting up shop...");
-            for (int i = 0; i < 3; i++)
-            {
-                var card = Game.CreateRandomCard();
-                Logging.Log($"Created card: {card.GetName()}");
-                var success = card.TrySetParent(Entity);
-                Logging.Log($"Added Card ? {success}");
-                card.AddComponent<ClickToBuy>();
-                var cost = card.AddComponent<Money>();
-                cost.Amount = 40; //TODO: add rarities, base cost on that. Add OnSale component
-            }
-        }
-    }
-
-    public class MapChoicesContainer : SummerJam1Component
-    {
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Game.PropertyChanged += GameOnPropertyChanged;
-            PopulateMapChoices();
-        }
-
-        private void GameOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Game.CurrentLevel))
-            {
-                PopulateMapChoices();
-            }
-        }
-
-        private void PopulateMapChoices()
-        {
-            Entity.Children.DestroyRecursive();
-
-            Context.CreateEntity<BattleChoice>(Entity);
-            Context.CreateEntity<ShopChoice>(Entity);
-        }
-    }
-
-    public abstract class EncounterChoice : SummerJam1Component, IDescription, IClickable, IVisual
-    {
-        public abstract string Description { get; }
-        public abstract void Click();
-    }
-
-    public class BattleChoice : EncounterChoice
-    {
-        public override string Description { get; } = "A battle, with a booster pack as reward.";
-
-        public override void Click()
-        {
-            Game.StartBattle();
-        }
-    }
-
-    public class ShopChoice : EncounterChoice
-    {
-        public override string Description { get; } = "Shop where you can cash in treasures and spend gold.";
-
-        public override void Click()
-        {
-            Game.StartShop();
-        }
-    }
-
     public class Game : SummerJam1Component
     {
         public DeckPile Deck { get; private set; }

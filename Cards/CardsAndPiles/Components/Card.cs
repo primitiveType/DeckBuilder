@@ -4,9 +4,6 @@ using Api;
 
 namespace CardsAndPiles.Components
 {
-    public interface IFreePlayCard
-    {
-    }
     public abstract class Card : Component, IPileItem, IVisual
     {
         public virtual bool AcceptsParent(IEntity parent)

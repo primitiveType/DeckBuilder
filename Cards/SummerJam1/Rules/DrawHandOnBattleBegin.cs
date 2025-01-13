@@ -1,12 +1,10 @@
-﻿using CardsAndPiles;
-
 namespace SummerJam1.Rules
 {
-    public class DrawHandOnTurnBegin : SummerJam1Component
+    public class DrawHandOnBattleBegin : SummerJam1Component
     {
         private int CardDraw => 5;
 
-        [OnDrawPhaseBegan]
+        [OnBattleStarted]
         private void OnDrawPhaseBegan()
         {
             Game game = Context.Root.GetComponent<Game>();
