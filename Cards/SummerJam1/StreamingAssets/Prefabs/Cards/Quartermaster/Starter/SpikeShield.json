@@ -10,11 +10,6 @@
       "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
     },
     {
-      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 5,
-      "Attacks": 1
-    },
-    {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
       "AssetName": "strategygameicons_windows/strategygameicons/SGI_addons_179"
     },
@@ -35,6 +30,15 @@
     {
       "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
       "Amount": 1
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.GrantArmorToPlayer, SummerJam1",
+      "BlockAmount": 5
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
+      "DamageAmount": 3,
+      "Attacks": 1
     }
   ]
 }

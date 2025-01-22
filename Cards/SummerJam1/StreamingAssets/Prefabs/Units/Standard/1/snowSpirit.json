@@ -43,8 +43,8 @@
     },
     {
       "$type": "SummerJam1.DamageIntent, SummerJam1",
-      "Amount": 2,
-      "Attacks": 1,
+      "Amount": 1,
+      "Attacks": 2,
       "Enabled": false
     }
   ]

@@ -17,7 +17,7 @@ namespace SummerJam1.Cards.Effects
 
         protected int Strength { get; set; }
 
-        protected Targeting Targeting => Entity.GetComponent<Targeting>();
+        protected Targeting Targeting => Entity?.GetComponent<Targeting>();
 
         [DependsOn(nameof(Strength), nameof(DamageAmount), nameof(Attacks))]
         public virtual string Description

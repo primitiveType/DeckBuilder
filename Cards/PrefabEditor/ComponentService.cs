@@ -102,7 +102,7 @@ namespace PrefabEditor
             foreach (var entity in CurrentEntity)
             {
                 var source = entity.GetComponent<SourcePrefab>();
-                var json = Serializer.Serialize(entity);
+                var json = Serializer.SerializeWithoutIds(entity);
                 string path = Path.Combine(Context.PrefabsPath, source.Prefab);
                 var info = new FileInfo(path);
                 if (!Directory.Exists(info.Directory.FullName))
