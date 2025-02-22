@@ -61,8 +61,9 @@ namespace App
 
         private Vector3 GetWorldPoint(PointerEventData eventData)
         {
-            return eventData.pressEventCamera.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y,
-                transform.position.z));
+            var eventDataPressEventCamera = eventData.pressEventCamera;
+            return eventDataPressEventCamera.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y,
+                transform.position.z - eventDataPressEventCamera.transform.position.z));
         }
 
         public void OnBeginDrag(PointerEventData eventData)

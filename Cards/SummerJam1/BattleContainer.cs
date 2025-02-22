@@ -20,7 +20,7 @@ namespace SummerJam1
 
         public ObjectivesPile ObjectivesPile { get; private set; }
 
-        public EncounterSlotPile EncounterSlots { get; set; }
+        public MonsterPile MonsterSlots { get; set; }
 
         public bool BattleStarted { get; private set; }
 
@@ -30,7 +30,7 @@ namespace SummerJam1
         {
             base.Initialize();
 
-            Context.CreateEntity(Entity, entity => EncounterSlots = entity.AddComponent<EncounterSlotPile>());
+            Context.CreateEntity(Entity, entity => MonsterSlots = entity.AddComponent<MonsterPile>());
         }
 
         public void MoveToNextFloor()
@@ -73,7 +73,7 @@ namespace SummerJam1
         public void StartBattle()
         {
             SetupBattleDeck();
-            if (EncounterSlots.Entity.Children.Count != 0)
+            if (MonsterSlots.Entity.Children.Count != 0)
             {
                 Logging.LogError("Units already existed in encounter slot!");
             }
@@ -81,7 +81,7 @@ namespace SummerJam1
             var list = Game.GetBattlePrefabs(1, 3);
             foreach (var unit in list)
             {
-                Context.CreateEntity(EncounterSlots.Entity, unit);
+                Context.CreateEntity(MonsterSlots.Entity, unit);
             }
 
             Context.CreateEntity(Entity, entity => ObjectivesPile = entity.AddComponent<ObjectivesPile>());

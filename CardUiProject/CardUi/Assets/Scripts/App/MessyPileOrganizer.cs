@@ -19,7 +19,8 @@ namespace App
             IGameObject view = added.GetComponent<IGameObject>();
             view.gameObject.transform.SetParent(transform);
             IPileItemView pileItemView = view.gameObject.GetComponentInChildren<IPileItemView>();
-            pileItemView.SetTargetPosition(view.gameObject.transform.localPosition, Vector3.zero);
+            pileItemView.SetTargetPosition(view.gameObject.transform.localPosition);
+            pileItemView.SetTargetRotation(view.gameObject.transform.localRotation.eulerAngles);
             return Task.CompletedTask;
         }
     }

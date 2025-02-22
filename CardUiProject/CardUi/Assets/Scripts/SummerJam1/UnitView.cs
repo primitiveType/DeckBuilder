@@ -30,15 +30,17 @@ namespace SummerJam1
         }
 
 
-        public void SetLocalPosition(Vector3 transformPosition, Vector3 transformRotation)
+        public void SetLocalPosition(Vector3 transformPosition)
         {
             transform.localPosition = transformPosition;
-            transform.rotation = Quaternion.Euler(transformRotation);
         }
 
-        public void SetTargetPosition(Vector3 transformPosition, Vector3 transformRotation, bool immediate = false)
+        public void SetTargetPosition(Vector3 transformPosition, bool immediate = false)
         {
             transform.localPosition = transformPosition;
+        }
+        public void SetTargetRotation( Vector3 transformRotation, bool immediate = false)
+        {
             transform.rotation = Quaternion.Euler(transformRotation);
         }
 

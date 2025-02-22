@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Api;
 using App.Utility;
 using CardsAndPiles;
 using Cinemachine;
+using Cinemachine.Utility;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 namespace App
 {
@@ -124,27 +128,38 @@ namespace App
 
         public ISortHandler SortHandler { get; private set; }
 
-        public void SetTargetPosition(Vector3 transformPosition, Vector3 transformRotation, bool immediate = false)
+        public void SetTargetPosition(Vector3 transformPosition, bool immediate = false)
         {
             if (immediate)
             {
                 TargetPosition = transformPosition;
-                TargetRotation = transformRotation;
             }
             else
             {
                 Disposables.Add(AnimationQueue.Instance.Enqueue(() =>
                 {
                     TargetPosition = transformPosition;
+                }));
+            }
+        }
+        public void SetTargetRotation( Vector3 transformRotation, bool immediate = false)
+        {
+            if (immediate)
+            {
+                TargetRotation = transformRotation;
+            }
+            else
+            {
+                Disposables.Add(AnimationQueue.Instance.Enqueue(() =>
+                {
                     TargetRotation = transformRotation;
                 }));
             }
         }
 
-        public void SetLocalPosition(Vector3 transformPosition, Vector3 transformRotation)
+        public void SetLocalPosition(Vector3 transformPosition)
         {
             transform.localPosition = transformPosition;
-            transform.rotation = Quaternion.Euler(transformRotation);
         }
 
         public Vector3 GetLocalPosition()
@@ -175,10 +190,11 @@ namespace App
                 VectorExtensions.Damp(transform.localPosition, transformPosition, lerpRate, Time.deltaTime);
             transform.localPosition = lerpedTarget;
 
-            Vector3 lerpedRotation = transformRotation;
-            //     VectorExtensions.Damp(transform.rotation.eulerAngles, transformRotation, lerpRate, Time.deltaTime);
+            var lerpedRotation =     UnityQuaternionExtensions.SlerpWithReferenceUp(transform.localRotation, Quaternion.Euler(transformRotation), lerpRate
+             * Time.deltaTime, Vector3.up);
+            
 
-            transform.localRotation = Quaternion.Euler(lerpedRotation);
+            transform.localRotation = (lerpedRotation);
         }
     }
 }

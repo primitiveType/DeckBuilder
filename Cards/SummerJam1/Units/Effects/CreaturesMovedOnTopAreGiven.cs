@@ -12,7 +12,7 @@ namespace SummerJam1.Units.Effects
         [OnUnitMoved]
         private void OnUnitMoved(object sender, UnitMovedEventArgs args)
         {
-            var mySlot = Entity.GetComponentInParent<EncounterSlotPile>();
+            var mySlot = Entity.GetComponentInParent<MonsterPile>();
             if (mySlot == null || mySlot.Entity != args.CardId.Parent)
             {
                 return;
@@ -23,7 +23,7 @@ namespace SummerJam1.Units.Effects
                 return;
             }
             
-            if (args.Target.GetComponentInSelfOrParent<EncounterSlotPile>() != mySlot)
+            if (args.Target.GetComponentInSelfOrParent<MonsterPile>() != mySlot)
             {
                 return;
             }

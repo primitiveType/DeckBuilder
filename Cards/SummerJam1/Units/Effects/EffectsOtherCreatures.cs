@@ -15,7 +15,7 @@ namespace SummerJam1.Units.Effects
         {
             if (EveryTurn)
             {
-                var neighbors = Game.Battle.EncounterSlots.Entity.Children;
+                var neighbors = Game.Battle.MonsterSlots.Entity.Children;
 
                 foreach (IEntity neighbor in neighbors)
                 {

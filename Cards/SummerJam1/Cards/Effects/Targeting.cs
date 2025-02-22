@@ -13,7 +13,7 @@ namespace SummerJam1.Cards.Effects
         {
             if (Aoe)
             {
-                return Game.Battle.EncounterSlots.Entity.GetComponentsInChildren<ITakesDamage>()
+                return Game.Battle.MonsterSlots.Entity.GetComponentsInChildren<ITakesDamage>()
                     .ToList();
             }
 

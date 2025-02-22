@@ -36,9 +36,8 @@
       "BlockAmount": 5
     },
     {
-      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
-      "DamageAmount": 3,
-      "Attacks": 1
+      "$type": "SummerJam1.Statuses.GrantThornsToPlayer, SummerJam1",
+      "Amount": 2
     }
   ]
 }

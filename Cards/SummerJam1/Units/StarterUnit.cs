@@ -22,7 +22,7 @@ namespace SummerJam1.Units
                 return;
             }
 
-            if (args.Target.GetComponent<EncounterSlotPile>() == null)
+            if (args.Target.GetComponent<MonsterPile>() == null)
             {
                 args.Blockers.Add(CardBlockers.INVALID_TARGET);
                 return;
@@ -50,7 +50,7 @@ namespace SummerJam1.Units
                 return;
             }
 
-            EncounterSlotPile slot = args.Target.GetComponentInSelfOrParent<EncounterSlotPile>();
+            MonsterPile slot = args.Target.GetComponentInSelfOrParent<MonsterPile>();
 
             if (Entity.TrySetParent(slot.Entity))
             {

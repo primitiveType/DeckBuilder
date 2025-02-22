@@ -1,17 +1,54 @@
-﻿using Api;
+﻿using System.Collections.Generic;
+using Api;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
 using SummerJam1.Units.Effects;
 
 namespace SummerJam1
 {
+    public class ShieldAllyIntent : Intent, IAmount
+    {
+        public int Amount { get; set; }
+
+        public bool TargetAll { get; private set; }
+
+        protected override void OnTrigger()
+        {
+            if (!Enabled)
+            {
+                return;
+            }
+
+            IEnumerable<IEntity> targets;
+            if (TargetAll)
+            {
+                targets = Game.Battle.MonsterSlots.Entity.Children;
+            }
+            else
+            {
+                targets = new[] { Game.Battle.MonsterSlots.GetRandom() };
+            }
+
+
+            Events.OnIntentStarted(new IntentStartedEventArgs(Entity));
+
+
+            foreach (IEntity friend in targets)
+            {
+                friend.GetOrAddComponent<Armor>().Amount += Amount;
+            }
+        }
+
+       
+    }
+
     public class DamageIntent : Intent, IAmount
     {
         public int Amount { get; set; }
 
         public int Attacks { get; set; } = 1;
 
-       
+
         protected override void OnTrigger()
         {
             if (!Enabled)
@@ -44,6 +81,7 @@ namespace SummerJam1
             {
                 return 0;
             }
+
             ITakesDamage component = targetEntity.GetComponentInChildren<ITakesDamage>();
             return component.GetEffectiveDamage(Amount, Entity);
         }

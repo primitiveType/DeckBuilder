@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrefabEditor", "PrefabEdito
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanupJson", "CleanupJson\CleanupJson.csproj", "{FB859217-B4A9-4492-AA02-5767C8265E97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApp1", "WinFormsApp1\WinFormsApp1.csproj", "{4C2CAD2E-5812-41D5-B0FF-FDA0EA47D9AC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,5 +72,9 @@ Global
 		{FB859217-B4A9-4492-AA02-5767C8265E97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB859217-B4A9-4492-AA02-5767C8265E97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB859217-B4A9-4492-AA02-5767C8265E97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C2CAD2E-5812-41D5-B0FF-FDA0EA47D9AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C2CAD2E-5812-41D5-B0FF-FDA0EA47D9AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C2CAD2E-5812-41D5-B0FF-FDA0EA47D9AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C2CAD2E-5812-41D5-B0FF-FDA0EA47D9AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

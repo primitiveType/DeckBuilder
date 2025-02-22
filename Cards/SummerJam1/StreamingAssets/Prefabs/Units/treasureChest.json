@@ -13,13 +13,6 @@
       "Amount": 2
     },
     {
-      "$type": "SummerJam1.Units.BloodRequirement, SummerJam1"
-    },
-    {
-      "$type": "SummerJam1.Units.Blood, SummerJam1",
-      "Amount": 1
-    },
-    {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
       "Value": "Treasure"
     },

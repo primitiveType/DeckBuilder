@@ -37,7 +37,7 @@ namespace App
 
         protected override void ComponentOnPropertyChanged()
         {
-            PileItemView.SetTargetPosition(Component.Pos.ToUnityVector3(), Vector3.zero);
+            PileItemView.SetTargetPosition(Component.Pos.ToUnityVector3());
         }
     }
 }

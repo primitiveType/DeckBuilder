@@ -132,18 +132,26 @@ namespace PrefabEditor
 
         private void OpenPrefabsDirectory()
         {
-            if (Settings?.PrefabsDirectory == null)
+            try
             {
-                return;
+                if (Settings?.PrefabsDirectory == null)
+                {
+                    return;
+                }
+
+                Service.Start(Settings.PrefabsDirectory);
+
+                UpdateAddComponentListBox();
+
+                UpdatePrefabsList();
+
+                UpdateComponentList();
             }
-
-            Service.Start(Settings.PrefabsDirectory);
-
-            UpdateAddComponentListBox();
-
-            UpdatePrefabsList();
-
-            UpdateComponentList();
+            catch (Exception e)
+            {
+                Logging.Logger.LogError(e.Message);
+                Settings.PrefabsDirectory = null;
+            }
         }
 
         private void UpdatePrefabsList()
@@ -218,14 +226,16 @@ namespace PrefabEditor
             foreach (var components in componentsListBox.Items)
             {
                 //will be true for any items of the same Type.
-                if(currentIndex == componentsListBox.SelectedIndex)
+                if (currentIndex == componentsListBox.SelectedIndex)
                 {
                     break;
                 }
+
                 if (components == componentsListBox.SelectedItem)
                 {
                     indexOfThisParticularComponent++;
                 }
+
                 currentIndex++;
             }
 
@@ -239,7 +249,7 @@ namespace PrefabEditor
                         //there could be more than one component of a given type.
                         //we infer which one is selected above, and select it here.
                         var components = entity.GetComponents((Type)selected);
-                        var component = components.ElementAt(indexOfThisParticularComponent); 
+                        var component = components.ElementAt(indexOfThisParticularComponent);
                         if (component != null)
                         {
                             CurrentProxy.Add(new Proxy(component));

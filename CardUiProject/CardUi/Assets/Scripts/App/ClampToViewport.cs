@@ -20,7 +20,7 @@ public class ClampToViewport : MonoBehaviour
         transform.position = new Vector3(-10_000, -10_000, position.z);
         Bounds tester = m_Collider.bounds;
         Bounds heck = new Bounds(new Vector3(-10_000, -10_000, 0), tester.size);
-        var newCenter = heck.ClampToViewport(Camera.main);
+        var newCenter = heck.ClampToViewport(transform, Camera.main);
         position = newCenter.WithZ(position.z);
         transform.position = position;
     }

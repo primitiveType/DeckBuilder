@@ -206,6 +206,12 @@
         <None Update="StreamingAssets\Prefabs\Cards\Quartermaster\Common\Longbow.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="StreamingAssets\Resources\Battles\1\battle2.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Units\Standard\1\cultistGoblin.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
 
     </ItemGroup>
 

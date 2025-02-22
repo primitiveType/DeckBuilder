@@ -1,7 +1,9 @@
 using System;
 using Api;
+using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Cards;
+using SummerJam1.Units;
 
 namespace SummerJam1
 {
@@ -16,7 +18,19 @@ namespace SummerJam1
         [OnAttackPhaseEnded]
         private void OnBattleEnded()
         {
-            Amount = 0;
+            if (Entity.HasComponent<Player>())
+            {
+                Amount = 0;
+            }
+        }
+
+        [OnTurnEnded]
+        private void OnTurnEnded(object sender, TurnEndedEventArgs args)
+        {
+            if (Entity.HasComponent<StarterUnit>())
+            {
+                Amount = 0;
+            }
         }
 
         /// <summary>

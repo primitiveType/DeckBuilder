@@ -105,7 +105,8 @@ namespace App
                 }
                 else
                 {
-                    card.PileItemView.SetTargetPosition(target, GetRotation(xPos), IsPlayerTurn);
+                    card.PileItemView.SetTargetPosition(target, IsPlayerTurn);
+                    card.PileItemView.SetTargetRotation(GetRotation(xPos), IsPlayerTurn);
                 }
 
                 xPos += halfWidth;
@@ -121,18 +122,18 @@ namespace App
 
         private void SetHoveredPosition(CardInHand card, Vector3 target, Vector3 pileItemPosition)
         {
+            
             //first move it to where it would be.
-            card.PileItemView.SetLocalPosition(target, new Vector3());
+            card.PileItemView.SetLocalPosition(target);
 
             //then clamp it to the screen and update its transform position.
-            Vector3 clampedPosition = card.PileItemView.GetBounds().ClampToViewport(Camera.main);
+            Vector3 clampedPosition = card.PileItemView.GetBounds().ClampToViewport(card.transform, Camera.main);
             Vector3 clampedLocalPosition =
                 transform.InverseTransformPoint(clampedPosition).WithZ(pileItemPosition.z);
-            card.PileItemView.SetTargetPosition(clampedLocalPosition, new Vector3(), IsPlayerTurn);
+            card.PileItemView.SetTargetPosition(clampedLocalPosition, IsPlayerTurn);
 
             card.PileItemView.SortHandler?.SetDepth((int)Sorting.DraggedPileItem);
-            card.PileItemView.SetLocalPosition(pileItemPosition,
-                new Vector3()); //reset its position to where it started.
+            card.PileItemView.SetLocalPosition(pileItemPosition); //reset its position to where it started.
         }
 
         private float GetEffectiveCardWidth(CardInHand card)

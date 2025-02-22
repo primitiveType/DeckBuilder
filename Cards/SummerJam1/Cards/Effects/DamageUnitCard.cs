@@ -49,7 +49,7 @@ namespace SummerJam1.Cards.Effects
             List<ITakesDamage> units;
             if (Targeting is { Aoe: true })
             {
-                units = Game.Battle.EncounterSlots.Entity.GetComponentsInChildren<ITakesDamage>();
+                units = Game.Battle.MonsterSlots.Entity.GetComponentsInChildren<ITakesDamage>();
             }
             else
             {

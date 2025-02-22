@@ -3,7 +3,7 @@ using CardsAndPiles;
 
 namespace SummerJam1.Piles
 {
-    public class EncounterSlotPile : DefaultPile
+    public class MonsterPile : DefaultPile
     {
         protected override int MaxChildren => 5;
 

@@ -8,7 +8,7 @@ namespace SummerJam1
     {
         protected override IEntity GetEntityForView()
         {
-            return GameContext.Instance.Game.Battle.EncounterSlots.Entity;
+            return GameContext.Instance.Game.Battle.MonsterSlots.Entity;
         }
     }
 }

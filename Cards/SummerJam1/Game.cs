@@ -236,11 +236,18 @@ namespace SummerJam1
         
         public static string GetRandomBattleInfo(int difficulty, Random random)
         {
-            DirectoryInfo info = new(Path.Combine(Context.ResourcesPath, "Battles", $"{difficulty}"));
+            var tier = (difficulty / 5);
+            if (tier < 1)
+            {
+                tier = 1;
+            }
+            string battlePath = Path.Combine(Context.ResourcesPath, "Battles", $"{tier}");
+
+            DirectoryInfo info = new(battlePath);
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
 
             int index = random.SystemRandom.Next(files.Count);
-            string name = Path.Combine(Context.ResourcesPath, "Battles", $"{difficulty}", files[index].Name);
+            string name = Path.Combine(battlePath, files[index].Name);
             return name;
         }
 

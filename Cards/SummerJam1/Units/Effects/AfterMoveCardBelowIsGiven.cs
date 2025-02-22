@@ -17,7 +17,7 @@ namespace SummerJam1.Units.Effects
                 return;
             }
             
-            EncounterSlotPile mySlot = Entity.GetComponentInParent<EncounterSlotPile>();
+            MonsterPile mySlot = Entity.GetComponentInParent<MonsterPile>();
             if (mySlot == null)
             {//we were moved outside of slots.
                 return;

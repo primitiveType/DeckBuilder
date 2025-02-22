@@ -15,9 +15,9 @@ namespace App.Utility
             return position - (diff * 2);
         }
     
-        public static Vector3 ClampToViewport(this Bounds bounds, Camera camera)
+        public static Vector3 ClampToViewport(this Bounds bounds, Transform owner, Camera camera)
         {
-            Bounds viewportBounds = camera.GetViewportBounds(Vector3.Distance(bounds.center, camera.transform.position));
+            Bounds viewportBounds = camera.GetViewportBounds(Vector3.Distance(bounds.center.WithX(0).WithY(0), camera.transform.position.WithX(0).WithY(0)));
             Bounds encapsulated = viewportBounds;
             encapsulated.Encapsulate(bounds);
 

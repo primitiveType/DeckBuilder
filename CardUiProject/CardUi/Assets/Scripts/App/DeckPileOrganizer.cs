@@ -24,7 +24,7 @@ namespace App
             {
                 if (pileItemView != null)
                 {
-                    pileItemView.SetTargetPosition(new Vector3(), new Vector3());
+                    pileItemView.SetTargetPosition(new Vector3());
                 }
                 else
                 {
