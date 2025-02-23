@@ -28,6 +28,8 @@ namespace CardsAndPiles
         }
         public static string GetName(this IEntity entity)
         {
+            if (entity == null)
+                return "Null";
             string myName = entity.GetComponent<NameComponent>()?.Value ?? $"Entity ({entity.Id.ToString()})";
             return myName;
         }

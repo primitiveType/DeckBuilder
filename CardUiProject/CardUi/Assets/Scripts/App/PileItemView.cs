@@ -6,6 +6,7 @@ using App.Utility;
 using CardsAndPiles;
 using Cinemachine;
 using Cinemachine.Utility;
+using SummerJam1.Cards.Effects;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -84,15 +85,21 @@ namespace App
             // var results = eventData.hovered;
             foreach (var result in results)
             {
-                IView pileView = result.transform.GetComponentInParent<IView>();
-                if (pileView?.Entity == Entity)
+                IView targetView = result.transform.GetComponentInParent<IView>();
+                if (targetView?.Entity == Entity)
                 {
                     continue;
                 }
-                if (pileView != null && pileView.Entity.GetComponent<IPile>() != CurrentPile)
+
+                //skip if the target is our own hand, or a card in our hand.
+                if (targetView.Entity.GetComponentInParent<IPile>() == CurrentPile)
                 {
-                    target = pileView.Entity;
-                    Logging.Log("Found target pile view : " + pileView.Entity.GetName());
+                    continue;
+                }
+                if (targetView != null && targetView is not CardView)
+                {
+                    target = targetView.Entity;
+                    Logging.Log("Found target pile view : " + targetView.Entity.GetName());
                 }
             }
 
@@ -108,7 +115,10 @@ namespace App
                 return;
             }
 
-            if (TargetDrag == null || TargetDrag == GetComponentInParent<PileView>())
+            var effects = Entity.GetComponents<IEffect>();
+            bool targetRequired = effects.Any(e => e.Targeting == TargetingType.Unit);
+            
+            if ((TargetDrag == null && targetRequired) || TargetDrag == CurrentPile.Entity)
             {
                 return;
             }

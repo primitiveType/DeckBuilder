@@ -7,6 +7,7 @@ namespace SummerJam1.Cards.Effects
 {
     public class ChooseDiscards : SummerJam1Component, IAmount, IEffect, IDescription
     {
+        public TargetingType Targeting { get; } = TargetingType.Player;
         public int Amount { get; set; }
 
 

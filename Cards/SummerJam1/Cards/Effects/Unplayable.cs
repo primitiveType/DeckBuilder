@@ -7,6 +7,7 @@ namespace SummerJam1.Cards
     public class Unplayable : SummerJam1Component, IDescription, IEffect
     {
         public string Description { get; } = "Unplayable";
+        public TargetingType Targeting{ get; } = TargetingType.None;
 
 
         public bool DoEffect(IEntity target)

@@ -31,10 +31,8 @@ public class TiltOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (isHovered)
         {
             var delta = transform.InverseTransformPoint(mousePosition) - (Collider.center);
-            Debug.Log($"Delta {delta}");
             var percentage = new Vector3(delta.x / Collider.bounds.extents.x, delta.y / Collider.bounds.extents.y,
                 delta.z / Collider.bounds.extents.z);
-            Debug.Log($"percentage {percentage}");
 
             x = xAmount * percentage.y;
             y = yAmount * -percentage.x;
@@ -64,6 +62,9 @@ public class TiltOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerMove(PointerEventData eventData)
     {
+        if (eventData.enterEventCamera != null)
+        {
             mousePosition = GetMousePosition(eventData);
+        }
     }
 }

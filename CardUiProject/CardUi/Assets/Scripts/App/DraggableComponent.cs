@@ -1,7 +1,9 @@
 using System.ComponentModel;
+using System.Linq;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using Stateless;
+using SummerJam1.Cards.Effects;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,9 +12,11 @@ namespace App
     public class DraggableComponent : View<IDraggable>, IDragHandler, IBeginDragHandler, IEndDragHandler
     {
         private Vector3 TargetPosition { get; set; }
+        private Vector3 CursorWorld { get; set; }
 
         private Vector3 Offset { get; set; }
         private bool Dragging { get; set; }
+        private bool UnitTargeting { get; set; }
 
         protected override void OnInitialized()
         {
@@ -47,16 +51,25 @@ namespace App
         // Update is called once per frame
         void Update()
         {
+
             if (Dragging)
             { //should lerp
-                transform.position = TargetPosition;
+
+                if (UnitTargeting)
+                {
+                    TargetingManager.Instance.SetPosition(transform.position, CursorWorld);
+                }
+                else
+                {
+                    transform.position = TargetPosition;
+                }
             }
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            Vector3 cursorWorld = GetWorldPoint(eventData);
-            TargetPosition = new Vector3(Offset.x + cursorWorld.x, Offset.y + cursorWorld.y, transform.position.z);
+            CursorWorld = GetWorldPoint(eventData);
+            TargetPosition = new Vector3(Offset.x + CursorWorld.x, Offset.y + CursorWorld.y, transform.position.z);
         }
 
         private Vector3 GetWorldPoint(PointerEventData eventData)
@@ -70,16 +83,26 @@ namespace App
         {
             Dragging = true;
             InputStateManager.Instance.StateMachine.Fire(InputAction.Drag);
-            Vector3 cursorWorld = GetWorldPoint(eventData);
+            CursorWorld = GetWorldPoint(eventData);
 
-            Offset = transform.position - cursorWorld;
+            Offset = transform.position - CursorWorld;
+
+            if (Entity.GetComponents<IEffect>().Any(e => e.Targeting == TargetingType.Unit))
+            {
+                TargetingManager.Instance.Show(true);
+                UnitTargeting = true;
+            }
+            else
+            {
+                UnitTargeting = false;
+            }
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
             Dragging = false;
             InputStateManager.Instance.StateMachine.Fire(InputAction.EndDrag);
-
+            TargetingManager.Instance.Show(false);
         }
     }
 }

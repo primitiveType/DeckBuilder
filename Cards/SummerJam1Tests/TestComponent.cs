@@ -8,6 +8,8 @@ namespace SummerJam1Tests
 {
     public class TestComponent : SummerJam1Component, IEffect
     {
+        public TargetingType Targeting{ get; } = TargetingType.Unit;
+
         private int _entrancies = 0;
 
         protected override void Initialize()

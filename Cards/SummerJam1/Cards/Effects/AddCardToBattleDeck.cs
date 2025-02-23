@@ -6,7 +6,7 @@ namespace SummerJam1.Cards.Effects
     {
         public string Prefab { get; set; }
         public int Amount { get; set; } = 1;
-
+        public TargetingType Targeting { get; } = TargetingType.Player;
         public bool DoEffect(IEntity target)
         {
             for (int i = 0; i < Amount; i++)

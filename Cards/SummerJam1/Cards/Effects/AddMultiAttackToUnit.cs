@@ -7,6 +7,7 @@ namespace SummerJam1.Cards.Effects
 {
     public class AddMultiAttackToUnit : SummerJam1Component, IEffect
     {
+        public TargetingType Targeting { get; } = TargetingType.Unit;
         public bool DoEffect(IEntity target)
         {
             Unit unit = target.GetComponentInChildren<Unit>();

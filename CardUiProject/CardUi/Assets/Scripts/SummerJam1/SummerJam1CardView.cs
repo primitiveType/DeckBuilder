@@ -12,7 +12,7 @@ namespace SummerJam1
     {
         public override bool TrySendToPile(IEntity target)
         {
-            if (target.HasComponent<BagOfHoldingHandPile>())//TODO: how do you even generalize this.
+            if (target != null && target.HasComponent<BagOfHoldingHandPile>())//TODO: how do you even generalize this.
             {
                 //I should rework all this so that cards don't have to target "Piles". It should play the card
                 //when targeting an entity directly, and try and move it when targeting a pile.

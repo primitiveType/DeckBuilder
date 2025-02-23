@@ -6,6 +6,8 @@ namespace SummerJam1.Cards.Effects
 {
     public class HealUnit : SummerJam1Component, IEffect
     {
+        public TargetingType Targeting{ get; } = TargetingType.Unit;
+
         [JsonProperty] public int HealAmount { get; private set; }
 
         public bool DoEffect(IEntity target)

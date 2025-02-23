@@ -6,12 +6,14 @@ namespace SummerJam1.Cards.Effects
 {
     public class GrantArmorToPlayer : SummerJam1Component, IEffect, IDescription, ITooltip
     {
+        public TargetingType Targeting{ get; } = TargetingType.Player;
+
         [JsonProperty] public int BlockAmount { get; private set; }
 
         [JsonIgnore] public string Description => $"Gain {BlockAmount} block.";
 
 
-        public bool DoEffect(IEntity target)
+        public bool DoEffect(IEntity _)
         {
             Armor armor = Game.Player.Entity.GetOrAddComponent<Armor>();
             armor.Amount += BlockAmount;

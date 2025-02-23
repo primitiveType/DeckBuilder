@@ -18,22 +18,7 @@ namespace SummerJam1.Cards
         }
 
 
-        //TODO: will probably remove this.
-        [OnRequestPlayCard]
-        private void OnRequestPlayCard(object sender, RequestPlayCardEventArgs args)
-        {
-            if (args.CardId != Entity)
-            {
-                return;
-            }
-
-            Health target = args.Target.GetComponentInChildren<Health>();
-
-            if (target == null)
-            {
-                args.Blockers.Add(CardBlockers.INVALID_TARGET);
-            }
-        }
+     
 
         protected override bool PlayCard(IEntity target)
         {
