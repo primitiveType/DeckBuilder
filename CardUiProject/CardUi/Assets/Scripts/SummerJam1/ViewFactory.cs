@@ -107,7 +107,7 @@ namespace SummerJam1
                     return m_PrefabReference;
                 case EncounterChoice:
                     return m_EncounterChoicePrefab;
-                default:
+                default:    
                     throw new ArgumentOutOfRangeException(nameof(visual), $"No prefab visual found for {visual?.GetType().Name}.");
             }
 

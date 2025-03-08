@@ -68,9 +68,8 @@ namespace SummerJam1
             return name;
         }
         
-
-
-        public void StartBattle()
+        
+        public void StartBattle(string path = null)
         {
             SetupBattleDeck();
             if (MonsterSlots.Entity.Children.Count != 0)
@@ -78,7 +77,7 @@ namespace SummerJam1
                 Logging.LogError("Units already existed in encounter slot!");
             }
 
-            var list = Game.GetBattlePrefabs(1, 3);
+            var list = Game.GetBattlePrefabs(path);
             foreach (var unit in list)
             {
                 Context.CreateEntity(MonsterSlots.Entity, unit);

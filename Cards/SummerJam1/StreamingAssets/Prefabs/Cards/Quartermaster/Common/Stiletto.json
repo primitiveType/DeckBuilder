@@ -30,6 +30,9 @@
     },
     {
       "$type": "SummerJam1.Cards.Exhaust, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.ExcludeFromShopAndBoosters, SummerJam1"
     }
   ]
 }

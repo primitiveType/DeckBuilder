@@ -47,6 +47,7 @@
             this.currentComponentsSearch = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // propertyGrid1
@@ -210,11 +211,22 @@
             this.label6.TabIndex = 17;
             this.label6.Text = "Filter:";
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(212, 12);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(177, 23);
+            this.button3.TabIndex = 18;
+            this.button3.Text = "Reload Prefabs Directory";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // PrefabEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1426, 816);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.currentComponentsSearch);
@@ -261,5 +273,6 @@
         private System.Windows.Forms.TextBox currentComponentsSearch;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button button3;
     }
 }

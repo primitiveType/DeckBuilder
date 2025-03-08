@@ -51,7 +51,7 @@ public class TiltOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private Vector3 GetMousePosition(PointerEventData eventData)
     {
-        return Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, Mathf.Abs(transform.position.z - eventData.enterEventCamera.transform.position.z)));
+        return Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, Mathf.Abs(transform.position.z - (eventData.enterEventCamera?.transform.position.z ?? 0 ))));
     }
 
 

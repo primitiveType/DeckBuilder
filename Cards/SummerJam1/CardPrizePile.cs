@@ -22,7 +22,7 @@ namespace SummerJam1
             var game = Entity.GetComponentInParent<Game>();
             for (int i = 0; i < 2; i++)
             {
-                game.CreateRandomCard().TrySetParent(Entity);
+                game.CreateRandomCardForPrizePileOrShop().TrySetParent(Entity);
             }
 
             game.CreateRandomTreasureCard().TrySetParent(Entity);

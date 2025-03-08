@@ -212,6 +212,12 @@
         <None Update="StreamingAssets\Prefabs\Units\Standard\1\cultistGoblin.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="StreamingAssets\Prefabs\Units\Standard\1\goblin.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="StreamingAssets\Prefabs\Units\Standard\1\apprentice.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
 
     </ItemGroup>
 

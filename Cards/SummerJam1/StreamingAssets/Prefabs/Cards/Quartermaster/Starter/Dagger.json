@@ -35,6 +35,9 @@
     {
       "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
       "Amount": 5
+    },
+    {
+      "$type": "SummerJam1.ExcludeFromShopAndBoosters, SummerJam1"
     }
   ]
 }

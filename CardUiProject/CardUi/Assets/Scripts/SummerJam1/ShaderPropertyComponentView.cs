@@ -17,7 +17,6 @@ namespace SummerJam1
 
         private void OnEnable()
         {
-            Debug.Log($"Setting frozen on {materialRenderer.Material.GetInstanceID()}");
             materialRenderer.Material.SetFloat(GetShaderProperty(), 1.0f);
         }
 

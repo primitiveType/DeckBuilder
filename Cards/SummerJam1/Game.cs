@@ -224,9 +224,19 @@ namespace SummerJam1
             Battle = Context.CreateEntity<BattleContainer>(Entity).WithName("BattleContainer");
             Battle.StartBattle();
         }
-
-
-        public List<string> GetBattlePrefabs(int min, int max)
+        
+        public List<string> GetBattlePrefabs(string path)
+        {
+            if (path == null)
+            {
+                return GetBattlePrefabs();
+            }
+            var infoStr = File.ReadAllText(path);
+            var info = Serializer.Deserialize<BattleInfo>(infoStr);
+            return info.Prefabs;
+        }
+        
+        public List<string> GetBattlePrefabs()
         {
             string infoPath = GetRandomBattleInfo(Game.CurrentLevel, Entity.GetComponent<Random>());
             var infoStr = File.ReadAllText(Path.Combine(infoPath));
@@ -268,6 +278,19 @@ namespace SummerJam1
             //
             return Context.CreateEntity(null, prefab);
         }
+        
+        public IEntity CreateRandomCardForPrizePileOrShop()
+        {
+            string character = Player.Entity.GetComponent<ICharacterClass>().Name;
+            var cards = GetCardPrefabs((card)=>
+            {
+                var constraint = card.GetComponent<CharacterConstraint>();
+                return constraint != null && constraint.Character == character && !card.HasComponent<ExcludeFromShopAndBoosters>();
+            });
+            var card = cards.Random(Random);
+            var prefab = card.GetComponent<SourcePrefab>().Prefab;
+            return Context.CreateEntity(null, prefab);
+        }
 
         public IEntity CreateRandomTreasureCard()
         {
@@ -301,5 +324,9 @@ namespace SummerJam1
             Shop?.Entity.Destroy();
             Events.OnShopEnded(new ShopEndedEventArgs());
         }
+    }
+
+    public class ExcludeFromShopAndBoosters : SummerJam1Component
+    {
     }
 }

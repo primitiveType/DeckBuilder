@@ -41,6 +41,19 @@ namespace SummerJam1
 
        
     }
+    public class ChargeIntent : Intent
+    {
+     
+        protected override void OnTrigger()
+        {
+            if (!Enabled)
+            {
+                return;
+            }
+            //does nothing.
+        }
+        
+    }
 
     public class DamageIntent : Intent, IAmount
     {

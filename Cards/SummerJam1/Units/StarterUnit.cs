@@ -102,4 +102,37 @@ namespace SummerJam1.Units
             }
         }
     }
+    
+    public class OrderedIntentHandler : SummerJam1Component
+    {
+        private int Turn { get; set; }
+        protected override void Initialize()
+        {
+            base.Initialize();
+            CreateIntent();
+        }
+
+        [OnTurnBegan]
+        private void OnTurnBegan(object sender, TurnBeganEventArgs args)
+        {
+            CreateIntent();
+            Turn++;
+        }
+
+        private void CreateIntent()
+        {
+            //all previous intents should have removed themselves already.
+            //lets add new ones.
+            var intents = Entity.GetComponents<Intent>();
+            
+            var random = Game.Random;
+            int active = Turn % intents.Count;
+
+            for (int i = 0; i < intents.Count; i++)
+            {
+                intents[i].Enabled = i == active;
+            }
+        }
+    }
+
 }

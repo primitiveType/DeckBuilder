@@ -17,7 +17,7 @@ namespace SummerJam1
             Logging.Log("Setting up shop...");
             for (int i = 0; i < 3; i++)
             {
-                var card = Game.CreateRandomCard();
+                var card = Game.CreateRandomCardForPrizePileOrShop();
                 Logging.Log($"Created card: {card.GetName()}");
                 var success = card.TrySetParent(Entity);
                 Logging.Log($"Added Card ? {success}");

@@ -7,23 +7,30 @@
     },
     {
       "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
-      "Value": "Goblin Cultist"
+      "Value": "Goblin"
     },
     {
       "$type": "SummerJam1.VisualComponent, SummerJam1",
-      "AssetName": "fantasycharacters_windows/fantasycharacters/Tex_cultist_goblin"
+      "AssetName": "mobsavataricons_windows\\mobsavataricons\\goblin_04.png"
     },
     {
       "$type": "SummerJam1.Health, SummerJam1",
-      "Max": 8,
-      "Amount": 8
+      "Max": 10,
+      "Amount": 10
     },
     {
       "$type": "SummerJam1.Units.RandomIntentHandler, SummerJam1"
     },
     {
-      "$type": "SummerJam1.ShieldAllyIntent, SummerJam1",
-      "Amount": 4
+      "$type": "SummerJam1.DamageIntent, SummerJam1",
+      "Amount": 5,
+      "Attacks": 1
+    },
+    {
+      "$type": "SummerJam1.DamageIntent, SummerJam1",
+      "Amount": 2,
+      "Attacks": 2,
+      "Enabled": false
     }
   ]
 }

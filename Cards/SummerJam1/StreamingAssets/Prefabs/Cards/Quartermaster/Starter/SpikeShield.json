@@ -38,6 +38,9 @@
     {
       "$type": "SummerJam1.Statuses.GrantThornsToPlayer, SummerJam1",
       "Amount": 2
+    },
+    {
+      "$type": "SummerJam1.ExcludeFromShopAndBoosters, SummerJam1"
     }
   ]
 }

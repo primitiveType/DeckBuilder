@@ -24,7 +24,7 @@ public class DiscardChoiceHandler : PileView, IPileView
         return GameContext.Instance.Game.DiscardStagingPile.Entity;
     }
 
-    protected void Start()
+    protected override void Start()
     {
         base.Start();
         Disposables.Add(GameContext.Instance.Events.SubscribeToChooseCardsToDiscard(OnChooseCardsToDiscard));

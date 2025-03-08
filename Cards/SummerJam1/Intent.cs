@@ -3,7 +3,7 @@
 namespace SummerJam1
 {
     //intents need to be associated with an enemy to show the intent above that enemy.
-    public abstract class Intent : SummerJam1Component, IVisual
+    public abstract class Intent : SummerJam1Component
     {
 
         [OnAttackPhaseStarted]

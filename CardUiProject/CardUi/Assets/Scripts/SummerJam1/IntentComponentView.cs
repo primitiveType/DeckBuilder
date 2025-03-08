@@ -13,6 +13,7 @@ namespace SummerJam1
         [SerializeField] private Sprite SleepingImage;
 
         [SerializeField] private Sprite DamageIntentImage;
+        [SerializeField] private Sprite ShieldIntentImage;
         [SerializeField] private GameObject ShowIfSleeping;
 
 
@@ -29,6 +30,9 @@ namespace SummerJam1
             {
                 case DamageIntent _:
                     IntentImage.sprite = DamageIntentImage;
+                    break;
+                case ShieldAllyIntent _:
+                    IntentImage.sprite = ShieldIntentImage;
                     break;
                 default:
                     IntentImage.gameObject.SetActive(false);
