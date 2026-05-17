@@ -286,10 +286,10 @@ namespace SummerJam1Tests
         }
 
         [Test]
-        public void CreateHeadCheese()
+        public void CreateSnowSpirit()
         {
-            IEntity cheese = Context.CreateEntity(Context.Root, "Units/Standard/2/headCheese.json");
-            Assert.That(cheese.GetComponent<GainMultiAttackBelowThreshold>(), Is.Not.Null);
+            IEntity spirit = Context.CreateEntity(Context.Root, "Units/Standard/1/snowSpirit.json");
+            Assert.That(spirit.GetComponent<SummerJam1.Units.Effects.FreezeOnAttack>(), Is.Not.Null);
         }
 
 
@@ -334,14 +334,12 @@ namespace SummerJam1Tests
             string gameString = Serializer.Serialize(Context);
             Context gameCopy = Serializer.Deserialize<Context>(gameString);
 
-            Health healthCopy = gameCopy.Root.Children.First().GetComponent<Health>();
+            Health healthCopy = gameCopy.EntityDatabase[entity.Id].GetComponent<Health>();
 
             Assert.That(healthCopy, Is.Not.Null);
             Assert.That(healthCopy.Amount, Is.EqualTo(health.Amount));
 
-            RequestDamageMultipliersEventArgs
-                args2 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
-            Events.OnRequestDamageMultipliers(args2);
+            healthCopy.TryDealDamage(3, healthCopy.Entity);
 
 
             Assert.That(healthCopy, Is.Not.Null);
@@ -365,15 +363,11 @@ namespace SummerJam1Tests
             Assert.That(health.Amount, Is.EqualTo(10));
 
 
-            RequestDamageMultipliersEventArgs
-                args2 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
-            Events.OnRequestDamageMultipliers(args2);
+            health.TryDealDamage(30, entity); //stop hitting yourself!
             //damage should have been prevented.
             Assert.That(health.Amount, Is.EqualTo(10));
 
-            RequestDamageMultipliersEventArgs
-                args3 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
-            Events.OnRequestDamageMultipliers(args3);
+            health.TryDealDamage(30, entity); //stop hitting yourself!
             //damage should not have been prevented.
             Assert.That(health.Amount, Is.EqualTo(0));
         }

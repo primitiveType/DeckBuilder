@@ -96,10 +96,6 @@
             <Project>{f62e0cb7-3250-4f97-8e04-1ae3b623dcfe}</Project>
             <Name>CardsAndPiles</Name>
         </ProjectReference>
-        <ProjectReference Include="..\CardTestProject\CardTestProject.csproj">
-            <Project>{04dda7b9-36af-4b44-8209-4bd4d06db5e0}</Project>
-            <Name>CardTestProject</Name>
-        </ProjectReference>
         <ProjectReference Include="..\SummerJam1\SummerJam1.csproj">
             <Project>{afa57b8c-46cc-444b-87e6-ddb55ba1b03b}</Project>
             <Name>SummerJam1</Name>

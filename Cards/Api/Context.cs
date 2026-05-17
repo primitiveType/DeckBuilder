@@ -39,6 +39,11 @@ namespace Api
             ResourcesPath = resourcesPath;
         }
 
+        public void SetPrefabsDirectory(string contentRoot)
+        {
+            SetPrefabsDirectory(Path.Combine(contentRoot, "Prefabs"), Path.Combine(contentRoot, "Resources"));
+        }
+
         public TComponent CreateEntity<TComponent>(IEntity parent = null) where TComponent : Component, new()
         {
             TComponent component = null;
@@ -65,6 +70,7 @@ namespace Api
 
         public IEntity CreateEntity(IEntity parent, string prefabName, Action<IEntity> setup = null, bool shouldInitialize = true)
         {
+            prefabName = prefabName.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
             if (!prefabName.ToLower().EndsWith(".json"))
             {
                 prefabName += ".json";
@@ -109,8 +115,10 @@ namespace Api
         //-setup-
         private void InitializeRecursively(IEntity root)
         {
-            ((Entity)root).Initialize(this, NextId++);
-            EntityDatabase.Add(root.Id, root);
+            int id = root.Id >= 0 ? root.Id : NextId++;
+            ((Entity)root).Initialize(this, id);
+            NextId = Math.Max(NextId, root.Id + 1);
+            EntityDatabase[root.Id] = root;
 
             foreach (IEntity child in root.Children)
             {

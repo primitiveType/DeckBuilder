@@ -13,14 +13,14 @@ namespace SummerJam1
         {
             base.Initialize();
             Game = Context.Root.GetComponent<Game>();
-            PropertyChanged += OnEnabledChanged;
+            PropertyChanged += HandleEnabledPropertyChanged;
             if (Enabled)
             {
                 OnEnable();
             }
         }
 
-        private void OnEnabledChanged([CanBeNull] object sender, PropertyChangedEventArgs e)
+        private void HandleEnabledPropertyChanged([CanBeNull] object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(Enabled))
             {
