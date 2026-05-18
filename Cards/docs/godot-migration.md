@@ -104,6 +104,6 @@ The `-m:1` flag avoids an MSBuild project-reference target issue seen during the
 - Remove Unity-only view bridge concepts from any shared model code.
 - Replace T4 event generation with a source generator or explicit build tool.
 - Consider replacing static `Context.PrefabsPath` and `Context.ResourcesPath` with instance properties.
-- Decide whether the WinForms `PrefabEditor` remains a separate desktop tool or becomes a Godot editor tool.
+- Continue improving the Godot entity authoring scene for prefab creation and editing.
 - Remove stale projects and deleted Solitaire references from the active solution.
 - Add a CI/build script once the .NET SDK is available in the environment.

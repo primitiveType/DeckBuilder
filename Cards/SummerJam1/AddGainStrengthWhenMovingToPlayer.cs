@@ -14,7 +14,7 @@ namespace SummerJam1
 
         public bool DoEffect(IEntity target)
         {
-            GainStrengthWhenMoving component = Game.Player.Entity.AddComponent<GainStrengthWhenMoving>();
+            GainStrengthWhenMoving component = (target ?? Game.Player.Entity).AddComponent<GainStrengthWhenMoving>();
             component.Amount = Amount;
             component.AnyMovementCounts = true;
             component.ResetEachTurn = true;

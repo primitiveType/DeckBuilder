@@ -9,6 +9,8 @@ using CardTestProject;
 using NUnit.Framework;
 using SummerJam1;
 using SummerJam1.Cards;
+using SummerJam1.Cards.Effects;
+using SummerJam1.Characters;
 using SummerJam1.Statuses;
 using SummerJam1.Units;
 
@@ -65,6 +67,95 @@ namespace SummerJam1Tests
         public void StartBattle()
         {
             // Game.StartBattle(new DungeonPile());
+        }
+
+        [Test]
+        public void StartingPartyContributesOwnedCardsToPlayerDeck()
+        {
+            Assert.That(Game.Party, Is.Not.Null);
+            Assert.That(Game.Party.ActiveMembers, Has.Count.EqualTo(1));
+            Assert.That(Game.Deck.Entity.Children, Has.Count.GreaterThan(0));
+            Assert.That(Game.Deck.Entity.Children.All(card => card.GetComponent<CardOwner>()?.Owner == Game.Player.Entity), Is.True);
+        }
+
+        [Test]
+        public void PartyRespectsConfiguredMaxActiveMembers()
+        {
+            Game.Party.MaxPartySize = 1;
+
+            IEntity newMember = Context.CreateEntity();
+            newMember.AddComponent<PartyMember>();
+            newMember.AddComponent<EquipmentLoadout>();
+
+            Assert.That(Game.Party.TryAddMember(newMember), Is.False);
+            Assert.That(Game.Party.ActiveMembers, Has.Count.EqualTo(1));
+        }
+
+        [Test]
+        public void EquipmentAddsOwnedCardsToCharacterContribution()
+        {
+            IEntity item = Context.CreateEntity(Game.Player.Entity, entity =>
+            {
+                Equipment equipment = entity.AddComponent<Equipment>();
+                equipment.Slot = EquipmentSlot.Hands;
+                equipment.CardPrefabs.Add("Cards/Strike.json");
+            });
+
+            Assert.That(Game.Player.Entity.GetComponent<EquipmentLoadout>().Equip(item), Is.True);
+
+            Game.Party.RebuildDeck();
+
+            Assert.That(Game.Deck.Entity.Children.Any(card =>
+                card.GetComponent<SourcePrefab>()?.Prefab == "Cards/Strike.json" &&
+                card.GetComponent<CardOwner>()?.Owner == Game.Player.Entity), Is.True);
+        }
+
+        [Test]
+        public void SelfTargetingAffectsCardOwner()
+        {
+            IEntity owner = Context.CreateEntity(null, entity =>
+            {
+                entity.AddComponent<PartyMember>();
+                entity.AddComponent<EquipmentLoadout>();
+                entity.AddComponent<Strength>().Amount = 0;
+            });
+            Assert.That(Game.Party.TryAddMember(owner), Is.True);
+
+            IEntity card = Context.CreateEntity(Game.Deck.Entity, entity =>
+            {
+                entity.AddComponent<PlayerCard>();
+                entity.AddComponent<GivePlayerStrength>().Amount = 2;
+                entity.AddComponent<Targeting>().Type = TargetingType.Self;
+                entity.AddComponent<CardOwner>().OwnerId = owner.Id;
+            });
+
+            Assert.That(card.GetComponent<PlayerCard>().TryPlayCard(null), Is.True);
+            Assert.That(owner.GetComponent<Strength>().Amount, Is.EqualTo(2));
+            Assert.That(Game.Player.Entity.GetOrAddComponent<Strength>().Amount, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void AllAlliesTargetingAffectsEveryActivePartyMember()
+        {
+            IEntity ally = Context.CreateEntity();
+            ally.AddComponent<PartyMember>();
+            ally.AddComponent<EquipmentLoadout>();
+            ally.AddComponent<Strength>().Amount = 0;
+            Assert.That(Game.Party.TryAddMember(ally), Is.True);
+
+            Game.Player.Entity.GetOrAddComponent<Strength>().Amount = 0;
+
+            IEntity card = Context.CreateEntity(Game.Deck.Entity, entity =>
+            {
+                entity.AddComponent<PlayerCard>();
+                entity.AddComponent<GivePlayerStrength>().Amount = 1;
+                entity.AddComponent<Targeting>().Type = TargetingType.AllAllies;
+                entity.AddComponent<CardOwner>().OwnerId = Game.Player.Entity.Id;
+            });
+
+            Assert.That(card.GetComponent<PlayerCard>().TryPlayCard(null), Is.True);
+            Assert.That(Game.Player.Entity.GetComponent<Strength>().Amount, Is.EqualTo(1));
+            Assert.That(ally.GetComponent<Strength>().Amount, Is.EqualTo(1));
         }
 
         [Test]

@@ -12,7 +12,7 @@ namespace SummerJam1.Statuses
         public string Tooltip => Tooltips.THORNS_TOOLTIP;
         public bool DoEffect(IEntity target)
         {
-            Thorns armor = Game.Player.Entity.GetOrAddComponent<Thorns>();
+            Thorns armor = (target ?? Game.Player.Entity).GetOrAddComponent<Thorns>();
             armor.Amount += Amount;
             return true;
         }

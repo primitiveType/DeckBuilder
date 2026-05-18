@@ -1,4 +1,6 @@
-﻿using Api;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
@@ -18,17 +20,65 @@ namespace SummerJam1.Cards
         }
 
 
-     
-
         protected override bool PlayCard(IEntity target)
         {
             bool played = false;
             foreach (IEffect effect in Entity.GetComponents<IEffect>())
             {
-                played |= effect.DoEffect(target);
+                TargetingType targetingType = Entity.GetComponent<Targeting>()?.Type ?? effect.Targeting;
+                foreach (IEntity resolvedTarget in ResolveTargets(targetingType, target))
+                {
+                    played |= effect.DoEffect(resolvedTarget);
+                }
             }
 
             return played;
+        }
+
+        private IEnumerable<IEntity> ResolveTargets(TargetingType targetingType, IEntity requestedTarget)
+        {
+            switch (targetingType)
+            {
+                case TargetingType.None:
+                    return new[] { requestedTarget ?? Entity };
+                case TargetingType.Player:
+                    return new[] { Game.Player.Entity };
+                case TargetingType.Self:
+                    return new[] { Entity.GetComponent<CardOwner>()?.Owner ?? Game.Player.Entity };
+                case TargetingType.Ally:
+                    return ResolveSingleAlly(requestedTarget);
+                case TargetingType.AllAllies:
+                    return Game.Party?.ActiveMembers ?? Enumerable.Empty<IEntity>();
+                case TargetingType.AllEnemies:
+                    return Game.Battle?.MonsterSlots.Entity.Children ?? Enumerable.Empty<IEntity>();
+                case TargetingType.RandomEnemy:
+                    return ResolveRandomEnemy();
+                case TargetingType.Enemy:
+                case TargetingType.Unit:
+                default:
+                    return requestedTarget == null ? Enumerable.Empty<IEntity>() : new[] { requestedTarget };
+            }
+        }
+
+        private IEnumerable<IEntity> ResolveSingleAlly(IEntity requestedTarget)
+        {
+            if (requestedTarget == null || Game.Party == null)
+            {
+                return Enumerable.Empty<IEntity>();
+            }
+
+            return Game.Party.ActiveMembers.Contains(requestedTarget) ? new[] { requestedTarget } : Enumerable.Empty<IEntity>();
+        }
+
+        private IEnumerable<IEntity> ResolveRandomEnemy()
+        {
+            List<IEntity> enemies = Game.Battle?.MonsterSlots.Entity.Children.ToList() ?? new List<IEntity>();
+            if (!enemies.Any())
+            {
+                return Enumerable.Empty<IEntity>();
+            }
+
+            return new[] { enemies[Game.Random.SystemRandom.Next(enemies.Count)] };
         }
     }
 }

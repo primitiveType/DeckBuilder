@@ -15,7 +15,7 @@ namespace SummerJam1.Cards.Effects
 
         public bool DoEffect(IEntity target)
         {
-            Strength strength = Game.Player.Entity.GetOrAddComponent<Strength>();
+            Strength strength = (target ?? Game.Player.Entity).GetOrAddComponent<Strength>();
             strength.Amount += Amount;
             return true;
         }

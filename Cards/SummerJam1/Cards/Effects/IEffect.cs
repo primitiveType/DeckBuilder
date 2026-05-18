@@ -13,7 +13,11 @@ namespace SummerJam1.Cards.Effects
     {
         None,
         Player,
+        Self,
+        Ally,
+        AllAllies,
         Unit,
+        Enemy,
         AllEnemies,
         RandomEnemy
     }

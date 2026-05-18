@@ -102,7 +102,7 @@ The project includes several non-Unity support projects:
 
 - `SummerJam1Tests`: NUnit tests for prefab loading, card metadata, damage, serialization experiments, event detachment, re-entrancy, and battle setup assumptions.
 - `CardTestProject`: small fixtures and tests around card events and event-attribute wiring.
-- `PrefabEditor`: a WinForms prefab editor that loads component types by reflection, opens JSON prefabs, edits selected entities, and saves ID-free prefab JSON.
+- `Godot/deckbuilder/scenes/entity_authoring_scene.tscn`: portable prefab authoring UI for creating, loading, editing, and saving entity JSON.
 - `CleanupJson`: a console utility that loads every prefab, removes `UnknownComponent`, and serializes the cleaned entity back to disk.
 
 These projects reinforce the main architectural goal: gameplay content and rules should be loadable, testable, and editable without requiring Unity.
@@ -115,7 +115,6 @@ These projects reinforce the main architectural goal: gameplay content and rules
 - `SummerJam1/StreamingAssets/Prefabs/`: serialized entity prefabs for cards, units, relics, objectives, player setup, and battles.
 - `SummerJam1Tests/`: NUnit coverage for the concrete game.
 - `CardTestProject/`: focused card/event fixtures.
-- `PrefabEditor/`: Windows Forms prefab inspection/editing tool.
 - `CleanupJson/`: prefab maintenance utility.
 
 ## Mental Model For Adding Features

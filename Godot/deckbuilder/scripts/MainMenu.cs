@@ -37,5 +37,13 @@ public partial class MainMenu : Control
         };
         newGameButton.Pressed += () => GetTree().ChangeSceneToFile("res://scenes/map_scene.tscn");
         root.AddChild(newGameButton);
+
+        var authoringButton = new Button
+        {
+            Text = "Entity Authoring",
+            CustomMinimumSize = new Vector2(240, 48)
+        };
+        authoringButton.Pressed += () => GetTree().ChangeSceneToFile("res://scenes/entity_authoring_scene.tscn");
+        root.AddChild(authoringButton);
     }
 }

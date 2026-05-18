@@ -24,7 +24,7 @@ namespace SummerJam1
         public BattleContainer Battle { get; private set; }
         public ShopContainer Shop { get; private set; }
         public Player Player { get; private set; }
-        // public Pile PlayerUnits { get; private set; }
+        public Party Party { get; private set; }
 
         public Random Random { get; private set; }
 
@@ -53,7 +53,6 @@ namespace SummerJam1
                 Deck = entity.AddComponent<DeckPile>();
                 entity.AddComponent<NameComponent>().Value = "Deck";
             });
-            // Context.CreateEntity(Entity, entity => PlayerUnits = entity.AddComponent<EncounterSlotPile>());
             Player = Context.CreateEntity(Entity, "player").GetComponent<Player>().WithName("Player");
           
             
@@ -66,8 +65,11 @@ namespace SummerJam1
             // Logging.Log($"Unit created : {unit}");
             CreatePrefabPile();
             
-            //choose player class...
+            Party = Player.Entity.AddComponent<Party>();
+            Player.Entity.GetOrAddComponent<PartyMember>().DisplayName = "Quartermaster";
+            Player.Entity.GetOrAddComponent<EquipmentLoadout>();
             Player.Entity.AddComponent<Quartermaster>();
+            Party.RebuildDeck();
             Events.OnGameStarted(new GameStartedEventArgs());
         }
 
@@ -263,7 +265,7 @@ namespace SummerJam1
 
         public IEntity CreateRandomCard()
         {
-            string character = Player.Entity.GetComponent<ICharacterClass>().Name;
+            string character = GetRandomActiveCharacterName();
             var cards = GetCardPrefabs((card)=>
             {
                 var constraint = card.GetComponent<CharacterConstraint>();
@@ -281,7 +283,7 @@ namespace SummerJam1
         
         public IEntity CreateRandomCardForPrizePileOrShop()
         {
-            string character = Player.Entity.GetComponent<ICharacterClass>().Name;
+            string character = GetRandomActiveCharacterName();
             var cards = GetCardPrefabs((card)=>
             {
                 var constraint = card.GetComponent<CharacterConstraint>();
@@ -290,6 +292,16 @@ namespace SummerJam1
             var card = cards.Random(Random);
             var prefab = card.GetComponent<SourcePrefab>().Prefab;
             return Context.CreateEntity(null, prefab);
+        }
+
+        private string GetRandomActiveCharacterName()
+        {
+            List<string> characterNames = Party.ActiveMembers
+                .Select(member => member.GetComponent<ICharacterClass>()?.Name)
+                .Where(name => !string.IsNullOrWhiteSpace(name))
+                .ToList();
+
+            return characterNames.Any() ? characterNames.Random(Random) : "Any";
         }
 
         public IEntity CreateRandomTreasureCard()

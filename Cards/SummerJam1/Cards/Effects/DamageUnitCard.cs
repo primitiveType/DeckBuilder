@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Api;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
 using PropertyChanged;
+using SummerJam1.Cards;
 
 namespace SummerJam1.Cards.Effects
 {
@@ -16,7 +16,9 @@ namespace SummerJam1.Cards.Effects
         [JsonProperty] public int Attacks { get; set; } = 1;
         [JsonProperty] public bool Pierce { get; set; }
 
-        protected int Strength { get; set; }
+        protected int Strength => (Entity.GetComponent<CardOwner>()?.Owner ?? Game.Player.Entity)
+            .GetOrAddComponent<Strength>()
+            .Amount;
 
         protected Targeting Targeting => Entity?.GetComponent<Targeting>();
 
@@ -69,30 +71,11 @@ namespace SummerJam1.Cards.Effects
             {
                 foreach (var unit in units)
                 {
-                    unit.TryDealDamage(DamageAmount, Entity);
+                    unit.TryDealDamage(FinalDamage, Entity);
                 }
             }
 
             return true;
-        }
-
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Game.Player.Entity.GetOrAddComponent<Strength>().PropertyChanged += StrengthChanged;
-            Strength = Game.Player.Entity.GetComponent<Strength>().Amount;
-        }
-
-        private void StrengthChanged(object sender, PropertyChangedEventArgs e)
-        {
-            Strength = Game.Player.Entity.GetComponent<Strength>().Amount;
-        }
-
-        public override void Terminate()
-        {
-            base.Terminate();
-            Game.Player.Entity.GetComponent<Strength>().PropertyChanged -= StrengthChanged;
         }
 
         public string Tooltip => Pierce ? PierceTooltip.PIERCE_TOOLTIP : null;

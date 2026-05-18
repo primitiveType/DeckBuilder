@@ -12,7 +12,7 @@ namespace SummerJam1.Cards.Effects
 
         public bool DoEffect(IEntity target)
         {
-            Game.Player.Entity.GetComponent<Health>().TryHeal(HealAmount, Entity);
+            (target ?? Game.Player.Entity).GetComponent<Health>().TryHeal(HealAmount, Entity);
             return true;
         }
 

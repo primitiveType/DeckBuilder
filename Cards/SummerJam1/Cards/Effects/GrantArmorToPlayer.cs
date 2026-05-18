@@ -13,9 +13,9 @@ namespace SummerJam1.Cards.Effects
         [JsonIgnore] public string Description => $"Gain {BlockAmount} block.";
 
 
-        public bool DoEffect(IEntity _)
+        public bool DoEffect(IEntity target)
         {
-            Armor armor = Game.Player.Entity.GetOrAddComponent<Armor>();
+            Armor armor = (target ?? Game.Player.Entity).GetOrAddComponent<Armor>();
             armor.Amount += BlockAmount;
             return true;
         }
