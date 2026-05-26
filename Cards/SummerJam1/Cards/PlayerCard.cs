@@ -41,8 +41,6 @@ namespace SummerJam1.Cards
             {
                 case TargetingType.None:
                     return new[] { requestedTarget ?? Entity };
-                case TargetingType.Player:
-                    return new[] { Game.Player.Entity };
                 case TargetingType.Self:
                     return new[] { Entity.GetComponent<CardOwner>()?.Owner ?? Game.Player.Entity };
                 case TargetingType.Ally:

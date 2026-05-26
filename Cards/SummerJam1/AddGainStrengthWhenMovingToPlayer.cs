@@ -7,7 +7,7 @@ namespace SummerJam1
 {
     public class AddGainStrengthWhenMovingToPlayer : SummerJam1Component, IEffect, IAmount, IDescription
     {
-        public TargetingType Targeting{ get; } = TargetingType.Player;
+        public TargetingType Targeting{ get; } = TargetingType.Self;
 
         public int Amount { get; set; }
         public string Description => $"Until end of battle, whenever an enemy is moved, gain {Amount} temporary strength.";

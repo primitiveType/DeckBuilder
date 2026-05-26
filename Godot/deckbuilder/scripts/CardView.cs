@@ -10,12 +10,18 @@ namespace Deckbuilder;
 
 public partial class CardView : PanelContainer
 {
+    public const float BaseWidth = 190.0f;
+    public const float BaseHeight = 250.0f;
+
     private IEntity? _card;
     private Label _costLabel = null!;
     private Label _descriptionLabel = null!;
     private Label _detailsLabel = null!;
     private Label _nameLabel = null!;
     private Label _typeLabel = null!;
+    private VBoxContainer _rootLayout = null!;
+    private HBoxContainer _headerLayout = null!;
+    private float _presentationScale = 1.0f;
 
     public IEntity? BoundCard => _card;
 
@@ -34,88 +40,132 @@ public partial class CardView : PanelContainer
         }
     }
 
+    public void ApplyPresentationScale(float scale)
+    {
+        _presentationScale = Mathf.Clamp(scale, 0.55f, 1.8f);
+        if (_costLabel == null)
+        {
+            return;
+        }
+
+        Vector2 cardSize = new(BaseWidth * _presentationScale, BaseHeight * _presentationScale);
+        CustomMinimumSize = cardSize;
+        Size = cardSize;
+        Scale = Vector2.One;
+        PivotOffset = cardSize / 2.0f;
+
+        AddThemeStyleboxOverride("panel", CreatePanelStyle(_presentationScale));
+        _rootLayout.AddThemeConstantOverride("separation", ScaledInt(8));
+        _headerLayout.AddThemeConstantOverride("separation", ScaledInt(8));
+
+        float costSize = 34.0f * _presentationScale;
+        _costLabel.CustomMinimumSize = new Vector2(costSize, costSize);
+        _costLabel.AddThemeFontSizeOverride("font_size", ScaledInt(18));
+        _costLabel.AddThemeStyleboxOverride("normal", CreateCostStyle(_presentationScale));
+
+        _nameLabel.AddThemeFontSizeOverride("font_size", ScaledInt(18));
+        _typeLabel.AddThemeFontSizeOverride("font_size", ScaledInt(12));
+        _descriptionLabel.AddThemeFontSizeOverride("font_size", ScaledInt(13));
+        _detailsLabel.AddThemeFontSizeOverride("font_size", ScaledInt(11));
+    }
+
     private void BuildLayout()
     {
-        CustomMinimumSize = new Vector2(190, 250);
         SizeFlagsHorizontal = SizeFlags.ShrinkBegin;
         SizeFlagsVertical = SizeFlags.ShrinkBegin;
         MouseFilter = MouseFilterEnum.Ignore;
-        PivotOffset = CustomMinimumSize / 2.0f;
+        ClipContents = true;
 
-        AddThemeStyleboxOverride("panel", new StyleBoxFlat
-        {
-            BgColor = new Color(0.13f, 0.12f, 0.10f),
-            BorderColor = new Color(0.72f, 0.62f, 0.42f),
-            BorderWidthBottom = 2,
-            BorderWidthLeft = 2,
-            BorderWidthRight = 2,
-            BorderWidthTop = 2,
-            CornerRadiusBottomLeft = 8,
-            CornerRadiusBottomRight = 8,
-            CornerRadiusTopLeft = 8,
-            CornerRadiusTopRight = 8,
-            ContentMarginBottom = 10,
-            ContentMarginLeft = 10,
-            ContentMarginRight = 10,
-            ContentMarginTop = 10
-        });
+        _rootLayout = new VBoxContainer();
+        AddChild(_rootLayout);
 
-        var root = new VBoxContainer();
-        root.AddThemeConstantOverride("separation", 8);
-        AddChild(root);
-
-        var header = new HBoxContainer();
-        header.AddThemeConstantOverride("separation", 8);
-        root.AddChild(header);
+        _headerLayout = new HBoxContainer();
+        _rootLayout.AddChild(_headerLayout);
 
         _costLabel = new Label
         {
-            CustomMinimumSize = new Vector2(34, 34),
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center
         };
         _costLabel.AddThemeColorOverride("font_color", new Color(0.14f, 0.12f, 0.10f));
-        _costLabel.AddThemeFontSizeOverride("font_size", 18);
-        _costLabel.AddThemeStyleboxOverride("normal", new StyleBoxFlat
-        {
-            BgColor = new Color(0.88f, 0.72f, 0.30f),
-            CornerRadiusBottomLeft = 17,
-            CornerRadiusBottomRight = 17,
-            CornerRadiusTopLeft = 17,
-            CornerRadiusTopRight = 17
-        });
-        header.AddChild(_costLabel);
+        _headerLayout.AddChild(_costLabel);
 
         _nameLabel = new Label
         {
             AutowrapMode = TextServer.AutowrapMode.WordSmart,
+            ClipText = true,
+            MaxLinesVisible = 2,
             SizeFlagsHorizontal = SizeFlags.ExpandFill
         };
-        _nameLabel.AddThemeFontSizeOverride("font_size", 18);
-        header.AddChild(_nameLabel);
+        _headerLayout.AddChild(_nameLabel);
 
         _typeLabel = new Label();
         _typeLabel.AddThemeColorOverride("font_color", new Color(0.72f, 0.68f, 0.58f));
-        _typeLabel.AddThemeFontSizeOverride("font_size", 12);
-        root.AddChild(_typeLabel);
+        _rootLayout.AddChild(_typeLabel);
 
         _descriptionLabel = new Label
         {
             AutowrapMode = TextServer.AutowrapMode.WordSmart,
+            ClipText = true,
+            MaxLinesVisible = 5,
             SizeFlagsVertical = SizeFlags.ExpandFill,
             VerticalAlignment = VerticalAlignment.Top
         };
-        _descriptionLabel.AddThemeFontSizeOverride("font_size", 13);
-        root.AddChild(_descriptionLabel);
+        _rootLayout.AddChild(_descriptionLabel);
 
         _detailsLabel = new Label
         {
             AutowrapMode = TextServer.AutowrapMode.WordSmart,
+            ClipText = true,
+            MaxLinesVisible = 3,
             VerticalAlignment = VerticalAlignment.Bottom
         };
         _detailsLabel.AddThemeColorOverride("font_color", new Color(0.70f, 0.76f, 0.78f));
-        _detailsLabel.AddThemeFontSizeOverride("font_size", 11);
-        root.AddChild(_detailsLabel);
+        _rootLayout.AddChild(_detailsLabel);
+
+        ApplyPresentationScale(_presentationScale);
+    }
+
+    private int ScaledInt(float value)
+    {
+        return Mathf.Max(1, Mathf.RoundToInt(value * _presentationScale));
+    }
+
+    private static StyleBoxFlat CreatePanelStyle(float scale)
+    {
+        int border = Mathf.Max(1, Mathf.RoundToInt(2.0f * scale));
+        int radius = Mathf.Max(1, Mathf.RoundToInt(8.0f * scale));
+        int margin = Mathf.Max(1, Mathf.RoundToInt(10.0f * scale));
+        return new StyleBoxFlat
+        {
+            BgColor = new Color(0.13f, 0.12f, 0.10f),
+            BorderColor = new Color(0.72f, 0.62f, 0.42f),
+            BorderWidthBottom = border,
+            BorderWidthLeft = border,
+            BorderWidthRight = border,
+            BorderWidthTop = border,
+            CornerRadiusBottomLeft = radius,
+            CornerRadiusBottomRight = radius,
+            CornerRadiusTopLeft = radius,
+            CornerRadiusTopRight = radius,
+            ContentMarginBottom = margin,
+            ContentMarginLeft = margin,
+            ContentMarginRight = margin,
+            ContentMarginTop = margin
+        };
+    }
+
+    private static StyleBoxFlat CreateCostStyle(float scale)
+    {
+        int radius = Mathf.Max(1, Mathf.RoundToInt(17.0f * scale));
+        return new StyleBoxFlat
+        {
+            BgColor = new Color(0.88f, 0.72f, 0.30f),
+            CornerRadiusBottomLeft = radius,
+            CornerRadiusBottomRight = radius,
+            CornerRadiusTopLeft = radius,
+            CornerRadiusTopRight = radius
+        };
     }
 
     private void Refresh()

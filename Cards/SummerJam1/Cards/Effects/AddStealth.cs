@@ -5,7 +5,7 @@ namespace SummerJam1.Cards.Effects
 {
     public class AddStealth : SummerJam1Component, IEffect, IAmount, IDescription
     {
-        public TargetingType Targeting { get; } = TargetingType.Player;
+        public TargetingType Targeting { get; } = TargetingType.Self;
         public int Amount { get; set; }
 
         public string Description => $"Gain {Amount} Stealth.";

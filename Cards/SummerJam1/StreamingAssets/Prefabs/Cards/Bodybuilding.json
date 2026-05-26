@@ -23,6 +23,22 @@
     {
       "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
       "Amount": 1
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.AddRegenToUnit, SummerJam1",
+      "Amount": 2
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "_description": "Add 0 regen to a unit."
+    },
+    {
+      "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
+      "Amount": 3
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.Targeting, SummerJam1",
+      "Type": 3
     }
   ]
 }

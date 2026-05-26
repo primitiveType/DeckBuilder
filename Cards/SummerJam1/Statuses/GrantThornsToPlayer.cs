@@ -7,7 +7,7 @@ namespace SummerJam1.Statuses
 {
     public class GrantThornsToPlayer: SummerJam1Component, IEffect, IDescription, ITooltip, IAmount
     {
-        public TargetingType Targeting{ get; } = TargetingType.Player;
+        public TargetingType Targeting{ get; } = TargetingType.Self;
 
         public string Tooltip => Tooltips.THORNS_TOOLTIP;
         public bool DoEffect(IEntity target)

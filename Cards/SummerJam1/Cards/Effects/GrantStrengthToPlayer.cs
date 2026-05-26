@@ -6,7 +6,7 @@ namespace SummerJam1.Cards.Effects
 {
     public class GrantStrengthToPlayer : SummerJam1Component, IEffect, IDescription, ITooltip, IAmount
     {
-        public TargetingType Targeting{ get; } = TargetingType.Player;
+        public TargetingType Targeting{ get; } = TargetingType.Self;
 
         [JsonProperty] public int Amount { get; set; }
 

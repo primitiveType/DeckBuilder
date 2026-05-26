@@ -8,6 +8,7 @@ using CardsAndPiles.Components;
 using Godot;
 using SummerJam1;
 using SummerJam1.Cards.Effects;
+using SummerJam1.Characters;
 using Card = CardsAndPiles.Components.Card;
 
 namespace Deckbuilder;
@@ -105,6 +106,11 @@ public partial class GameRuntime : Node
     public IReadOnlyList<IEntity> GetEnemyUnits()
     {
         return Game?.Battle?.MonsterSlots?.Entity.Children.ToList() ?? new List<IEntity>();
+    }
+
+    public IReadOnlyList<IEntity> GetPartyMembers()
+    {
+        return Game?.Party?.ActiveMembers ?? new List<IEntity>();
     }
 
     public CardTargetMode GetCardTargetMode(IEntity card)

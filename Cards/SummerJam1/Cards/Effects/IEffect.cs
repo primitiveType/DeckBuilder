@@ -12,7 +12,6 @@ namespace SummerJam1.Cards.Effects
     public enum TargetingType
     {
         None,
-        Player,
         Self,
         Ally,
         AllAllies,
