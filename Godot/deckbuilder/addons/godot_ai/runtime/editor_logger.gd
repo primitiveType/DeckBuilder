@@ -3,16 +3,12 @@ extends Logger
 
 ## Editor-process Logger subclass.
 ##
-## NOTE: deliberately no `class_name` — `extends Logger` requires the Logger
-## class which Godot only exposes from 4.5+. plugin.gd loads this script
-## dynamically via load() after gating on
-## ClassDB.class_exists("Logger"), so the script never gets parsed on
-## older engines. Registered via OS.add_logger() from plugin.gd::_enter_tree
+## NOTE: deliberately no `class_name`. Registered from plugin.gd::_enter_tree
 ## so we can intercept editor-process script errors — parse errors, @tool
-## runtime errors, EditorPlugin errors, push_error/push_warning — and
-## surface them via `logs_read(source="editor")`. Without this, the LLM
-## sees nothing in `logs_read` while the same errors show in red lines in
-## Godot's Output panel.
+## runtime errors, EditorPlugin errors, push_error/push_warning — and surface
+## them via `logs_read(source="editor")`. Without this, the LLM sees nothing
+## in `logs_read` while the same errors show in red lines in Godot's Output
+## panel.
 ##
 ## Why only `_log_error` and not `_log_message`:
 ## `_log_message(msg, error)` covers print() and printerr(), which is the
@@ -29,10 +25,14 @@ extends Logger
 
 const ADDON_PATH_MARKER := "/addons/godot_ai/"
 
-## McpEditorLogBuffer — untyped because this script is loaded dynamically and
-## McpEditorLogBuffer's class_name isn't yet registered on the parser at the
-## time `extends Logger` resolves. Constructor-injected so the hot path
-## doesn't need a per-call null check.
+## Resolve McpLogBacktrace by path, not by the `McpLogBacktrace` class_name.
+## A bare class_name reference depends on the global class-name table being populated
+## at compile time, which isn't guaranteed on a cold editor enable mid-scan.
+## `const preload` resolves at compile time independent of the registry —
+## matches game_logger.gd's deliberate choice for the same reason.
+const _LogBacktrace := preload("res://addons/godot_ai/utils/log_backtrace.gd")
+
+## Constructor-injected so the hot path doesn't need a per-call null check.
 var _buffer
 
 
@@ -61,7 +61,7 @@ func _log_error(
 	var message_res_path := _extract_user_res_path(message)
 	if not _is_user_script(file) and script_backtraces.is_empty() and message_res_path.is_empty():
 		return
-	var resolved := McpLogBacktrace.resolve_error(
+	var resolved := _LogBacktrace.resolve_error(
 		function, file, line, code, rationale, error_type, script_backtraces,
 	)
 	if not _is_user_script(resolved.path):
@@ -70,11 +70,25 @@ func _log_error(
 		resolved.path = message_res_path
 		resolved.line = 0
 		resolved.function = function
+		_update_resolved_details(resolved)
 	if _is_in_godot_ai_addon(resolved.path):
 		return
 	if not message_res_path.is_empty() and _is_in_godot_ai_addon(message_res_path):
 		return
-	_buffer.append(resolved.level, resolved.message, resolved.path, resolved.line, resolved.function)
+	var details: Dictionary = resolved.get("details", {})
+	_buffer.append(resolved.level, resolved.message, resolved.path, resolved.line, resolved.function, details)
+
+
+static func _update_resolved_details(resolved: Dictionary) -> void:
+	var details: Dictionary = resolved.get("details", {})
+	if details.is_empty():
+		return
+	details["resolved"] = {
+		"path": resolved.get("path", ""),
+		"line": resolved.get("line", 0),
+		"function": resolved.get("function", ""),
+	}
+	resolved["details"] = details
 
 
 ## Predicate broken out so tests can drive the path-filter logic without

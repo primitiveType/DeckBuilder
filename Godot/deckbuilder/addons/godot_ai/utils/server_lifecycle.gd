@@ -46,7 +46,11 @@ var _server_actual_name: String = ""
 
 ## Diagnostic + recovery flags surfaced to the dock via `get_status()`.
 var _server_status_message: String = ""
-var _server_dev_version_mismatch_allowed: bool = false
+## #647: when a post-crash probe pins the failure on a specific port held
+## by a foreign process, this names that port (HTTP or WS) so the dock's
+## status line and port-picker gating don't blame the wrong one. Zero when
+## no conflict was diagnosed.
+var _conflict_port: int = 0
 var _can_recover_incompatible: bool = false
 var _connection_blocked: bool = false
 
@@ -87,9 +91,9 @@ func get_status_dict() -> Dictionary:
 		"actual_version": _server_actual_version,
 		"expected_version": _server_expected_version,
 		"message": _server_status_message,
-		"dev_version_mismatch_allowed": _server_dev_version_mismatch_allowed,
 		"can_recover_incompatible": _can_recover_incompatible,
 		"connection_blocked": _connection_blocked,
+		"conflict_port": _conflict_port,
 	}
 
 
@@ -215,21 +219,9 @@ func handle_server_version_verified(expected_version: String, version: String) -
 	_server_actual_version = version
 	var expected := _resolve_expected_version(expected_version)
 	_server_expected_version = expected
-	var compatibility := _server_version_compatibility(
-		version,
-		expected,
-		ClientConfigurator.is_dev_checkout()
-	)
+	var compatibility := _server_version_compatibility(version, expected)
 	if compatibility.get("compatible", false):
 		_can_recover_incompatible = false
-		_server_dev_version_mismatch_allowed = bool(
-			compatibility.get("dev_mismatch_allowed", false)
-		)
-		if _server_dev_version_mismatch_allowed:
-			_server_status_message = (
-				"Using dev server v%s with plugin v%s "
-				+ "(dev checkout version mismatch allowed)."
-			) % [version, expected]
 		## Foreign-port and post-spawn handshakes both clear to READY
 		## on a successful handshake. Late re-arms from READY also land
 		## here and self-confirm.
@@ -259,18 +251,22 @@ func handle_server_version_unverified(expected_version: String) -> void:
 
 # ---- Compatibility / version helpers (pure) ---------------------------
 
+## Plugin and server speak a single, version-coupled protocol — new commands
+## and response fields are added together. Treating dev-mode mismatches as
+## "compatible" silently adopts a stale server whose code may differ from the
+## live source tree (e.g. another worktree on a different branch holding
+## port 8000). Strict match in all modes routes mismatches through
+## `recover_strong_port_occupant`, which kills the branded port-holder and
+## lets `start_server` spawn fresh against the current source.
 static func _server_version_compatibility(
 	actual_version: String,
-	expected_version: String,
-	is_dev_checkout: bool
+	expected_version: String
 ) -> Dictionary:
 	if actual_version.is_empty():
-		return {"compatible": false, "reason": "unknown", "dev_mismatch_allowed": false}
+		return {"compatible": false, "reason": "unknown"}
 	if actual_version == expected_version:
-		return {"compatible": true, "reason": "exact", "dev_mismatch_allowed": false}
-	if is_dev_checkout:
-		return {"compatible": true, "reason": "dev_mismatch", "dev_mismatch_allowed": true}
-	return {"compatible": false, "reason": "version_mismatch", "dev_mismatch_allowed": false}
+		return {"compatible": true, "reason": "exact"}
+	return {"compatible": false, "reason": "version_mismatch"}
 
 
 static func _server_status_compatibility(
@@ -278,17 +274,12 @@ static func _server_status_compatibility(
 	expected_version: String,
 	actual_ws_port: int,
 	expected_ws_port: int,
-	is_dev_checkout: bool,
 ) -> Dictionary:
-	var version_result := _server_version_compatibility(
-		actual_version,
-		expected_version,
-		is_dev_checkout
-	)
+	var version_result := _server_version_compatibility(actual_version, expected_version)
 	if not bool(version_result.get("compatible", false)):
 		return version_result
 	if actual_ws_port != expected_ws_port:
-		return {"compatible": false, "reason": "ws_port_mismatch", "dev_mismatch_allowed": false}
+		return {"compatible": false, "reason": "ws_port_mismatch"}
 	return version_result
 
 
@@ -308,7 +299,6 @@ func _set_incompatible_server(live: Dictionary, expected_version: String, port: 
 	_server_expected_version = expected_version
 	_server_actual_name = str(live.get("name", ""))
 	_server_actual_version = _live_version_for_message(live)
-	_server_dev_version_mismatch_allowed = false
 	_server_status_message = _incompatible_server_message(
 		live, expected_version, port, int(_host._resolved_ws_port)
 	)
@@ -316,6 +306,15 @@ func _set_incompatible_server(live: Dictionary, expected_version: String, port: 
 	var proof_name := str(proof.get("proof", ""))
 	_can_recover_incompatible = not proof_name.is_empty()
 	print("MCP | proof: %s" % (proof_name if _can_recover_incompatible else "(none)"))
+	if not _can_recover_incompatible:
+		## Non-recoverable: a foreign / unprovable occupant holds the port and
+		## we have no ownership proof, so we must NOT kill it — surface a
+		## concrete free port the user can switch to instead (the same hint
+		## the dock crash body renders). Logging it to the editor output also
+		## lets `ci-stale-server-smoke --mode foreign` assert this upstream
+		## classification from CI. Reservation-aware on Windows.
+		var suggested := ClientConfigurator.suggest_free_port(port + 1)
+		print("MCP | port %d occupant not recoverable (no ownership proof); suggested free port %d (set godot_ai/http_port)" % [port, suggested])
 	_host._refresh_dock_client_statuses()
 
 
@@ -387,22 +386,47 @@ static func _live_package_path_for_message(live: Dictionary) -> String:
 
 ## Sets GODOT_AI_DISABLE_TELEMETRY in the process environment for the
 ## upcoming OS.create_process call if: (a) neither GODOT_AI_DISABLE_TELEMETRY
-## nor DISABLE_TELEMETRY is already set, and (b) the EditorSettings key
-## "godot_ai/telemetry_enabled" is set to false. Returns true if the var was
+## nor DISABLE_TELEMETRY is already set to a *truthy* value (a falsey "0" does
+## NOT count — it must not suppress a dock UI opt-out), and (b) the effective
+## McpSettings.telemetry_enabled() is false. Returns true if the var was
 ## injected so the caller can unset it after spawning.
 func _inject_telemetry_env() -> bool:
-	if OS.has_environment("GODOT_AI_DISABLE_TELEMETRY") or OS.has_environment("DISABLE_TELEMETRY"):
+	## If telemetry is already disabled by a *truthy* env var, leave the env as
+	## the user/CI set it — the post-spawn cleanup unsets what we inject, so
+	## injecting here would strip their own var from the editor process. A
+	## *falsey* value (e.g. DISABLE_TELEMETRY=0) must NOT count as "handled":
+	## fall through so a dock UI opt-out still reaches the spawned server. The
+	## truthy test mirrors McpSettings.telemetry_enabled() and the Python server.
+	if McpSettings.env_truthy("GODOT_AI_DISABLE_TELEMETRY") or McpSettings.env_truthy("DISABLE_TELEMETRY"):
 		return false
-	var es := EditorInterface.get_editor_settings()
-	var telemetry_enabled: bool = (
-		bool(es.get_setting("godot_ai/telemetry_enabled"))
-		if es != null and es.has_setting("godot_ai/telemetry_enabled")
-		else true
-	)
-	if not telemetry_enabled:
+	if not McpSettings.telemetry_enabled():
 		OS.set_environment("GODOT_AI_DISABLE_TELEMETRY", "true")
 		return true
 	return false
+
+
+## Set GODOT_AI_OWNER_PID to this editor's PID for the next OS.create_process,
+## so the spawned server can self-reap if this editor crashes. Returns true if
+## set (caller must unset right after spawning — keep it out of the persistent
+## editor env). No-op on Windows, where the server's reaper is disabled.
+func _set_owner_pid_env() -> bool:
+	if OS.get_name() == "Windows":
+		return false
+	OS.set_environment("GODOT_AI_OWNER_PID", str(OS.get_process_id()))
+	return true
+
+
+## Mark the next OS.create_process as plugin-spawned so the server arms its
+## session-idle self-terminate backstop (#498): with zero editor sessions for
+## a grace window, it exits on its own. Unlike the owner-PID reaper this is
+## pure session-count on the server side, so it is set on EVERY platform —
+## including Windows, where owner-PID is skipped; this marker is what finally
+## gives Windows orphan coverage (#497). Same env-channel rationale and same
+## tight scoping as _set_owner_pid_env: callers unset it right after spawning
+## so a later manually-started dev server can never inherit it and idle-kill
+## itself.
+func _set_plugin_spawned_env() -> void:
+	OS.set_environment("GODOT_AI_PLUGIN_SPAWNED", "1")
 
 
 ## Branch table (recorded version is the "is this ours?" signal — uvx
@@ -420,6 +444,7 @@ func start_server() -> void:
 		return
 
 	_refresh_retried = false
+	_conflict_port = 0
 
 	var port := ClientConfigurator.http_port()
 	var ws_port := ClientConfigurator.ws_port()
@@ -445,18 +470,11 @@ func start_server() -> void:
 			current_version,
 			live_ws_port,
 			ws_port,
-			ClientConfigurator.is_dev_checkout()
 		)
 		if compatibility.get("compatible", false):
 			_server_actual_name = "godot-ai"
 			_server_actual_version = live_version
 			_can_recover_incompatible = false
-			_server_dev_version_mismatch_allowed = bool(compatibility.get("dev_mismatch_allowed", false))
-			if bool(_server_dev_version_mismatch_allowed):
-				_server_status_message = (
-					"Using dev server v%s on WS port %d with plugin v%s "
-					+ "(dev checkout version mismatch allowed)."
-				) % [str(_server_actual_version), live_ws_port, current_version]
 			var owner := int(_host._find_managed_pid(port))
 			var owner_label := adopt_compatible_server(record_version, current_version, owner)
 			_host._server_started_this_session = true
@@ -547,8 +565,26 @@ func start_server() -> void:
 			OS.set_environment("PYTHONPATH", new_pp)
 			pythonpath_set = true
 
+	## Tell the spawned server which editor owns it so it can self-reap if we
+	## die without a clean stop_server (crash / hard-kill). Passed via env, not
+	## a CLI flag, so an older server (staggered user-mode upgrade) silently
+	## ignores an unknown var instead of failing argparse. Scoped tightly around
+	## create_process and unset right after (like PYTHONPATH below): the child
+	## inherits it, but it must NOT linger in the editor env, or a later
+	## non-reload `godot-ai` subprocess (dev server, future spawn) would inherit
+	## it and wrongly arm a reaper keyed to this editor.
+	## Skipped on Windows: the server's reaper is POSIX-only for now (Windows
+	## process-liveness/self-shutdown isn't live-validated yet). The server
+	## gates on this too.
+	var owner_env_set := _set_owner_pid_env()
+	_set_plugin_spawned_env()
+
 	_server_pid = OS.create_process(cmd, args)
 	var spawned_pid := int(_server_pid)
+
+	if owner_env_set:
+		OS.unset_environment("GODOT_AI_OWNER_PID")
+	OS.unset_environment("GODOT_AI_PLUGIN_SPAWNED")
 
 	## Restore PYTHONPATH immediately — the spawned child has already
 	## copied the env, so the editor's own process state returns to
@@ -601,6 +637,26 @@ func check_server_health() -> void:
 		_server_pid = real_pid
 	elif not PortResolver.pid_alive(spawn_pid):
 		if elapsed >= int(_host.SPAWN_GRACE_MS) and not McpServerStateScript.is_terminal_diagnosis(_server_state):
+			## #647: the server died inside the grace window. If a foreign
+			## (non-godot-ai) process holds the HTTP or WS port, the server
+			## exited fast with its "port already in use" stderr message and
+			## EXIT_PORT_IN_USE — but we can't read the child's stderr, so
+			## re-probe the ports and surface FOREIGN_PORT with an actionable
+			## message instead of a bare CRASHED pointing at the output log.
+			## Checked before the --refresh retry: respawning against an
+			## occupied port can only fail the same way.
+			var conflict := _diagnose_spawn_port_conflict()
+			if not conflict.is_empty():
+				_server_exit_ms = elapsed
+				_server_status_message = str(conflict.get("message", ""))
+				_conflict_port = int(conflict.get("port", 0))
+				set_terminal_diagnosis(McpServerStateScript.FOREIGN_PORT)
+				disarm_version_check()
+				_host._update_process_enabled()
+				_host._log_buffer.log(str(_server_status_message))
+				push_warning("MCP | %s" % _server_status_message)
+				_host._stop_server_watch()
+				return
 			if bool(_host._should_retry_with_refresh()):
 				_refresh_retried = true
 				respawn_with_refresh()
@@ -617,6 +673,38 @@ func check_server_health() -> void:
 		_host._stop_server_watch()
 
 
+## #647: post-crash port-conflict probe. Returns `{}` when no foreign
+## conflict is detected (fall through to the CRASHED / retry path), or
+## `{"message": String, "port": int}` when the HTTP or WS port is held by
+## a process we can't identify as godot-ai. An occupant that *does*
+## identify as godot-ai is deliberately not diagnosed here — that's the
+## stale-server / adoption territory handled by the next `start_server`
+## walk, not a foreign conflict.
+func _diagnose_spawn_port_conflict() -> Dictionary:
+	var http_port := ClientConfigurator.http_port()
+	if bool(_host._is_port_in_use(http_port)):
+		var live: Dictionary = _host._probe_live_server_status_for_port(http_port)
+		if _live_status_identifies_godot_ai(live):
+			return {}
+		return {
+			"message": (
+				"Port %d is in use by another application. Stop it or change "
+				+ "the port in Editor Settings (godot_ai/http_port)."
+			) % http_port,
+			"port": http_port,
+		}
+	var ws_port := int(_host._resolved_ws_port)
+	if ws_port > 0 and bool(_host._is_port_in_use(ws_port)):
+		return {
+			"message": (
+				"WebSocket port %d is in use by another application. Stop it "
+				+ "or change the port in Editor Settings (godot_ai/ws_port)."
+			) % ws_port,
+			"port": ws_port,
+		}
+	return {}
+
+
 ## Retry the spawn with uvx `--refresh` prepended (PyPI index can lag a
 ## fresh publish ~10 min — #172). One-shot per session via _refresh_retried.
 func respawn_with_refresh() -> void:
@@ -631,7 +719,14 @@ func respawn_with_refresh() -> void:
 	_host._clear_pid_file()
 	_host._log_buffer.log("retrying with --refresh (PyPI index may be stale)")
 	var injected_telemetry_env := _inject_telemetry_env()
+	## Set owner PID for THIS spawn too (don't rely on it lingering from
+	## start_server) — and unset right after, same scoping as start_server.
+	var owner_env_set := _set_owner_pid_env()
+	_set_plugin_spawned_env()
 	_server_pid = OS.create_process(cmd, args)
+	if owner_env_set:
+		OS.unset_environment("GODOT_AI_OWNER_PID")
+	OS.unset_environment("GODOT_AI_PLUGIN_SPAWNED")
 	if injected_telemetry_env:
 		OS.unset_environment("GODOT_AI_DISABLE_TELEMETRY")
 	var spawn_pid := int(_server_pid)
@@ -724,17 +819,17 @@ func stop_server() -> void:
 	var killed: Array = []
 	var candidates: Array[int] = [int(_server_pid)]
 	var real_pid := int(_host._find_managed_pid(port))
-	if real_pid > 0 and (
-		candidates.has(real_pid)
-		or _host._pid_cmdline_is_godot_ai_for_proof(real_pid)
-	):
+	## Add the real Python PID only if it isn't already tracked and proves out
+	## as ours — re-appending an already-present PID just produces a duplicate
+	## kill candidate.
+	if real_pid > 0 and not candidates.has(real_pid) and _host._pid_cmdline_is_godot_ai_for_proof(real_pid):
 		candidates.append(real_pid)
 	var listener_pids: Array = _host._find_all_pids_on_port(port)
 	for pid in listener_pids:
 		var listener_pid := int(pid)
 		if candidates.has(listener_pid):
-			candidates.append(listener_pid)
-		elif _host._pid_cmdline_is_godot_ai_for_proof(listener_pid):
+			continue
+		if _host._pid_cmdline_is_godot_ai_for_proof(listener_pid):
 			candidates.append(listener_pid)
 	killed = _host._kill_processes_and_windows_spawn_children(candidates)
 	if not killed.is_empty():
@@ -823,6 +918,7 @@ func recover_incompatible_server() -> bool:
 	transition_state(McpServerStateScript.STOPPED)
 	_connection_blocked = false
 	_server_status_message = ""
+	_conflict_port = 0
 	_server_actual_version = ""
 	_server_actual_name = ""
 	_can_recover_incompatible = false

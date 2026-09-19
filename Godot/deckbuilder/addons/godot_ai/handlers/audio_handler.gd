@@ -101,6 +101,10 @@ func set_stream(params: Dictionary) -> Dictionary:
 	if stream_path.is_empty():
 		return ErrorCodes.make(ErrorCodes.MISSING_REQUIRED_PARAM, "Missing required param: stream_path")
 
+	var stream_path_err = McpPathValidator.loadable_error(stream_path, "stream_path")
+	if stream_path_err != null:
+		return stream_path_err
+
 	var resolved := _resolve_player(player_path)
 	if resolved.has("error"):
 		return resolved
@@ -259,12 +263,15 @@ func list_streams(params: Dictionary) -> Dictionary:
 	var root: String = params.get("root", "res://")
 	var include_duration: bool = bool(params.get("include_duration", true))
 
-	if not root.begins_with("res://"):
-		return ErrorCodes.make(ErrorCodes.VALUE_OUT_OF_RANGE, "root must start with res://")
+	var root_err = McpPathValidator.path_error(root, "root")
+	if root_err != null:
+		return root_err
 
 	var efs := EditorInterface.get_resource_filesystem()
 	if efs == null:
-		return ErrorCodes.make(ErrorCodes.EDITOR_NOT_READY, "EditorFileSystem not available")
+		return ErrorCodes.make_not_ready(
+			ErrorCodes.SUB_EDITOR_UNAVAILABLE,
+			"EditorFileSystem not available", false)
 
 	var results: Array[Dictionary] = []
 	var start_dir := efs.get_filesystem_path(root)

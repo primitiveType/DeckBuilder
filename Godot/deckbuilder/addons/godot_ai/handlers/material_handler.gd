@@ -40,7 +40,7 @@ func create_material(params: Dictionary) -> Dictionary:
 	var shader_path: String = params.get("shader_path", "")
 	var overwrite: bool = params.get("overwrite", false)
 
-	var err := _validate_material_path(path, "path")
+	var err := _validate_material_path(path, "path", true)
 	if err != null:
 		return err
 
@@ -65,8 +65,11 @@ func create_material(params: Dictionary) -> Dictionary:
 		if shader_path.is_empty():
 			return ErrorCodes.make(
 				ErrorCodes.INVALID_PARAMS,
-				"ShaderMaterial requires shader_path (res:// path to a .gdshader)"
+				"ShaderMaterial requires shader_path (res:// / uid:// / user:// path to a .gdshader)"
 			)
+		var shader_path_err = McpPathValidator.loadable_error(shader_path, "shader_path")
+		if shader_path_err != null:
+			return shader_path_err
 		if not ResourceLoader.exists(shader_path):
 			return ErrorCodes.make(ErrorCodes.RESOURCE_NOT_FOUND, "Shader not found: %s" % shader_path)
 		var shader_res := ResourceLoader.load(shader_path)
@@ -111,7 +114,7 @@ func create_material(params: Dictionary) -> Dictionary:
 # ============================================================================
 
 func set_param(params: Dictionary) -> Dictionary:
-	var load_result := _load_material_from_path(params.get("path", ""))
+	var load_result := _load_material_from_path(params.get("path", ""), true)
 	if load_result.has("error"):
 		return load_result
 	var mat: Material = load_result.material
@@ -169,7 +172,7 @@ func set_param(params: Dictionary) -> Dictionary:
 # ============================================================================
 
 func set_shader_param(params: Dictionary) -> Dictionary:
-	var load_result := _load_material_from_path(params.get("path", ""))
+	var load_result := _load_material_from_path(params.get("path", ""), true)
 	if load_result.has("error"):
 		return load_result
 	var mat: Material = load_result.material
@@ -297,12 +300,15 @@ func list_materials(params: Dictionary) -> Dictionary:
 	var root: String = params.get("root", "res://")
 	var type_filter: String = params.get("type", "")
 
-	if not root.begins_with("res://"):
-		return ErrorCodes.make(ErrorCodes.VALUE_OUT_OF_RANGE, "root must start with res://")
+	var root_err = McpPathValidator.path_error(root, "root")
+	if root_err != null:
+		return root_err
 
 	var efs := EditorInterface.get_resource_filesystem()
 	if efs == null:
-		return ErrorCodes.make(ErrorCodes.EDITOR_NOT_READY, "EditorFileSystem not available")
+		return ErrorCodes.make_not_ready(
+			ErrorCodes.SUB_EDITOR_UNAVAILABLE,
+			"EditorFileSystem not available", false)
 
 	var results: Array[Dictionary] = []
 	var start_dir := efs.get_filesystem_path(root)
@@ -350,7 +356,7 @@ func assign_material(params: Dictionary) -> Dictionary:
 	if _resolved.has("error"):
 		return _resolved
 	var node: Node = _resolved.node
-	var scene_root: Node = _resolved.scene_root
+	var _scene_root: Node = _resolved.scene_root
 
 	var slot: String = params.get("slot", "override")
 	var resource_path: String = params.get("resource_path", "")
@@ -366,6 +372,9 @@ func assign_material(params: Dictionary) -> Dictionary:
 	var mat: Material = null
 	var material_created := false
 	if not resource_path.is_empty():
+		var rpath_err = McpPathValidator.loadable_error(resource_path, "resource_path")
+		if rpath_err != null:
+			return rpath_err
 		if not ResourceLoader.exists(resource_path):
 			if create_if_missing:
 				# We'd need to create a new file here — refuse; callers should
@@ -442,7 +451,7 @@ func apply_to_node(params: Dictionary) -> Dictionary:
 	if _resolved.has("error"):
 		return _resolved
 	var node: Node = _resolved.node
-	var scene_root: Node = _resolved.scene_root
+	var _scene_root: Node = _resolved.scene_root
 
 	var slot: String = params.get("slot", "override")
 	var slot_result := _resolve_slot_property(node, slot)
@@ -463,7 +472,7 @@ func apply_to_node(params: Dictionary) -> Dictionary:
 	var save_to: String = params.get("save_to", "")
 	var saved := false
 	if not save_to.is_empty():
-		var save_err_validation := _validate_material_path(save_to, "save_to")
+		var save_err_validation := _validate_material_path(save_to, "save_to", true)
 		if save_err_validation != null:
 			return save_err_validation
 		var dir_path := save_to.get_base_dir()
@@ -476,7 +485,12 @@ func apply_to_node(params: Dictionary) -> Dictionary:
 		var efs := EditorInterface.get_resource_filesystem()
 		if efs != null:
 			efs.update_file(save_to)
-		mat = ResourceLoader.load(save_to)  # Use the saved reference to keep scene ref small.
+		# Prefer the on-disk reference (keeps the scene ref small), but fall
+		# back to the in-memory material if the reload fails — otherwise a null
+		# would clear the slot and crash mat.get_class() below.
+		var reloaded := ResourceLoader.load(save_to)
+		if reloaded != null:
+			mat = reloaded
 		saved = true
 
 	var old_value = node.get(property)
@@ -559,7 +573,7 @@ func apply_preset(params: Dictionary) -> Dictionary:
 			"Material already exists at %s (pass overwrite=true to replace)" % path
 		)
 
-	var path_err := _validate_material_path(path, "path")
+	var path_err := _validate_material_path(path, "path", true)
 	if path_err != null:
 		return path_err
 
@@ -588,7 +602,7 @@ func apply_preset(params: Dictionary) -> Dictionary:
 		if _resolved.has("error"):
 			return _resolved
 		var node: Node = _resolved.node
-		var scene_root: Node = _resolved.scene_root
+		var _scene_root: Node = _resolved.scene_root
 		var slot_result := _resolve_slot_property(node, params.get("slot", "override"))
 		if slot_result.has("error"):
 			return slot_result
@@ -660,11 +674,12 @@ static func _reverse_type_map() -> Dictionary:
 	return out
 
 
-static func _validate_material_path(path: String, param_name: String) -> Variant:
+static func _validate_material_path(path: String, param_name: String, for_write: bool = false) -> Variant:
 	if path.is_empty():
 		return ErrorCodes.make(ErrorCodes.MISSING_REQUIRED_PARAM, "Missing required param: %s" % param_name)
-	if not path.begins_with("res://"):
-		return ErrorCodes.make(ErrorCodes.INVALID_PARAMS, "%s must start with res:// (got %s)" % [param_name, path])
+	var path_err := McpPathValidator.validate_resource_path(path, for_write)
+	if not path_err.is_empty():
+		return ErrorCodes.make(ErrorCodes.VALUE_OUT_OF_RANGE, "%s: %s" % [param_name, path_err])
 	var has_suffix := false
 	for s in _SUPPORTED_SUFFIXES:
 		if path.ends_with(s):
@@ -678,8 +693,8 @@ static func _validate_material_path(path: String, param_name: String) -> Variant
 	return null
 
 
-func _load_material_from_path(path: String) -> Dictionary:
-	var err := _validate_material_path(path, "path")
+func _load_material_from_path(path: String, for_write: bool = false) -> Dictionary:
+	var err := _validate_material_path(path, "path", for_write)
 	if err != null:
 		return err
 	if not ResourceLoader.exists(path):

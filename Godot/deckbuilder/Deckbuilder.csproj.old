@@ -1,0 +1,14 @@
+<Project Sdk="Godot.NET.Sdk/4.6.2">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../Cards/Api/Api.csproj" />
+    <ProjectReference Include="../../Cards/CardsAndPiles/CardsAndPiles.csproj" />
+    <ProjectReference Include="../../Cards/SummerJam1/SummerJam1.csproj" />
+  </ItemGroup>
+</Project>

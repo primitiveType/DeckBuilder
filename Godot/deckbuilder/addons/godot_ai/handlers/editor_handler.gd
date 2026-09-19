@@ -13,18 +13,25 @@ var _connection: McpConnection
 var _debugger_plugin: McpDebuggerPlugin
 var _game_log_buffer: McpGameLogBuffer
 var _editor_log_buffer: McpEditorLogBuffer
+var _debugger_errors_root: Node
+var _surfaced_error_tracker
 
 
-func _init(log_buffer: McpLogBuffer, connection: McpConnection = null, debugger_plugin: McpDebuggerPlugin = null, game_log_buffer: McpGameLogBuffer = null, editor_log_buffer: McpEditorLogBuffer = null) -> void:
+func _init(log_buffer: McpLogBuffer, connection: McpConnection = null, debugger_plugin: McpDebuggerPlugin = null, game_log_buffer: McpGameLogBuffer = null, editor_log_buffer: McpEditorLogBuffer = null, debugger_errors_root: Node = null, surfaced_error_tracker = null) -> void:
 	_log_buffer = log_buffer
 	_connection = connection
 	_debugger_plugin = debugger_plugin
 	_game_log_buffer = game_log_buffer
 	_editor_log_buffer = editor_log_buffer
+	_debugger_errors_root = debugger_errors_root
+	_surfaced_error_tracker = surfaced_error_tracker
+	if _surfaced_error_tracker == null:
+		_surfaced_error_tracker = McpSurfacedErrorTracker.new(_editor_log_buffer, _game_log_buffer, _debugger_errors_root)
 
 
 func get_editor_state(_params: Dictionary) -> Dictionary:
 	var scene_root := EditorInterface.get_edited_scene_root()
+	var game_status := _current_game_status()
 	var data := {
 		"godot_version": Engine.get_version_info().get("string", "unknown"),
 		"project_name": ProjectSettings.get_setting("application/config/name", ""),
@@ -35,6 +42,9 @@ func get_editor_state(_params: Dictionary) -> Dictionary:
 		## false between Play→Stop cycles. Lets capture-source=game callers
 		## poll for a real ready signal instead of guessing with sleep().
 		"game_capture_ready": _debugger_plugin != null and _debugger_plugin.is_game_capture_ready(),
+		"game_status": game_status,
+		"helper_live": bool(game_status.get("helper_live", false)),
+		"session_active": bool(game_status.get("session_active", false)),
 	}
 	## Half-installed addon tree from a failed self-update rollback. When
 	## non-empty, the agent / dock paint the operator-facing recovery copy
@@ -66,6 +76,10 @@ func get_logs(params: Dictionary) -> Dictionary:
 	var count: int = maxi(0, int(params.get("count", 50)))
 	var offset: int = maxi(0, int(params.get("offset", 0)))
 	var source: String = str(params.get("source", "plugin"))
+	var include_details: bool = bool(params.get("include_details", false))
+	var has_since_cursor := params.has("since_cursor") and params.get("since_cursor") != null
+	var since_cursor: int = maxi(0, int(params.get("since_cursor", 0)))
+	var since_run_id := "" if params.get("since_run_id", null) == null else str(params.get("since_run_id", ""))
 	if not source in VALID_LOG_SOURCES:
 		return ErrorCodes.make(
 			ErrorCodes.VALUE_OUT_OF_RANGE,
@@ -76,12 +90,23 @@ func get_logs(params: Dictionary) -> Dictionary:
 		"plugin":
 			return _get_plugin_logs(count, offset)
 		"game":
-			return _get_game_logs(count, offset)
+			return _get_game_logs(count, offset, include_details, since_run_id)
 		"editor":
-			return _get_editor_logs(count, offset)
+			return _get_editor_logs(count, offset, include_details, has_since_cursor, since_cursor)
 		"all":
-			return _get_all_logs(count, offset)
+			return _get_all_logs(count, offset, include_details)
 	return ErrorCodes.make(ErrorCodes.INTERNAL_ERROR, "Unreachable")
+
+
+func _current_game_status() -> Dictionary:
+	if _debugger_plugin == null:
+		return McpDebuggerPlugin.with_liveness_flags({
+			"status": "stopped",
+			"active": false,
+			"ready": false,
+			"helper_expected": true,
+		})
+	return _debugger_plugin.get_game_status()
 
 
 func _get_plugin_logs(count: int, offset: int) -> Dictionary:
@@ -101,7 +126,10 @@ func _get_plugin_logs(count: int, offset: int) -> Dictionary:
 	}
 
 
-func _get_game_logs(count: int, offset: int) -> Dictionary:
+func _get_game_logs(count: int, offset: int, include_details: bool, since_run_id: String = "") -> Dictionary:
+	var game_status := _current_game_status()
+	var helper_live := bool(game_status.get("helper_live", false))
+	var session_active := bool(game_status.get("session_active", false))
 	if _game_log_buffer == null:
 		return {
 			"data": {
@@ -111,56 +139,141 @@ func _get_game_logs(count: int, offset: int) -> Dictionary:
 				"returned_count": 0,
 				"offset": offset,
 				"run_id": "",
-				"is_running": false,
+				"current_run_id": "",
+				"is_running": session_active,
+				"helper_live": helper_live,
+				"session_active": session_active,
+				"game_status": game_status,
 				"dropped_count": 0,
+				"stale_run_id": false,
 			}
 		}
-	var page := _game_log_buffer.get_range(offset, count)
-	return {
-		"data": {
-			"source": "game",
-			"lines": page,
-			"total_count": _game_log_buffer.total_count(),
-			"returned_count": page.size(),
-			"offset": offset,
-			"run_id": _game_log_buffer.run_id(),
-			"is_running": EditorInterface.is_playing_scene(),
-			"dropped_count": _game_log_buffer.dropped_count(),
-		}
+	var current_run_id := _game_log_buffer.run_id()
+	var target_run_id := since_run_id if not since_run_id.is_empty() else current_run_id
+	var stale_run_id := not since_run_id.is_empty() and since_run_id != current_run_id
+	var run_page := _game_log_buffer.get_run_page(target_run_id, offset, count)
+	var page := _entries_for_response(run_page.get("entries", []), include_details)
+	var data := {
+		"source": "game",
+		"lines": page,
+		"total_count": int(run_page.get("total_count", 0)),
+		"returned_count": page.size(),
+		"offset": offset,
+		"run_id": target_run_id,
+		"current_run_id": current_run_id,
+		"is_running": session_active,
+		"helper_live": helper_live,
+		"session_active": session_active,
+		"game_status": game_status,
+		"dropped_count": _game_log_buffer.dropped_count(),
+		"stale_run_id": stale_run_id,
 	}
+	_merge_editor_errors_hint(data, game_status)
+	return {"data": data}
 
 
-func _get_editor_logs(count: int, offset: int) -> Dictionary:
+## #641: boot-time parse errors happen while autoload scripts compile — before
+## the game helper's logger attaches via OS.add_logger — so they can NEVER
+## appear in the game buffer. They surface only through the editor scope
+## (Errors-tab rows + editor logger). Cross-reference them here so an
+## empty/clean game log is not mistaken for a clean launch.
+func _merge_editor_errors_hint(data: Dictionary, game_status: Dictionary) -> void:
+	if _debugger_plugin == null:
+		return
+	## A since_run_id read of a prior run must not carry the CURRENT run's
+	## editor errors — the hint interprets the run being read.
+	if bool(data.get("stale_run_id", false)):
+		return
+	## run_token == 0 means no tracked run ever started this session; the
+	## run-start cursor would be 0 and every retained editor error would be
+	## misattributed to "this run".
+	if int(game_status.get("run_token", 0)) <= 0:
+		return
+	## One-shot read — force the scan so rows that landed after the last
+	## gated scan (and before the deferred timers fire) make the FIRST
+	## logs_read(source='game') response, not just a later one.
+	var errors_info: Dictionary = _debugger_plugin.recent_editor_errors_since(
+		int(game_status.get("editor_log_cursor", 0)), true)
+	if str(errors_info.get("scope", "none")) != "run":
+		return
+	var errors: Array = errors_info.get("errors", [])
+	if errors.is_empty():
+		return
+	data["editor_errors_count"] = errors.size()
+	data["editor_errors_hint"] = (
+		"%d editor-side error%s from this run (first: %s) missing from the game log — boot-time parse/load errors occur before the game helper's logger attaches. Read logs_read(source='editor', include_details=true)."
+		% [errors.size(), "s" if errors.size() != 1 else "", _format_editor_error_summary(errors[0])]
+	)
+
+
+func _format_editor_error_summary(entry: Dictionary) -> String:
+	return McpSurfacedErrorTracker.format_editor_error_summary(entry)
+
+
+func _get_editor_logs(count: int, offset: int, include_details: bool, has_since_cursor: bool = false, since_cursor: int = 0) -> Dictionary:
 	## Editor-process script errors (parse errors, @tool runtime errors,
 	## EditorPlugin errors, push_error/push_warning). Captured by
 	## editor_logger.gd via OS.add_logger and gated on Godot 4.5+; on older
-	## engines or before plugin enable the buffer is null/empty and we
-	## return an empty page so callers can poll unconditionally.
-	if _editor_log_buffer == null:
-		return {
-			"data": {
-				"source": "editor",
-				"lines": [],
-				"total_count": 0,
-				"returned_count": 0,
-				"offset": offset,
-				"dropped_count": 0,
-			}
-		}
-	var page := _editor_log_buffer.get_range(offset, count)
+	## engines the buffer can be null. Godot also sends GDScript reload
+	## warnings/errors straight to the Debugger dock's Errors tab; those do
+	## not flow through OS.add_logger, so merge the visible tree rows here.
+	if has_since_cursor:
+		return _get_editor_logs_since(count, since_cursor, include_details)
+	var all_entries := _collect_editor_log_entries()
+	var page := _entries_for_response(_slice_entries(all_entries, offset, count), include_details)
+	var appended_total := _editor_log_buffer.appended_total() if _editor_log_buffer != null else 0
 	return {
 		"data": {
 			"source": "editor",
 			"lines": page,
-			"total_count": _editor_log_buffer.total_count(),
+			"total_count": all_entries.size(),
 			"returned_count": page.size(),
 			"offset": offset,
-			"dropped_count": _editor_log_buffer.dropped_count(),
+			"dropped_count": _editor_log_buffer.dropped_count() if _editor_log_buffer != null else 0,
+			"next_cursor": appended_total,
+			"appended_total": appended_total,
 		}
 	}
 
 
-func _get_all_logs(count: int, offset: int) -> Dictionary:
+func _get_editor_logs_since(count: int, since_cursor: int, include_details: bool) -> Dictionary:
+	## Cursor reads are defined over the monotonic editor logger ring only.
+	## Visible Debugger Errors-tab rows are live UI state, not ring entries,
+	## so regular offset reads still merge them while since_cursor polling
+	## reports only Logger-backed entries.
+	var captured := {
+		"cursor": since_cursor,
+		"oldest_cursor": 0,
+		"next_cursor": 0,
+		"appended_total": 0,
+		"truncated": false,
+		"has_more": false,
+		"entries": [],
+	}
+	var dropped := 0
+	if _editor_log_buffer != null:
+		captured = _editor_log_buffer.get_since(since_cursor, count)
+		dropped = _editor_log_buffer.dropped_count()
+	var page := _entries_for_response(captured.get("entries", []), include_details)
+	return {
+		"data": {
+			"source": "editor",
+			"lines": page,
+			"total_count": int(captured.get("appended_total", 0)),
+			"returned_count": page.size(),
+			"offset": 0,
+			"dropped_count": dropped,
+			"cursor": int(captured.get("cursor", since_cursor)),
+			"oldest_cursor": int(captured.get("oldest_cursor", 0)),
+			"next_cursor": int(captured.get("next_cursor", 0)),
+			"appended_total": int(captured.get("appended_total", 0)),
+			"truncated": bool(captured.get("truncated", false)),
+			"has_more": bool(captured.get("has_more", false)),
+		}
+	}
+
+
+func _get_all_logs(count: int, offset: int, include_details: bool) -> Dictionary:
 	## Plugin lines have no timestamp, so we can't merge chronologically.
 	## Concatenate plugin → editor → game and apply the offset/count window
 	## over the combined list. The per-line `source` field tells callers
@@ -170,23 +283,26 @@ func _get_all_logs(count: int, offset: int) -> Dictionary:
 	var combined: Array[Dictionary] = []
 	for line in _log_buffer.get_recent(_log_buffer.total_count()):
 		combined.append({"source": "plugin", "level": "info", "text": line})
-	if _editor_log_buffer != null:
-		for entry in _editor_log_buffer.get_range(0, _editor_log_buffer.total_count()):
-			combined.append(entry)
+	for entry in _collect_editor_log_entries():
+		combined.append(entry)
+	var run_id := ""
+	var current_run_id := ""
+	var dropped := 0
 	if _game_log_buffer != null:
-		for entry in _game_log_buffer.get_range(0, _game_log_buffer.total_count()):
+		run_id = _game_log_buffer.run_id()
+		current_run_id = run_id
+		dropped = _game_log_buffer.dropped_count()
+		var run_page := _game_log_buffer.get_run_page(run_id, 0, McpGameLogBuffer.MAX_LINES)
+		for entry in run_page.get("entries", []):
 			combined.append(entry)
 	var stop := mini(combined.size(), offset + count)
 	var page: Array[Dictionary] = []
 	for i in range(mini(offset, combined.size()), stop):
 		page.append(combined[i])
-	var run_id := ""
-	var dropped := 0
-	if _game_log_buffer != null:
-		run_id = _game_log_buffer.run_id()
-		dropped = _game_log_buffer.dropped_count()
+	page = _entries_for_response(page, include_details)
 	if _editor_log_buffer != null:
 		dropped += _editor_log_buffer.dropped_count()
+	var game_status := _current_game_status()
 	return {
 		"data": {
 			"source": "all",
@@ -195,10 +311,41 @@ func _get_all_logs(count: int, offset: int) -> Dictionary:
 			"returned_count": page.size(),
 			"offset": offset,
 			"run_id": run_id,
-			"is_running": EditorInterface.is_playing_scene(),
+			"current_run_id": current_run_id,
+			"is_running": bool(game_status.get("session_active", false)),
+			"helper_live": bool(game_status.get("helper_live", false)),
+			"session_active": bool(game_status.get("session_active", false)),
+			"game_status": game_status,
 			"dropped_count": dropped,
 		}
 	}
+
+
+func _entries_for_response(entries: Array[Dictionary], include_details: bool) -> Array[Dictionary]:
+	## Compact responses only drop the top-level "details" key, so a shallow
+	## copy is enough; the deep copy is reserved for the opt-in details path
+	## where nested dicts leave the buffer.
+	var out: Array[Dictionary] = []
+	for entry in entries:
+		if include_details:
+			out.append(entry.duplicate(true))
+		else:
+			var copy: Dictionary = entry.duplicate(false)
+			copy.erase("details")
+			out.append(copy)
+	return out
+
+
+func _collect_editor_log_entries() -> Array[Dictionary]:
+	return _surfaced_error_tracker.collect_editor_log_entries()
+
+
+static func _slice_entries(entries: Array[Dictionary], offset: int, count: int) -> Array[Dictionary]:
+	var page: Array[Dictionary] = []
+	var stop := mini(entries.size(), offset + count)
+	for i in range(mini(offset, entries.size()), stop):
+		page.append(entries[i])
+	return page
 
 
 ## Map of human-readable monitor names to Performance.Monitor enum values.
@@ -278,7 +425,19 @@ func take_screenshot(params: Dictionary) -> Dictionary:
 		"viewport":
 			viewport = EditorInterface.get_editor_viewport_3d()
 			if viewport == null:
-				return ErrorCodes.make(ErrorCodes.EDITOR_NOT_READY, "No 3D viewport available")
+				return ErrorCodes.make_not_ready(
+					ErrorCodes.SUB_EDITOR_VIEWPORT_UNAVAILABLE,
+					"No 3D viewport available", false)
+			## The 3D viewport's texture is empty when the edited scene
+			## has no Node3D content (2D-only scene, or no scene open),
+			## and the empty-image guard further down used to surface
+			## that as INTERNAL_ERROR — leaving callers with no signal
+			## that the failure was caller-side. Reject up front with a
+			## structured hint so the LLM can pick a sensible next step
+			## (open a 3D scene, switch to source="cinematic", etc.).
+			var precheck := viewport_screenshot_precheck(EditorInterface.get_edited_scene_root())
+			if precheck.has("error"):
+				return precheck
 		"game":
 			if not EditorInterface.is_playing_scene():
 				return ErrorCodes.make(ErrorCodes.INVALID_PARAMS, "Game is not running — use source='viewport' or start the project first")
@@ -297,8 +456,34 @@ func take_screenshot(params: Dictionary) -> Dictionary:
 			return McpDispatcher.DEFERRED_RESPONSE
 		"cinematic":
 			return _take_cinematic_screenshot(max_resolution)
+		"viewport_2d":
+			viewport = EditorInterface.get_editor_viewport_2d()
+			if viewport == null:
+				return ErrorCodes.make_not_ready(
+					ErrorCodes.SUB_EDITOR_VIEWPORT_UNAVAILABLE,
+					"No 2D viewport available", false)
+			var scene_root_2d := EditorInterface.get_edited_scene_root()
+			if scene_root_2d == null:
+				return ErrorCodes.make_not_ready(
+					ErrorCodes.SUB_EDITOR_NO_SCENE,
+					"No scene open — open a scene first", false,
+					"Call scene_open with a scene path (e.g. \"res://main.tscn\") first.")
+			if not view_target.is_empty() or coverage or custom_elevation != null or custom_azimuth != null or custom_fov != null:
+				return ErrorCodes.make(
+					ErrorCodes.INVALID_PARAMS,
+					"view_target, coverage, elevation, azimuth, and fov are not supported with source='viewport_2d'"
+				)
+			## Capture the 2D editor viewport directly; no view_target/coverage for 2D.
+			RenderingServer.force_draw(false)
+			var image_2d: Image = viewport.get_texture().get_image()
+			if image_2d == null or image_2d.is_empty():
+				return _empty_image_error(
+					"viewport_2d",
+					"Captured an empty image from the 2D viewport. The 2D viewport produced no output — typically headless mode or the 2D viewport has not drawn a frame yet."
+				)
+			return _finalize_image(image_2d, "viewport_2d", max_resolution)
 		_:
-			return ErrorCodes.make(ErrorCodes.VALUE_OUT_OF_RANGE, "Invalid source '%s' — use 'viewport', 'cinematic', or 'game'" % source)
+			return ErrorCodes.make(ErrorCodes.VALUE_OUT_OF_RANGE, "Invalid source '%s' — use 'viewport', 'viewport_2d', 'cinematic', or 'game'" % source)
 
 	## Handle view_target: temporarily reposition the editor's own camera to
 	## frame one or more target nodes, force a render, capture, then restore.
@@ -335,7 +520,9 @@ func take_screenshot(params: Dictionary) -> Dictionary:
 
 		var cam := viewport.get_camera_3d()
 		if cam == null:
-			return ErrorCodes.make(ErrorCodes.EDITOR_NOT_READY, "No camera in 3D viewport")
+			return ErrorCodes.make_not_ready(
+				ErrorCodes.SUB_EDITOR_VIEWPORT_UNAVAILABLE,
+				"No camera in 3D viewport", false)
 
 		## Merge AABBs from all targets
 		var combined_aabb := _get_visual_aabb(targets[0])
@@ -385,7 +572,10 @@ func take_screenshot(params: Dictionary) -> Dictionary:
 			## Consistent with single-shot path: error if no frames rendered
 			## (e.g. headless mode where force_draw produces no output).
 			if images.is_empty():
-				return ErrorCodes.make(ErrorCodes.INTERNAL_ERROR, "Coverage sweep rendered no images")
+				return _empty_image_error(
+					"viewport",
+					"Coverage sweep rendered no images. The 3D viewport produced no output across any of the preset angles — typically because the editor is in headless mode (force_draw has no rendered output) or the 3D viewport has not drawn a frame yet."
+				)
 
 			var aabb_center := combined_aabb.get_center()
 			var aabb_size := combined_aabb.size
@@ -423,7 +613,10 @@ func take_screenshot(params: Dictionary) -> Dictionary:
 		RenderingServer.camera_set_transform(cam_rid, saved_xform)
 
 		if image == null or image.is_empty():
-			return ErrorCodes.make(ErrorCodes.INTERNAL_ERROR, "Framed viewport rendered an empty image")
+			return _empty_image_error(
+				"viewport",
+				"Framed viewport rendered an empty image after repositioning the camera onto the view_target. The 3D viewport produced no output — typically headless mode or the 3D viewport has not drawn a frame yet."
+			)
 
 		var result := _finalize_image(image, "viewport", max_resolution)
 		result.data["view_target"] = view_target
@@ -445,7 +638,10 @@ func take_screenshot(params: Dictionary) -> Dictionary:
 	var image: Image = viewport.get_texture().get_image()
 
 	if image == null or image.is_empty():
-		return ErrorCodes.make(ErrorCodes.INTERNAL_ERROR, "Failed to capture image from %s" % source)
+		return _empty_image_error(
+			source,
+			"Captured an empty image from %s. The 3D viewport produced no output — typically headless mode or the 3D viewport has not drawn a frame yet." % source
+		)
 
 	return _finalize_image(image, source, max_resolution)
 
@@ -499,6 +695,12 @@ func _take_cinematic_screenshot(max_resolution: int) -> Dictionary:
 	## global_transform is resolved against the ancestor Node3D chain, so it
 	## must be set after parenting — otherwise the camera ends up at origin.
 	cam.global_transform = scene_camera.global_transform
+	## NOTIFICATION_TRANSFORM_CHANGED is delivered deferred (next frame's
+	## flush_transform_notifications), but force_draw renders immediately —
+	## without this flush the RenderingServer still has the identity
+	## transform pushed at ENTER_WORLD and the capture shows only sky
+	## instead of the camera's actual view (issue #650).
+	cam.force_update_transform()
 
 	RenderingServer.force_draw(false)
 	var image: Image = sub_vp.get_texture().get_image()
@@ -507,11 +709,106 @@ func _take_cinematic_screenshot(max_resolution: int) -> Dictionary:
 	sub_vp.queue_free()
 
 	if image == null or image.is_empty():
-		return ErrorCodes.make(ErrorCodes.INTERNAL_ERROR, "Cinematic render produced an empty image")
+		return _empty_image_error(
+			"cinematic",
+			"Cinematic render produced an empty image. The SubViewport returned no texture — typically headless mode (force_draw has no rendered output) or the scene's Camera3D is positioned so nothing visible is in frame."
+		)
 
 	var result := _finalize_image(image, "cinematic", max_resolution)
 	result.data["camera_path"] = McpScenePath.from_node(scene_camera, scene_root)
 	return result
+
+
+## Reject a `source="viewport"` screenshot before we ever pull the
+## texture if the edited scene has no Node3D content. The 3D viewport
+## returns an empty (or stale) image in that case; surfacing it as
+## INTERNAL_ERROR ("Failed to capture image from viewport") gave LLM
+## callers no signal that the right move is to switch source or open a
+## 3D scene. 152 hits / 63 uuids in 24h across plugin versions 2.5.0 ->
+## 2.5.6 traced back to this. Returns `{}` on success.
+##
+## Caller passes `EditorInterface.get_edited_scene_root()`; the static
+## form lets tests exercise the branches with a synthetic scene root
+## without driving the editor.
+static func viewport_screenshot_precheck(scene_root: Node) -> Dictionary:
+	if scene_root == null:
+		var no_scene_err := _make_viewport_not_3d_error(
+			"",
+			"The editor 3D viewport is empty because no scene is open. Open a scene with `scene_open` first."
+		)
+		## The honest state here is "no scene", not "scene lacks 3D content"
+		## — relabel the sub-code so telemetry doesn't conflate the two.
+		## `editor_state` stays "viewport_not_3d" for pre-#651 consumers.
+		no_scene_err["error"]["data"]["sub_code"] = ErrorCodes.SUB_EDITOR_NO_SCENE
+		return no_scene_err
+	## A scene with any Node3D content — root or descendant — has
+	## something the 3D viewport can render. Walking the tree (rather
+	## than only checking the root type) avoids a false reject on the
+	## common `Node` / `Node2D` root + Node3D descendant pattern.
+	if _scene_has_node3d_content(scene_root):
+		return {}
+	var root_type := scene_root.get_class()
+	var hint: String
+	var is_2d_scene := scene_root is CanvasItem
+	if is_2d_scene:
+		hint = (
+			"The 3D viewport is empty because the current scene is 2D (%s root) with no Node3D descendants. "
+			+ "Options: (a) open a 3D scene, "
+			+ "(b) use source=\"cinematic\" if a Camera3D exists in the scene, "
+			+ "(c) use source=\"viewport_2d\" to capture the 2D editor viewport directly, "
+			+ "(d) call scene_get_hierarchy first to inspect what's available."
+		) % root_type
+	else:
+		hint = (
+			"The 3D viewport is empty because the current scene (%s root) has no Node3D content anywhere in the tree. "
+			+ "Options: (a) open or add a Node3D, "
+			+ "(b) use source=\"cinematic\" if a Camera3D exists in the scene, "
+			+ "(c) call scene_get_hierarchy first to inspect what's available."
+		) % root_type
+	var err := _make_viewport_not_3d_error(root_type, hint)
+	if is_2d_scene:
+		err["error"]["data"]["suggestion"] = "use source='viewport_2d' for 2D scenes"
+	return err
+
+
+## True if scene_root is itself a Node3D or owns any Node3D descendant.
+## DFS short-circuits on the first hit so empty 2D scenes stay cheap.
+static func _scene_has_node3d_content(scene_root: Node) -> bool:
+	if scene_root is Node3D:
+		return true
+	var stack: Array[Node] = [scene_root]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		for child in node.get_children():
+			if child is Node3D:
+				return true
+			stack.append(child)
+	return false
+
+
+static func _make_viewport_not_3d_error(scene_root_type: String, hint: String) -> Dictionary:
+	## `hint` becomes `error.message`; not duplicated into `data` because
+	## `GodotCommandError`'s string form already appends every `data` key
+	## as a suffix on the agent-visible error.
+	var err := ErrorCodes.make_not_ready(
+		ErrorCodes.SUB_EDITOR_VIEWPORT_NOT_3D, hint, false)
+	err["error"]["data"]["editor_state"] = "viewport_not_3d"
+	err["error"]["data"]["scene_root_type"] = scene_root_type
+	return err
+
+
+## Reached only when the precheck passed but the texture still came
+## back empty — headless rendering, a freshly opened editor whose 3D
+## viewport hasn't drawn a frame, or a SubViewport that lost its target.
+static func _empty_image_error(source: String, hint: String) -> Dictionary:
+	## retryable=false: an empty capture is usually headless mode, where a
+	## retry loops forever — the not-yet-drawn-frame case is transient but
+	## indistinguishable from here, so don't invite a retry loop.
+	var err := ErrorCodes.make_not_ready(
+		ErrorCodes.SUB_EDITOR_VIEWPORT_EMPTY, hint, false)
+	err["error"]["data"]["editor_state"] = "viewport_empty"
+	err["error"]["data"]["source"] = source
+	return err
 
 
 ## Return the Camera3D that would be active if the scene were running.
@@ -630,14 +927,19 @@ func get_performance_monitors(params: Dictionary) -> Dictionary:
 	}
 
 
-func clear_logs(_params: Dictionary) -> Dictionary:
+func clear_logs(params: Dictionary) -> Dictionary:
 	var count := _log_buffer.total_count()
 	_log_buffer.clear()
-	return {
-		"data": {
-			"cleared_count": count,
-		}
-	}
+	var data := {"cleared_count": count}
+	## The Debugger Errors panel is user-visible editor UI, not an MCP-owned
+	## buffer — wiping it stays behind an explicit opt-in.
+	if bool(params.get("clear_debugger_errors", false)):
+		data["debugger_errors_cleared"] = _clear_debugger_error_trees()
+	return {"data": data}
+
+
+func _clear_debugger_error_trees() -> int:
+	return _surfaced_error_tracker.clear_debugger_error_trees()
 
 
 func reload_plugin(_params: Dictionary) -> Dictionary:
@@ -673,3 +975,52 @@ func quit_editor(_params: Dictionary) -> Dictionary:
 	## Defer the quit so the response is sent back before the editor exits.
 	EditorInterface.get_base_control().get_tree().call_deferred("quit")
 	return {"data": {"status": "quitting", "message": "Editor quit initiated"}}
+
+
+func game_eval(params: Dictionary) -> Dictionary:
+	var code: String = params.get("code", "")
+	if code.is_empty():
+		return ErrorCodes.make(ErrorCodes.MISSING_REQUIRED_PARAM, "code is required")
+
+	if _debugger_plugin == null or _connection == null:
+		return ErrorCodes.make(ErrorCodes.INTERNAL_ERROR,
+			"Debugger bridge unavailable — plugin may not be fully initialised")
+
+	if not EditorInterface.is_playing_scene():
+		return ErrorCodes.make_not_ready(
+			ErrorCodes.SUB_EDITOR_GAME_NOT_RUNNING,
+			"Game is not running — start the project first", false,
+			"Start the game with project_run (or wait for the user to run it), then retry.")
+
+	var request_id: String = params.get("_request_id", "")
+	if request_id.is_empty():
+		return ErrorCodes.make(ErrorCodes.INTERNAL_ERROR,
+			"Missing request_id — cannot correlate deferred response")
+
+	_debugger_plugin.request_game_eval(code, request_id, _connection)
+	return McpDispatcher.DEFERRED_RESPONSE
+
+
+func game_command(params: Dictionary) -> Dictionary:
+	var op: String = str(params.get("op", ""))
+	if op.is_empty():
+		return ErrorCodes.make(ErrorCodes.MISSING_REQUIRED_PARAM, "op is required")
+
+	if _debugger_plugin == null or _connection == null:
+		return ErrorCodes.make(ErrorCodes.INTERNAL_ERROR,
+			"Debugger bridge unavailable — plugin may not be fully initialised")
+
+	if not EditorInterface.is_playing_scene():
+		return ErrorCodes.make_not_ready(
+			ErrorCodes.SUB_EDITOR_GAME_NOT_RUNNING,
+			"Game is not running — start the project first", false,
+			"Start the game with project_run (or wait for the user to run it), then retry.")
+
+	var request_id: String = params.get("_request_id", "")
+	if request_id.is_empty():
+		return ErrorCodes.make(ErrorCodes.INTERNAL_ERROR,
+			"Missing request_id — cannot correlate deferred response")
+
+	var command_params: Dictionary = params.get("params", {})
+	_debugger_plugin.request_game_command(op, command_params, request_id, _connection)
+	return McpDispatcher.DEFERRED_RESPONSE

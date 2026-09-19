@@ -38,6 +38,9 @@ func set_points(params: Dictionary) -> Dictionary:
 	var node: Node = null
 	var curve_created := false
 	if has_file_target:
+		var rpath_err = McpPathValidator.loadable_error(resource_path, "resource_path")
+		if rpath_err != null:
+			return rpath_err
 		if not ResourceLoader.exists(resource_path):
 			return ErrorCodes.make(ErrorCodes.RESOURCE_NOT_FOUND, "Resource not found: %s" % resource_path)
 		# ResourceLoader.load() returns Godot's cached Resource. Duplicate
@@ -219,37 +222,6 @@ static func _coerce_points(curve: Resource, points: Array) -> Dictionary:
 			coerced3["tilt"] = float(p3.get("tilt", 0.0))
 			snapshot.append(coerced3)
 	return {"snapshot": snapshot}
-
-
-static func _snapshot_curve(curve: Resource) -> Array:
-	var snapshot: Array = []
-	if curve is Curve:
-		var c: Curve = curve
-		for i in range(c.point_count):
-			snapshot.append({
-				"offset": c.get_point_position(i).x,
-				"value": c.get_point_position(i).y,
-				"left_tangent": c.get_point_left_tangent(i),
-				"right_tangent": c.get_point_right_tangent(i),
-			})
-	elif curve is Curve2D:
-		var c2: Curve2D = curve
-		for i in range(c2.point_count):
-			snapshot.append({
-				"position": c2.get_point_position(i),
-				"in": c2.get_point_in(i),
-				"out": c2.get_point_out(i),
-			})
-	elif curve is Curve3D:
-		var c3: Curve3D = curve
-		for i in range(c3.point_count):
-			snapshot.append({
-				"position": c3.get_point_position(i),
-				"in": c3.get_point_in(i),
-				"out": c3.get_point_out(i),
-				"tilt": c3.get_point_tilt(i),
-			})
-	return snapshot
 
 
 func _apply_snapshot_to_curve(curve: Resource, snapshot: Array) -> void:

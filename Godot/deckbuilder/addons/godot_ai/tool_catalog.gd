@@ -30,6 +30,7 @@ const CORE_TOOLS := [
 ##   tools: flat list of tool names registered by this domain (non-core only)
 const DOMAINS := [
 	{"id": "animation", "label": "animation", "count": 2, "tools": ["animation_create", "animation_manage"]},
+	{"id": "api", "label": "api", "count": 1, "tools": ["api_manage"]},
 	{"id": "audio", "label": "audio", "count": 1, "tools": ["audio_manage"]},
 	{"id": "autoload", "label": "autoload", "count": 1, "tools": ["autoload_manage"]},
 	{"id": "batch", "label": "batch", "count": 1, "tools": ["batch_execute"]},
@@ -37,6 +38,7 @@ const DOMAINS := [
 	{"id": "client", "label": "client", "count": 1, "tools": ["client_manage"]},
 	{"id": "editor", "label": "editor", "count": 4, "tools": ["editor_manage", "editor_reload_plugin", "editor_screenshot", "logs_read"]},
 	{"id": "filesystem", "label": "filesystem", "count": 1, "tools": ["filesystem_manage"]},
+	{"id": "game", "label": "game", "count": 1, "tools": ["game_manage"]},
 	{"id": "input_map", "label": "input_map", "count": 1, "tools": ["input_map_manage"]},
 	{"id": "material", "label": "material", "count": 1, "tools": ["material_manage"]},
 	{"id": "node", "label": "node", "count": 4, "tools": ["node_create", "node_find", "node_manage", "node_set_property"]},
@@ -48,6 +50,8 @@ const DOMAINS := [
 	{"id": "signal", "label": "signal", "count": 1, "tools": ["signal_manage"]},
 	{"id": "testing", "label": "testing", "count": 2, "tools": ["test_manage", "test_run"]},
 	{"id": "theme", "label": "theme", "count": 1, "tools": ["theme_manage"]},
+	{"id": "tilemap", "label": "tilemap", "count": 1, "tools": ["tilemap_manage"]},
+	{"id": "tileset", "label": "tileset", "count": 1, "tools": ["tileset_manage"]},
 	{"id": "ui", "label": "ui", "count": 1, "tools": ["ui_manage"]},
 ]
 

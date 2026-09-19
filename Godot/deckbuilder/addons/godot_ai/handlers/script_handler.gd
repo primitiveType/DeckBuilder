@@ -2,6 +2,8 @@
 extends RefCounted
 
 const ErrorCodes := preload("res://addons/godot_ai/utils/error_codes.gd")
+const DiagnosticsCapture := preload("res://addons/godot_ai/utils/diagnostics_capture.gd")
+const ValidationLogger := preload("res://addons/godot_ai/runtime/validation_logger.gd")
 
 ## Handles script creation, reading, attaching, detaching, and symbol inspection.
 
@@ -27,9 +29,9 @@ func create_script(params: Dictionary) -> Dictionary:
 	var path: String = params.get("path", "")
 	var content: String = params.get("content", "")
 
-	var path_err := McpPathValidator.validate_resource_path(path)
-	if not path_err.is_empty():
-		return ErrorCodes.make(ErrorCodes.INVALID_PARAMS, path_err)
+	var path_err = McpPathValidator.path_error(path, "path", true)
+	if path_err != null:
+		return path_err
 
 	if not path.ends_with(".gd"):
 		return ErrorCodes.make(ErrorCodes.VALUE_OUT_OF_RANGE, "Path must end with .gd")
@@ -50,9 +52,6 @@ func create_script(params: Dictionary) -> Dictionary:
 	file.store_string(content)
 	file.close()
 
-	# Trigger reimport so the editor recognises the new file
-	EditorInterface.get_resource_filesystem().scan()
-
 	var data := {
 		"path": path,
 		"size": content.length(),
@@ -62,6 +61,46 @@ func create_script(params: Dictionary) -> Dictionary:
 		"undoable": false,
 		"reason": "File system operations cannot be undone via editor undo",
 	}
+	_attach_gdscript_diagnostics(data, path, content)
+
+	# A freshly-declared `class_name` is NOT in the global class table until a
+	# filesystem scan runs — update_file() below registers the file with the
+	# resource pipeline but not the class registry (see the scan() comment).
+	# Surface that precisely (only when the class isn't already registered) so a
+	# headless caller knows to follow up with filesystem_manage(op="scan")
+	# instead of hitting a confusing "Unknown type" / "Unknown resource type" on
+	# the very next call. We don't scan here — a scan() per create is the exact
+	# SIGABRT race documented below; the explicit op is single-flight.
+	# Skip the hint when the script failed to parse: a scan won't register a
+	# class from a broken script, so pointing at op="scan" would steer the caller
+	# away from the real fix (the parse error already attached above).
+	var declared_class := _extract_class_name(content)
+	if (
+		not declared_class.is_empty()
+		and not _script_has_error_diagnostics(data)
+		and not _class_name_registered(declared_class)
+	):
+		data["class_name"] = declared_class
+		data["class_registration"] = "scan_required"
+		data["class_registration_hint"] = (
+			"New class_name '%s' isn't in the global class table yet. " % declared_class
+			+ "Call filesystem_manage(op=\"scan\") if it won't resolve on the next "
+			+ "call (e.g. resource_manage op=\"create\", or used as a type in another "
+			+ "script). The editor also registers it on its next filesystem scan or "
+			+ "when its window regains focus."
+		)
+
+	# Register just this file with the editor instead of a full recursive
+	# scan(). A scan() per write stacks `update_scripts_classes` /
+	# `update_script_paths_documentation` WorkerThreadPool tasks under concurrent
+	# script creation ("Task ... already exists" / "!tasks.has(p_task)"), which
+	# races the global-class registry and can SIGABRT in
+	# ScriptServer::remove_global_class_by_path (see dsarno/godot#6).
+	# update_file() is the single-file path the rest of the plugin already uses.
+	var efs := EditorInterface.get_resource_filesystem()
+	if efs != null:
+		efs.update_file(path)
+
 	# `.gd.uid` is the sidecar Godot generates on scan; list both so the caller
 	# can rm the full set in one go.
 	McpResourceIO.attach_cleanup_hint(data, existed_before, [path, path + ".uid"])
@@ -130,12 +169,54 @@ static func _finish_create_script_deferred(
 	connection.send_deferred_response(request_id, {"data": payload})
 
 
+## Extract the `class_name` a script declares, or "" if none. A cheap line scan
+## (no full parse) for create_script's "scan_required" hint. Stops at the first
+## space/tab or comma so all three valid forms yield just the name:
+## `class_name Foo`, `class_name Foo extends Bar`, and the icon form
+## `class_name Foo, "res://icon.svg"`.
+static func _extract_class_name(content: String) -> String:
+	for raw_line in content.split("\n"):
+		var line := raw_line.strip_edges()
+		if line.begins_with("class_name "):
+			var rest := line.substr(11).strip_edges()
+			var cut := rest.length()
+			for i in rest.length():
+				var ch := rest[i]
+				if ch == " " or ch == "\t" or ch == ",":
+					cut = i
+					break
+			return rest.substr(0, cut)
+	return ""
+
+
+## True if create_script's diagnostics captured a parse error for this script.
+## Used to suppress the "scan_required" hint when the class can't register
+## anyway — see create_script.
+static func _script_has_error_diagnostics(data: Dictionary) -> bool:
+	for diag in data.get("diagnostics", []):
+		if diag is Dictionary and diag.get("level", "") == "error":
+			return true
+	return false
+
+
+## True if `cn` is already usable as a type — an engine built-in (ClassDB) or an
+## already-registered project global class. A brand-new class_name returns false
+## until a filesystem scan registers it.
+static func _class_name_registered(cn: String) -> bool:
+	if ClassDB.class_exists(cn):
+		return true
+	for entry in ProjectSettings.get_global_class_list():
+		if entry.get("class", "") == cn:
+			return true
+	return false
+
+
 func read_script(params: Dictionary) -> Dictionary:
 	var path: String = params.get("path", "")
 
-	var path_err := McpPathValidator.validate_resource_path(path)
-	if not path_err.is_empty():
-		return ErrorCodes.make(ErrorCodes.INVALID_PARAMS, path_err)
+	var path_err = McpPathValidator.path_error(path, "path")
+	if path_err != null:
+		return path_err
 
 	if not FileAccess.file_exists(path):
 		return ErrorCodes.make(ErrorCodes.RESOURCE_NOT_FOUND, "File not found: %s" % path)
@@ -157,15 +238,103 @@ func read_script(params: Dictionary) -> Dictionary:
 	}
 
 
+func _attach_gdscript_diagnostics(data: Dictionary, path: String, content: String) -> void:
+	var validation := _validate_gdscript_source(content)
+	var diagnostics: Array = []
+	var diagnostics_detail := "none"
+	var diagnostics_status := "checked"
+
+	if not validation.get("ok", true):
+		var capture := _capture_gdscript_load_diagnostics(path)
+		diagnostics = capture.get("diagnostics", [])
+		diagnostics_detail = capture.get("diagnostics_detail", "none")
+		diagnostics_status = capture.get("diagnostics_status", "checked")
+	if not validation.get("ok", true) and diagnostics.is_empty():
+		diagnostics.append(_fallback_gdscript_diagnostic(path, validation.get("error_code", FAILED), content))
+		diagnostics_detail = "fallback"
+	data["diagnostics"] = diagnostics
+	data["diagnostics_detail"] = diagnostics_detail
+	data["diagnostics_scope"] = "this_file"
+	data["diagnostics_status"] = diagnostics_status
+
+
+static func _validate_gdscript_source(content: String) -> Dictionary:
+	var script := GDScript.new()
+	script.source_code = content
+	## Keep validation off the live cached resource: assigning resource_path to
+	## this ephemeral Script can collide with loaded instances. reload() still
+	## performs normal GDScript analysis, including static initializer work, so
+	## this check is intentionally scoped to `.gd` writes where the editor would
+	## compile the file on scan anyway.
+	var err := script.reload()
+	return {
+		"ok": err == OK,
+		"error_code": err,
+	}
+
+
+func _capture_gdscript_load_diagnostics(path: String) -> Dictionary:
+	var buffer := McpEditorLogBuffer.new()
+	var logger := ValidationLogger.new(buffer)
+	var capture := DiagnosticsCapture.capture_this_file(buffer, path, func() -> Dictionary:
+		OS.add_logger(logger)
+		# ResourceLoader.load() reports parse failure instead of throwing, and
+		# a failed GDScript parse does not execute user code; remove immediately
+		# after the synchronous load to keep the private capture window tiny.
+		ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE)
+		OS.remove_logger(logger)
+		return {}
+	)
+	return capture
+
+
+static func _empty_diagnostics_capture() -> Dictionary:
+	return {
+		"diagnostics": [],
+		"diagnostics_detail": "none",
+		"diagnostics_scope": "this_file",
+		"diagnostics_status": "checked",
+	}
+
+
+static func _fallback_gdscript_diagnostic(path: String, error_code: int, content: String) -> Dictionary:
+	var line := _fallback_gdscript_error_line(content)
+	return {
+		"source": "editor",
+		"level": "error",
+		"text": "GDScript reload failed with error code %d." % error_code,
+		"path": path,
+		"line": line,
+		"function": "GDScript::reload",
+		"details": {
+			"code": "gdscript_reload_failed",
+			"error_code": error_code,
+			"fallback_line": true,
+			"source": {
+				"path": path,
+				"line": line,
+			},
+		},
+	}
+
+
+static func _fallback_gdscript_error_line(content: String) -> int:
+	var lines := content.split("\n")
+	for i in range(lines.size() - 1, -1, -1):
+		if not str(lines[i]).strip_edges().is_empty():
+			return i + 1
+	return 1
+
+
 func patch_script(params: Dictionary) -> Dictionary:
 	var path: String = params.get("path", "")
 	var old_text: String = params.get("old_text", "")
 	var new_text: String = params.get("new_text", "")
 	var replace_all: bool = params.get("replace_all", false)
 
-	var path_err := McpPathValidator.validate_resource_path(path)
-	if not path_err.is_empty():
-		return ErrorCodes.make(ErrorCodes.INVALID_PARAMS, path_err)
+	var path_err = McpPathValidator.path_error(path, "path", true)
+	if path_err != null:
+		return path_err
 	if not "old_text" in params:
 		return ErrorCodes.make(ErrorCodes.MISSING_REQUIRED_PARAM, "Missing required param: old_text")
 	if not "new_text" in params:
@@ -206,18 +375,22 @@ func patch_script(params: Dictionary) -> Dictionary:
 	write.store_string(new_content)
 	write.close()
 
-	EditorInterface.get_resource_filesystem().scan()
-
-	return {
-		"data": {
-			"path": path,
-			"replacements": replacements,
-			"size": new_content.length(),
-			"old_size": content.length(),
-			"undoable": false,
-			"reason": "File system operations cannot be undone via editor undo",
-		}
+	var data := {
+		"path": path,
+		"replacements": replacements,
+		"size": new_content.length(),
+		"old_size": content.length(),
+		"undoable": false,
+		"reason": "File system operations cannot be undone via editor undo",
 	}
+	_attach_gdscript_diagnostics(data, path, new_content)
+
+	# Single-file register, not a full scan() — see create_script (dsarno/godot#6).
+	var efs := EditorInterface.get_resource_filesystem()
+	if efs != null:
+		efs.update_file(path)
+
+	return {"data": data}
 
 
 func attach_script(params: Dictionary) -> Dictionary:
@@ -230,11 +403,15 @@ func attach_script(params: Dictionary) -> Dictionary:
 	if script_path.is_empty():
 		return ErrorCodes.make(ErrorCodes.MISSING_REQUIRED_PARAM, "Missing required param: script_path")
 
+	var spath_err = McpPathValidator.loadable_error(script_path, "script_path")
+	if spath_err != null:
+		return spath_err
+
 	var _resolved := McpNodeValidator.resolve_or_error(node_path, "node_path")
 	if _resolved.has("error"):
 		return _resolved
 	var node: Node = _resolved.node
-	var scene_root: Node = _resolved.scene_root
+	var _scene_root: Node = _resolved.scene_root
 
 	if not ResourceLoader.exists(script_path):
 		return ErrorCodes.make(ErrorCodes.RESOURCE_NOT_FOUND, "Script not found: %s" % script_path)
@@ -270,7 +447,7 @@ func detach_script(params: Dictionary) -> Dictionary:
 	if _resolved.has("error"):
 		return _resolved
 	var node: Node = _resolved.node
-	var scene_root: Node = _resolved.scene_root
+	var _scene_root: Node = _resolved.scene_root
 
 	var old_script: Script = node.get_script()
 	if old_script == null:
@@ -293,9 +470,9 @@ func detach_script(params: Dictionary) -> Dictionary:
 func find_symbols(params: Dictionary) -> Dictionary:
 	var path: String = params.get("path", "")
 
-	var path_err := McpPathValidator.validate_resource_path(path)
-	if not path_err.is_empty():
-		return ErrorCodes.make(ErrorCodes.INVALID_PARAMS, path_err)
+	var path_err = McpPathValidator.path_error(path, "path")
+	if path_err != null:
+		return path_err
 
 	if not FileAccess.file_exists(path):
 		return ErrorCodes.make(ErrorCodes.RESOURCE_NOT_FOUND, "File not found: %s" % path)
@@ -335,9 +512,10 @@ func find_symbols(params: Dictionary) -> Dictionary:
 			else:
 				signals_list.append(sig_text)
 
-		# func
-		if line.begins_with("func "):
-			var func_text := line.substr(5).strip_edges()
+		# func (including `static func` — strip the leading `static ` first)
+		var func_line := line.substr(7).strip_edges() if line.begins_with("static func ") else line
+		if func_line.begins_with("func "):
+			var func_text := func_line.substr(5).strip_edges()
 			var paren_idx := func_text.find("(")
 			if paren_idx >= 0:
 				functions.append({

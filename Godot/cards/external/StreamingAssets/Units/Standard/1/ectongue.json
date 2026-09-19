@@ -1,0 +1,37 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Ectongue",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "ectongue",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Strength, SummerJam1",
+      "Amount": 1,
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Health, SummerJam1",
+      "Max": 10,
+      "Amount": 10,
+      "Enabled": true
+    },
+    {
+      "$type": "Api.SourcePrefab, Api",
+      "Prefab": "Units\\Standard\\1\\ectongue.json",
+      "Enabled": true
+    }
+  ],
+  "Id": 127
+}

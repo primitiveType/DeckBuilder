@@ -1,0 +1,22 @@
+{
+  "$type": "Api.Entity, Api",
+  "m_Children": [],
+  "Id": 11,
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Objectives.DealXHealingInOneTurn, SummerJam1",
+      "Required": 10,
+      "HealDealt": 0,
+      "Completed": false,
+      "Failed": false
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles",
+      "Description": "Heal 10 damage in one turn."
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": 0
+    }
+  ]
+}

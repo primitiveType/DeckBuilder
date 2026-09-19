@@ -6,10 +6,8 @@ const GAME_HELPER_AUTOLOAD_PATH := "res://addons/godot_ai/runtime/game_helper.gd
 
 ## Editor-process Logger subclass — captures parse errors, @tool runtime
 ## errors, and push_error/push_warning so the LLM can read them via
-## `logs_read(source="editor")`. Loaded dynamically because
-## `extends Logger` requires Godot 4.5+; gating on ClassDB at registration
-## time keeps the plugin loadable on 4.4. See issue #231.
-const EDITOR_LOGGER_PATH := "res://addons/godot_ai/runtime/editor_logger.gd"
+## `logs_read(source="editor")`.
+const EditorLogger := preload("res://addons/godot_ai/runtime/editor_logger.gd")
 
 ## EditorSettings keys used to remember which server process the plugin
 ## spawned — survives editor restarts, lets a later editor session adopt
@@ -45,6 +43,7 @@ const Telemetry := preload("res://addons/godot_ai/telemetry.gd")
 const LogBuffer := preload("res://addons/godot_ai/utils/log_buffer.gd")
 const GameLogBuffer := preload("res://addons/godot_ai/utils/game_log_buffer.gd")
 const EditorLogBuffer := preload("res://addons/godot_ai/utils/editor_log_buffer.gd")
+const SurfacedErrorTracker := preload("res://addons/godot_ai/utils/surfaced_error_tracker.gd")
 const Dock := preload("res://addons/godot_ai/mcp_dock.gd")
 const DebuggerPlugin := preload("res://addons/godot_ai/debugger/mcp_debugger_plugin.gd")
 const ClientConfigurator := preload("res://addons/godot_ai/client_configurator.gd")
@@ -61,6 +60,7 @@ const ProjectHandler := preload("res://addons/godot_ai/handlers/project_handler.
 const ClientHandler := preload("res://addons/godot_ai/handlers/client_handler.gd")
 const ScriptHandler := preload("res://addons/godot_ai/handlers/script_handler.gd")
 const ResourceHandler := preload("res://addons/godot_ai/handlers/resource_handler.gd")
+const ApiHandler := preload("res://addons/godot_ai/handlers/api_handler.gd")
 const FilesystemHandler := preload("res://addons/godot_ai/handlers/filesystem_handler.gd")
 const SignalHandler := preload("res://addons/godot_ai/handlers/signal_handler.gd")
 const AutoloadHandler := preload("res://addons/godot_ai/handlers/autoload_handler.gd")
@@ -79,6 +79,8 @@ const EnvironmentHandler := preload("res://addons/godot_ai/handlers/environment_
 const TextureHandler := preload("res://addons/godot_ai/handlers/texture_handler.gd")
 const CurveHandler := preload("res://addons/godot_ai/handlers/curve_handler.gd")
 const ControlDrawRecipeHandler := preload("res://addons/godot_ai/handlers/control_draw_recipe_handler.gd")
+const TilemapHandler := preload("res://addons/godot_ai/handlers/tilemap_handler.gd")
+const TilesetHandler := preload("res://addons/godot_ai/handlers/tileset_handler.gd")
 
 ## The Python server writes its own PID here on startup (passed as
 ## `--pid-file`) and unlinks on clean exit. Deterministic replacement
@@ -140,17 +142,14 @@ const STARTUP_TRACE_COUNTER_NAMES := [
 ##
 ## `tests/unit/test_plugin_self_update_safety.py` locks this wording in.
 ##
-## `_editor_logger` was already untyped because its script extends Godot
-## 4.5+'s Logger class and is loaded via `load()` so the plugin still parses
-## on 4.4. Null on Godot < 4.5 or before `_attach_editor_logger` runs;
-## "attached" state IS exactly "non-null".
 var _connection
 var _dispatcher
 var _telemetry
 var _log_buffer
 var _game_log_buffer
 var _editor_log_buffer
-var _editor_logger
+var _surfaced_error_tracker
+var _editor_logger: Logger
 var _dock
 var _handlers: Array = []  # prevent GC of RefCounted handlers
 var _debugger_plugin
@@ -191,6 +190,11 @@ func _enter_tree() -> void:
 		print("MCP | plugin disabled in headless mode")
 		return
 
+	## Self-update extracts over the live addon and doesn't prune files that
+	## disappeared from the new ZIP. Remove obsolete Logger-loader quarantine
+	## files/folders once so upgraders match a fresh install.
+	_cleanup_legacy_logger_scripts()
+
 	## Register port overrides before spawn so `http_port()` / `ws_port()`
 	## return the user's configured values (if any) when `_start_server`
 	## builds the CLI args.
@@ -198,17 +202,24 @@ func _enter_tree() -> void:
 	_startup_trace_phase("settings_registered")
 
 	_log_buffer = LogBuffer.new()
+	## Apply the persisted dock "Log" toggle before anything logs through the
+	## buffer. Without this the choice only took effect after a manual toggle
+	## and reset to noisy on every editor restart (#626).
+	_log_buffer.enabled = McpSettings.mcp_logging_enabled()
 	_start_server()
 	_startup_trace_phase("server_start")
 
 	_game_log_buffer = GameLogBuffer.new()
 	_editor_log_buffer = EditorLogBuffer.new()
+	_surfaced_error_tracker = SurfacedErrorTracker.new(_editor_log_buffer, _game_log_buffer)
 	_attach_editor_logger()
-	_dispatcher = Dispatcher.new(_log_buffer)
+	_dispatcher = Dispatcher.new(_log_buffer, _surfaced_error_tracker)
+	_dispatcher.mcp_logging = _log_buffer.enabled
 	_startup_trace_phase("core_objects")
 
 	_connection = Connection.new()
 	_connection.log_buffer = _log_buffer
+	_connection.surfaced_error_tracker = _surfaced_error_tracker
 	_connection.ws_port = _resolved_ws_port
 	_connection.connect_blocked = _lifecycle.is_connection_blocked()
 	_connection.connect_block_reason = _lifecycle.get_status_dict().get("message", "")
@@ -220,18 +231,20 @@ func _enter_tree() -> void:
 
 	_telemetry = Telemetry.new(_connection)
 
-	_debugger_plugin = DebuggerPlugin.new(_log_buffer, _game_log_buffer)
+	_debugger_plugin = DebuggerPlugin.new(_log_buffer, _game_log_buffer, _editor_log_buffer, _surfaced_error_tracker)
 	add_debugger_plugin(_debugger_plugin)
+	_connection.debugger_plugin = _debugger_plugin
 	_ensure_game_helper_autoload()
 
-	var editor_handler := EditorHandler.new(_log_buffer, _connection, _debugger_plugin, _game_log_buffer, _editor_log_buffer)
+	var editor_handler := EditorHandler.new(_log_buffer, _connection, _debugger_plugin, _game_log_buffer, _editor_log_buffer, null, _surfaced_error_tracker)
 	var scene_handler := SceneHandler.new(_connection)
 	var node_handler := NodeHandler.new(get_undo_redo())
-	var project_handler := ProjectHandler.new(_connection, _debugger_plugin)
+	var project_handler := ProjectHandler.new(_connection, _debugger_plugin, _editor_log_buffer)
 	var client_handler := ClientHandler.new()
 	var script_handler := ScriptHandler.new(get_undo_redo(), _connection)
 	var resource_handler := ResourceHandler.new(get_undo_redo(), _connection)
-	var filesystem_handler := FilesystemHandler.new()
+	var api_handler := ApiHandler.new()
+	var filesystem_handler := FilesystemHandler.new(_connection)
 	var signal_handler := SignalHandler.new(get_undo_redo())
 	var autoload_handler := AutoloadHandler.new()
 	var input_handler := InputHandler.new()
@@ -249,7 +262,9 @@ func _enter_tree() -> void:
 	var texture_handler := TextureHandler.new(get_undo_redo(), _connection)
 	var curve_handler := CurveHandler.new(get_undo_redo(), _connection)
 	var control_draw_recipe_handler := ControlDrawRecipeHandler.new(get_undo_redo())
-	_handlers = [editor_handler, scene_handler, node_handler, project_handler, client_handler, script_handler, resource_handler, filesystem_handler, signal_handler, autoload_handler, input_handler, test_handler, batch_handler, ui_handler, theme_handler, animation_handler, material_handler, particle_handler, camera_handler, audio_handler, physics_shape_handler, environment_handler, texture_handler, curve_handler, control_draw_recipe_handler]
+	var tilemap_handler := TilemapHandler.new(get_undo_redo())
+	var tileset_handler := TilesetHandler.new()
+	_handlers = [editor_handler, scene_handler, node_handler, project_handler, client_handler, script_handler, resource_handler, api_handler, filesystem_handler, signal_handler, autoload_handler, input_handler, test_handler, batch_handler, ui_handler, theme_handler, animation_handler, material_handler, particle_handler, camera_handler, audio_handler, physics_shape_handler, environment_handler, texture_handler, curve_handler, control_draw_recipe_handler, tilemap_handler, tileset_handler]
 
 	_dispatcher.register("get_editor_state", editor_handler.get_editor_state)
 	_dispatcher.register("get_scene_tree", scene_handler.get_scene_tree)
@@ -279,6 +294,8 @@ func _enter_tree() -> void:
 	_dispatcher.register("get_performance_monitors", editor_handler.get_performance_monitors)
 	_dispatcher.register("reload_plugin", editor_handler.reload_plugin)
 	_dispatcher.register("quit_editor", editor_handler.quit_editor)
+	_dispatcher.register("game_eval", editor_handler.game_eval)
+	_dispatcher.register("game_command", editor_handler.game_command)
 	_dispatcher.register("get_project_setting", project_handler.get_project_setting)
 	_dispatcher.register("set_project_setting", project_handler.set_project_setting)
 	_dispatcher.register("run_project", project_handler.run_project)
@@ -298,9 +315,11 @@ func _enter_tree() -> void:
 	_dispatcher.register("assign_resource", resource_handler.assign_resource)
 	_dispatcher.register("create_resource", resource_handler.create_resource)
 	_dispatcher.register("get_resource_info", resource_handler.get_resource_info)
+	_dispatcher.register("get_class_info", api_handler.get_class_info)
 	_dispatcher.register("read_file", filesystem_handler.read_file)
 	_dispatcher.register("write_file", filesystem_handler.write_file)
 	_dispatcher.register("reimport", filesystem_handler.reimport)
+	_dispatcher.register("scan_filesystem", filesystem_handler.scan_filesystem)
 	_dispatcher.register("list_signals", signal_handler.list_signals)
 	_dispatcher.register("connect_signal", signal_handler.connect_signal)
 	_dispatcher.register("disconnect_signal", signal_handler.disconnect_signal)
@@ -309,8 +328,10 @@ func _enter_tree() -> void:
 	_dispatcher.register("remove_autoload", autoload_handler.remove_autoload)
 	_dispatcher.register("list_actions", input_handler.list_actions)
 	_dispatcher.register("add_action", input_handler.add_action)
+	_dispatcher.register("ensure_action", input_handler.ensure_action)
 	_dispatcher.register("remove_action", input_handler.remove_action)
 	_dispatcher.register("bind_event", input_handler.bind_event)
+	_dispatcher.register("ensure_binding", input_handler.ensure_binding)
 	_dispatcher.register("run_tests", test_handler.run_tests)
 	_dispatcher.register("get_test_results", test_handler.get_test_results)
 	_dispatcher.register("batch_execute", batch_handler.batch_execute)
@@ -376,6 +397,12 @@ func _enter_tree() -> void:
 	_dispatcher.register(
 		"control_draw_recipe", control_draw_recipe_handler.control_draw_recipe
 	)
+	_dispatcher.register("tilemap_set_cell",              tilemap_handler.set_cell)
+	_dispatcher.register("tilemap_set_cells_rect",        tilemap_handler.set_cells_rect)
+	_dispatcher.register("tilemap_clear",                 tilemap_handler.clear_layer)
+	_dispatcher.register("tilemap_get_cells",             tilemap_handler.get_used_cells)
+	_dispatcher.register("tileset_get_atlas_tiles",        tileset_handler.get_atlas_tiles)
+	_dispatcher.register("tileset_get_atlas_image",        tileset_handler.get_atlas_image)
 
 	_connection.dispatcher = _dispatcher
 	add_child(_connection)
@@ -472,6 +499,7 @@ func _exit_tree() -> void:
 	_log_buffer = null
 	_game_log_buffer = null
 	_editor_log_buffer = null
+	_surfaced_error_tracker = null
 
 	_stop_server()
 	## Symmetric with prepare_for_update_reload: the static guard persists
@@ -487,9 +515,7 @@ func _exit_tree() -> void:
 ## Attach editor_logger.gd as a Godot logger so editor-process script
 ## errors (parse errors, @tool runtime errors, EditorPlugin errors,
 ## push_error/push_warning) flow into _editor_log_buffer for
-## logs_read(source="editor"). Logger subclassing is 4.5+ only; the
-## ClassDB gate keeps the plugin loadable on 4.4 with no-op editor logs
-## (the buffer stays empty, logs_read returns no entries).
+## logs_read(source="editor").
 ##
 ## Limitation called out in the issue: parse errors fired *before* the
 ## plugin's _enter_tree (e.g. during the editor's initial filesystem
@@ -499,18 +525,53 @@ func _exit_tree() -> void:
 ## file would re-emit them but at the cost of disrupting the user's
 ## editing state, so we accept the gap.
 func _attach_editor_logger() -> void:
-	if not (ClassDB.class_exists("Logger") and OS.has_method("add_logger")):
+	_editor_logger = EditorLogger.new(_editor_log_buffer)
+	OS.add_logger(_editor_logger)
+
+
+## Remove old Logger-quarantine artifacts left by extract-over-live
+## self-update. Idempotent: existence-guarded, so it's a no-op on fresh
+## installs and symlinked dev checkouts.
+func _cleanup_legacy_logger_scripts() -> void:
+	var legacy_files := [
+		"res://addons/godot_ai/runtime/logger_loader.gd",
+		"res://addons/godot_ai/runtime/logger_loader.gd.uid",
+		"res://addons/godot_ai/testing/script_error_capture_loader.gd",
+		"res://addons/godot_ai/testing/script_error_capture_loader.gd.uid",
+	]
+	for res_path in legacy_files:
+		if FileAccess.file_exists(res_path):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(res_path))
+	var legacy_dirs := [
+		"res://addons/godot_ai/runtime/loggers",
+		"res://addons/godot_ai/testing/loggers",
+	]
+	for res_path in legacy_dirs:
+		var absolute := ProjectSettings.globalize_path(res_path)
+		if DirAccess.dir_exists_absolute(absolute):
+			_remove_dir_recursive_absolute(absolute)
+
+
+static func _remove_dir_recursive_absolute(path: String) -> void:
+	var dir := DirAccess.open(path)
+	if dir == null:
 		return
-	var logger_script := load(EDITOR_LOGGER_PATH)
-	if logger_script == null:
-		return
-	_editor_logger = logger_script.new(_editor_log_buffer)
-	OS.call("add_logger", _editor_logger)
+	dir.list_dir_begin()
+	var name := dir.get_next()
+	while not name.is_empty():
+		var child := path.path_join(name)
+		if dir.current_is_dir():
+			_remove_dir_recursive_absolute(child)
+		else:
+			DirAccess.remove_absolute(child)
+		name = dir.get_next()
+	dir.list_dir_end()
+	DirAccess.remove_absolute(path)
 
 
 func _detach_editor_logger() -> void:
-	if _editor_logger != null and OS.has_method("remove_logger"):
-		OS.call("remove_logger", _editor_logger)
+	if _editor_logger != null:
+		OS.remove_logger(_editor_logger)
 	_editor_logger = null
 
 
@@ -533,7 +594,7 @@ static func _mcp_disabled_for_headless_launch() -> bool:
 
 
 static func _mcp_disabled_for_headless(args: PackedStringArray, display_name: String, allow_value: String) -> bool:
-	if _env_truthy(allow_value):
+	if McpSettings.truthy(allow_value):
 		return false
 	return _args_request_headless(args) or display_name.to_lower() == "headless"
 
@@ -550,12 +611,6 @@ static func _args_request_headless(args: PackedStringArray) -> bool:
 	return false
 
 
-static func _env_truthy(value: String) -> bool:
-	match value.strip_edges().to_lower():
-		"1", "true", "yes", "on":
-			return true
-		_:
-			return false
 
 
 func _disable_plugin() -> void:
@@ -662,10 +717,10 @@ static func _incompatible_server_message(
 
 
 static func _server_version_compatibility(
-	actual_version: String, expected_version: String, is_dev_checkout: bool
+	actual_version: String, expected_version: String
 ) -> Dictionary:
 	return ServerLifecycleManager._server_version_compatibility(
-		actual_version, expected_version, is_dev_checkout
+		actual_version, expected_version
 	)
 
 
@@ -674,10 +729,9 @@ static func _server_status_compatibility(
 	expected_version: String,
 	actual_ws_port: int,
 	expected_ws_port: int,
-	is_dev_checkout: bool,
 ) -> Dictionary:
 	return ServerLifecycleManager._server_status_compatibility(
-		actual_version, expected_version, actual_ws_port, expected_ws_port, is_dev_checkout
+		actual_version, expected_version, actual_ws_port, expected_ws_port
 	)
 
 
@@ -1064,7 +1118,17 @@ func _evaluate_strong_port_occupant_proof(port: int, live: Dictionary = {}) -> D
 	var record_version := str(record.get("version", ""))
 
 	if record_pid > 1 and record_pid != OS.get_process_id():
-		if listener_pids.has(record_pid) and _pid_alive_for_proof(record_pid):
+		## Brand-verify the recorded PID before trusting it as a kill target.
+		## A recorded PID can outlive the server it named and be recycled by
+		## the kernel for an unrelated process that happens to bind the same
+		## port — without the cmdline brand gate (the same one the
+		## `pidfile_listener` branch enforces) that process could be killed.
+		## See #525.
+		if (
+			listener_pids.has(record_pid)
+			and _pid_alive_for_proof(record_pid)
+			and _pid_cmdline_is_godot_ai_for_proof(record_pid)
+		):
 			return {"proof": "managed_record", "pids": [record_pid]}
 
 	var legacy_targets := _legacy_pidfile_kill_targets(port, listener_pids)
@@ -1104,18 +1168,32 @@ func _recover_strong_port_occupant(port: int, wait_s: float, pre_kill_live: Dict
 func _legacy_pidfile_kill_targets(_port: int, listener_pids: Array[int]) -> Array[int]:
 	var targets: Array[int] = []
 	var pidfile_pid := _read_pid_file_for_proof()
-	var pidfile_alive := _pid_alive_for_proof(pidfile_pid)
-	var pidfile_branded := _pid_cmdline_is_godot_ai_for_proof(pidfile_pid)
 	if pidfile_pid <= 1 or pidfile_pid == OS.get_process_id():
 		return targets
-	if not listener_pids.has(pidfile_pid) or not pidfile_alive:
-		return targets
-	if not pidfile_branded:
+	## An alive, branded pid-file PID is sufficient ownership proof. Under
+	## `uvicorn --reload` the reloader writes the pid-file but a child worker
+	## binds the port, so `listener_pids` never contains the reloader PID.
+	## Requiring `listener_pids.has(pidfile_pid)` here used to silently skip
+	## the kill path for the entire reload-shaped server family. The branded
+	## listener loop below still does the per-PID brand check so we never
+	## kill an unrelated process that happens to share the port.
+	if not _pid_alive_for_proof(pidfile_pid) or not _pid_cmdline_is_godot_ai_for_proof(pidfile_pid):
 		return targets
 
 	for pid in listener_pids:
-		if pid > 1 and pid != OS.get_process_id() and _pid_cmdline_is_godot_ai_for_proof(pid):
+		if pid <= 1 or pid == OS.get_process_id():
+			continue
+		## Reuse the brand result already proven above when this listener is
+		## the same PID as the pidfile — saves a parent-chain walk and a
+		## shell-out (PowerShell on Windows, /proc on Linux, ps on macOS) per
+		## startup proof evaluation.
+		if pid == pidfile_pid or _pid_cmdline_is_godot_ai_for_proof(pid):
 			targets.append(pid)
+	## Also kill the reloader/launcher itself when it isn't already a listener.
+	## Without this, `--reload` workers would be killed but their parent would
+	## immediately respawn a replacement and the port would never free.
+	if not targets.has(pidfile_pid):
+		targets.append(pidfile_pid)
 	return targets
 
 
@@ -1192,6 +1270,15 @@ static func _build_server_flags(port: int, ws_port: int) -> Array[String]:
 	if not excluded.is_empty():
 		flags.append("--exclude-domains")
 		flags.append(excluded)
+	## LAN opt-in (#507, server core #421): pass `--allow-host` only when the
+	## developer-mode Settings tab named at least one CIDR / bare IP. Skipping
+	## the empty case keeps the default spawn byte-for-byte identical and
+	## compatible with older servers that don't know the flag — same pattern
+	## as `--exclude-domains` above.
+	var allow_hosts := ClientConfigurator.allow_hosts()
+	if not allow_hosts.is_empty():
+		flags.append("--allow-host")
+		flags.append(allow_hosts)
 	return flags
 
 
@@ -1537,7 +1624,10 @@ func start_dev_server() -> void:
 			var new_pp := worktree_src if prev_pythonpath.is_empty() else worktree_src + sep + prev_pythonpath
 			OS.set_environment("PYTHONPATH", new_pp)
 
+		var injected_telemetry: bool = _lifecycle._inject_telemetry_env()
 		var pid := OS.create_process(cmd, inner_args)
+		if injected_telemetry:
+			OS.unset_environment("GODOT_AI_DISABLE_TELEMETRY")
 
 		## Restore PYTHONPATH immediately — the spawned child has already
 		## copied the env, so the editor's own process state returns to

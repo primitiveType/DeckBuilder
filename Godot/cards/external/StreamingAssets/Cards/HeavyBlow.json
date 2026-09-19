@@ -1,0 +1,48 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
+      "DamageAmount": 8,
+      "Attacks": 1,
+      "Aoe": false,
+      "Pierce": false,
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "pulse",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1",
+      "Enabled": true
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "HeavyBlow",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.BeatCost, SummerJam1",
+      "Amount": 3,
+      "Enabled": true
+    },
+    {
+      "$type": "Api.SourcePrefab, Api",
+      "Prefab": "Cards\\HeavyBlow.json",
+      "Enabled": true
+    },
+    {
+      "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
+      "Amount": 1,
+      "Enabled": true
+    }
+  ],
+  "Id": 162
+}

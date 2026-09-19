@@ -28,7 +28,7 @@ func create_theme(params: Dictionary) -> Dictionary:
 	var path: String = params.get("path", "")
 	var overwrite: bool = params.get("overwrite", false)
 
-	var err := _validate_res_path(path, ".tres", "path")
+	var err := _validate_res_path(path, ".tres", "path", true)
 	if err != null:
 		return err
 
@@ -86,12 +86,17 @@ func set_color(params: Dictionary) -> Dictionary:
 		func(v): return _parse_color(v))
 
 
+# constant / font_size parsers validate before coercing: int("abc")/int({})/int([])
+# all return 0 in GDScript (never null), so a bare `int(v)` would silently store
+# garbage as 0 and report success. Returning null for non-numeric input lets
+# _set_scalar's null guard surface a VALUE_OUT_OF_RANGE error, matching the
+# color path's contract.
 func set_constant(params: Dictionary) -> Dictionary:
 	return _set_scalar(params, "constant", func(theme, name, cls): return theme.get_constant(name, cls),
 		func(theme, name, cls, val): theme.set_constant(name, cls, int(val)),
 		func(theme, name, cls): theme.clear_constant(name, cls),
 		func(theme, name, cls): return theme.has_constant(name, cls),
-		func(v): return int(v))
+		func(v): return int(v) if (v is int or v is float or (v is String and v.is_valid_int())) else null)
 
 
 func set_font_size(params: Dictionary) -> Dictionary:
@@ -99,7 +104,7 @@ func set_font_size(params: Dictionary) -> Dictionary:
 		func(theme, name, cls, val): theme.set_font_size(name, cls, int(val)),
 		func(theme, name, cls): theme.clear_font_size(name, cls),
 		func(theme, name, cls): return theme.has_font_size(name, cls),
-		func(v): return int(v))
+		func(v): return int(v) if (v is int or v is float or (v is String and v.is_valid_int())) else null)
 
 
 # Shared implementation for scalar Theme slots (color, constant, font_size).
@@ -139,8 +144,10 @@ func _set_scalar(
 		)
 	var parsed = parser.call(raw_value)
 	if parsed == null:
+		## color slots want a color hint; constant/font_size are integer slots.
+		var hint := _COLOR_HINT if kind == "color" else "expected an integer"
 		return ErrorCodes.make(ErrorCodes.VALUE_OUT_OF_RANGE,
-			"Invalid %s value: %s (%s)" % [kind, raw_value, _COLOR_HINT])
+			"Invalid %s value: %s (%s)" % [kind, raw_value, hint])
 
 	var had_before: bool = has_fn.call(theme, name, class_name_param)
 	var before_value = getter.call(theme, name, class_name_param) if had_before else null
@@ -394,7 +401,7 @@ func apply_theme(params: Dictionary) -> Dictionary:
 	if _resolved.has("error"):
 		return _resolved
 	var node: Node = _resolved.node
-	var scene_root: Node = _resolved.scene_root
+	var _scene_root: Node = _resolved.scene_root
 	if not node is Control and not node is Window:
 		return ErrorCodes.make(
 			ErrorCodes.WRONG_TYPE,
@@ -423,7 +430,7 @@ func apply_theme(params: Dictionary) -> Dictionary:
 
 func _load_theme_from_params(params: Dictionary) -> Dictionary:
 	var theme_path: String = params.get("theme_path", "")
-	var err := _validate_res_path(theme_path, ".tres")
+	var err := _validate_res_path(theme_path, ".tres", "theme_path", true)
 	if err != null:
 		return err
 	if not ResourceLoader.exists(theme_path):
@@ -434,14 +441,12 @@ func _load_theme_from_params(params: Dictionary) -> Dictionary:
 	return {"theme": theme, "path": theme_path}
 
 
-static func _validate_res_path(path: String, required_suffix: String, param_name: String = "theme_path") -> Variant:
+static func _validate_res_path(path: String, required_suffix: String, param_name: String = "theme_path", for_write: bool = false) -> Variant:
 	if path.is_empty():
 		return ErrorCodes.make(ErrorCodes.MISSING_REQUIRED_PARAM, "Missing required param: %s" % param_name)
-	if not path.begins_with("res://"):
-		return ErrorCodes.make(
-			ErrorCodes.VALUE_OUT_OF_RANGE,
-			"%s must start with res:// (got %s)" % [param_name, path]
-		)
+	var path_err := McpPathValidator.validate_resource_path(path, for_write)
+	if not path_err.is_empty():
+		return ErrorCodes.make(ErrorCodes.VALUE_OUT_OF_RANGE, "%s: %s" % [param_name, path_err])
 	if not path.ends_with(required_suffix):
 		return ErrorCodes.make(
 			ErrorCodes.VALUE_OUT_OF_RANGE,

@@ -11,7 +11,7 @@ extends RefCounted
 static func build(client: McpClient, server_name: String, server_url: String, resolved_path: String) -> String:
 	match client.config_type:
 		"cli":
-			return _build_cli(client, server_name, server_url)
+			return _build_cli(client, server_name, server_url, resolved_path)
 		"json":
 			return _build_json(client, server_name, server_url, resolved_path)
 		"toml":
@@ -23,7 +23,7 @@ static func build(client: McpClient, server_name: String, server_url: String, re
 ## the user can paste it into a terminal regardless of where their binary
 ## lives. (The auto-configure path resolves to an absolute uvx-style path;
 ## that's noise for a paste-into-terminal hint.)
-static func _build_cli(client: McpClient, server_name: String, server_url: String) -> String:
+static func _build_cli(client: McpClient, server_name: String, server_url: String, resolved_path: String = "") -> String:
 	if client.cli_register_template.is_empty() or client.cli_names.is_empty():
 		return ""
 	var short_name: String = String(client.cli_names[0])
@@ -35,7 +35,16 @@ static func _build_cli(client: McpClient, server_name: String, server_url: Strin
 	var args := McpCliStrategy.format_args(client.cli_register_template, server_name, server_url)
 	var parts: Array[String] = [short_name]
 	parts.append_array(args)
-	return " ".join(parts)
+	var cmd := " ".join(parts)
+	# #463: a CLI client with a JSON fallback (Claude Code) may have no `claude`
+	# binary at all — e.g. installed only as a VS Code/Cursor extension. The CLI
+	# line above is useless to that user, so also show the config-file edit that
+	# auto-configure falls back to writing.
+	if client.has_json_fallback() and not resolved_path.is_empty():
+		return "%s\n\nNo `%s` CLI (e.g. installed as a VS Code/Cursor extension)? %s" % [
+			cmd, short_name, _build_json(client, server_name, server_url, resolved_path),
+		]
+	return cmd
 
 
 static func _build_json(client: McpClient, server_name: String, server_url: String, resolved_path: String) -> String:

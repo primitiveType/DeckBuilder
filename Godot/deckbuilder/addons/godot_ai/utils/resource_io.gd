@@ -71,8 +71,9 @@ static func save_to_disk(
 	extra_fields: Dictionary = {},
 	pause_target: McpConnection = null,
 ) -> Dictionary:
-	if not resource_path.begins_with("res://"):
-		return ErrorCodes.make(ErrorCodes.INVALID_PARAMS, "resource_path must start with res://")
+	var path_err = McpPathValidator.path_error(resource_path, "resource_path", true)
+	if path_err != null:
+		return path_err
 
 	var existed_before := FileAccess.file_exists(resource_path)
 	if existed_before and not overwrite:

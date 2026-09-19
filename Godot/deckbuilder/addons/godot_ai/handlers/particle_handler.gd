@@ -261,16 +261,13 @@ func _set_process_gpu(node: Node, node_path: String, properties: Dictionary) -> 
 
 
 func _set_process_cpu(node: Node, node_path: String, properties: Dictionary) -> Dictionary:
-	# CPU particles expose the same vocabulary directly on the node.
-	# Map a few GPU-only names to the CPU equivalents where they differ.
-	var aliases := {
-		"emission_sphere_radius": "emission_sphere_radius",
-	}
+	# CPU particles expose the same property vocabulary directly on the node,
+	# so property names pass through unchanged.
 	var coerced: Dictionary = {}
 	var old_values: Dictionary = {}
 
 	for property in properties:
-		var prop_name: String = aliases.get(String(property), String(property))
+		var prop_name: String = String(property)
 		var prop_type := _node_property_type(node, prop_name)
 		if prop_type == TYPE_NIL:
 			return ErrorCodes.make(
@@ -344,6 +341,9 @@ func _set_draw_pass_gpu_3d(node: GPUParticles3D, node_path: String, pass_idx: in
 	if int(node.draw_passes) >= pass_idx:
 		existing_mesh = node.get(property_name) as Mesh
 	if not mesh_path.is_empty():
+		var mesh_path_err = McpPathValidator.loadable_error(mesh_path, "mesh_path")
+		if mesh_path_err != null:
+			return mesh_path_err
 		if not ResourceLoader.exists(mesh_path):
 			return ErrorCodes.make(ErrorCodes.RESOURCE_NOT_FOUND, "Mesh not found: %s" % mesh_path)
 		var loaded := ResourceLoader.load(mesh_path)
@@ -360,6 +360,9 @@ func _set_draw_pass_gpu_3d(node: GPUParticles3D, node_path: String, pass_idx: in
 
 	var material: Material = null
 	if not material_path.is_empty():
+		var material_path_err = McpPathValidator.loadable_error(material_path, "material_path")
+		if material_path_err != null:
+			return material_path_err
 		if not ResourceLoader.exists(material_path):
 			return ErrorCodes.make(ErrorCodes.RESOURCE_NOT_FOUND, "Material not found: %s" % material_path)
 		var loaded_mat := ResourceLoader.load(material_path)
@@ -410,6 +413,9 @@ func _set_draw_pass_cpu_3d(node: CPUParticles3D, node_path: String, mesh_path: S
 	var mesh: Mesh = node.mesh
 	var old_mesh: Mesh = mesh
 	if not mesh_path.is_empty():
+		var mesh_path_err = McpPathValidator.loadable_error(mesh_path, "mesh_path")
+		if mesh_path_err != null:
+			return mesh_path_err
 		if not ResourceLoader.exists(mesh_path):
 			return ErrorCodes.make(ErrorCodes.RESOURCE_NOT_FOUND, "Mesh not found: %s" % mesh_path)
 		var loaded := ResourceLoader.load(mesh_path)
@@ -420,6 +426,9 @@ func _set_draw_pass_cpu_3d(node: CPUParticles3D, node_path: String, mesh_path: S
 	var material: Material = null
 	var old_material: Material = node.material_override
 	if not material_path.is_empty():
+		var material_path_err = McpPathValidator.loadable_error(material_path, "material_path")
+		if material_path_err != null:
+			return material_path_err
 		if not ResourceLoader.exists(material_path):
 			return ErrorCodes.make(ErrorCodes.RESOURCE_NOT_FOUND, "Material not found: %s" % material_path)
 		var loaded_mat := ResourceLoader.load(material_path)
@@ -450,6 +459,9 @@ func _set_draw_pass_cpu_3d(node: CPUParticles3D, node_path: String, mesh_path: S
 func _set_draw_pass_2d(node: Node, node_path: String, texture_path: String) -> Dictionary:
 	if texture_path.is_empty():
 		return ErrorCodes.make(ErrorCodes.MISSING_REQUIRED_PARAM, "2D particles require texture param")
+	var texture_path_err = McpPathValidator.loadable_error(texture_path, "texture_path")
+	if texture_path_err != null:
+		return texture_path_err
 	if not ResourceLoader.exists(texture_path):
 		return ErrorCodes.make(ErrorCodes.RESOURCE_NOT_FOUND, "Texture not found: %s" % texture_path)
 	var tex := ResourceLoader.load(texture_path)
