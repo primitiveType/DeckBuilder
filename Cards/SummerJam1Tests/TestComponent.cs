@@ -1,0 +1,41 @@
+﻿using Api;
+using CardsAndPiles;
+using CardsAndPiles.Components;
+using SummerJam1;
+using SummerJam1.Cards.Effects;
+
+namespace SummerJam1Tests
+{
+    public class TestComponent : SummerJam1Component, IEffect
+    {
+        public TargetingType Targeting{ get; } = TargetingType.Unit;
+
+        private int _entrancies = 0;
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Logging.Logger.Log("Initializing reentrancy component.");
+        }
+
+        [OnCardPlayed]
+        private void OnCardPlayed(object sender, CardPlayedEventArgs args)
+        {
+            Logging.Logger.Log("Reentrancy component oncardplayed.");
+
+            if (_entrancies > 100)
+            {
+                return;
+            }
+
+            _entrancies++;
+
+            args.CardId.GetComponent<Card>().TryPlayCard(args.Target);
+        }
+
+        public bool DoEffect(IEntity target)
+        {
+            return true;
+        }
+    }
+}

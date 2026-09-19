@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using Api;
 using UnityEngine;
-using UnityEngine.Serialization;
+using IComponent = Api.IComponent;
 
 namespace App
 {
@@ -22,7 +23,7 @@ namespace App
         }
     }
 
-    public abstract class ComponentView<T> : ComponentViewBase
+    public abstract class ComponentView<T> : ComponentViewBase where T : IComponent 
     {
         protected T Component { get; set; }
 
@@ -40,7 +41,7 @@ namespace App
 
         protected virtual void Start()
         {
-            View = GetComponentInParent<IView>();
+            View = GetComponentInParent<IView>(true);
             UpdateVisibility(true);
             if (View.Entity == null)
             {
@@ -85,6 +86,10 @@ namespace App
         /// <returns></returns>
         private bool UpdateComponentReference()
         {
+            if (Entity.Components.Contains<IComponent>(Component))
+            {
+                return false;
+            }
             var component = Entity.GetComponent<T>();
             if (Equals(component, Component))
             {
@@ -94,7 +99,7 @@ namespace App
 
             if (Component != null && component != null)
             {
-                Debug.LogWarning($"Replacing Component reference in {nameof(ComponentView<T>)}.");
+                Logging.LogWarning($"Replacing Component reference in {nameof(ComponentView<T>)}.");
             }
 
             if (Component != null)
@@ -117,7 +122,7 @@ namespace App
 
         private void ComponentOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (this == null)
+            if (this == null || Component.State == LifecycleState.Destroyed)
             {
                 return;
             }
@@ -128,8 +133,23 @@ namespace App
 
         private void UpdateVisibility(bool immediate)
         {
-            bool visible = Component != null || !m_HideIfNull;
-            bool disabled = Component == null && m_DisableComponentIfNull;
+            if (!m_HideIfNull && !m_DisableComponentIfNull)
+            {
+                return;
+            }
+            
+            bool visible = VisibilityObject.activeSelf;
+            if (m_HideIfNull)
+            {
+                visible = Component != null;
+            }
+
+            bool disabled = !enabled;
+            if (m_DisableComponentIfNull)
+            {
+                disabled |= Component == null;
+            }
+
             if (immediate)
             {
                 VisibilityObject.SetActive(visible);
@@ -194,7 +214,7 @@ namespace App
     //
     //         if (Component != null && component != null)
     //         {
-    //             Debug.LogWarning($"Replacing Component reference in {nameof(ComponentView<T>)}.");
+    //             Logging.LogWarning($"Replacing Component reference in {nameof(ComponentView<T>)}.");
     //         }
     //
     //         if (Component != null)

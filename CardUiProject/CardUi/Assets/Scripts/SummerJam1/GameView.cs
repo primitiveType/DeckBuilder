@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Api;
 using App;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,7 +35,7 @@ namespace SummerJam1
             {
                 Model.PropertyChanged -= ModelOnPropertyChanged;
             }
-            Debug.Log("Game view destroyed!");
+            Logging.Log("Game view destroyed!");
         }
     }
 }

@@ -2,12 +2,11 @@ using System.ComponentModel;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
-using SummerJam1.Statuses;
 using Component = Api.Component;
 
 namespace SummerJam1.Units.Effects
 {
-    public abstract class AmountEqualsCardsInHand<T> : EnabledWhenAtTopOfEncounterSlot, ITooltip, IDescription where T : Component, IAmount, new()
+    public abstract class AmountEqualsCardsInHand<T> : SummerJam1Component, ITooltip, IDescription where T : Component, IAmount, new()
     {
         protected abstract string StatName { get; }
         public string Description => $"{StatName} equals the number of cards in your hand.";

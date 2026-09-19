@@ -6,7 +6,6 @@ using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Piles;
-using SummerJam1.Units;
 using Random = Api.Random;
 
 namespace SummerJam1
@@ -18,14 +17,10 @@ namespace SummerJam1
         public IEntity Exhaust { get; private set; }
         public HandPile Hand { get; private set; }
         public DeckPile BattleDeck { get; private set; }
-        public BeatTracker BeatTracker { get; private set; }
 
         public ObjectivesPile ObjectivesPile { get; private set; }
 
-        public DeckPile EncounterDrawPile { get; private set; }
-        public PlayerDiscard EncounterDiscardPile { get; private set; }
-
-        public EncounterSlotPile EncounterSlots { get; set; }
+        public MonsterPile MonsterSlots { get; set; }
 
         public bool BattleStarted { get; private set; }
 
@@ -35,8 +30,7 @@ namespace SummerJam1
         {
             base.Initialize();
 
-            Context.CreateEntity(Entity, child => BeatTracker = child.AddComponent<BeatTracker>());
-            Context.CreateEntity(Entity, entity => EncounterSlots = entity.AddComponent<EncounterSlotPile>());
+            Context.CreateEntity(Entity, entity => MonsterSlots = entity.AddComponent<MonsterPile>());
         }
 
         public void MoveToNextFloor()
@@ -73,19 +67,24 @@ namespace SummerJam1
             string name = Path.Combine("Units", "Standard", $"{difficulty}", files[index].Name);
             return name;
         }
-
-        public void StartBattle(DungeonPile pile)
+        
+        
+        public void StartBattle(string path = null)
         {
-            pile.Entity.TrySetParent(Entity);
-
             SetupBattleDeck();
+            if (MonsterSlots.Entity.Children.Count != 0)
+            {
+                Logging.LogError("Units already existed in encounter slot!");
+            }
+
+            var list = Game.GetBattlePrefabs(path);
+            foreach (var unit in list)
+            {
+                Context.CreateEntity(MonsterSlots.Entity, unit);
+            }
 
             Context.CreateEntity(Entity, entity => ObjectivesPile = entity.AddComponent<ObjectivesPile>());
-            Context.CreateEntity(Entity, entity => EncounterDrawPile = entity.AddComponent<DeckPile>());
-            Context.CreateEntity(Entity, entity => EncounterDiscardPile = entity.AddComponent<PlayerDiscard>());
 
-
-            PopulateEncounterPiles(pile);
 
             Exhaust = Context.CreateEntity(Entity, entity =>
             {
@@ -93,6 +92,7 @@ namespace SummerJam1
                 entity.AddComponent<PlayerControl>();
             });
 
+            Context.CreateEntity<CardReward>(Game.Entity).WithName("Card Reward");
             BattleStarted = true;
             Events.OnBattleStarted(new BattleStartedEventArgs());
             Events.OnDrawPhaseBegan(new DrawPhaseBeganEventArgs());
@@ -102,6 +102,8 @@ namespace SummerJam1
         private void SetupBattleDeck()
         {
             BattleDeck = Context.DuplicateEntity(Game.Deck.Entity).GetComponent<DeckPile>();
+            BattleDeck.Entity.AddComponent<NameComponent>().Value = "Battle Deck";
+
             BattleDeck.Entity.AddComponent<PlayerControl>();
 
             BattleDeck.Entity.TrySetParent(Entity);
@@ -109,11 +111,13 @@ namespace SummerJam1
             {
                 Hand = entity.AddComponent<HandPile>();
                 entity.AddComponent<PlayerControl>();
+                entity.AddComponent<NameComponent>().Value = "Hand";
             });
             Discard = Context.CreateEntity(Entity, entity =>
             {
                 entity.AddComponent<PlayerDiscard>();
                 entity.AddComponent<PlayerControl>();
+                entity.AddComponent<NameComponent>().Value = "Discard";
             });
 
             BattleDeck.SetHandAndDiscard(Hand.Entity, Discard);
@@ -142,21 +146,6 @@ namespace SummerJam1
             return false;
         }
 
-        private void PopulateEncounterPiles(DungeonPile pile)
-        {
-            Logging.Log($"Starting battle with {pile.Entity.Children.Count} encounters.");
-
-            foreach (IEntity entity in pile.Entity.Children
-                         .OrderByDescending(entity => entity.HasComponent<IBottomCard>())
-                         .ThenBy(DungeonOrder)) //fill encounter slots.
-            {
-                if (!entity.TrySetParent(EncounterSlots.Entity))
-                {
-                    Logging.LogError(
-                        $"Failed to parent encounter card! : {entity.GetComponent<NameComponent>().Value}.");
-                }
-            }
-        }
 
         private int DungeonOrder(IEntity _)
         {

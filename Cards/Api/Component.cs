@@ -21,6 +21,7 @@ namespace Api
         private Lazy<EventsBase> LazyEvents { get; }
         protected EventsBase Events => LazyEvents.Value;
         [JsonIgnore] public IEntity Entity { get; private set; }
+        [DefaultValue(true)]
         public bool Enabled { get; set; } = true;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -107,6 +108,7 @@ namespace Api
             State = LifecycleState.Destroyed;
         }
 
+        [JsonIgnore]
         public Dictionary<int, int> EventEntrance { get; } = new(0);
     }
 }

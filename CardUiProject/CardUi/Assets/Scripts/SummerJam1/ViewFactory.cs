@@ -6,7 +6,6 @@ using App.Utility;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Units;
-using TMPro;
 using UnityEngine;
 
 namespace SummerJam1
@@ -20,9 +19,7 @@ namespace SummerJam1
         [SerializeField] private GameObject m_WalkablePrefab;
         [SerializeField] private GameObject m_PrefabReference;
         [SerializeField] private GameObject m_WallPrefab;
-        [SerializeField] private GameObject m_DungeonPrefab;
-        [SerializeField] private GameObject m_HatchEncounterPrefab;
-        [SerializeField] private GameObject m_PlayerPrefab;
+        [SerializeField] private GameObject m_EncounterChoicePrefab;
 
         public GameObject m_DefaultParent;
 
@@ -47,13 +44,15 @@ namespace SummerJam1
         private void CreateViewsForExistingModels()
         {
             List<IVisual> existing = GameContext.Instance.Context.Root.GetComponentsInChildren<IVisual>();
-           
+
             foreach (IVisual child in existing)
             {
-                if (((IComponent)child).Entity.Parent == GameContext.Instance.Context.Root.GetComponentInChildren<Game>().PrefabsContainer)
+                if (((IComponent)child).Entity.Parent ==
+                    GameContext.Instance.Context.Root.GetComponentInChildren<Game>().PrefabsContainer)
                 {
-                    Debug.Log("made prefab prefab..");
+                    // Logging.Log("made prefab prefab..");
                 }
+
                 GameObject prefab = GetPrefab(child);
                 if (prefab != null)
                 {
@@ -84,6 +83,12 @@ namespace SummerJam1
         public GameObject CreateGameObjectForModel(IEntity entity)
         {
             IVisual visual = entity.GetComponent<IVisual>();
+            if (visual == null)
+            {
+                // Logging.LogWarning($"No visual component found for entity {entity.GetDebugString()}");
+                return null;
+            }
+
             GameObject prefab = GetPrefab(visual);
             return prefab != null ? CreateView(entity, prefab) : null;
         }
@@ -92,25 +97,18 @@ namespace SummerJam1
         {
             switch (visual)
             {
-                case RelicEncounter relicEncounter:
-                    break;
-                case ShrineEncounter shrineEncounter:
-                    Debug.Log("Found shrine encounter.");
-                    break;
-                case RelicComponent relic:
+                case RelicComponent:
                     return RelicPrefab;
-                case Unit unit:
+                case Unit:
                     return UnitPrefab;
-                case Card card:
+                case Card:
                     return CardPrefab;
-                case DungeonPile dungeonPile:
-                    return m_DungeonPrefab;
-                case PrefabReference prefabReference:
+                case PrefabReference:
                     return m_PrefabReference;
-                default:
-                    // throw new ArgumentOutOfRangeException(nameof(visual));
-                    Debug.LogWarning("No prefab visual found.");
-                    return null;
+                case EncounterChoice:
+                    return m_EncounterChoicePrefab;
+                default:    
+                    throw new ArgumentOutOfRangeException(nameof(visual), $"No prefab visual found for {visual?.GetType().Name}.");
             }
 
 
@@ -119,11 +117,10 @@ namespace SummerJam1
 
         public static GameObject CreateView(IEntity entity, GameObject prefab)
         {
-            GameObject unitView = Instantiate(prefab);
+            GameObject unitView = Instantiate(prefab, Instance.m_DefaultParent.transform, true);
             // unitView.transform.localPosition = Vector3.one * 10_000;
             unitView.GetComponent<ISetModel>().SetModel(entity);
             entity.GetOrAddComponent<SummerJam1ModelViewBridge>().gameObject = unitView;
-            unitView.transform.SetParent(Instance.m_DefaultParent.transform);
             return unitView;
         }
     }

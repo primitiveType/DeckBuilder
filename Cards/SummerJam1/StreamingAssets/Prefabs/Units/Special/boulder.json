@@ -1,0 +1,25 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Boulder"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "boulder"
+    },
+    {
+      "$type": "SummerJam1.Health, SummerJam1",
+      "Max": 5,
+      "Amount": 5
+    },
+    {
+      "$type": "SummerJam1.Units.Effects.DiesAtBeginningOfTurn, SummerJam1"
+    }
+  ]
+}

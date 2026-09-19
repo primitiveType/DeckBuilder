@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using Api;
 using App;
 using SummerJam1.Units;
 using UnityEngine;
@@ -29,21 +30,17 @@ namespace SummerJam1
         }
 
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            Entity.Children.CollectionChanged -= ChildrenOnCollectionChanged;
-        }
-
-        public void SetLocalPosition(Vector3 transformPosition, Vector3 transformRotation)
+        public void SetLocalPosition(Vector3 transformPosition)
         {
             transform.localPosition = transformPosition;
-            transform.rotation = Quaternion.Euler(transformRotation);
         }
 
-        public void SetTargetPosition(Vector3 transformPosition, Vector3 transformRotation, bool immediate = false)
+        public void SetTargetPosition(Vector3 transformPosition, bool immediate = false)
         {
             transform.localPosition = transformPosition;
+        }
+        public void SetTargetRotation( Vector3 transformRotation, bool immediate = false)
+        {
             transform.rotation = Quaternion.Euler(transformRotation);
         }
 
@@ -63,36 +60,6 @@ namespace SummerJam1
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            Entity.Children.CollectionChanged += ChildrenOnCollectionChanged;
-            UpdateCurrentIntent();
-        }
-
-        private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            UpdateCurrentIntent();
-        }
-
-        private void UpdateCurrentIntent()
-        {
-            BattleContainer battleContainer = Entity.Context.Root.GetComponent<Game>().Battle;
-            if (battleContainer == null)
-            {
-                return;
-            }
-
-            foreach (Transform child in IntentRoot)
-            {
-                Destroy(child.gameObject);
-            }
-
-            int currentBeat = battleContainer.BeatTracker.CurrentBeat;
-            Intent nextIntent = Entity.GetComponentsInChildren<Intent>().OrderBy(intent => intent.TargetBeat - currentBeat).FirstOrDefault();
-
-            if (nextIntent != null)
-            {
-                IntentView view = Instantiate(IntentViewPrefab, IntentRoot);
-                view.SetModel(nextIntent);
-            }
         }
     }
 }

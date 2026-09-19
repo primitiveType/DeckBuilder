@@ -1,0 +1,23 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Artifact fragment"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "artifact"
+    },
+    {
+      "$type": "SummerJam1.Units.CollectableIntoDeck, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Units.VictoryWhenNoneOfThisTypeExistsInBattle, SummerJam1"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "$type": "SummerJam1.BattleInfo, SummerJam1",
+  "Prefabs": [
+    "Units\\Standard\\1\\cultistGoblin.json",
+    "Units\\Standard\\1\\mountainGolem.json"
+  ]
+}

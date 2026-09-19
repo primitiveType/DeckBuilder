@@ -1,0 +1,26 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.PlayerUnit, SummerJam1",
+      "UnitName": "Knight"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Knight"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "bannerman"
+    },
+    {
+      "$type": "SummerJam1.Strength, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Health, SummerJam1",
+      "Max": 7,
+      "Amount": 7
+    }
+  ]
+}

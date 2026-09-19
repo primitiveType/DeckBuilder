@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Stateless;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,6 +20,8 @@ namespace App
 
         private void Awake()
         {
+            Debug.Log("HoverExpand created.");
+
             ResetScale();
             StartCoroutine(WarmUp());
         }
@@ -69,6 +72,11 @@ namespace App
         private void ResetScale()
         {
             transform.localScale = Vector3.one;
+        }
+
+        private void OnDestroy()
+        {
+            Debug.Log("HoverExpand destroyed.");
         }
     }
 }

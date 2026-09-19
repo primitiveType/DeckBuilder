@@ -23,6 +23,9 @@ public class HideGameObjectIfNoPrizes : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameContext.Instance.Game.PrizePile.Entity.Children.CollectionChanged -= ChildrenOnCollectionChanged;
+        if (GameContext.Instance.Game?.PrizePile?.Entity?.Children != null)
+        {
+            GameContext.Instance.Game.PrizePile.Entity.Children.CollectionChanged -= ChildrenOnCollectionChanged;
+        }
     }
 }

@@ -62,6 +62,11 @@ namespace App.Utility
         /// </summary>
         private static T _instance;
 
+        [RuntimeInitializeOnLoadMethod]
+        private void OnLoad()
+        {
+            _instance = null;
+        }
         /// <summary>
         ///     Finds an existing instance of this singleton in the scene.
         /// </summary>

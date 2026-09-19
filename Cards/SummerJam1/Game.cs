@@ -5,8 +5,11 @@ using System.Linq;
 using Api;
 using Api.Extensions;
 using CardsAndPiles;
+using CardsAndPiles.Components;
 using SummerJam1.Cards;
+using SummerJam1.Characters;
 using SummerJam1.Rules;
+using Component = Api.Component;
 using Random = Api.Random;
 
 namespace SummerJam1
@@ -19,7 +22,9 @@ namespace SummerJam1
         public Pile RelicPile { get; private set; }
 
         public BattleContainer Battle { get; private set; }
+        public ShopContainer Shop { get; private set; }
         public Player Player { get; private set; }
+        public Party Party { get; private set; }
 
         public Random Random { get; private set; }
 
@@ -29,7 +34,8 @@ namespace SummerJam1
 
         public int CurrentLevel { get; private set; } = 1;
 
-        public IEntity Dungeons { get; private set; }
+        public IEntity MapChoicesContainer { get; private set; }
+
 
         protected override void Initialize()
         {
@@ -37,31 +43,36 @@ namespace SummerJam1
             Logging.Log("Game Initialized.");
             AddRules();
             Random = Entity.AddComponent<Random>();
-            Context.CreateEntity(Entity, entity => PrizePile = entity.AddComponent<CardPrizePile>());
-            Context.CreateEntity(Entity, entity => RelicPrizePile = entity.AddComponent<RelicPrizePile>());
-            Context.CreateEntity(Entity, entity => RelicPile = entity.AddComponent<RelicPile>());
-            Context.CreateEntity(Entity, entity => DiscardStagingPile = entity.AddComponent<DiscardStagingPile>());
-            Player = Context.CreateEntity(Entity, "player").GetComponent<Player>();
+            PrizePile = Context.CreateEntity<CardPrizePile>(Entity).WithName("PrizePile");
+            RelicPrizePile = Context.CreateEntity<RelicPrizePile>(Entity).WithName("RelicPrizePile");
+            RelicPile = Context.CreateEntity<RelicPile>(Entity).WithName("PlayerRelicPile");
+            DiscardStagingPile = Context.CreateEntity<DiscardStagingPile>(Entity).WithName("DiscardStaging");
+            //create an example deck.
+            Context.CreateEntity(Entity, entity =>
+            {
+                Deck = entity.AddComponent<DeckPile>();
+                entity.AddComponent<NameComponent>().Value = "Deck";
+            });
+            Player = Context.CreateEntity(Entity, "player").GetComponent<Player>().WithName("Player");
+          
+            
+            MapChoicesContainer =
+                Context.CreateEntity<MapChoicesContainer>(Entity).WithName("MapChoicesContainer").Entity;
+            //temp code
+            // var unit = Context.CreateEntity(PlayerUnits.Entity, "Units/Player/Knight");
 
+
+            // Logging.Log($"Unit created : {unit}");
             CreatePrefabPile();
-            PopulatePlayerDeck();
-            PrepareNextDungeon(Context.CreateEntity(null, entity => entity.AddComponent<FirstDungeonPile>()));
+            
+            Party = Player.Entity.AddComponent<Party>();
+            Player.Entity.GetOrAddComponent<PartyMember>().DisplayName = "Quartermaster";
+            Player.Entity.GetOrAddComponent<EquipmentLoadout>();
+            Player.Entity.AddComponent<Quartermaster>();
+            Party.RebuildDeck();
             Events.OnGameStarted(new GameStartedEventArgs());
         }
 
-        private void PopulatePlayerDeck()
-        {
-            //create an example deck.
-            Context.CreateEntity(Entity, entity => Deck = entity.AddComponent<DeckPile>());
-
-            foreach (StartingCard prefabsContainerChild in PrefabsContainer.GetComponentsInChildren<StartingCard>())
-            {
-                for (int i = 0; i < prefabsContainerChild.Amount; i++)
-                {
-                    Context.CreateEntity(Deck.Entity, prefabsContainerChild.Entity.GetComponent<SourcePrefab>().Prefab);
-                }
-            }
-        }
 
         private void CreatePrefabPile()
         {
@@ -128,6 +139,8 @@ namespace SummerJam1
             {
                 CurrentLevel++;
             }
+
+            Battle.Entity.Destroy();
         }
 
         // ReSharper disable once UnusedMember.Local
@@ -181,8 +194,6 @@ namespace SummerJam1
             Context.Root.AddComponent<BattleEndsWhenAllEnemiesDefeated>();
             // Context.Root.AddComponent<FillSlotsOnBattleStarted>();
             Context.Root.AddComponent<DrawHandOnTurnBegin>();
-            Context.Root.AddComponent<WaitForCardCostsBeats>();
-            Context.Root.AddComponent<EndTurnOnBeatOverload>();
             // Context.Root.AddComponent<DrawEncounterHandOnTurnBegin>();
             // Context.Root.AddComponent<DrawEncounterHandWhenEmpty>();
         }
@@ -197,8 +208,8 @@ namespace SummerJam1
         public void EndTurn()
         {
             Events.OnTurnEnded(new TurnEndedEventArgs());
-            // Events.OnAttackPhaseStarted(new AttackPhaseStartedEventArgs());
-            // Events.OnAttackPhaseEnded(new AttackPhaseEndedEventArgs());
+            Events.OnAttackPhaseStarted(new AttackPhaseStartedEventArgs());
+            Events.OnAttackPhaseEnded(new AttackPhaseEndedEventArgs());
             // Events.OnMovementPhaseBegan(new MovementPhaseBeganEventArgs());
 
             // Events.OnDungeonPhaseStarted(new DungeonPhaseStartedEventArgs());
@@ -208,64 +219,99 @@ namespace SummerJam1
         }
 
 
-        public void PrepareNextDungeon(IEntity dungeon)
-        {
-            if (Dungeons == null)
-            {
-                Context.CreateEntity(Entity,
-                    entity =>
-                    {
-                        Dungeons = entity;
-                        Dungeons.AddComponent<DungeonParent>();
-                    });
-            }
-
-            int numDungeons = 5;
-
-            foreach (IEntity child in Dungeons.Children.ToList())
-            {
-                child.Destroy();
-            }
-
-            dungeon.TrySetParent(Dungeons);
-        }
-
-        public void StartBattle(DungeonPile pile)
+        public void StartBattle()
         {
             Battle?.Entity.Destroy();
 
-            Context.CreateEntity(Entity, entity =>
-            {
-                Battle = entity.AddComponent<BattleContainer>();
-            });
-
-
-            Battle.StartBattle(Dungeons.GetComponentInChildren<DungeonPile>());
+            Battle = Context.CreateEntity<BattleContainer>(Entity).WithName("BattleContainer");
+            Battle.StartBattle();
         }
-
-
-        public List<string> GetBattlePrefabs(int min, int max)
+        
+        public List<string> GetBattlePrefabs(string path)
         {
-            List<string> prefabs = new();
-            int count = Random.SystemRandom.Next(min, max);
-            for (int i = 0; i < count; i++)
+            if (path == null)
             {
-                prefabs.Add(
-                    BattleContainer.GetRandomMonsterPrefab(1, Game.CurrentLevel, Entity.GetComponent<Random>()));
+                return GetBattlePrefabs();
             }
-
-            return prefabs;
+            var infoStr = File.ReadAllText(path);
+            var info = Serializer.Deserialize<BattleInfo>(infoStr);
+            return info.Prefabs;
         }
+        
+        public List<string> GetBattlePrefabs()
+        {
+            string infoPath = GetRandomBattleInfo(Game.CurrentLevel, Entity.GetComponent<Random>());
+            var infoStr = File.ReadAllText(Path.Combine(infoPath));
+            var info = Serializer.Deserialize<BattleInfo>(infoStr);
+            return info.Prefabs;
+        }
+        
+        public static string GetRandomBattleInfo(int difficulty, Random random)
+        {
+            var tier = (difficulty / 5);
+            if (tier < 1)
+            {
+                tier = 1;
+            }
+            string battlePath = Path.Combine(Context.ResourcesPath, "Battles", $"{tier}");
 
+            DirectoryInfo info = new(battlePath);
+            List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
+
+            int index = random.SystemRandom.Next(files.Count);
+            string name = Path.Combine(battlePath, files[index].Name);
+            return name;
+        }
 
         public IEntity CreateRandomCard()
         {
-            DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Cards"));
+            string character = GetRandomActiveCharacterName();
+            var cards = GetCardPrefabs((card)=>
+            {
+                var constraint = card.GetComponent<CharacterConstraint>();
+                return constraint != null && constraint.Character == character;
+            });
+            var card = cards.Random(Random);
+            var prefab = card.GetComponent<SourcePrefab>().Prefab;
+            // DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Cards"));
+            // List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
+            //
+            // int index = Random.SystemRandom.Next(files.Count);
+            //
+            return Context.CreateEntity(null, prefab);
+        }
+        
+        public IEntity CreateRandomCardForPrizePileOrShop()
+        {
+            string character = GetRandomActiveCharacterName();
+            var cards = GetCardPrefabs((card)=>
+            {
+                var constraint = card.GetComponent<CharacterConstraint>();
+                return constraint != null && constraint.Character == character && !card.HasComponent<ExcludeFromShopAndBoosters>();
+            });
+            var card = cards.Random(Random);
+            var prefab = card.GetComponent<SourcePrefab>().Prefab;
+            return Context.CreateEntity(null, prefab);
+        }
+
+        private string GetRandomActiveCharacterName()
+        {
+            List<string> characterNames = Party.ActiveMembers
+                .Select(member => member.GetComponent<ICharacterClass>()?.Name)
+                .Where(name => !string.IsNullOrWhiteSpace(name))
+                .ToList();
+
+            return characterNames.Any() ? characterNames.Random(Random) : "Any";
+        }
+
+        public IEntity CreateRandomTreasureCard()
+        {
+            DirectoryInfo info = new(Path.Combine(Context.PrefabsPath, "Cards/Treasure"));
             List<FileInfo> files = info.GetFiles().Where(file => file.Extension == ".json").ToList();
 
             int index = Random.SystemRandom.Next(files.Count);
 
-            return Context.CreateEntity(null, Path.Combine("Cards", files[index].Name));
+            return Context.CreateEntity(null, Path.Combine("Cards/Treasure", files[index].Name));
         }
 
         public IEntity CreateRandomRelic()
@@ -277,5 +323,22 @@ namespace SummerJam1
 
             return Context.CreateEntity(null, Path.Combine("Relics", files[index].Name));
         }
+
+        public void StartShop()
+        {
+            Shop?.Entity.Destroy();
+            Shop = Context.CreateEntity<ShopContainer>(Entity).WithName("Shop");
+            Events.OnShopStarted(new ShopStartedEventArgs());
+        }
+
+        public void EndShop()
+        {
+            Shop?.Entity.Destroy();
+            Events.OnShopEnded(new ShopEndedEventArgs());
+        }
+    }
+
+    public class ExcludeFromShopAndBoosters : SummerJam1Component
+    {
     }
 }

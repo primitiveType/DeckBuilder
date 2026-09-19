@@ -1,0 +1,36 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.CharacterConstraint, SummerJam1",
+      "Character": "Quartermaster"
+    },
+    {
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.DamageUnitCard, SummerJam1",
+      "DamageAmount": 8,
+      "Attacks": 1
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "itemscards_windows/itemscards/ItemsCards_bg/ItemsCards_07_b"
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.Weapon, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Two Edge Sword"
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Amount": 2
+    }
+  ]
+}

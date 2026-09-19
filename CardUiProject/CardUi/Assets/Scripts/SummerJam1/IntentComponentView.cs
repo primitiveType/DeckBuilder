@@ -6,32 +6,33 @@ using UnityEngine.UI;
 
 namespace SummerJam1
 {
-    public class IntentComponentView : ComponentView<Intent>
+    public class IntentComponentView : View<Intent>
     {
         // [SerializeField] private Text AmountText;
         [SerializeField] private Image IntentImage;
         [SerializeField] private Sprite SleepingImage;
 
         [SerializeField] private Sprite DamageIntentImage;
-        // [SerializeField] private GameObject HideIfSleeping;
+        [SerializeField] private Sprite ShieldIntentImage;
         [SerializeField] private GameObject ShowIfSleeping;
 
 
-        protected override void ComponentOnPropertyChanged()
-        {
-            UpdateIntentImage();
-        }
-
+        [PropertyListener]
         private void UpdateIntentImage()
         {
-            IntentImage.gameObject.SetActive(true);
-            // HideIfSleeping.SetActive(Component.Enabled);
-            // ShowIfSleeping.SetActive(!Component.Enabled);
+            var enabled = Model.Enabled;
+            Disposables.Add(AnimationQueue.Instance.Enqueue(() => gameObject.SetActive(enabled)));
 
-            switch (Component)
+            
+            IntentImage.gameObject.SetActive(true);
+
+            switch (Model)
             {
                 case DamageIntent _:
                     IntentImage.sprite = DamageIntentImage;
+                    break;
+                case ShieldAllyIntent _:
+                    IntentImage.sprite = ShieldIntentImage;
                     break;
                 default:
                     IntentImage.gameObject.SetActive(false);

@@ -5,7 +5,7 @@ using SummerJam1.Statuses;
 
 namespace SummerJam1.Units.Effects
 {
-    public class GainBlockWhenDrawingFrozenCards : EnabledWhenAtTopOfEncounterSlot, ITooltip, IDescription, IAmount
+    public class GainBlockWhenDrawingFrozenCards : SummerJam1Component, ITooltip, IDescription, IAmount
     {
         public int Amount { get; set; }
         public string Description => Tooltip;

@@ -4,6 +4,7 @@ using CardsAndPiles.Components;
 
 namespace CardsAndPiles
 {
+
     public class HandPile : Pile
     {
         public bool Discard()

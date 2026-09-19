@@ -12,7 +12,7 @@ namespace SummerJam1
         private void ParentChanged(object sender, PropertyChangedEventArgs args){
             if (Model.State == LifecycleState.Destroyed)
             {
-                Debug.Log("transformer removed!");
+                Logging.Log("transformer removed!");
             }
         }
     }

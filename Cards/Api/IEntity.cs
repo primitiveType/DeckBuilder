@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 
 namespace Api
 {
@@ -10,7 +9,7 @@ namespace Api
         Context Context { get; }
         int Id { get; }
         IEntity Parent { get; }
-        IChildrenCollection<IEntity> Children { get; }
+        EntityCollection Children { get; }
         IChildrenCollection<Component> Components { get; }
         LifecycleState State { get; }
         bool TrySetParent(IEntity parent);
@@ -28,5 +27,8 @@ namespace Api
         bool RemoveComponent<TType>() where TType : Component;
         T GetComponentInSelfOrParent<T>();
         bool CanSetParent(IEntity parent);
+        bool HasComponent(Type type);
+        object GetComponent(Type type);
+        IEnumerable<object> GetComponents(Type type);
     }
 }

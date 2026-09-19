@@ -6,11 +6,13 @@ namespace SummerJam1.Cards.Effects
 {
     public class HealPlayer : SummerJam1Component, IEffect
     {
+        public TargetingType Targeting{ get; } = TargetingType.Self;
+
         [JsonProperty] public int HealAmount { get; private set; }
 
         public bool DoEffect(IEntity target)
         {
-            Game.Player.Entity.GetComponent<Health>().TryHeal(HealAmount, Entity);
+            (target ?? Game.Player.Entity).GetComponent<Health>().TryHeal(HealAmount, Entity);
             return true;
         }
 

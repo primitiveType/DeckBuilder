@@ -8,14 +8,17 @@ namespace SummerJam1
         public abstract string RewardText { get; }
         public abstract void TriggerReward();
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+        
+        }
+
         [OnBattleEnded]
         private void OnBattleEnded(object sender, BattleEndedEventArgs args)
         {
-            if (Game.Battle == Entity.GetComponentInParent<BattleContainer>())
-            {
-                Logging.Log($"Reward acquired {RewardText}.");
-                TriggerReward();
-            }
+            Logging.Log($"Reward acquired {RewardText}.");
+            TriggerReward();
         }
     }
 }

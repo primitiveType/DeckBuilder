@@ -1,11 +1,10 @@
 ﻿using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
-using SummerJam1.Statuses;
 
 namespace SummerJam1.Units.Effects
 {
-    public abstract class EffectsOtherCreatures : EnabledWhenAtTopOfEncounterSlot, IDescription
+    public abstract class EffectsOtherCreatures : SummerJam1Component, IDescription
     {
         public abstract bool EveryTurn { get; }
 
@@ -16,7 +15,7 @@ namespace SummerJam1.Units.Effects
         {
             if (EveryTurn)
             {
-                var neighbors = Game.Battle.EncounterSlots.Entity.Children;
+                var neighbors = Game.Battle.MonsterSlots.Entity.Children;
 
                 foreach (IEntity neighbor in neighbors)
                 {

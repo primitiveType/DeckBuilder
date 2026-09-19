@@ -1,0 +1,36 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Units.StarterUnit, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Goblin"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "mobsavataricons_windows\\mobsavataricons\\goblin_04.png"
+    },
+    {
+      "$type": "SummerJam1.Health, SummerJam1",
+      "Max": 10,
+      "Amount": 10
+    },
+    {
+      "$type": "SummerJam1.Units.RandomIntentHandler, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.DamageIntent, SummerJam1",
+      "Amount": 5,
+      "Attacks": 1
+    },
+    {
+      "$type": "SummerJam1.DamageIntent, SummerJam1",
+      "Amount": 2,
+      "Attacks": 2,
+      "Enabled": false
+    }
+  ]
+}

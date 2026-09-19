@@ -10,7 +10,8 @@ using UnityEngine.UI;
 
 public class ComponentService : MonoBehaviour
 {
-    public string m_PrefabsPath = "Assets/StreamingAssets";
+    public string m_PrefabsPath = "Assets/StreamingAssets/Prefabs";
+    public string m_ResourcesPath = "Assets/StreamingAssets/Resources";
     private Context Context { get; set; }
     private Game Game { get; set; }
 
@@ -33,7 +34,7 @@ public class ComponentService : MonoBehaviour
             {
                 if (typeof(IComponent).IsAssignableFrom(type))
                 {
-                    Debug.Log(type.FullName);
+                    Logging.Log(type.FullName);
                 }
             }
         }
@@ -44,7 +45,7 @@ public class ComponentService : MonoBehaviour
         SummerJam1Events events = new SummerJam1Events();
         Context = new Context(events);
 
-        Context.SetPrefabsDirectory(m_PrefabsPath);
+        Context.SetPrefabsDirectory(m_PrefabsPath, m_ResourcesPath);
         IEntity game = Context.Root;
 
 
@@ -68,11 +69,11 @@ public class ComponentService : MonoBehaviour
 
     private void LoadPrefab(string fileName)
     {
-        Debug.Log($"Loading file {fileName}.");
+        Logging.Log($"Loading file {fileName}.");
 
         CurrentEntity = Context.CreateEntity(EditRoot, fileName);
 
-        Debug.Log($"Loaded {CurrentEntity.GetComponent<NameComponent>().Value}.");
+        Logging.Log($"Loaded {CurrentEntity.GetComponent<NameComponent>().Value}.");
     }
 
     // Update is called once per frame

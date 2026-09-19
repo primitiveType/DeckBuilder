@@ -33,7 +33,7 @@ namespace Simple_Health_Bar.Scripts
         }
 
         public DisplayText displayText;
-        public Text barText;
+        public TMPro.TMP_Text barText;
         public string additionalText = string.Empty;
 
         // PRIVATE VARIABLES AND GET FUNCTIONS //

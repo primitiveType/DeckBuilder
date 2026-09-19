@@ -1,6 +1,8 @@
-﻿namespace SummerJam1.Units
+﻿using Api;
+
+namespace SummerJam1.Units
 {
-    public interface IClickable
+    public interface IClickable : IComponent
     {
         void Click();
     }

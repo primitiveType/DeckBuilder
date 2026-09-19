@@ -1,22 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <LangVersion>9</LangVersion>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" />
         <PackageReference Include="JsonNet.ContractResolvers" Version="2.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-        <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+        <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="all" />
         <PackageReference Include="RandN" Version="0.3.0" />
     </ItemGroup>
-    <PropertyGroup>
-        <TransformOnBuild>true</TransformOnBuild>
-        <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
-    </PropertyGroup>
-
     <ItemGroup>
         <None Update="EventsBase.tt">
             <Generator>TextTemplatingFileGenerator</Generator>

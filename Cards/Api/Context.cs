@@ -30,11 +30,18 @@ namespace Api
         [JsonProperty] public EventsBase Events { get; private set; }
 
         public static string PrefabsPath { get; private set; }
+        public static string ResourcesPath { get; private set; }
 
 
-        public void SetPrefabsDirectory(string path)
+        public void SetPrefabsDirectory(string path, string resourcesPath)
         {
             PrefabsPath = path;
+            ResourcesPath = resourcesPath;
+        }
+
+        public void SetPrefabsDirectory(string contentRoot)
+        {
+            SetPrefabsDirectory(Path.Combine(contentRoot, "Prefabs"), Path.Combine(contentRoot, "Resources"));
         }
 
         public TComponent CreateEntity<TComponent>(IEntity parent = null) where TComponent : Component, new()
@@ -63,12 +70,18 @@ namespace Api
 
         public IEntity CreateEntity(IEntity parent, string prefabName, Action<IEntity> setup = null, bool shouldInitialize = true)
         {
+            prefabName = prefabName.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
             if (!prefabName.ToLower().EndsWith(".json"))
             {
                 prefabName += ".json";
             }
+            var path = Path.Combine(PrefabsPath, prefabName);
+            //if (!File.Exists(path))
+            //{
+            //    return null;
+            //}
 
-            string prefab = File.ReadAllText(Path.Combine(PrefabsPath, prefabName));
+            string prefab = File.ReadAllText(path);
             Entity entity = Serializer.Deserialize<Entity>(prefab);
             entity.GetOrAddComponent<SourcePrefab>().Prefab = prefabName;
             if (shouldInitialize)
@@ -102,8 +115,10 @@ namespace Api
         //-setup-
         private void InitializeRecursively(IEntity root)
         {
-            ((Entity)root).Initialize(this, NextId++);
-            EntityDatabase.Add(root.Id, root);
+            int id = root.Id >= 0 ? root.Id : NextId++;
+            ((Entity)root).Initialize(this, id);
+            NextId = Math.Max(NextId, root.Id + 1);
+            EntityDatabase[root.Id] = root;
 
             foreach (IEntity child in root.Children)
             {

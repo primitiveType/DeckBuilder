@@ -5,6 +5,7 @@ namespace SummerJam1.Cards.Effects
 {
     public class DamageUnitEqualToStealth : SummerJam1Component, IEffect
     {
+        public TargetingType Targeting { get; } = TargetingType.Unit;
         public bool DoEffect(IEntity target)
         {
             ITakesDamage unit = target.GetComponentInChildren<ITakesDamage>();

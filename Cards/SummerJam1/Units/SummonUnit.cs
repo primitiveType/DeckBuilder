@@ -7,6 +7,8 @@ namespace SummerJam1.Units
 {
     public class SummonUnit : SummerJam1Component, IEffect
     {
+        public TargetingType Targeting{ get; } = TargetingType.Unit;
+
         [OnRequestPlayCard]
         private void OnRequestPlayCard(object sender, RequestPlayCardEventArgs args)
         {

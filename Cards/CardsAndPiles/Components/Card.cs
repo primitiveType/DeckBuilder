@@ -41,7 +41,7 @@ namespace CardsAndPiles.Components
             }
 
             Entity.TrySetParent(null); //it should not be in hand while the play effects occur...
-            ((CardEvents)Context.Events).OnCardPlayed(new CardPlayedEventArgs(Entity, target, false));
+            ((CardEvents)Context.Events).OnCardPlayed(new CardPlayedEventArgs(Entity, target, Entity.HasComponent<IFreePlayCard>()));
             return true;
         }
 

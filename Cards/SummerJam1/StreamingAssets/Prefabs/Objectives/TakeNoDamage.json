@@ -1,0 +1,12 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Objectives.TakeNoDamage, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.DescriptionComponent, CardsAndPiles"
+    }
+  ]
+}

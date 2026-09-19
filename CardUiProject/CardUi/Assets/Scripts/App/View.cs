@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Api;
 using JetBrains.Annotations;
+using TMPro;
 using UnityEngine;
 using IComponent = Api.IComponent;
 
@@ -12,7 +13,10 @@ namespace App
 {
     public class View<T> : MonoBehaviour, IView<T>
     {
-        [SerializeField] private int DEBUG_entity; 
+        [SerializeField] private int DEBUG_entity;
+        [SerializeField] private int DEBUG_component;
+        [SerializeField] private bool required = true;
+
         public IEntity Entity
         {
             get => _entity;
@@ -29,7 +33,12 @@ namespace App
             get => _model;
             private set
             {
+
                 _model = value;
+
+                DEBUG_component = value != null ? value.GetHashCode() : -1;
+
+
                 OnPropertyChanged();
             }
         }
@@ -38,28 +47,45 @@ namespace App
 
         public void SetModel(IEntity entity)
         {
+            InternalSetEntity(entity);
+            var model = entity.GetComponent<T>();
+            InternalSetModel(model);
+        }
+
+        private void InternalSetEntity(IEntity entity)
+        {
             if (Entity != null)
             {
                 Entity.PropertyChanged -= OnEntityDestroyed;
-                Debug.LogWarning("SetModel called on view that already had been populated.");
+                Logging.LogWarning("SetModel called on view that already had been populated.");
             }
+
             Entity = entity;
-            Model = entity.GetComponent<T>();
-            if (Model == null)
+            Entity.PropertyChanged += OnEntityDestroyed;
+        }
+
+        private void InternalSetModel(T model)
+        {
+            Model = model;
+            if (required && Model == null)
             {
-                Debug.LogWarning($"Failed to find model {typeof(T).Name} on Entity Component.", gameObject);
+                Debug.LogError($"Failed to find model {typeof(T).Name} on Entity Component.", gameObject);
                 enabled = false;
                 return;
             }
 
-            AttachListeners();
+            if (Model != null)
+            {
+                AttachListeners();
+            }
+
             OnInitialized();
-            Entity.PropertyChanged += OnEntityDestroyed;
         }
 
         public void SetModel(IComponent component)
         {
-            SetModel(component.Entity);
+            InternalSetEntity(component.Entity);
+            InternalSetModel((T)component);
         }
 
         private void OnEntityDestroyed(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -85,40 +111,50 @@ namespace App
 
         protected virtual void Start()
         {
+            ParentView = GetComponentsInParent<IView>()
+                .FirstOrDefault(item => !ReferenceEquals(item, this));
             if (Entity == null)
             {
-                ParentView = GetComponentsInParent<IView>().FirstOrDefault(item => !ReferenceEquals(item, this) && item.Entity != null);
-                if (ParentView == null)
+                var entity = GetEntityForView();
+                if (entity != null)
                 {
-                    Debug.LogWarning($"Failed to find Parent View for component.", gameObject);
-                    enabled = false;
-                    return;
-                }
-
-                if (ParentView?.Entity != null)
-                {
-                    SetModel(ParentView.Entity);
+                    SetModel(entity);
                 }
                 else
                 {
+                    // Debug.LogWarning("Parent view has no entity. Listening for it to be populated...", gameObject);
                     ParentView.PropertyChanged += ParentViewOnPropertyChanged;
                 }
             }
+        }
+
+        protected virtual IEntity GetEntityForView()
+        {
+            if (ParentView == null)
+            {
+                Debug.LogWarning($"Failed to find Parent View for component. {this.GetType().Name}", gameObject);
+                enabled = false;
+                return null;
+            }
+
+            return ParentView?.Entity;
         }
 
         private void ParentViewOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(IView.Entity))
             {
+                // Debug.Log("Parent view populated entity.");
                 ParentView.PropertyChanged -= ParentViewOnPropertyChanged;
                 SetModel(ParentView.Entity);
             }
         }
 
-        private List<PropertyChangedEventHandler> EventHandlers = new List<PropertyChangedEventHandler>();
+        private List<PropertyChangedEventHandler> EventHandlers = new();
         private IEntity _entity;
         private T _model;
         private IView ParentView { get; set; }
+
 
         private void AttachListeners()
         {
@@ -142,14 +178,15 @@ namespace App
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError($"Caught exception executing event! {e.Message} : {e.InnerException.StackTrace}", this);
+                        Debug.LogError($"Caught exception executing event! {e.Message} : {e.InnerException.StackTrace}",
+                            this);
                     }
                 };
                 ((INotifyPropertyChanged)Model).PropertyChanged += action;
                 EventHandlers.Add(action);
                 try
                 {
-                    action.Invoke(this,  new PropertyChangedEventArgs(method.Filter) );
+                    action.Invoke(this, new PropertyChangedEventArgs(method.Filter));
                 }
                 catch (Exception e)
                 {

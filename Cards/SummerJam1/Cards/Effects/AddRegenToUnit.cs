@@ -9,6 +9,7 @@ namespace SummerJam1.Cards.Effects
 {
     public class AddRegenToUnit : SummerJam1Component, IEffect
     {
+        public TargetingType Targeting { get; } = TargetingType.Unit;
         private bool _initialized;
         [JsonProperty] public int Amount { get; set; }
 

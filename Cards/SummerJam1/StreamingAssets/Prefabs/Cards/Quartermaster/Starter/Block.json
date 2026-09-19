@@ -1,0 +1,39 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.CharacterConstraint, SummerJam1",
+      "Character": "Quartermaster"
+    },
+    {
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.GrantArmorToPlayer, SummerJam1",
+      "BlockAmount": 4
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "tabletopbadges_windows/tabletopbadges/TabletopBadges_png/TabletopBadges_36"
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Block"
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Amount": 1
+    },
+    {
+      "$type": "SummerJam1.Cards.StartingCard, SummerJam1",
+      "Amount": 5
+    },
+    {
+      "$type": "SummerJam1.ExcludeFromShopAndBoosters, SummerJam1"
+    }
+  ]
+}

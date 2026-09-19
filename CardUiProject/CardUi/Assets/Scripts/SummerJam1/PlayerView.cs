@@ -1,4 +1,5 @@
 using System;
+using Api;
 using App;
 using UnityEngine;
 
@@ -18,12 +19,6 @@ namespace SummerJam1
             {
                 throw new NullReferenceException($"Player GO null somehow. {component.GetType()}.");
             }
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            Debug.LogWarning("Player destroyed!");
         }
     }
 }

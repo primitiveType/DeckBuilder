@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using SummerJam1.Statuses;
+using JetBrains.Annotations;
 using Component = Api.Component;
 
 namespace SummerJam1
@@ -13,14 +13,14 @@ namespace SummerJam1
         {
             base.Initialize();
             Game = Context.Root.GetComponent<Game>();
-            PropertyChanged += OnEnabledChanged;
+            PropertyChanged += HandleEnabledPropertyChanged;
             if (Enabled)
             {
                 OnEnable();
             }
         }
 
-        private void OnEnabledChanged(object sender, PropertyChangedEventArgs e)
+        private void HandleEnabledPropertyChanged([CanBeNull] object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(Enabled))
             {

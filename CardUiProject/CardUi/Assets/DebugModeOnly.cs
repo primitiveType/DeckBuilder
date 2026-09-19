@@ -8,6 +8,7 @@ public class DebugModeOnly : MonoBehaviour
     void Start()
     {
         UpdateVisibility();
+        DebugMode.Instance.PropertyChanged -= InstanceOnPropertyChanged;
         DebugMode.Instance.PropertyChanged += InstanceOnPropertyChanged;
     }
 

@@ -31,21 +31,21 @@ namespace CardTestProject
             CardDiscardedComponent testComponent2 = entity.AddComponent<CardDiscardedComponent>();
 
             //Verify initial value.
-            Assert.IsFalse(testComponent.CardPlayed);
-            Assert.IsFalse(testComponent2.CardDiscarded);
+            Assert.That(testComponent.CardPlayed, Is.False);
+            Assert.That(testComponent2.CardDiscarded, Is.False);
 
             //Simulate a card being played
             Events.OnCardPlayed(new CardPlayedEventArgs(null, game, false));
 
             //Verify event was fired from attribute.
-            Assert.IsTrue(testComponent.CardPlayed);
+            Assert.That(testComponent.CardPlayed, Is.True);
 
             //Simulate a card being discarded
             Events.OnCardDiscarded(new CardDiscardedEventArgs(null));
 
 
             //Verify event was fired from attribute.
-            Assert.IsTrue(testComponent2.CardDiscarded);
+            Assert.That(testComponent2.CardDiscarded, Is.True);
         }
     }
 }

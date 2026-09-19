@@ -7,6 +7,7 @@
         public override void TriggerReward()
         {
             Game.PrizePile.SetupRandomPrizePile();
+            Entity.Destroy();
         }
     }
 }

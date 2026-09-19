@@ -4,14 +4,15 @@ namespace App
 {
     public interface IPileItemView
     {
-        void SetTargetPosition(Vector3 transformPosition, Vector3 transformRotation, bool immediate = false);
+        void SetTargetPosition(Vector3 transformPosition, bool immediate = false);
+        void SetTargetRotation(Vector3 transformRotation, bool immediate = false);
         Vector3 GetLocalPosition();
         Bounds GetBounds();
         bool IsDragging { get; }
 
         ISortHandler SortHandler { get; }
+    
 
-
-        void SetLocalPosition(Vector3 transformPosition, Vector3 transformRotation);
+        void SetLocalPosition(Vector3 transformPosition);
     }
 }

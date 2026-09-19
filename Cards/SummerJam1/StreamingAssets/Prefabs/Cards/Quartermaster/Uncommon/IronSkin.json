@@ -1,0 +1,29 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.CharacterConstraint, SummerJam1",
+      "Character": "Quartermaster"
+    },
+    {
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.Powers.GainBlockWhenCardsGetBloodied, SummerJam1",
+      "Amount": 1
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "strategygameicons_windows/strategygameicons/SGI_107"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Iron Skin"
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Amount": 1
+    }
+  ]
+}

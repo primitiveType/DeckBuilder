@@ -1,26 +1,28 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Api;
 using CardsAndPiles.Components;
 using Newtonsoft.Json;
 using PropertyChanged;
-using SummerJam1.Piles;
+using SummerJam1.Cards;
 
 namespace SummerJam1.Cards.Effects
 {
     public class DamageUnitCard : SummerJam1Component, IEffect, IDescription, ITooltip
     {
+        TargetingType IEffect.Targeting { get; } = TargetingType.Unit;
         [JsonProperty] public int DamageAmount { get; private set; }
         protected virtual int FinalDamage => DamageAmount + Strength;
         [JsonProperty] public int Attacks { get; set; } = 1;
-        [JsonProperty] public bool Aoe { get; set; }
         [JsonProperty] public bool Pierce { get; set; }
 
-        protected int Strength { get; set; }
+        protected int Strength => (Entity.GetComponent<CardOwner>()?.Owner ?? Game.Player.Entity)
+            .GetOrAddComponent<Strength>()
+            .Amount;
 
+        protected Targeting Targeting => Entity?.GetComponent<Targeting>();
 
-        [DependsOn(nameof(Strength), nameof(DamageAmount), nameof(Attacks), nameof(Aoe))]
+        [DependsOn(nameof(Strength), nameof(DamageAmount), nameof(Attacks))]
         public virtual string Description
         {
             get
@@ -28,15 +30,15 @@ namespace SummerJam1.Cards.Effects
                 string pierceString = Pierce ? "Pierce." : "";
                 if (Attacks == 1)
                 {
-                    if (Aoe)
+                    if (Targeting is { Aoe: true })
                     {
-                        return $"Deal {FinalDamage} damage to target and adjacent. {pierceString}";
+                        return $"Deal {FinalDamage} damage to ALL enemies. {pierceString}";
                     }
 
                     return $"Deal {FinalDamage} damage. {pierceString}";
                 }
 
-                if (Aoe)
+                if (Targeting is { Aoe: true })
                 {
                     return $"Deal {FinalDamage} damage to target and adjacent, {Attacks} times. {pierceString}";
                 }
@@ -47,33 +49,33 @@ namespace SummerJam1.Cards.Effects
 
         public virtual bool DoEffect(IEntity target)
         {
-            ITakesDamage backUnit = target?.GetComponentInChildren<ITakesDamage>();
-            if (backUnit == null)
+            List<ITakesDamage> units;
+            if (Targeting is { Aoe: true })
+            {
+                units = Game.Battle.MonsterSlots.Entity.GetComponentsInChildren<ITakesDamage>();
+            }
+            else
+            {
+                units = new List<ITakesDamage>
+                {
+                    target.GetComponent<ITakesDamage>()
+                };
+            }
+
+            if (!units.Any())
             {
                 return false;
             }
 
-            backUnit.TryDealDamage(DamageAmount, Game.Player.Entity);
+            for (int i = 0; i < Attacks; i++)
+            {
+                foreach (var unit in units)
+                {
+                    unit.TryDealDamage(FinalDamage, Entity);
+                }
+            }
+
             return true;
-        }
-
-
-        protected override void Initialize()
-        {
-            base.Initialize();
-            Game.Player.Entity.GetOrAddComponent<Strength>().PropertyChanged += StrengthChanged;
-            Strength = Game.Player.Entity.GetComponent<Strength>().Amount;
-        }
-
-        private void StrengthChanged(object sender, PropertyChangedEventArgs e)
-        {
-            Strength = Game.Player.Entity.GetComponent<Strength>().Amount;
-        }
-
-        public override void Terminate()
-        {
-            base.Terminate();
-            Game.Player.Entity.GetComponent<Strength>().PropertyChanged -= StrengthChanged;
         }
 
         public string Tooltip => Pierce ? PierceTooltip.PIERCE_TOOLTIP : null;

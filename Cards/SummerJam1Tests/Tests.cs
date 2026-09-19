@@ -9,9 +9,10 @@ using CardTestProject;
 using NUnit.Framework;
 using SummerJam1;
 using SummerJam1.Cards;
+using SummerJam1.Cards.Effects;
+using SummerJam1.Characters;
 using SummerJam1.Statuses;
 using SummerJam1.Units;
-using SummerJam1.Units.Effects;
 
 namespace SummerJam1Tests
 {
@@ -32,7 +33,7 @@ namespace SummerJam1Tests
 
             card.GetComponent<Card>().TryPlayCard(Game.Entity);
         }
-        
+
         [SetUp]
         public void Setup()
         {
@@ -40,17 +41,20 @@ namespace SummerJam1Tests
             Logging.Initialize(new DefaultLogger());
             Context = new Context(new SummerJam1Events());
             IEntity gameEntity = Context.Root;
-            Context.SetPrefabsDirectory("StreamingAssets");
+            Context.SetPrefabsDirectory("StreamingAssets/Prefabs", "StreamingAssets/Resources");
             Game = gameEntity.AddComponent<Game>();
             long memoryAfter = GC.GetTotalMemory(false);
             long memoryLast = GC.GetTotalMemory(true);
 
-            Logging.Log($"Memory before : {memoryBefore}. Memory after : {memoryAfter}. Memory after cleanup {memoryLast}.");
+            Logging.Log(
+                $"Memory before : {memoryBefore}. Memory after : {memoryAfter}. Memory after cleanup {memoryLast}.");
         }
 
         [Test]
         public void TestSaveLoad()
         {
+            //this test fails because I have many places where there are things being created in Initialized.
+            //Either initialize shouldn't be called during deserialize, or I need two different "Versions" of initialize.
             string contextStr = Serializer.Serialize(Context);
             Context copy = Serializer.Deserialize<Context>(contextStr);
 
@@ -63,6 +67,95 @@ namespace SummerJam1Tests
         public void StartBattle()
         {
             // Game.StartBattle(new DungeonPile());
+        }
+
+        [Test]
+        public void StartingPartyContributesOwnedCardsToPlayerDeck()
+        {
+            Assert.That(Game.Party, Is.Not.Null);
+            Assert.That(Game.Party.ActiveMembers, Has.Count.EqualTo(1));
+            Assert.That(Game.Deck.Entity.Children, Has.Count.GreaterThan(0));
+            Assert.That(Game.Deck.Entity.Children.All(card => card.GetComponent<CardOwner>()?.Owner == Game.Player.Entity), Is.True);
+        }
+
+        [Test]
+        public void PartyRespectsConfiguredMaxActiveMembers()
+        {
+            Game.Party.MaxPartySize = 1;
+
+            IEntity newMember = Context.CreateEntity();
+            newMember.AddComponent<PartyMember>();
+            newMember.AddComponent<EquipmentLoadout>();
+
+            Assert.That(Game.Party.TryAddMember(newMember), Is.False);
+            Assert.That(Game.Party.ActiveMembers, Has.Count.EqualTo(1));
+        }
+
+        [Test]
+        public void EquipmentAddsOwnedCardsToCharacterContribution()
+        {
+            IEntity item = Context.CreateEntity(Game.Player.Entity, entity =>
+            {
+                Equipment equipment = entity.AddComponent<Equipment>();
+                equipment.Slot = EquipmentSlot.Hands;
+                equipment.CardPrefabs.Add("Cards/Strike.json");
+            });
+
+            Assert.That(Game.Player.Entity.GetComponent<EquipmentLoadout>().Equip(item), Is.True);
+
+            Game.Party.RebuildDeck();
+
+            Assert.That(Game.Deck.Entity.Children.Any(card =>
+                card.GetComponent<SourcePrefab>()?.Prefab == "Cards/Strike.json" &&
+                card.GetComponent<CardOwner>()?.Owner == Game.Player.Entity), Is.True);
+        }
+
+        [Test]
+        public void SelfTargetingAffectsCardOwner()
+        {
+            IEntity owner = Context.CreateEntity(null, entity =>
+            {
+                entity.AddComponent<PartyMember>();
+                entity.AddComponent<EquipmentLoadout>();
+                entity.AddComponent<Strength>().Amount = 0;
+            });
+            Assert.That(Game.Party.TryAddMember(owner), Is.True);
+
+            IEntity card = Context.CreateEntity(Game.Deck.Entity, entity =>
+            {
+                entity.AddComponent<PlayerCard>();
+                entity.AddComponent<GivePlayerStrength>().Amount = 2;
+                entity.AddComponent<Targeting>().Type = TargetingType.Self;
+                entity.AddComponent<CardOwner>().OwnerId = owner.Id;
+            });
+
+            Assert.That(card.GetComponent<PlayerCard>().TryPlayCard(null), Is.True);
+            Assert.That(owner.GetComponent<Strength>().Amount, Is.EqualTo(2));
+            Assert.That(Game.Player.Entity.GetOrAddComponent<Strength>().Amount, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void AllAlliesTargetingAffectsEveryActivePartyMember()
+        {
+            IEntity ally = Context.CreateEntity();
+            ally.AddComponent<PartyMember>();
+            ally.AddComponent<EquipmentLoadout>();
+            ally.AddComponent<Strength>().Amount = 0;
+            Assert.That(Game.Party.TryAddMember(ally), Is.True);
+
+            Game.Player.Entity.GetOrAddComponent<Strength>().Amount = 0;
+
+            IEntity card = Context.CreateEntity(Game.Deck.Entity, entity =>
+            {
+                entity.AddComponent<PlayerCard>();
+                entity.AddComponent<GivePlayerStrength>().Amount = 1;
+                entity.AddComponent<Targeting>().Type = TargetingType.AllAllies;
+                entity.AddComponent<CardOwner>().OwnerId = Game.Player.Entity.Id;
+            });
+
+            Assert.That(card.GetComponent<PlayerCard>().TryPlayCard(null), Is.True);
+            Assert.That(Game.Player.Entity.GetComponent<Strength>().Amount, Is.EqualTo(1));
+            Assert.That(ally.GetComponent<Strength>().Amount, Is.EqualTo(1));
         }
 
         [Test]
@@ -82,23 +175,21 @@ namespace SummerJam1Tests
                 foreach (FileInfo enumerateFile in dir.EnumerateFiles())
                 {
                     IEntity entity = Context.CreateEntity(null, Path.Combine(relativePath, enumerateFile.Name));
-                    Assert.NotNull(entity);
+                    Assert.That(entity, Is.Not.Null);
                     Assert.That(entity.Components, Has.Count.GreaterThan(0));
-                    Assert.NotNull(entity.GetComponent<IDescription>(), enumerateFile.Name);
-                    Assert.NotNull(entity.GetComponent<NameComponent>(), enumerateFile.Name);
+                    Assert.That(entity.GetComponent<IDescription>(), Is.Not.Null, enumerateFile.Name);
+                    Assert.That(entity.GetComponent<NameComponent>(), Is.Not.Null, enumerateFile.Name);
                 }
             }
         }
 
-        
 
-       
 
         [Test]
         public void TryLoadAllPrefabs()
         {
             DirectoryInfo info = new DirectoryInfo(Context.PrefabsPath);
-            Game.StartBattle(Game.Dungeons.GetComponentInChildren<DungeonPile>());
+            Game.StartBattle();
 
 
             TestDirectory(info, "");
@@ -113,7 +204,7 @@ namespace SummerJam1Tests
                 foreach (FileInfo enumerateFile in dir.EnumerateFiles())
                 {
                     IEntity entity = Context.CreateEntity(null, Path.Combine(relativePath, enumerateFile.Name));
-                    Assert.NotNull(entity);
+                    Assert.That(entity, Is.Not.Null);
                     Assert.That(entity.Components, Has.Count.GreaterThan(0));
                 }
             }
@@ -211,7 +302,7 @@ namespace SummerJam1Tests
         {
             IEntity test1 = Context.CreateEntity();
             IEntity test2 = Context.CreateEntity();
-            Game.StartBattle(new BountyDungeonPile());
+            Game.StartBattle();
             TestEvents events1 = test1.AddComponent<TestEvents>();
             TestEvents events2 = test2.AddComponent<TestEvents>();
 
@@ -230,8 +321,8 @@ namespace SummerJam1Tests
             };
 
             Game.EndTurn();
-            Assert.IsTrue(didExecute1);
-            Assert.IsFalse(didExecute2);
+            Assert.That(didExecute1, Is.True);
+            Assert.That(didExecute2, Is.False);
         }
 
         private event TesterEvent Tester;
@@ -272,7 +363,7 @@ namespace SummerJam1Tests
 
             child.TrySetParent(entity);
 
-            Assert.IsTrue(isWrapped);
+            Assert.That(isWrapped, Is.True);
 
             void ChildrenOnCollectionChanged1(object sender, NotifyCollectionChangedEventArgs e)
             {
@@ -286,14 +377,12 @@ namespace SummerJam1Tests
         }
 
         [Test]
-        public void CreateHeadCheese()
+        public void CreateSnowSpirit()
         {
-            IEntity cheese = Context.CreateEntity(Context.Root, "Units/Standard/2/headCheese.json");
-            Assert.That(cheese.GetComponent<GainMultiAttackBelowThreshold>(), Is.Not.Null);
+            IEntity spirit = Context.CreateEntity(Context.Root, "Units/Standard/1/snowSpirit.json");
+            Assert.That(spirit.GetComponent<SummerJam1.Units.Effects.FreezeOnAttack>(), Is.Not.Null);
         }
 
-
-    
 
         [Test]
         public void TestDealDamage()
@@ -336,20 +425,18 @@ namespace SummerJam1Tests
             string gameString = Serializer.Serialize(Context);
             Context gameCopy = Serializer.Deserialize<Context>(gameString);
 
-            Health healthCopy = gameCopy.Root.Children.First().GetComponent<Health>();
+            Health healthCopy = gameCopy.EntityDatabase[entity.Id].GetComponent<Health>();
 
-            Assert.NotNull(healthCopy);
-            Assert.AreEqual(healthCopy.Amount, health.Amount);
+            Assert.That(healthCopy, Is.Not.Null);
+            Assert.That(healthCopy.Amount, Is.EqualTo(health.Amount));
 
-            RequestDamageMultipliersEventArgs
-                args2 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
-            Events.OnRequestDamageMultipliers(args2);
+            healthCopy.TryDealDamage(3, healthCopy.Entity);
 
 
-            Assert.NotNull(healthCopy);
-            Assert.AreNotEqual(healthCopy.Amount, health.Amount);
-            Assert.NotNull(healthCopy.Entity);
-            Assert.AreEqual(healthCopy.Entity.Id, health.Entity.Id);
+            Assert.That(healthCopy, Is.Not.Null);
+            Assert.That(healthCopy.Amount, Is.Not.EqualTo(health.Amount));
+            Assert.That(healthCopy.Entity, Is.Not.Null);
+            Assert.That(healthCopy.Entity.Id, Is.EqualTo(health.Entity.Id));
         }
 
         [Test]
@@ -367,15 +454,11 @@ namespace SummerJam1Tests
             Assert.That(health.Amount, Is.EqualTo(10));
 
 
-            RequestDamageMultipliersEventArgs
-                args2 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
-            Events.OnRequestDamageMultipliers(args2);
+            health.TryDealDamage(30, entity); //stop hitting yourself!
             //damage should have been prevented.
             Assert.That(health.Amount, Is.EqualTo(10));
 
-            RequestDamageMultipliersEventArgs
-                args3 = new RequestDamageMultipliersEventArgs(30, entity, entity); //stop hitting yourself!
-            Events.OnRequestDamageMultipliers(args3);
+            health.TryDealDamage(30, entity); //stop hitting yourself!
             //damage should not have been prevented.
             Assert.That(health.Amount, Is.EqualTo(0));
         }

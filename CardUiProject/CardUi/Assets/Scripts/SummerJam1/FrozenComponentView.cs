@@ -1,12 +1,15 @@
-using App;
 using SummerJam1.Statuses;
+using UnityEngine;
 
 namespace SummerJam1
 {
-    public class FrozenComponentView : ComponentView<Frozen>
+    public class FrozenComponentView : ShaderPropertyComponentView<Frozen>
     {
-        protected override void ComponentOnPropertyChanged()
+        private readonly int _property = Shader.PropertyToID("_Frozen");
+
+        protected override int GetShaderProperty()
         {
+            return _property;
         }
     }
 }

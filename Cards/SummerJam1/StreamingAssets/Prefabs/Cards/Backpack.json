@@ -1,0 +1,28 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Cards.Effects.DrawCards, SummerJam1",
+      "Amount": 2
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "bloodDraw"
+    },
+    {
+      "$type": "SummerJam1.Cards.Discard, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Backpack"
+    },
+    {
+      "$type": "SummerJam1.Cards.EnergyCost, SummerJam1",
+      "Amount": 1
+    }
+  ]
+}

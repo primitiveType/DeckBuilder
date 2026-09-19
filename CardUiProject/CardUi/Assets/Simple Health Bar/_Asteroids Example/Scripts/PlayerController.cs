@@ -2,6 +2,7 @@
 /* PlayerController.cs */
 
 using System.Collections;
+using Api;
 using Simple_Health_Bar.Scripts;
 using UnityEngine;
 
@@ -59,7 +60,7 @@ namespace Simple_Health_Bar._Asteroids_Example.Scripts
 		{
 			// If the instance variable is already assigned, then there are multiple of this component in the scene. Inform the user.
 			if( instance != null )
-				Debug.LogError( "There are multiple instances of the Player Controller script. Assigning the most recent one to Instance." );
+				Logging.LogError( "There are multiple instances of the Player Controller script. Assigning the most recent one to Instance." );
 			
 			// Assign the instance variable as the Player Controller script on this object.
 			instance = GetComponent<PlayerController>();
@@ -140,8 +141,8 @@ namespace Simple_Health_Bar._Asteroids_Example.Scripts
 			myRigidbody.AddForce( transform.forward * distVec * 1000.0f * accelerationSpeed * Time.deltaTime );
 
 			// If the player's force is greater than the max speed, then normalize it.
-			if( myRigidbody.velocity.magnitude > maxSpeed )
-				myRigidbody.velocity = myRigidbody.velocity.normalized * maxSpeed;
+			if( myRigidbody.linearVelocity.magnitude > maxSpeed )
+				myRigidbody.linearVelocity = myRigidbody.linearVelocity.normalized * maxSpeed;
 		}
 
 		void Aiming ()
@@ -187,7 +188,7 @@ namespace Simple_Health_Bar._Asteroids_Example.Scripts
 			bullet.name = bulletPrefab.name;
 			
 			// Apply a speed to the bullet's velocity.
-			bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 200.0f;
+			bullet.GetComponent<Rigidbody>().linearVelocity = bullet.transform.forward * 200.0f;
 
 			// Destroy the bullet after 3 seconds.
 			Destroy( bullet, 3.0f );

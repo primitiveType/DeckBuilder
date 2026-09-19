@@ -1,14 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using Api;
 using App.Utility;
 using CardsAndPiles;
 using Cinemachine;
+using Cinemachine.Utility;
+using SummerJam1.Cards.Effects;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 namespace App
 {
+    
     [RequireComponent(typeof(ISortHandler))]
     public class PileItemView<T> : View<T>, IEndDragHandler, IPileItemView, IDragHandler, IGameObject,
         IBeginDragHandler
@@ -16,9 +23,9 @@ namespace App
         public bool IsInLayoutGroup; //feels a bit hacky, but hopefully reliable?
 
         private readonly float lerpRate = 8;
-        private PileView TargetPileView { get; set; }
+        private IEntity TargetDrag { get; set; }
 
-        private Vector3 BoundsSize { get; set; }
+        private Vector3 BoundsSize { get; set; } 
 
         //during turn, setting a new target should interrupt.
         //during combat, setting a new target should wait until old lerp is finished.
@@ -26,24 +33,14 @@ namespace App
         private Vector3 TargetPosition { get; set; }
         private Vector3 TargetRotation { get; set; }
 
-        public IPileView CurrentPileView { get; set; }
+        public IPile CurrentPile { get; set; }
 
         private void Awake()
         {
             SortHandler = GetComponent<ISortHandler>();
             SortHandler.SetDepth((int)Sorting.PileItem);
-
-            List<Collider> colliders = GetComponentsInChildren<Collider>().ToList();
-            if (colliders.Count > 0)
-            {
-                Bounds bounds = colliders[0].bounds;
-                foreach (Collider renderer1 in colliders)
-                {
-                    bounds.Encapsulate(renderer1.bounds);
-                }
-
-                BoundsSize = bounds.size;
-            }
+            BoxCollider colliders = GetComponentInChildren<BoxCollider>(true);
+            BoundsSize = colliders.size;
         }
 
         protected override void Start()
@@ -54,7 +51,7 @@ namespace App
 
         private void Update()
         {
-            IsInLayoutGroup = transform.parent?.GetComponentInParent<LayoutGroup>() != null;
+            IsInLayoutGroup = (transform.parent != null ? transform.parent.GetComponentInParent<LayoutGroup>() : null) != null;
 
             if (!IsDragging && !IsInLayoutGroup)
             {
@@ -68,14 +65,14 @@ namespace App
 
         public void OnTriggerEnter(Collider other)
         {
-            TargetPileView = other.gameObject.GetComponentInParent<PileView>();
+            TargetDrag = other.gameObject.GetComponentInParent<IView>().Entity;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
             IsDragging = true;
             transform.localRotation = Quaternion.identity;
-            CurrentPileView = transform.GetComponentInParent<IPileView>();
+            CurrentPile = transform.GetComponentInParent<IPileView>().Entity.GetComponent<IPile>();
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -83,20 +80,30 @@ namespace App
             Ray ray = eventData.pressEventCamera.ScreenPointToRay(Input.mousePosition);
             
             RaycastHit[] results = Physics.RaycastAll(ray, 10000, ~0, QueryTriggerInteraction.Collide);
-            Debug.Log($"{results.Count()} items hovered.");
-
-            PileView target = null;
+            
+            IEntity target = null;
+            // var results = eventData.hovered;
             foreach (var result in results)
             {
-                PileView pileView = result.transform.GetComponentInParent<PileView>();
-                if (pileView != null && pileView != CurrentPileView)
+                IView targetView = result.transform.GetComponentInParent<IView>();
+                if (targetView?.Entity == Entity)
                 {
-                    target = pileView;
-                    Debug.Log("Found target pile view : " + pileView.name);
+                    continue;
+                }
+
+                //skip if the target is our own hand, or a card in our hand.
+                if (targetView.Entity.GetComponentInParent<IPile>() == CurrentPile)
+                {
+                    continue;
+                }
+                if (targetView != null && targetView is not CardView)
+                {
+                    target = targetView.Entity;
+                    Logging.Log("Found target pile view : " + targetView.Entity.GetName());
                 }
             }
 
-            TargetPileView = target;
+            TargetDrag = target;
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -108,44 +115,61 @@ namespace App
                 return;
             }
 
-            if (TargetPileView == null || TargetPileView == GetComponentInParent<PileView>())
+            var effects = Entity.GetComponents<IEffect>();
+            bool targetRequired = effects.Any(e => e.Targeting == TargetingType.Unit);
+            
+            if ((TargetDrag == null && targetRequired) || TargetDrag == CurrentPile.Entity)
             {
                 return;
             }
 
-            if (!TrySendToPile(TargetPileView))
+            if (!TrySendToPile(TargetDrag))
             {
-                Debug.Log($"Failed to add {name} to {TargetPileView.name}.");
+                Logging.Log($"Failed to add {name} to {TargetDrag.GetName()}.");
             }
             else
             {
-                CurrentPileView = TargetPileView;
+                Logging.Log($"Adding {name} to {TargetDrag.GetName()}.");
+
+                //We should maybe instead just navigate the model hierarchy...
+                // CurrentPile = TargetDrag.GetComponentInParent<PileView>().Model;
             }
         }
 
         public ISortHandler SortHandler { get; private set; }
 
-        public void SetTargetPosition(Vector3 transformPosition, Vector3 transformRotation, bool immediate = false)
+        public void SetTargetPosition(Vector3 transformPosition, bool immediate = false)
         {
             if (immediate)
             {
                 TargetPosition = transformPosition;
-                TargetRotation = transformRotation;
             }
             else
             {
                 Disposables.Add(AnimationQueue.Instance.Enqueue(() =>
                 {
                     TargetPosition = transformPosition;
+                }));
+            }
+        }
+        public void SetTargetRotation( Vector3 transformRotation, bool immediate = false)
+        {
+            if (immediate)
+            {
+                TargetRotation = transformRotation;
+            }
+            else
+            {
+                Disposables.Add(AnimationQueue.Instance.Enqueue(() =>
+                {
                     TargetRotation = transformRotation;
                 }));
             }
         }
 
-        public void SetLocalPosition(Vector3 transformPosition, Vector3 transformRotation)
+        public void SetLocalPosition(Vector3 transformPosition)
         {
             transform.localPosition = transformPosition;
-            transform.rotation = Quaternion.Euler(transformRotation);
         }
 
         public Vector3 GetLocalPosition()
@@ -162,9 +186,9 @@ namespace App
 
         public bool IsDragging { get; private set; }
 
-        public virtual bool TrySendToPile(IPileView pileView)
+        public virtual bool TrySendToPile(IEntity target)
         {
-            bool success = Entity.TrySetParent(pileView.Entity);
+            bool success = Entity.TrySetParent(target);
 
 
             return success;
@@ -176,10 +200,11 @@ namespace App
                 VectorExtensions.Damp(transform.localPosition, transformPosition, lerpRate, Time.deltaTime);
             transform.localPosition = lerpedTarget;
 
-            Vector3 lerpedRotation = transformRotation;
-            //     VectorExtensions.Damp(transform.rotation.eulerAngles, transformRotation, lerpRate, Time.deltaTime);
+            var lerpedRotation =     UnityQuaternionExtensions.SlerpWithReferenceUp(transform.localRotation, Quaternion.Euler(transformRotation), lerpRate
+             * Time.deltaTime, Vector3.up);
+            
 
-            transform.localRotation = Quaternion.Euler(lerpedRotation);
+            transform.localRotation = (lerpedRotation);
         }
     }
 }

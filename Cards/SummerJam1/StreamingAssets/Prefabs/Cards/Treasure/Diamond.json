@@ -1,0 +1,27 @@
+{
+  "$type": "Api.Entity, Api",
+  "_children": [],
+  "ComponentsInternal": [
+    {
+      "$type": "SummerJam1.Cards.PlayerCard, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.VisualComponent, SummerJam1",
+      "AssetName": "tcgcardspack_windows/tcgcardspack/coin"
+    },
+    {
+      "$type": "SummerJam1.Cards.Unplayable, SummerJam1"
+    },
+    {
+      "$type": "CardsAndPiles.Components.NameComponent, CardsAndPiles",
+      "Value": "Coin"
+    },
+    {
+      "$type": "SummerJam1.Cards.Treasure, SummerJam1"
+    },
+    {
+      "$type": "SummerJam1.Money, SummerJam1",
+      "Amount": 10
+    }
+  ]
+}

@@ -6,6 +6,7 @@ using Api;
 using App.Utility;
 using CardsAndPiles;
 using CardsAndPiles.Components;
+using External.UnityAsync.UnityAsync.Assets.UnityAsync;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -86,6 +87,7 @@ namespace App
                     float theta = (Mathf.PI / 2f) + radialOffset + (-xPos / radius);
                     x = radius * Mathf.Cos(theta) + h;
                     y = radius * Mathf.Sin(theta) + k;
+                    y += yPos;
                 }
                 else
                 {
@@ -94,7 +96,7 @@ namespace App
                 }
 
                 Vector3 pileItemPosition = card.PileItemView.GetLocalPosition();
-                Vector3 target = new Vector3(x, y, pileItemPosition.z);
+                Vector3 target = new Vector3(x, y, 0);
 
 
                 if (card.DisplayWholeCard)
@@ -103,7 +105,8 @@ namespace App
                 }
                 else
                 {
-                    card.PileItemView.SetTargetPosition(target, GetRotation(xPos), IsPlayerTurn);
+                    card.PileItemView.SetTargetPosition(target, IsPlayerTurn);
+                    card.PileItemView.SetTargetRotation(GetRotation(xPos), IsPlayerTurn);
                 }
 
                 xPos += halfWidth;
@@ -119,18 +122,18 @@ namespace App
 
         private void SetHoveredPosition(CardInHand card, Vector3 target, Vector3 pileItemPosition)
         {
+            
             //first move it to where it would be.
-            card.PileItemView.SetLocalPosition(target, new Vector3());
+            card.PileItemView.SetLocalPosition(target);
 
             //then clamp it to the screen and update its transform position.
-            Vector3 clampedPosition = card.PileItemView.GetBounds().ClampToViewport(Camera.main);
+            Vector3 clampedPosition = card.PileItemView.GetBounds().ClampToViewport(card.transform, Camera.main);
             Vector3 clampedLocalPosition =
                 transform.InverseTransformPoint(clampedPosition).WithZ(pileItemPosition.z);
-            card.PileItemView.SetTargetPosition(clampedLocalPosition, new Vector3(), IsPlayerTurn);
+            card.PileItemView.SetTargetPosition(clampedLocalPosition, IsPlayerTurn);
 
             card.PileItemView.SortHandler?.SetDepth((int)Sorting.DraggedPileItem);
-            card.PileItemView.SetLocalPosition(pileItemPosition,
-                new Vector3()); //reset its position to where it started.
+            card.PileItemView.SetLocalPosition(pileItemPosition); //reset its position to where it started.
         }
 
         private float GetEffectiveCardWidth(CardInHand card)
@@ -184,7 +187,7 @@ namespace App
             {
                 CardInHand card = entityGO.GetComponent<CardInHand>();
                 CardsInHand.Remove(card);
-                Destroy(card);
+                DestroyImmediate(card);
             }
         }
 
@@ -194,7 +197,7 @@ namespace App
             GameObject entityGO = added.GetComponent<IGameObject>()?.gameObject;
             if (entityGO != null && entityGO.GetComponent<CardInHand>() != null)
             {
-//                Debug.LogError($"{entityGO.name} was already in hand!?");
+//                Logging.LogError($"{entityGO.name} was already in hand!?");
             }
 
             if (entityGO != null)

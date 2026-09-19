@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Api;
 using CardsAndPiles;
 using CardsAndPiles.Components;
@@ -21,7 +22,7 @@ namespace SummerJam1.Units
                 return;
             }
 
-            if (args.Target.GetComponent<EncounterSlotPile>() == null)
+            if (args.Target.GetComponent<MonsterPile>() == null)
             {
                 args.Blockers.Add(CardBlockers.INVALID_TARGET);
                 return;
@@ -49,7 +50,7 @@ namespace SummerJam1.Units
                 return;
             }
 
-            EncounterSlotPile slot = args.Target.GetComponentInSelfOrParent<EncounterSlotPile>();
+            MonsterPile slot = args.Target.GetComponentInSelfOrParent<MonsterPile>();
 
             if (Entity.TrySetParent(slot.Entity))
             {
@@ -62,10 +63,76 @@ namespace SummerJam1.Units
         {
             if (args.Entity == Entity)
             {
-                Blood blood = Entity.GetComponent<Blood>();
-                EncounterSlotPile slot = Entity.GetComponentInParent<EncounterSlotPile>();
-                slot.Entity.GetOrAddComponent<Blood>().Amount += blood.Amount;
+                //should I call destroy instead? I'm not sure why this is like this.
+                Entity.TrySetParent(null);
+            }
+        }
+        
+       
+        
+       
+    }
+
+    public class RandomIntentHandler : SummerJam1Component
+    {
+        protected override void Initialize()
+        {
+            base.Initialize();
+            CreateIntent();
+        }
+
+        [OnTurnBegan]
+        private void OnTurnBegan(object sender, TurnBeganEventArgs args)
+        {
+            CreateIntent();
+        }
+
+        private void CreateIntent()
+        {
+            //all previous intents should have removed themselves already.
+            //lets add new ones.
+            var intents = Entity.GetComponents<Intent>();
+            
+            var random = Game.Random;
+            int active = random.SystemRandom.Next(0, intents.Count);
+
+            for (int i = 0; i < intents.Count; i++)
+            {
+                intents[i].Enabled = i == active;
             }
         }
     }
+    
+    public class OrderedIntentHandler : SummerJam1Component
+    {
+        private int Turn { get; set; }
+        protected override void Initialize()
+        {
+            base.Initialize();
+            CreateIntent();
+        }
+
+        [OnTurnBegan]
+        private void OnTurnBegan(object sender, TurnBeganEventArgs args)
+        {
+            CreateIntent();
+            Turn++;
+        }
+
+        private void CreateIntent()
+        {
+            //all previous intents should have removed themselves already.
+            //lets add new ones.
+            var intents = Entity.GetComponents<Intent>();
+            
+            var random = Game.Random;
+            int active = Turn % intents.Count;
+
+            for (int i = 0; i < intents.Count; i++)
+            {
+                intents[i].Enabled = i == active;
+            }
+        }
+    }
+
 }

@@ -13,29 +13,36 @@ namespace Api
     [DebuggerDisplay("{GetComponent<IComponent>()?.GetType()?.Name ?? \"Entity\"}")]
     internal class Entity : IEntity
     {
-        [JsonProperty] private ChildrenCollection<IEntity> _children = new();
+        [JsonProperty] private EntityCollection _children = new();
+        private string _name;
 
         [JsonProperty] private ChildrenCollection<Component> ComponentsInternal { get; set; } = new();
         public Context Context { get; private set; }
         [JsonProperty] public int Id { get; private set; } = -1;
 
+        public bool ShouldSerializeId()
+        {
+            return true;
+        }
         public IChildrenCollection<Component> Components => ComponentsInternal;
 
         public LifecycleState State { get; private set; }
 
         public IEntity Parent { get; private set; }
 
-        public IChildrenCollection<IEntity> Children => _children;
+        public EntityCollection Children => _children;
+
+        public string Name
+        {
+            get => _name ?? $"Entity {Id}";
+            set => _name = value;
+        }
 
         public void Destroy()
         {
             Terminate();
             SetParent(null);
-            foreach (IEntity child in Children.ToList())
-            {
-                child.Destroy();
-            }
-
+            Children.DestroyRecursive();
             State = LifecycleState.Destroyed;
         }
 
@@ -55,6 +62,12 @@ namespace Api
         {
             if (parent != null) //setting null is always valid.... ?
             {
+                if (parent.State == LifecycleState.Destroyed)
+                {
+                    Logging.Log("Failed to set parent that was destroyed.");
+                    return false;
+                }
+                
                 foreach (IParentConstraint component in GetComponents<IParentConstraint>())
                 {
                     if (!component.AcceptsParent(parent))
@@ -80,10 +93,24 @@ namespace Api
         {
             return GetComponents<T>().FirstOrDefault();
         }
+        
+        public object GetComponent(Type type)
+        {
+            return Components.FirstOrDefault(c => c.GetType().IsAssignableFrom(type));
+        }
+        public IEnumerable<object> GetComponents(Type type)
+        {
+            return Components.Where(c => c.GetType().IsAssignableFrom(type));
+        }
 
         public bool HasComponent<T>()
         {
             return Components.OfType<T>().Any();
+        }
+        
+        public bool HasComponent(Type type)
+        {
+            return Components.Any(c => c.GetType().IsAssignableFrom(type));
         }
 
 

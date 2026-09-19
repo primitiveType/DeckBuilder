@@ -10,6 +10,7 @@ namespace SummerJam1.Cards.Effects
 {
     public class DealDamageForEachHealthLostThisTurn : SummerJam1Component, IEffect, IDescription
     {
+        public TargetingType Targeting { get; } = TargetingType.Unit;
         [JsonProperty] public int Multiplier { get; set; } = 1;
 
         private int PlayerStartHealth { get; set; }

@@ -1,22 +1,24 @@
 using System;
+using Api;
 using App;
 using CardsAndPiles;
 using CardsAndPiles.Components;
 using SummerJam1.Cards;
+using SummerJam1.Relics;
 
 namespace SummerJam1
 {
     public class SummerJam1CardView : PileItemView<Card>, ISetModel
     {
-        public override bool TrySendToPile(IPileView pileView)
+        public override bool TrySendToPile(IEntity target)
         {
-            return Model.TryPlayCard(pileView.Model.Entity);
-            // if (pileView == null || !Model.TryPlayCard(pileView.Model.Entity))
-            // {
-            //     return Model.TryPlayCard(GameContext.Instance.Game.Player.Entity);//assume the card is meant for the player.
-            // }
-        
-            return false;
+            if (target != null && target.HasComponent<BagOfHoldingHandPile>())//TODO: how do you even generalize this.
+            {
+                //I should rework all this so that cards don't have to target "Piles". It should play the card
+                //when targeting an entity directly, and try and move it when targeting a pile.
+                return Model.Entity.TrySetParent(target);
+            }
+            return Model.TryPlayCard(target);
         }
 
         protected override void Start()

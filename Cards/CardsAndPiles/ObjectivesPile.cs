@@ -9,11 +9,4 @@ namespace CardsAndPiles
             return true;
         }
     }
-
-    public interface IReward
-    {
-        string RewardText { get; }
-    }
-    
-  
 }

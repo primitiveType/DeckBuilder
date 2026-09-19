@@ -28,14 +28,14 @@ namespace SummerJam1.Statuses
 
         private void UpdateEnabledState()
         {
-            EncounterSlotPile component = Entity.GetComponentInParent<EncounterSlotPile>();
+            MonsterPile component = Entity.GetComponentInParent<MonsterPile>();
             if (component == null)
             {
                 Enabled = false;
             }
 
             
-            Enabled = Game.Battle != null && Entity.Parent.GetComponent<EncounterSlotPile>() != null;
+            Enabled = Game.Battle != null && Entity.Parent.GetComponent<MonsterPile>() != null;
         }
 
         public override void Terminate()

@@ -33,7 +33,7 @@ public class ScrollPileOrganizer : PileOrganizer
         }
         else
         {
-            Debug.LogWarning($"Failed to destroy card container for entity {removed.Id}.");
+            Logging.LogWarning($"Failed to destroy card container for entity {removed.Id}.");
         }
     }
 

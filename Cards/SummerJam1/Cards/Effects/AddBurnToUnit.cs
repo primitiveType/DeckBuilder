@@ -9,6 +9,7 @@ namespace SummerJam1.Cards.Effects
     public class AddBurnToUnit : SummerJam1Component, IEffect
     {
         [JsonProperty] public int Amount { get; set; }
+        public TargetingType Targeting { get; } = TargetingType.Unit;
 
         public bool DoEffect(IEntity target)
         {

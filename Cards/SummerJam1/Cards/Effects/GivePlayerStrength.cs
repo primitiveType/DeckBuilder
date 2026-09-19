@@ -5,13 +5,15 @@ namespace SummerJam1.Cards.Effects
 {
     public class GivePlayerStrength : SummerJam1Component, IAmount, IEffect, IDescription, ITooltip
     {
+        public TargetingType Targeting{ get; } = TargetingType.Self;
+
         public int Amount { get; set; }
 
         public string Description => $"Gain {Amount} Strength.";
 
         public bool DoEffect(IEntity target)
         {
-            Game.Player.Entity.GetOrAddComponent<Strength>().Amount += Amount;
+            (target ?? Game.Player.Entity).GetOrAddComponent<Strength>().Amount += Amount;
             return true;
         }
 

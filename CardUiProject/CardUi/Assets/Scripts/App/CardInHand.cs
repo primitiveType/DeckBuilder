@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Api;
+using App.Utility;
+using UnityEngine;
 
 namespace App
 {
@@ -10,20 +12,21 @@ namespace App
         
         private HoverExpand HoverExpand { get; set; }
 
-        private void Awake()
+        private void OnEnable()
         {
-            HoverExpand = gameObject.AddComponent<HoverExpand>();
+            HoverExpand = gameObject.GetOrAddComponent<HoverExpand>();
+         
             PileItemView = GetComponentInChildren<IPileItemView>();
-            GetComponent<RectTransform>().sizeDelta = new Vector2(3, 5);
+            GetComponent<RectTransform>().sizeDelta = new Vector2(300, 500);
             if (PileItemView == null)
             {
-                Debug.LogError("Pile item not found when adding card to hand!");
+                Logging.LogError("Pile item not found when adding card to hand!");
             }
         }
 
         private void OnDestroy()
         {
-            Destroy(HoverExpand);
+            DestroyImmediate(HoverExpand);
         }
     }
 }
